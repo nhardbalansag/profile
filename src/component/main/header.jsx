@@ -3,7 +3,7 @@ import React from 'react'
 const Header = ({onPressAction, ActionState}) => {
   return (
     <div>
-      <header className="bg-indigo-500">
+      <header className="bg-[#001d3d]">
         <nav className="container relative flex items-center justify-between px-6 py-8 mx-auto text-white">
           <a href="#">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 md:w-10 md:h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
