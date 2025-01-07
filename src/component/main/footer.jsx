@@ -3,7 +3,7 @@ import React from 'react'
 export default function Footer() {
   return (
     <div>
-      <footer className="flex flex-col items-center py-20 text-white bg-[#001d3d]">
+      <footer className="flex flex-col items-center py-20 text-white bg-[#001d3d]" id='contact'>
         <p className="text-center">Copyright © 2020, Hero Header Inc.</p>
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -5,8 +5,17 @@ import {
 } from '../component/index'
 
 import {
-  WebDesign
+  WebDesign,
+  Linkedin,
+  Github,
+  Information,
+  Android,
+  Web,
+  Support
 } from '../assets/icons/index'
+
+
+import Dashboard from '../assets/images/dashboard.png'
 
 const HomeContent = () =>{
 
@@ -16,7 +25,7 @@ const HomeContent = () =>{
     <div>
       <main>
         <section>
-          <div className="relative grid w-full bg-[#001d3d] h-96 lg:h-[32rem] place-items-center">
+          <div className="relative grid w-full bg-[#000814] h-96 lg:h-[32rem] place-items-center">
             <div className="flex flex-col items-center mx-auto text-center">
               <p className="mt-6 text-lg leading-5 text-[#ffc300]">See more details</p>
               <a href="#about" className="mt-8 cursor-pointer animate-bounce">
@@ -28,17 +37,27 @@ const HomeContent = () =>{
               <div className="mockup-phone">
                 <div className="camera"></div>
                 <div className="display">
-                  <div className="artboard artboard-demo phone-1 bg-white p-3">
-                    <div className='text-start'>
-                      <h1 className="text-4xl font-semibold text-[#003566] uppercase md:text-3xl">Hello,</h1>
-                      <h1 className="text-4xl uppercase">
-                        <span className='font-semibold text-[#003566] md:text-5xl'>I am </span> 
-                        <span className='font-bold text-black md:text-6xl'>bernard</span> 
-                      </h1>
-                      <div className='mt-5'>
-                        <a href="/public/gmrc.pdf" download>
-                          <button className="bg-[#001d3d] p-2 rounded-md text-white font-bold">Download CV</button>
-                        </a>
+                  <div className="p-3 bg-white artboard artboard-demo phone-1">
+                    <div className='place-content-center h-[70%]'>
+                      <div className='text-start'>
+                        <h1 className="text-4xl font-semibold text-[#003566] uppercase md:text-3xl">Hello,</h1>
+                        <h1 className="text-4xl uppercase">
+                          <span className='font-semibold text-[#003566] md:text-5xl'>I am </span> 
+                          <span className='font-bold text-[#000814] md:text-6xl'>bernard</span> 
+                        </h1>
+                        <div className='mt-5'>
+                          <a href="/public/gmrc.pdf" download>
+                            <button className="bg-[#001d3d] p-2 rounded-md text-white font-bold">Download CV</button>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div className='place-content-center h-[30%]'>
+                      <div class="flex w-full flex-col">
+                        <div class="divider">
+                          <div> <Linkedin/></div>
+                          <div> <Github/></div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -48,51 +67,40 @@ const HomeContent = () =>{
           </div>
         </section>
 
-        <section className="container px-6 py-8 mx-auto lg:pt-40 lg:py-16 bordered" id="about">
-          <div className="lg:flex lg:items-center lg:-mx-4">
-            <div className="lg:w-1/2 lg:px-4">
+        <section className="container px-6 py-8 mx-auto pt-[400px] sm:pt-[400px] lg:pt-[250px] md:pt-[400px] lg:py-16" id="about">
+          <div className="flex w-full flex-col my-8">
+            <div className="divider">
+              <div className='flex items-start justify-start'> 
+                <Information size={5}/>
+                <p className="mx-1 font-fo">About me</p>
+              </div>
+            </div>
+          </div>
+          <div className="lg:flex lg:items-center sm:flex sm:items-center lg:-mx-4 ">
+            <div className="lg:w-1/2 lg:px-4 sm:w-1/2">
               <h3 className="text-xl font-medium text-gray-800 md:text-2xl lg:text-3xl">
-                Web And Mobile Applications?
+                Full Stack Web And Mobile Application Developer
               </h3>
 
               <p className="mt-6 text-gray-500">
               I specialize in designing and developing web and mobile applications 
-  that combine functionality, performance, and intuitive user experiences. 
-  My work ranges from crafting responsive websites 
-  to building scalable mobile apps for Android and iOS platforms. 
-  Leveraging modern technologies, I ensure every project meets high standards of usability and innovation, tailored to suit diverse personal and business needs.
+              that combine functionality, performance, and intuitive user experiences. 
+              My work ranges from crafting responsive websites 
+              to building scalable mobile apps for Android and iOS platforms. 
+              Leveraging modern technologies, I ensure every project meets high standards of usability and innovation, tailored to suit diverse personal and business needs.
               </p>
-
-              <button className="flex items-center mt-8 -mx-2 text-indigo-500">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-8 h-8 mx-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <p className="mx-1 font-semibold">PLAY VIDEO</p>
-              </button>
             </div>
 
-            <div className="mt-8 lg:w-1/2 lg:px-4 lg:mt-0">
-              <img
-                className="object-cover w-full rounded-xl h-96"
-                src="https://images.unsplash.com/photo-1516131206008-dd041a9764fd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                alt="Video thumbnail"
-              />
+            <div className="w-full px-4 mt-8 sm:w-1/2 lg:w-1/2 lg:px-4 lg:mt-0">
+              <div className="border mockup-window bg-base-300">
+                <div className="flex justify-center p-2 bg-base-200">
+                  <img
+                    className="object-cover w-full rounded-xl h-100 lg:h-96"
+                    src={Dashboard}
+                    alt="dashboard thumbnail"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -100,25 +108,18 @@ const HomeContent = () =>{
         <section className="container px-6 py-8 mx-auto lg:py-16">
           <div className="grid grid-cols-1 gap-8 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
             {/* Card 1 */}
-            <Card icon={<WebDesign/>} cardTitle='web design' sub='Research, user experience testing, mockups, and prototypes'/>
+            <Card icon={<Android/>} cardTitle='mobile app development' sub='Experienced in mobile app development using React Native for cross-platform apps and Kotlin for native Android. Skilled in creating responsive, visually engaging apps with seamless API integration and platform-specific optimizations.'/>
+            <Card icon={<Web/>} cardTitle='web application system' sub='Experienced in web app development with expertise in building responsive and scalable systems. Skilled in using modern frameworks like React or Vue.js for front-end development and Laravel or .NET for back-end services. Proficient in RESTful API integration, database management, and performance optimization to deliver efficient and user-friendly solutions.'/>
+            <Card icon={<Support/>} cardTitle='maintenance and support' sub='Ensures smooth operation through bug fixes, performance optimization, updates, and security enhancements. Provides user support, issue resolution, and continuous improvements based on feedback.'/>
           </div>
         </section>
 
-        <section className="container px-6 py-8 mx-auto lg:py-16">
-          <h3 className="text-xl font-medium text-gray-800 md:text-2xl lg:text-3xl">Browse Our Projects</h3>
+        <section className="container px-6 py-8 mx-auto lg:py-16" id="projects">
+          <h3 className="text-xl font-medium text-gray-800 md:text-2xl lg:text-3xl">Browse Some Of My Projects</h3>
 
           <div className="flex items-center py-6 mt-4 -mx-2 overflow-x-auto whitespace-nowrap">
             <button className="inline-flex px-4 mx-2 focus:outline-none items-center py-0.5 text-white bg-indigo-500 hover:bg-indigo-400 duration-300 transition-colors rounded-2xl">
               All
-            </button>
-            <button className="inline-flex px-4 mx-2 duration-300 transition-colors hover:bg-indigo-500/70 hover:text-white text-gray-500 focus:outline-none py-0.5 cursor-pointer rounded-2xl">
-              Web Design
-            </button>
-            <button className="inline-flex px-4 mx-2 duration-300 transition-colors hover:bg-indigo-500/70 hover:text-white text-gray-500 focus:outline-none py-0.5 cursor-pointer rounded-2xl">
-              Development
-            </button>
-            <button className="inline-flex px-4 mx-2 duration-300 transition-colors hover:bg-indigo-500/70 hover:text-white text-gray-500 focus:outline-none py-0.5 cursor-pointer rounded-2xl">
-              Research
             </button>
           </div>
 
@@ -165,108 +166,6 @@ const HomeContent = () =>{
                 alt=""
               />
             </a>
-          </div>
-        </section>
-
-        <section className="container px-6 py-8 mx-auto lg:py-16">
-          <h3 className="text-xl font-medium text-gray-800 md:text-2xl lg:text-3xl">Recent Blog Posts</h3>
-
-          <div className="grid grid-cols-1 gap-8 mt-8 md:mt-10 md:grid-cols-2 xl:grid-cols-3">
-            <div>
-              <div className="relative">
-                <img
-                  className="object-cover object-center w-full h-64 rounded-lg lg:h-80"
-                  src="https://images.unsplash.com/photo-1624996379697-f01d168b1a52?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                  alt=""
-                />
-                <div className="absolute bottom-0 flex p-3 bg-white">
-                  <img
-                    className="object-cover object-center w-10 h-10 rounded-full"
-                    src="https://cdn.dribbble.com/users/1436669/screenshots/15006128/media/5f91264b3b56cc452cb2bba2535bccdd.png?compress=1&resize=1000x750&vertical=top"
-                    alt=""
-                  />
-                  <div className="mx-4">
-                    <h1 className="text-sm text-gray-700">Tom Hank</h1>
-                    <p className="text-sm text-gray-500">Creative Director</p>
-                  </div>
-                </div>
-              </div>
-              <h1 className="mt-6 text-xl font-semibold text-gray-800">
-                What do you want to know about UI
-              </h1>
-              <hr className="w-32 my-6 text-indigo-500" />
-              <p className="text-sm text-gray-500">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis fugit dolorum amet dolores praesentium,
-                alias nam? Tempore
-              </p>
-              <a href="#" className="inline-block mt-4 text-indigo-500 underline hover:text-indigo-400">
-                Read more
-              </a>
-            </div>
-
-            <div>
-              <div className="relative">
-                <img
-                  className="object-cover object-center w-full h-64 rounded-lg lg:h-80"
-                  src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                  alt=""
-                />
-                <div className="absolute bottom-0 flex p-3 bg-white">
-                  <img
-                    className="object-cover object-center w-10 h-10 rounded-full"
-                    src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                    alt=""
-                  />
-                  <div className="mx-4">
-                    <h1 className="text-sm text-gray-700">arthur melo</h1>
-                    <p className="text-sm text-gray-500">Creative Director</p>
-                  </div>
-                </div>
-              </div>
-              <h1 className="mt-6 text-xl font-semibold text-gray-800">
-                All the features you want to know
-              </h1>
-              <hr className="w-32 my-6 text-indigo-500" />
-              <p className="text-sm text-gray-500">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis fugit dolorum amet dolores praesentium,
-                alias nam? Tempore
-              </p>
-              <a href="#" className="inline-block mt-4 text-indigo-500 underline hover:text-indigo-400">
-                Read more
-              </a>
-            </div>
-
-            <div>
-              <div className="relative">
-                <img
-                  className="object-cover object-center w-full h-64 rounded-lg lg:h-80"
-                  src="https://images.unsplash.com/photo-1597534458220-9fb4969f2df5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80"
-                  alt=""
-                />
-                <div className="absolute bottom-0 flex p-3 bg-white">
-                  <img
-                    className="object-cover object-center w-10 h-10 rounded-full"
-                    src="https://images.unsplash.com/photo-1531590878845-12627191e687?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
-                    alt=""
-                  />
-                  <div className="mx-4">
-                    <h1 className="text-sm text-gray-700">Amelia. Anderson</h1>
-                    <p className="text-sm text-gray-500">Lead Developer</p>
-                  </div>
-                </div>
-              </div>
-              <h1 className="mt-6 text-xl font-semibold text-gray-800">
-                Which services you get from Meraki UI
-              </h1>
-              <hr className="w-32 my-6 text-indigo-500" />
-              <p className="text-sm text-gray-500">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis fugit dolorum amet dolores praesentium,
-                alias nam? Tempore
-              </p>
-              <a href="#" className="inline-block mt-4 text-indigo-500 underline hover:text-indigo-400">
-                Read more
-              </a>
-            </div>
           </div>
         </section>
       </main>
