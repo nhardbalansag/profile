@@ -11,3 +11,9 @@
     example: 
             <script type="module" crossorigin src="/<repository name>/assets/index-sCSJl_wq.js"></script>
             <link rel="stylesheet" crossorigin href="/<repository name>/assets/index-n_ryQ3BS.css">
+
+
+
+<!-- design inpiration -->
+https://img.daisyui.com/images/store/screenshots/agency-landingpage-react.webp
+https://github.com/merakiuilabs/hero-header-template
