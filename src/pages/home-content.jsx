@@ -3,13 +3,11 @@ import React, { useState } from 'react';
 import {
   Card,
   ProjectCardShort,
-  ProjectCardLong
+  ProjectCardLong,
+  Phone
 } from '../component/index'
 
 import {
-  WebDesign,
-  Linkedin,
-  Github,
   Information,
   Android,
   Web,
@@ -18,16 +16,13 @@ import {
 
 import PhilricePresentation from '../assets/images/Product Presentation philrice.png'
 import IOWOToolPresentation from '../assets/images/IOWOpresentation.jpg'
-import Dashboard from '../assets/images/dashboard.png'
 import IOWOEventToolPresentation from '../assets/images/iowoeventotoolpresentation.png'
-import IOWOEventAdmin from '../assets/images/IOWOeventToolAdmin.png'
 import ExQuizSeat from '../assets/images/ExQuizSeat.png'
 import buyAndSellDashboard from '../assets/images/buyAndSellDashboard.png'
 import IOWOEventToolDashboard from '../assets/images/IOWO Event Tool Dashboard.png'
 import DCODEPOSDASHBOARD from '../assets/images/DCODE POS DASHBOARD.png'
 import Bernard from '../assets/images/bernard.png'
 import Kedica from '../assets/images/kedica.png'
-import technology  from '../assets/images/technology.png'
 
 const HomeContent = () =>{
 
@@ -46,49 +41,7 @@ const HomeContent = () =>{
                   <path d="M22.41 23.2875L27 27.8675L31.59 23.2875L33 24.6975L27 30.6975L21 24.6975L22.41 23.2875Z" fill="white" />
                 </svg>
               </a>
-              <div className="mockup-phone">
-                <div className="camera"></div>
-                <div className="display">
-                  <div className="p-3 bg-white artboard artboard-demo phone-1">
-                    <div className='flex items-end justify-center h-[70%]'>
-                      <div className='text-start'>
-                        <h1 className="text-4xl font-semibold text-[#003566] uppercase md:text-3xl">Hello,</h1>
-                        <h1 className="text-4xl uppercase">
-                          <span className='font-semibold text-[#003566] md:text-5xl'>I am </span> 
-                          <span className='font-bold text-[#000814] md:text-6xl'>bernard</span> 
-                        </h1>
-                        <div className='mt-5'>
-                          <a href="/profile/BernardBalansagResume.pdf" download>
-                            <button className="bg-[#001d3d] p-2 rounded-md text-white font-bold">Download CV</button>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    <div className='flex items-end justify-center h-[30%]'>
-                      <div class="flex w-full flex-col">
-                        <div class="divider">
-                          <div> 
-                            <a 
-                            href="https://www.linkedin.com/in/bernard-balansag-8148b71b6" 
-                            target="_blank" 
-                            rel="noopener noreferrer">
-                              <Linkedin/>
-                            </a>
-                          </div>
-                          <div>
-                            <a 
-                            href="https://github.com/nhardbalansag" 
-                            target="_blank" 
-                            rel="noopener noreferrer">
-                              <Github isLight={true}/>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Phone/>
             </div>
           </div>
         </section>
@@ -137,7 +90,6 @@ const HomeContent = () =>{
             </div>
           </div>
           <div className="grid grid-cols-1 gap-8 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
-            {/* Card 1 */}
             <Card icon={<Android/>} cardTitle='mobile app development' sub='Experienced in mobile app development using React Native for cross-platform apps and Kotlin for native Android. Skilled in creating responsive, visually engaging apps with seamless API integration and platform-specific optimizations.'/>
             <Card icon={<Web/>} cardTitle='web application system' sub='Experienced in web app development with expertise in building responsive and scalable systems. Skilled in using modern frameworks like React or Vue.js for front-end development and Laravel or .NET for back-end services. Proficient in RESTful API integration, database management, and performance optimization to deliver efficient and user-friendly solutions.'/>
             <Card icon={<Support/>} cardTitle='maintenance and support' sub='Ensures smooth operation through bug fixes, performance optimization, updates, and security enhancements. Provides user support, issue resolution, and continuous improvements based on feedback.'/>
