@@ -58,7 +58,7 @@ const HomeContent = () =>{
                           <span className='font-bold text-[#000814] md:text-6xl'>bernard</span> 
                         </h1>
                         <div className='mt-5'>
-                          <a href="/public/gmrc.pdf" download>
+                          <a href="/profile/BernardBalansagResume.pdf" download>
                             <button className="bg-[#001d3d] p-2 rounded-md text-white font-bold">Download CV</button>
                           </a>
                         </div>
