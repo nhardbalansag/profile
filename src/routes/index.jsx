@@ -14,7 +14,7 @@ import {
 
 const router = createBrowserRouter([
     {
-        path: "/",
+        path: "/profile",
         loader: () => ({ message: "Hello Data Router!" }),
         Component: HomePage,  
         children:[

@@ -14,8 +14,16 @@ import {
   Support
 } from '../assets/icons/index'
 
-
+import PhilricePresentation from '../assets/images/Product Presentation philrice.png'
+import IOWOToolPresentation from '../assets/images/IOWOpresentation.jpg'
 import Dashboard from '../assets/images/dashboard.png'
+import IOWOEventToolPresentation from '../assets/images/iowoeventotoolpresentation.png'
+import IOWOEventAdmin from '../assets/images/IOWOeventToolAdmin.png'
+import ExQuizSeat from '../assets/images/ExQuizSeat.png'
+import buyAndSellDashboard from '../assets/images/buyAndSellDashboard.png'
+import IOWOEventToolDashboard from '../assets/images/IOWO Event Tool Dashboard.png'
+import DCODEPOSDASHBOARD from '../assets/images/DCODE POS DASHBOARD.png'
+import Bernard from '../assets/images/bernard.png'
 
 const HomeContent = () =>{
 
@@ -38,7 +46,7 @@ const HomeContent = () =>{
                 <div className="camera"></div>
                 <div className="display">
                   <div className="p-3 bg-white artboard artboard-demo phone-1">
-                    <div className='place-content-center h-[70%]'>
+                    <div className='flex items-end justify-center h-[70%]'>
                       <div className='text-start'>
                         <h1 className="text-4xl font-semibold text-[#003566] uppercase md:text-3xl">Hello,</h1>
                         <h1 className="text-4xl uppercase">
@@ -52,11 +60,25 @@ const HomeContent = () =>{
                         </div>
                       </div>
                     </div>
-                    <div className='place-content-center h-[30%]'>
+                    <div className='flex items-end justify-center h-[30%]'>
                       <div class="flex w-full flex-col">
                         <div class="divider">
-                          <div> <Linkedin/></div>
-                          <div> <Github/></div>
+                          <div> 
+                            <a 
+                            href="https://www.linkedin.com/in/bernard-balansag-8148b71b6" 
+                            target="_blank" 
+                            rel="noopener noreferrer">
+                              <Linkedin/>
+                            </a>
+                          </div>
+                          <div>
+                            <a 
+                             href="https://github.com/nhardbalansag" 
+                             target="_blank" 
+                             rel="noopener noreferrer">
+                              <Github/>
+                            </a>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -92,15 +114,16 @@ const HomeContent = () =>{
             </div>
 
             <div className="w-full px-4 mt-8 sm:w-1/2 lg:w-1/2 lg:px-4 lg:mt-0">
-              <div className="border mockup-window bg-base-300">
+              {/* <div className="border mockup-window bg-base-300">
                 <div className="flex justify-center p-2 bg-base-200">
-                  <img
-                    className="object-cover w-full rounded-xl h-100 lg:h-96"
-                    src={Dashboard}
+                  
+                </div>
+              </div> */}
+              <img
+                    className="object-cover w-full rounded-xl h-100 lg:h-100"
+                    src={Bernard}
                     alt="dashboard thumbnail"
                   />
-                </div>
-              </div>
             </div>
           </div>
         </section>
@@ -127,42 +150,49 @@ const HomeContent = () =>{
             <a href="#" className="transition-all duration-500 lg:col-span-2 hover:scale-105">
               <img
                 className="object-cover object-top w-full rounded-lg shadow-md shadow-gray-200 h-80 xl:h-96"
-                src="https://cdn.dribbble.com/users/1644453/screenshots/17056773/media/00509f74e765da294440886db976943a.png?compress=1&resize=1000x750&vertical=top"
+                src={PhilricePresentation}
                 alt=""
               />
             </a>
             <a href="#" className="transition-all duration-500 hover:scale-105">
               <img
                 className="object-cover object-top w-full rounded-lg shadow-md shadow-gray-200 h-80 xl:h-96"
-                src="https://cdn.dribbble.com/userupload/3233220/file/original-e80767b5947df65a0f1ab4dab4964679.png?compress=1&resize=1024x768"
+                src={DCODEPOSDASHBOARD}
                 alt=""
               />
             </a>
             <a href="#" className="transition-all duration-500 hover:scale-105">
               <img
                 className="object-cover object-top w-full rounded-lg shadow-md shadow-gray-200 h-80 xl:h-96"
-                src="https://cdn.dribbble.com/users/1644453/screenshots/14748860/media/25f53296059b741ac1c083be9f41745b.png?compress=1&resize=1000x750&vertical=top"
+                src={IOWOEventToolDashboard}
                 alt=""
               />
             </a>
             <a href="#" className="transition-all duration-500 lg:col-span-2 hover:scale-105">
               <img
                 className="object-cover object-top w-full rounded-lg shadow-md shadow-gray-200 h-80 xl:h-96"
-                src="https://cdn.dribbble.com/users/878428/screenshots/17307425/media/01782a518148ce7ef2e790473c888b1f.png?compress=1&resize=1000x750&vertical=top"
+                src={IOWOEventToolPresentation}
                 alt=""
               />
             </a>
             <a href="#" className="transition-all duration-500 lg:col-span-2 hover:scale-105">
               <img
                 className="object-cover object-top w-full rounded-lg shadow-md shadow-gray-200 h-80 xl:h-96"
-                src="https://cdn.dribbble.com/users/1930709/screenshots/11466872/media/e50b0f02160a77397eb4a76782d23966.png?compress=1&resize=1000x750&vertical=top"
+                src={ExQuizSeat}
                 alt=""
               />
             </a>
             <a href="#" className="transition-all duration-500 hover:scale-105">
               <img
                 className="object-cover object-top w-full rounded-lg shadow-md shadow-gray-200 h-80 xl:h-96"
-                src="https://cdn.dribbble.com/users/1644453/screenshots/14403641/media/21e305eb9c8255b6e3367f0ca52c6668.png?compress=1&resize=1000x750&vertical=top"
+                src={IOWOToolPresentation}
+                alt=""
+              />
+            </a>
+            <a href="#" className="transition-all duration-500 lg:col-span-2 hover:scale-105">
+              <img
+                className="object-cover object-top w-full rounded-lg shadow-md shadow-gray-200 h-80 xl:h-96"
+                src={buyAndSellDashboard}
                 alt=""
               />
             </a>
