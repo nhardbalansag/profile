@@ -1,24 +1,46 @@
 import React from 'react'
 
+import {
+  Github,
+  Linkedin
+} from '../../assets/icons/index'
+
 export default function Footer() {
   return (
     <div>
-      <footer className="flex flex-col items-center py-20 text-white bg-[#001d3d]" id='contact'>
-        <p className="text-center">Copyright © 2020, Hero Header Inc.</p>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-6 h-6 mt-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-          />
-        </svg>
+      <footer className="footer footer-center bg-[#001d3d] text-primary-content p-10">
+        <aside>
+          <p className="font-bold">
+            Bernard Balansag
+            <br />
+            Software Developer
+          </p>
+          <p className="font-bold">
+            Contact Number: 
+            09091067604
+          </p>
+          <p className="font-bold">
+            Email Address: 
+            nhardbalansag@gmail.com
+          </p>
+          <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
+        </aside>
+        <nav>
+          <div className="grid grid-flow-col gap-4">
+            <a 
+            href="https://www.linkedin.com/in/bernard-balansag-8148b71b6" 
+            target="_blank" 
+            rel="noopener noreferrer">
+              <Linkedin isLight/>
+            </a>
+            <a 
+              href="https://github.com/nhardbalansag" 
+              target="_blank" 
+              rel="noopener noreferrer">
+              <Github/>
+            </a>
+          </div>
+        </nav>
       </footer>
     </div>
   )

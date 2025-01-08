@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 
 import {
-  Card
+  Card,
+  ProjectCardShort,
+  ProjectCardLong
 } from '../component/index'
 
 import {
@@ -76,7 +78,7 @@ const HomeContent = () =>{
                              href="https://github.com/nhardbalansag" 
                              target="_blank" 
                              rel="noopener noreferrer">
-                              <Github/>
+                              <Github isLight={true}/>
                             </a>
                           </div>
                         </div>
@@ -114,21 +116,24 @@ const HomeContent = () =>{
             </div>
 
             <div className="w-full px-4 mt-8 sm:w-1/2 lg:w-1/2 lg:px-4 lg:mt-0">
-              {/* <div className="border mockup-window bg-base-300">
-                <div className="flex justify-center p-2 bg-base-200">
-                  
-                </div>
-              </div> */}
               <img
-                    className="object-cover w-full rounded-xl h-100 lg:h-100"
-                    src={Bernard}
-                    alt="dashboard thumbnail"
-                  />
+                className="object-cover w-full rounded-xl h-100 lg:h-100"
+                src={Bernard}
+                alt="dashboard thumbnail"
+              />
             </div>
           </div>
         </section>
 
-        <section className="container px-6 py-8 mx-auto lg:py-16">
+        <section className="container px-6 py-8 mx-auto lg:py-8">
+          <div className="flex w-full flex-col my-8">
+            <div className="divider">
+              <div className='flex items-start justify-start'> 
+                <Information size={5}/>
+                <p className="mx-1 font-fo">What I Do</p>
+              </div>
+            </div>
+          </div>
           <div className="grid grid-cols-1 gap-8 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
             {/* Card 1 */}
             <Card icon={<Android/>} cardTitle='mobile app development' sub='Experienced in mobile app development using React Native for cross-platform apps and Kotlin for native Android. Skilled in creating responsive, visually engaging apps with seamless API integration and platform-specific optimizations.'/>
@@ -147,55 +152,13 @@ const HomeContent = () =>{
           </div>
 
           <div className="grid grid-cols-1 gap-10 mt-10 md:grid-cols-2 lg:grid-cols-3">
-            <a href="#" className="transition-all duration-500 lg:col-span-2 hover:scale-105">
-              <img
-                className="object-cover object-top w-full rounded-lg shadow-md shadow-gray-200 h-80 xl:h-96"
-                src={PhilricePresentation}
-                alt=""
-              />
-            </a>
-            <a href="#" className="transition-all duration-500 hover:scale-105">
-              <img
-                className="object-cover object-top w-full rounded-lg shadow-md shadow-gray-200 h-80 xl:h-96"
-                src={DCODEPOSDASHBOARD}
-                alt=""
-              />
-            </a>
-            <a href="#" className="transition-all duration-500 hover:scale-105">
-              <img
-                className="object-cover object-top w-full rounded-lg shadow-md shadow-gray-200 h-80 xl:h-96"
-                src={IOWOEventToolDashboard}
-                alt=""
-              />
-            </a>
-            <a href="#" className="transition-all duration-500 lg:col-span-2 hover:scale-105">
-              <img
-                className="object-cover object-top w-full rounded-lg shadow-md shadow-gray-200 h-80 xl:h-96"
-                src={IOWOEventToolPresentation}
-                alt=""
-              />
-            </a>
-            <a href="#" className="transition-all duration-500 lg:col-span-2 hover:scale-105">
-              <img
-                className="object-cover object-top w-full rounded-lg shadow-md shadow-gray-200 h-80 xl:h-96"
-                src={ExQuizSeat}
-                alt=""
-              />
-            </a>
-            <a href="#" className="transition-all duration-500 hover:scale-105">
-              <img
-                className="object-cover object-top w-full rounded-lg shadow-md shadow-gray-200 h-80 xl:h-96"
-                src={IOWOToolPresentation}
-                alt=""
-              />
-            </a>
-            <a href="#" className="transition-all duration-500 lg:col-span-2 hover:scale-105">
-              <img
-                className="object-cover object-top w-full rounded-lg shadow-md shadow-gray-200 h-80 xl:h-96"
-                src={buyAndSellDashboard}
-                alt=""
-              />
-            </a>
+            <ProjectCardLong imageSrc={PhilricePresentation}/>
+            <ProjectCardShort imageSrc={DCODEPOSDASHBOARD}/>
+            <ProjectCardShort imageSrc={IOWOEventToolDashboard}/>
+            <ProjectCardLong imageSrc={IOWOEventToolPresentation}/>
+            <ProjectCardLong imageSrc={ExQuizSeat}/>
+            <ProjectCardShort imageSrc={IOWOToolPresentation}/>
+            <ProjectCardLong imageSrc={buyAndSellDashboard}/>
           </div>
         </section>
       </main>
