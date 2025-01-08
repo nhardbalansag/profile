@@ -7,7 +7,7 @@ import {
 
 export default function Footer() {
   return (
-    <div>
+    <div id="contact">
       <footer className="footer footer-center bg-[#001d3d] text-primary-content p-10">
         <aside>
           <p className="font-bold">

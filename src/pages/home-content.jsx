@@ -26,6 +26,8 @@ import buyAndSellDashboard from '../assets/images/buyAndSellDashboard.png'
 import IOWOEventToolDashboard from '../assets/images/IOWO Event Tool Dashboard.png'
 import DCODEPOSDASHBOARD from '../assets/images/DCODE POS DASHBOARD.png'
 import Bernard from '../assets/images/bernard.png'
+import Kedica from '../assets/images/kedica.png'
+import technology  from '../assets/images/technology.png'
 
 const HomeContent = () =>{
 
@@ -75,9 +77,9 @@ const HomeContent = () =>{
                           </div>
                           <div>
                             <a 
-                             href="https://github.com/nhardbalansag" 
-                             target="_blank" 
-                             rel="noopener noreferrer">
+                            href="https://github.com/nhardbalansag" 
+                            target="_blank" 
+                            rel="noopener noreferrer">
                               <Github isLight={true}/>
                             </a>
                           </div>
@@ -159,6 +161,7 @@ const HomeContent = () =>{
             <ProjectCardLong imageSrc={ExQuizSeat}/>
             <ProjectCardShort imageSrc={IOWOToolPresentation}/>
             <ProjectCardLong imageSrc={buyAndSellDashboard}/>
+            <ProjectCardShort imageSrc={Kedica}/>
           </div>
         </section>
       </main>
