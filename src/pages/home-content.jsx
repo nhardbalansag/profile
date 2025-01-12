@@ -4,7 +4,8 @@ import {
   Card,
   ProjectCardShort,
   ProjectCardLong,
-  Phone
+  Phone,
+  Divider
 } from '../component/index'
 
 import {
@@ -47,14 +48,7 @@ const HomeContent = () =>{
         </section>
 
         <section className="container px-6 py-8 mx-auto pt-[400px] sm:pt-[400px] lg:pt-[250px] md:pt-[400px] lg:py-16" id="about">
-          <div className="flex w-full flex-col my-8">
-            <div className="divider">
-              <div className='flex items-start justify-start'> 
-                <Information size={5}/>
-                <p className="mx-1 font-fo">About me</p>
-              </div>
-            </div>
-          </div>
+          <Divider text='about me'/>
           <div className="lg:flex lg:items-center sm:flex sm:items-center lg:-mx-4 ">
             <div className="lg:w-1/2 lg:px-4 sm:w-1/2">
               <h3 className="text-xl font-medium text-gray-800 md:text-2xl lg:text-3xl">
@@ -81,14 +75,7 @@ const HomeContent = () =>{
         </section>
 
         <section className="container px-6 py-8 mx-auto lg:py-8">
-          <div className="flex w-full flex-col my-8">
-            <div className="divider">
-              <div className='flex items-start justify-start'> 
-                <Information size={5}/>
-                <p className="mx-1 font-fo">What I Do</p>
-              </div>
-            </div>
-          </div>
+          <Divider text='What I Do'/>
           <div className="grid grid-cols-1 gap-8 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
             <Card icon={<Android/>} cardTitle='mobile app development' sub='Experienced in mobile app development using React Native for cross-platform apps and Kotlin for native Android. Skilled in creating responsive, visually engaging apps with seamless API integration and platform-specific optimizations.'/>
             <Card icon={<Web/>} cardTitle='web application system' sub='Experienced in web app development with expertise in building responsive and scalable systems. Skilled in using modern frameworks like React or Vue.js for front-end development and Laravel or .NET for back-end services. Proficient in RESTful API integration, database management, and performance optimization to deliver efficient and user-friendly solutions.'/>

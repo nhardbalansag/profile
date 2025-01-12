@@ -8,7 +8,8 @@ import {
 
 import {
     HomePage,
-    HomeContent
+    HomeContent,
+    ProjectHighlight
 } from '../pages/index'
 
 
@@ -24,8 +25,20 @@ const router = createBrowserRouter([
                 children:[
                     
                 ]
-            }
+            },
+            // {
+            //     path: "project",
+            //     Component: ProjectHighlight,  
+            //     children:[
+                    
+            //     ]
+            // }
         ]
+    },
+    {
+        path: "/project",
+        loader: () => ({ message: "Hello Data Router!" }),
+        Component: ProjectHighlight,  
     }
 ])
 
