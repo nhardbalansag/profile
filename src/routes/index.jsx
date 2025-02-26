@@ -28,7 +28,6 @@ const router = createBrowserRouter([
             },
             {
                 path: "iowo",
-                loader: () => ({ message: "Hello Data Router!" }),
                 element: <Content/>
             },
         ]
