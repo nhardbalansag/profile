@@ -53,12 +53,17 @@ const ProjectHighlight = () => {
             <div className="py-8 mx-auto">
                 <InlineContentSingleImage 
                 image={exquizseat1} 
-                title={"title"} 
+                title={"ExQuizSeat"} 
                 subtext={"this is a subtext"}
                 textColor={'#0C0C0C'}
                 />
                 <div>
-                    <div className='flex justify-end my-10 md:flex-row'>
+                    <div className='text-center h-[100px] grid place-content-center'>
+                        <h3 className={`font-semibold text-[#0C0C0C] text-[32px] capitalize`}>
+                            Features
+                        </h3>
+                    </div>
+                    {/* <div className='flex justify-end my-10 md:flex-row'>
                         <CardRightImage image={exquizbody3} iscenter={true}/>
                         <CardRightImage image={exquizbody1} rightImage={true}/>
                     </div>
@@ -69,7 +74,7 @@ const ProjectHighlight = () => {
                     <div className='flex justify-end my-10 md:flex-row'>
                         <CardRightImage image={exquizbody3} iscenter={true}/>
                         <CardRightImage image={exquizbody1} rightImage={true}/>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div>

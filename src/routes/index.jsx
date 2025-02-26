@@ -9,7 +9,10 @@ import {
 import {
     HomePage,
     HomeContent,
-    ProjectHighlight
+    ProjectHighlight,
+
+    IOWOReportIndex,
+    Content
 } from '../pages/index'
 
 
@@ -26,13 +29,24 @@ const router = createBrowserRouter([
                     
                 ]
             },
-            // {
-            //     path: "project",
-            //     Component: ProjectHighlight,  
-            //     children:[
+            {
+                path: "project",
+                Component: ProjectHighlight,  
+                children:[
                     
-            //     ]
-            // }
+                ]
+            },
+        ]
+    },
+    {
+        path: "/profile/iowo",
+        loader: () => ({ message: "Hello Data Router!" }),
+        Component: IOWOReportIndex,  
+        children:[
+            {
+                path: "",
+                element: <Content/>
+            },
         ]
     },
     {

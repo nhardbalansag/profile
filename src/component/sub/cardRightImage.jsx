@@ -1,41 +1,31 @@
 import React from 'react'
 
-function CardRightImage({image, rightImage = false, iscenter = false, title = "test", textColor = '#0C0C0C'}) {
+function CardRightImage({image, title = "test", step = 'step test', subtext = "sub", textColor = '#0C0C0C'}) {
 
   return (
     <div
-     style={{
-        backgroundImage: `url(${image})`, 
-        backgroundRepeat:'no-repeat',
-    }}
     className={`
         bg-[#FFFFFF] 
-        ${iscenter ? 'hidden sm:block' : 'block'}
-        lg:display
         drop-shadow-lg 
         bg-cover 
-        lg:h-[599px]  
-        w-[323px]
-        h-[350px]
-        ${iscenter 
-            ? 'rounded-[50px] lg:w-[591px] mx-5' 
-            : (rightImage ? 'rounded-ss-[50px] rounded-es-[50px] lg:w-[703px] flex justify-start' : 'rounded-se-[50px] rounded-ee-[50px] lg:w-[703px] flex justify-end')
-        } 
+        p-5
+        rounded-[20px] 
+        m-5
     `}>
-        <div className={`
-            grid 
-            place-content-center 
-            p-5
-            lg:h-[${iscenter ? '300px' : '599px'}] 
-            lg:w-[${iscenter ? 'full' : '350px'}]`
-        }>
-            <div className='flex-col items-center justify-center px-2 text-center'>
-                <h3 className={`text-5xl font-normal text-[${textColor}] lg:text-[64px] capitalize`}>
-                {title}
+        <div className='grid grid-cols-2 place-content-center'>
+            <div className='px-2 text-center place-content-center'>
+                <h3 className={`font-extrabold text-[#e11818e6] text-16 lg:text-[64px] capitalize`}>
+                {step}
                 </h3>
-                <p className={`text-[${textColor}] lg:text-[20px] font-thin`}>
-                    afasdfasfasdf sdfd
+                <h4 className={`font-medium text-[${textColor}] text-16 lg:text-[64px] capitalize`}>
+                {title}
+                </h4>
+                <p className={`text-[${textColor}] md:text-[30px] font-thin`}>
+                    {subtext}
                 </p>
+            </div>
+            <div className=' place-content-center'>
+                <img src={image} alt="Reporting Tool" className="w-64 h-auto" />
             </div>
         </div>
     </div>
