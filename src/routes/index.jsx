@@ -24,25 +24,12 @@ const router = createBrowserRouter([
         children:[
             {
                 path: "",
-                Component: HomeContent,  
-                children:[
-                    
-                ]
-            },
-            {
-                path: "project",
-                element: <ProjectHighlight/>
+                element: <HomeContent/>
             },
             {
                 path: "iowo",
                 loader: () => ({ message: "Hello Data Router!" }),
-                Component: IOWOReportIndex,  
-                children:[
-                    {
-                        path: "",
-                        element: <Content/>
-                    },
-                ]
+                element: <Content/>
             },
         ]
     }
