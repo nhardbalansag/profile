@@ -31,28 +31,20 @@ const router = createBrowserRouter([
             },
             {
                 path: "project",
-                Component: ProjectHighlight,  
+                element: <ProjectHighlight/>
+            },
+            {
+                path: "iowo",
+                loader: () => ({ message: "Hello Data Router!" }),
+                Component: IOWOReportIndex,  
                 children:[
-                    
+                    {
+                        path: "",
+                        element: <Content/>
+                    },
                 ]
             },
         ]
-    },
-    {
-        path: "/profile/iowo",
-        loader: () => ({ message: "Hello Data Router!" }),
-        Component: IOWOReportIndex,  
-        children:[
-            {
-                path: "",
-                element: <Content/>
-            },
-        ]
-    },
-    {
-        path: "/project",
-        loader: () => ({ message: "Hello Data Router!" }),
-        Component: ProjectHighlight,  
     }
 ])
 
