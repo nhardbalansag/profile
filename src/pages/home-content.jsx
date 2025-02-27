@@ -24,6 +24,8 @@ import IOWOEventToolDashboard from '../assets/images/IOWO Event Tool Dashboard.p
 import DCODEPOSDASHBOARD from '../assets/images/DCODE POS DASHBOARD.png'
 import Bernard from '../assets/images/bernard.png'
 import Kedica from '../assets/images/kedica.png'
+import iowoapp from '../assets/images/iowoapp.png'
+import ropaapp from '../assets/images/ropaapp.png'
 
 const HomeContent = () =>{
 
@@ -93,6 +95,8 @@ const HomeContent = () =>{
           </div>
 
           <div className="grid grid-cols-1 gap-10 mt-10 md:grid-cols-2 lg:grid-cols-3">
+            <ProjectCardShort imageSrc={iowoapp}/>
+            <ProjectCardLong imageSrc={ropaapp}/>
             <ProjectCardLong imageSrc={PhilricePresentation}/>
             <ProjectCardShort imageSrc={DCODEPOSDASHBOARD}/>
             <ProjectCardShort imageSrc={IOWOEventToolDashboard}/>
