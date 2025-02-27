@@ -9,10 +9,6 @@ import {
 import {
     HomePage,
     HomeContent,
-    ProjectHighlight,
-
-    IOWOReportIndex,
-    Content
 } from '../pages/index'
 
 
@@ -25,11 +21,7 @@ const router = createBrowserRouter([
             {
                 path: "",
                 element: <HomeContent/>
-            },
-            {
-                path: "iowo",
-                element: <Content/>
-            },
+            }
         ]
     }
 ])
