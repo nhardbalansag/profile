@@ -2,7 +2,7 @@ import React from 'react'
 
 const Card = ({cardTitle = "test", sub = "test", icon}) => {
   return (
-    <div className="p-8 space-y-3 border-2 border-indigo-400 rounded-xl">
+    <div className="p-8 space-y-3 border-2 border-[#FF4E03] rounded-xl">
         <span className="inline-block text-indigo-500">
             {icon}
         </span>

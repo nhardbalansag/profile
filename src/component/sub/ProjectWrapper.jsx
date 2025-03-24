@@ -4,17 +4,14 @@ import {
     InlineContentSingleImage,
 } from '../index'
 
-import {
-    exquizbg1,
-    exquizseat1
-} from '../../assets/images/Exquizseat/index'
+import Empty from '../../assets/images/glorijan/empty.jpg'
 
 function ProjectWrapper({
     children,
     title = "title",
     subtitle = "sub",
-    bgImage = exquizbg1,
-    frontImage = exquizseat1
+    bgImage = Empty,
+    frontImage = Empty
 }) {
   return (
     <div

@@ -5,6 +5,8 @@ import Support from "./Support";
 import Github from "./Github";
 import Web from "./Web";
 import Android from "./Android";
+import Tool1 from "./Tool1";
+import Checked from "./Checked";
 
 export{
     WebDesign,
@@ -13,5 +15,7 @@ export{
     Support,
     Github,
     Web,
-    Android
+    Android,
+    Tool1,
+    Checked
 }

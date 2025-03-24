@@ -10,7 +10,7 @@ function Divider({text = "", icon = <Information size={5}/>}) {
         <div className="divider">
             <div className='flex items-start justify-start'> 
                 {icon}
-                <p className="mx-1 font-fo">
+                <p className="mx-1 font-fo font-bold">
                     {text}
                 </p>
             </div>

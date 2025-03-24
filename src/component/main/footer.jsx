@@ -1,46 +1,27 @@
 import React from 'react'
 
-import {
-  Github,
-  Linkedin
-} from '../../assets/icons/index'
-
 export default function Footer() {
   return (
     <div id="contact">
       <footer className="footer footer-center bg-[#001d3d] text-primary-content p-10">
         <aside>
-          <p className="font-bold">
-            Bernard Balansag
-            <br />
-            Software Developer
+          <p className="font-bold text-[25px] text-[#FF4E03]">
+            GLORIJAN CONSTRUCTION & SUPPLY
           </p>
-          <p className="font-bold">
+          <p className="font-semibold text-[18px] mt-5">
             Contact Number: 
-            09091067604
           </p>
-          <p className="font-bold">
+          <p className="font-semibold text-[18px]">
+            +639989917208 | +639266931264
+          </p>
+          <p className="font-semibold text-[18px] mt-5">
             Email Address: 
-            nhardbalansag@gmail.com
           </p>
-          <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
+          <p className="font-semibold text-[18px]">
+            glorijan2018@gmail.com
+          </p>
+          <p className='text-[18px]  mt-5'>Copyright © {new Date().getFullYear()} - All right reserved</p>
         </aside>
-        <nav>
-          <div className="grid grid-flow-col gap-4">
-            <a 
-            href="https://www.linkedin.com/in/bernard-balansag-8148b71b6" 
-            target="_blank" 
-            rel="noopener noreferrer">
-              <Linkedin isLight/>
-            </a>
-            <a 
-              href="https://github.com/nhardbalansag" 
-              target="_blank" 
-              rel="noopener noreferrer">
-              <Github/>
-            </a>
-          </div>
-        </nav>
       </footer>
     </div>
   )
