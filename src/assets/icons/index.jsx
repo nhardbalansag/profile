@@ -7,6 +7,7 @@ import Web from "./Web";
 import Android from "./Android";
 import Tool1 from "./Tool1";
 import Checked from "./Checked";
+import Phone from "./Phone";
 
 export{
     WebDesign,
@@ -17,5 +18,6 @@ export{
     Web,
     Android,
     Tool1,
-    Checked
+    Checked,
+    Phone
 }

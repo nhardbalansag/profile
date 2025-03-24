@@ -1,14 +1,18 @@
 import React from 'react'
 
+import Logo3 from '../../assets/images/glorijan/logo3.png'
+
 const Header = ({onPressAction, ActionState}) => {
   return (
     <div>
       <header className="bg-[#001d3d]">
         <nav className="container relative flex items-center justify-between px-6 py-8 mx-auto text-white">
-          <a href="#">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 md:w-10 md:h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
-            </svg>
+          <a href="#" className='flex items-center'>
+             <img
+              className="w-8 h-8 mr-2 md:w-10 md:h-10"
+              alt="Tailwind CSS chat bubble component"
+              src={Logo3} />
+              <h1 className="text-[29px] font-bold text-[#FF4E03] uppercase">Glorijan</h1>
           </a>
 
           <button onClick={onPressAction} className="md:hidden">

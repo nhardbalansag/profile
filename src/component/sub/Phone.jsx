@@ -1,6 +1,7 @@
 import React from 'react'
 
 import BGlorijan  from '../../assets/images/glorijan/glorijanmob.png'
+import Logo3 from '../../assets/images/glorijan/logo3.png'
 
 function Phone() {
   return (
@@ -15,7 +16,13 @@ function Phone() {
                 }}>
                 <div className='flex items-end justify-center h-[70%]'>
                     <div className='text-start'>
-                        <h1 className="text-[29px] font-bold text-[#FF4E03] uppercase">Glorijan</h1>
+                         <div className='flex items-center'>
+                            <img
+                            className="w-8 h-8 mr-2 md:w-10 md:h-10"
+                            alt="Tailwind CSS chat bubble component"
+                            src={Logo3} />
+                            <h1 className="text-[29px] font-bold text-[#FF4E03] uppercase">Glorijan</h1>
+                         </div>
                         <h3 className="text-[29px] font-extrabold text-[white] uppercase">Construction Supply </h3>
                         <p className='text-white'>
                         Glorijan Construction & Supply delivers quality materials and reliable services for durable, high-standard projects.
