@@ -2,7 +2,7 @@ import React from 'react'
 
 function MechantCard({classes, width = "300px", image}) {
   return (
-    <div className={`lg:flex lg:justify-center lg:items-center w-[${width}] p-2 m-3 rounded-lg shadow-lg ${classes}`}>
+    <div className={`lg:flex lg:justify-center lg:items-center w-[${width}] p-2 m-3 rounded-lg shadow-lg ${classes} bg-white`}>
         <div>
             <div className=" bg-base-100">
                 <figure>

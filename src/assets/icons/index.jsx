@@ -15,6 +15,8 @@ import Location from "./Location";
 import Globe from "./Globe";
 import UserCicle from "./UserCicle";
 import Hearth from "./Hearth";
+import Chat from "./Chat";
+import Group from "./Group";
 
 export{
     WebDesign,
@@ -33,5 +35,7 @@ export{
     Location,
     Globe,
     UserCicle,
-    Hearth
+    Hearth,
+    Chat,
+    Group
 }

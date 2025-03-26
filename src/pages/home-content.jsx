@@ -24,6 +24,10 @@ import EmptyImage  from  '../assets/images/glorijan/empty.jpg'
 
 import Logo1 from '../assets/images/ten/logo.png'
 import TenBG2 from '../assets/images/ten/tenBg2.png'
+import test from '../assets/images/glorijan/glorijanmob.png'
+import ForTestDisplay from '../assets/images/ten/forTestDisplay.jpg'
+import ForTestDisplay2 from '../assets/images/ten/forTestDisplay2.jpg'
+import ForTestDisplay3 from '../assets/images/ten/forTestDisplay3.jpg'
 
 const HomeContent = () =>{
 
@@ -52,10 +56,12 @@ const HomeContent = () =>{
 
         {/* contents */}
         <div className='flex justify-center my-5'>
-          <div className='w-[75%] '>
-
-          <CategoryTitleAndArrow title={"Community"}/>
+          <div className='md:w-[75%] w-[100%]'>
+            <CategoryTitleAndArrow title={"Community"}/>
             <Swiper
+              pagination={{
+                dynamicBullets: true,
+              }}
               modules={[Navigation, Pagination, Scrollbar, A11y]}
               spaceBetween={5}
               slidesPerView={1}
@@ -72,22 +78,25 @@ const HomeContent = () =>{
                 // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
               }}
             >
-              <SwiperSlide className='flex justify-center'>
-                <HomeCardCommunity image={EmptyImage}/>
+              <SwiperSlide className='flex justify-center mb-10'>
+                <HomeCardCommunity image={ForTestDisplay3} isLiked/>
               </SwiperSlide>
-              <SwiperSlide className='flex justify-center'>
-                <HomeCardCommunity image={EmptyImage}/>
+              <SwiperSlide className='flex justify-center mb-10'>
+                <HomeCardCommunity image={ForTestDisplay}/>
               </SwiperSlide>
-              <SwiperSlide className='flex justify-center'>
-                <HomeCardCommunity image={EmptyImage}/>
+              <SwiperSlide className='flex justify-center mb-10'>
+                <HomeCardCommunity image={ForTestDisplay2}/>
               </SwiperSlide>
-              <SwiperSlide className='flex justify-center'>
+              <SwiperSlide className='flex justify-center mb-10'>
                 <HomeCardCommunity image={EmptyImage}/>
               </SwiperSlide>
             </Swiper>
 
             <CategoryTitleAndArrow title={"Travel Deals"}/>
             <Swiper
+              pagination={{
+                dynamicBullets: true,
+              }}
               modules={[Navigation, Pagination, Scrollbar, A11y]}
               spaceBetween={5}
               slidesPerView={1}
@@ -104,54 +113,60 @@ const HomeContent = () =>{
                 // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
               }}
             >
-              <SwiperSlide className='flex justify-center'>
-                <HomeCard image={EmptyImage}/>
+              <SwiperSlide className='flex justify-center mb-10'>
+                <HomeCard image={ForTestDisplay} isLiked/>
               </SwiperSlide>
-              <SwiperSlide className='flex justify-center'>
-                <HomeCard image={EmptyImage}/>
+              <SwiperSlide className='flex justify-center mb-10'>
+                <HomeCard image={ForTestDisplay3}/>
               </SwiperSlide>
-              <SwiperSlide className='flex justify-center'>
-                <HomeCard image={EmptyImage}/>
+              <SwiperSlide className='flex justify-center mb-10'>
+                <HomeCard image={ForTestDisplay2}/>
               </SwiperSlide>
-              <SwiperSlide className='flex justify-center'>
+              <SwiperSlide className='flex justify-center mb-10'>
                 <HomeCard image={EmptyImage}/>
               </SwiperSlide>
             </Swiper>
             
             <CategoryTitleAndArrow title={"Event Deals"}/>
-            <Swiper
+              <Swiper
+              pagination={{
+                dynamicBullets: true,
+              }}
                modules={[Navigation, Pagination, Scrollbar, A11y]}
                spaceBetween={5}
                slidesPerView={1}
                onSlideChange={() => console.log('slide change')}
                onSwiper={(swiper) => console.log(swiper)}
                breakpoints={{
-                 300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
-                 400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
-                 500: { slidesPerView: 1, spaceBetween: 0 }, // 2 slides on tablets
-                 600: { slidesPerView: 2, spaceBetween: 60 }, // 2 slides on tablets
-                 700: { slidesPerView: 2, spaceBetween: 50 }, // 2 slides on tablets
-                 800: { slidesPerView: 2, spaceBetween: 10 }, // 2 slides on tablets
-                 1024: { slidesPerView: 3,  spaceBetween: 10} // 3 slides on desktops
-                 // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
-               }}
+                300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
+                400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
+                500: { slidesPerView: 1, spaceBetween: 0 }, // 2 slides on tablets
+                600: { slidesPerView: 2, spaceBetween: 60 }, // 2 slides on tablets
+                700: { slidesPerView: 2, spaceBetween: 50 }, // 2 slides on tablets
+                800: { slidesPerView: 2, spaceBetween: 10 }, // 2 slides on tablets
+                1024: { slidesPerView: 3,  spaceBetween: 10} // 3 slides on desktops
+                // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
+              }}
             >
-              <SwiperSlide className='flex justify-center'>
+              <SwiperSlide className='flex justify-center mb-10'>
                 <HomeCard image={EmptyImage}/>
               </SwiperSlide>
-              <SwiperSlide className='flex justify-center'>
+              <SwiperSlide className='flex justify-center mb-10'>
                 <HomeCard image={EmptyImage}/>
               </SwiperSlide>
-              <SwiperSlide className='flex justify-center'>
+              <SwiperSlide className='flex justify-center mb-10'>
                 <HomeCard image={EmptyImage}/>
               </SwiperSlide>
-              <SwiperSlide className='flex justify-center'>
+              <SwiperSlide className='flex justify-center mb-10'>
                 <HomeCard image={EmptyImage}/>
               </SwiperSlide>
             </Swiper>
 
             <CategoryTitleAndArrow title={"Learnings"}/>
             <Swiper
+              pagination={{
+                dynamicBullets: true,
+              }}
                modules={[Navigation, Pagination, Scrollbar, A11y]}
                spaceBetween={5}
                slidesPerView={1}
@@ -168,22 +183,25 @@ const HomeContent = () =>{
                  // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
                }}
             >
-              <SwiperSlide className='flex justify-center'>
+              <SwiperSlide className='flex justify-center mb-10'>
                 <HomeCard image={EmptyImage}/>
               </SwiperSlide>
-              <SwiperSlide className='flex justify-center'>
+              <SwiperSlide className='flex justify-center mb-10'>
                 <HomeCard image={EmptyImage}/>
               </SwiperSlide>
-              <SwiperSlide className='flex justify-center'>
+              <SwiperSlide className='flex justify-center mb-10'>
                 <HomeCard image={EmptyImage}/>
               </SwiperSlide>
-              <SwiperSlide className='flex justify-center'>
+              <SwiperSlide className='flex justify-center mb-10'>
                 <HomeCard image={EmptyImage}/>
               </SwiperSlide>
             </Swiper>
 
             <CategoryTitleAndArrow title={"Merchants"}/>
             <Swiper
+              pagination={{
+                dynamicBullets: true,
+              }}
                modules={[Navigation, Pagination, Scrollbar, A11y]}
                spaceBetween={5}
                slidesPerView={1}
@@ -200,16 +218,16 @@ const HomeContent = () =>{
                  // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
                }}
             >
-              <SwiperSlide className='flex justify-center'>
+              <SwiperSlide className='flex justify-center mb-10'>
                 <MechantCard image={EmptyImage}/>
               </SwiperSlide>
-              <SwiperSlide className='flex justify-center'>
+              <SwiperSlide className='flex justify-center mb-10'>
                 <MechantCard image={EmptyImage}/>
               </SwiperSlide>
-              <SwiperSlide className='flex justify-center'>
+              <SwiperSlide className='flex justify-center mb-10'>
                 <MechantCard image={EmptyImage}/>
               </SwiperSlide>
-              <SwiperSlide className='flex justify-center'>
+              <SwiperSlide className='flex justify-center mb-10'>
                 <MechantCard image={EmptyImage}/>
               </SwiperSlide>
             </Swiper>
