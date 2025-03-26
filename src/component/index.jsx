@@ -12,6 +12,8 @@ import HomeCard from "./sub/HomeCard";
 import BottomCreateAccountFloat from "./sub/BottomCreateAccountFloat";
 import MechantCard from "./sub/MechantCard";
 import CategoryTitleAndArrow from "./sub/CategoryTitleAndArrow";
+import HomeCardCommunity from "./sub/HomeCardCommunity";
+import SearchFilterBar from "./sub/SearchFilterBar";
 
 export{
     Header,
@@ -27,5 +29,7 @@ export{
     HomeCard,
     BottomCreateAccountFloat,
     MechantCard,
-    CategoryTitleAndArrow
+    CategoryTitleAndArrow,
+    HomeCardCommunity,
+    SearchFilterBar
 }

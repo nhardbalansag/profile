@@ -14,6 +14,7 @@ import CircledArrowRight from "./CircledArrowRight";
 import Location from "./Location";
 import Globe from "./Globe";
 import UserCicle from "./UserCicle";
+import Hearth from "./Hearth";
 
 export{
     WebDesign,
@@ -31,5 +32,6 @@ export{
     CircledArrowRight,
     Location,
     Globe,
-    UserCicle
+    UserCicle,
+    Hearth
 }

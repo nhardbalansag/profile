@@ -7,7 +7,7 @@ import {
 function CategoryTitleAndArrow({title}) {
   return (
     <div className='flex items-center justify-between'>
-        <h2 h2 className='font-bold text-[30px] text-[#063970] my-5'>{title}</h2>
+        <h2 h2 className='font-bold text-[25px] text-[#063970] my-5'>{title}</h2>
         <button className='flex items-center justify-center'>
             <p className='mr-3 font-semibold'>Explore</p>
             <CircledArrowRight />
