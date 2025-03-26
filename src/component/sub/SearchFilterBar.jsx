@@ -8,7 +8,7 @@ import {
 function SearchFilterBar() {
   return (
     <div className='flex justify-center my-5 '>
-        <div className='lg:flex lg:justify-center lg:items-center w-[75%] p-2 rounded-lg shadow-lg bg-white'>
+        <div className='lg:flex lg:justify-center lg:items-center w-[95%] md:w-[75%] p-2 rounded-lg shadow-lg bg-white'>
             <div  className="flex items-center mx-2 my-1">
                 <Search classes={'text-black mr-3'}/>
                 <input type="text" placeholder="Where to?"  className='placeholder-black border-gray-400 input w-full lg:w-[150px]'/>

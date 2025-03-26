@@ -37,33 +37,33 @@ const HomeCard = ({classes, width = "350px", image, isLiked = false}) => {
                 alt="Tailwind CSS chat bubble component"
                 src={image} />
             </div>
-            <div className="p-3">
+            <div className="p-2 px-5">
                 <div className='py-1'>
-                    <p className="font-bold text-[15px]">Card Title</p>
-                    <p className='text-[14px] py-1'>A card component a body part, and ...</p>
+                    <p className="font-bold card-title">Card Title</p>
+                    <p className='text-[18px] py-1'>A card component a body part, and ...</p>
                 </div>
                 <div className='px-2 border rounded-lg'>
                     <p className='font-bold text-[15px] my-1'>5 Days 4 Nights</p>
                     <div className='flex justify-between'>
                         <div className='flex items-center justify-start'>
                             <Calendar size={6}/>
-                            <p className=' text-[14px] ml-2 my-1'>June 2 - June 6</p>
+                            <p className=' text-[16px] ml-2 my-1'>June 2 - June 6</p>
                         </div>
                         <div className='flex items-center justify-start my-1'>
                             <Location size={6}/>
-                            <p className='text-[14px] ml-2'>Singapore</p>
+                            <p className='text-[16px] ml-2'>Singapore</p>
                         </div>
                     </div>
                 </div>
             </div>
-           <div className='flex items-center'>
+           <div className='flex items-center justify-start mx-5'>
                 <div className='flex items-center justify-start p-2'>
                     <div className='flex items-center justify-center p-1 mr-2 bg-white shadow-lg rounded-badge'>
                         <Hearth color={'gray'} size={6} />
                     </div>
                     <div className='flex items-center'>
-                        <p className='text-[13px] font-semibold mr-1'>100</p>
-                        <p className='text-[13px] underline'>Reacted</p>
+                        <p className='text-[15px] font-semibold mr-1'>100</p>
+                        <p className='text-[15px] underline'>Reacted</p>
                     </div>
                 </div>
                 <div className='flex items-center justify-start p-2'>
@@ -71,8 +71,8 @@ const HomeCard = ({classes, width = "350px", image, isLiked = false}) => {
                         <Group color={'gray'} size={6} />
                     </div>
                     <div className='flex items-center'>
-                        <p className='text-[13px] font-semibold mr-1'>5</p>
-                        <p className='text-[13px] underline'>Communities</p>
+                        <p className='text-[15px] font-semibold mr-1'>5</p>
+                        <p className='text-[15px] underline'>Communities</p>
                     </div>
                 </div>
             </div>

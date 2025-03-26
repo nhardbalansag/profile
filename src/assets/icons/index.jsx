@@ -17,6 +17,7 @@ import UserCicle from "./UserCicle";
 import Hearth from "./Hearth";
 import Chat from "./Chat";
 import Group from "./Group";
+import ThreeDot from "./ThreeDot";
 
 export{
     WebDesign,
@@ -37,5 +38,6 @@ export{
     UserCicle,
     Hearth,
     Chat,
-    Group
+    Group,
+    ThreeDot
 }
