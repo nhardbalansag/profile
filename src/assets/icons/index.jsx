@@ -8,6 +8,12 @@ import Android from "./Android";
 import Tool1 from "./Tool1";
 import Checked from "./Checked";
 import Phone from "./Phone";
+import Search from "./Search";
+import Calendar from "./Calendar";
+import CircledArrowRight from "./CircledArrowRight";
+import Location from "./Location";
+import Globe from "./Globe";
+import UserCicle from "./UserCicle";
 
 export{
     WebDesign,
@@ -19,5 +25,11 @@ export{
     Android,
     Tool1,
     Checked,
-    Phone
+    Phone,
+    Search,
+    Calendar,
+    CircledArrowRight,
+    Location,
+    Globe,
+    UserCicle
 }

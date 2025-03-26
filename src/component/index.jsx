@@ -8,6 +8,10 @@ import Divider from "./sub/Divider";
 import InlineContentSingleImage from "./sub/InlineContentSingleImage";
 import CardRightImage from "./sub/cardRightImage";
 import ProjectWrapper from "./sub/ProjectWrapper";
+import HomeCard from "./sub/HomeCard";
+import BottomCreateAccountFloat from "./sub/BottomCreateAccountFloat";
+import MechantCard from "./sub/MechantCard";
+import CategoryTitleAndArrow from "./sub/CategoryTitleAndArrow";
 
 export{
     Header,
@@ -19,5 +23,9 @@ export{
     Divider,
     InlineContentSingleImage,
     CardRightImage,
-    ProjectWrapper
+    ProjectWrapper,
+    HomeCard,
+    BottomCreateAccountFloat,
+    MechantCard,
+    CategoryTitleAndArrow
 }

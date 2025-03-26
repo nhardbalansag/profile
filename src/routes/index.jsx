@@ -14,7 +14,7 @@ import {
 
 const router = createBrowserRouter([
     {
-        path: "/glorijan",
+        path: "/ReactTenFrontend",
         loader: () => ({ message: "Hello Data Router!" }),
         Component: HomePage,  
         children:[

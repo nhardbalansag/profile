@@ -1,18 +1,22 @@
 import React from 'react'
 
-import Logo3 from '../../assets/images/glorijan/logo3.png'
+import Logo2 from '../../assets/images/ten/logo2.png'
+
+import {
+  Globe,
+  UserCicle
+} from '../../assets/icons/index'
 
 const Header = ({onPressAction, ActionState}) => {
   return (
     <div>
       <header className="bg-[#001d3d]">
-        <nav className="container relative flex items-center justify-between px-6 py-8 mx-auto text-white">
+        <nav className="container relative flex items-center justify-between px-6 mx-auto text-white">
           <a href="#" className='flex items-center'>
              <img
-              className="w-8 h-8 mr-2 md:w-10 md:h-10"
+              className="w-[60px] md:w-[100px]"
               alt="Tailwind CSS chat bubble component"
-              src={Logo3} />
-              <h1 className="text-[29px] font-bold text-[#FF4E03] uppercase">Glorijan</h1>
+              src={Logo2} />
           </a>
 
           <button onClick={onPressAction} className="md:hidden">
@@ -28,14 +32,22 @@ const Header = ({onPressAction, ActionState}) => {
           </button>
 
           <div
-            className={`absolute inset-x-0 z-30 w-full px-6 py-8 mt-4 space-y-6 transition-all duration-300 ease-in-out bg-indigo-600 top-16 md:mt-0 md:p-0 md:top-0 md:relative md:bg-transparent md:w-auto md:opacity-100 md:translate-x-0 md:space-y-0 md:-mx-6 md:flex md:items-center ${
+            className={`place-content-center grid grid-cols-1 absolute inset-x-0 z-30 w-full px-6 py-8 mt-4 space-y-6 transition-all duration-300 ease-in-out bg-[#2596be]  top-16 md:mt-0 md:p-0 md:top-0 md:relative md:bg-transparent md:w-auto md:opacity-100 md:translate-x-0 md:space-y-0 md:-mx-6 md:flex md:items-center ${
               ActionState ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'
             }`}
           >
-            <a href="#" className="block text-white transition-colors duration-300 md:px-6 hover:text-indigo-300">Home</a>
-            <a href="#about" className="block text-white transition-colors duration-300 md:px-6 hover:text-indigo-300">About</a>
-            <a href="#projects" className="block text-white transition-colors duration-300 md:px-6 hover:text-indigo-300">Portfolio</a>
-            <a href="#contact" className="block text-white transition-colors duration-300 md:px-6 hover:text-indigo-300">Contact</a>
+             <div className='flex items-center justify-center'>
+              <Globe/>
+              <p className='ml-2'>Language</p>
+            </div>
+            <div className='flex items-center justify-center md:px-10 '>
+              <UserCicle/>
+              <a href="#" className="block ml-2 text-white transition-colors duration-300 hover:text-indigo-300">Login</a>
+            </div>
+            <button className="px-5 py-2 text-sm font-semibold border rounded-lg">
+            Create account
+            </button>
+           
           </div>
         </nav>
       </header>
