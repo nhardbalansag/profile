@@ -41,6 +41,22 @@ const HomeCardCommunity = ({classes, width = "350px", image, isLiked = false, ca
                 </div>
                 <div className={`bg-base-100 md:flex md:justify-center`}>
                     <div>
+                        <div className='flex justify-center hidden sm:block'>
+                            <div className='border-[0.5px] border-[#9f9f9b] border-b-transparent rounded-b-none rounded-lg w-[95%] sm:w-[100%]'>
+                                <div className='flex items-center justify-start p-2 px-5 '>
+                                    <div className="w-8 h-8 mr-2 overflow-hidden rounded-full">
+                                        <img src={Logo2} alt={`Avatar`} className="object-cover w-full h-full" />
+                                    </div>
+                                    <div>
+                                        <p className='font-semibold text-[15px] text-black'>Club TEN</p>
+                                    </div>
+                                </div>
+                                <div className='px-6 py-2'>
+                                    <p className="font-semibold text-[17px]">Card Title</p>
+                                    <p className='text-[16px] py-1'>A card component a body part, and ...</p>
+                                </div>
+                            </div>
+                        </div>
                         <div className='flex justify-center'>
                             <div 
                                 style={{
@@ -48,7 +64,7 @@ const HomeCardCommunity = ({classes, width = "350px", image, isLiked = false, ca
                                     backgroundSize: "cover", 
                                     backgroundPosition: "center"
                                 }}
-                                className={`h-[150px] rounded-lg w-[230px] hidden md:block`}
+                                className={`h-[150px] rounded-lg w-[100%] hidden md:block rounded-t-none`}
                             >
                                 <div className='flex items-center justify-end py-2'>
                                     <button onClick={() => alert("liked")} className='mr-2'>
@@ -56,6 +72,22 @@ const HomeCardCommunity = ({classes, width = "350px", image, isLiked = false, ca
                                             <Hearth color={isLiked ? 'red' : 'gray'} size={8} />
                                         </div>
                                     </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='flex justify-center block sm:hidden'>
+                            <div className='border-[0.5px] border-[#9f9f9b] border-b-transparent rounded-b-none rounded-lg w-[95%]'>
+                                <div className='flex items-center justify-start p-2 px-5'>
+                                    <div className="w-8 h-8 mr-2 overflow-hidden rounded-full">
+                                        <img src={Logo2} alt={`Avatar`} className="object-cover w-full h-full" />
+                                    </div>
+                                    <div>
+                                        <p className='font-semibold text-[15px] text-black'>Club TEN</p>
+                                    </div>
+                                </div>
+                                <div className='px-6 py-2'>
+                                    <p className="font-semibold text-[17px]">Card Title</p>
+                                    <p className='text-[16px] py-1'>A card component a body part, and ...</p>
                                 </div>
                             </div>
                         </div>
@@ -68,13 +100,13 @@ const HomeCardCommunity = ({classes, width = "350px", image, isLiked = false, ca
                         <div className={`p-2 px-5`}>
                             <div className='flex items-center justify-between'>
                                 <div>
-                                    <div className='py-1'>
-                                        <p className="font-bold card-title">Card Title</p>
+                                    <div className='block py-1 md:hidden'>
+                                        <p className="font-bold card-title">My Community Group</p>
                                     </div>
                                     <div className='flex items-center justify-between'>
                                         <button onClick={() => alert("liked")} className='mb-3'>
                                             <div className='flex items-center justify-center'>
-                                                <div className='flex items-center justify-center p-1 mr-2 bg-white shadow-lg rounded-badge'>
+                                                <div className='flex items-center justify-center p-1 mr-2 '>
                                                     <Chat color={'gray'} size={6} />
                                                 </div>
                                                 <p className='ml-2 underline text-[15px]'>Discussion</p>

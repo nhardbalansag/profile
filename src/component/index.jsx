@@ -14,6 +14,9 @@ import MechantCard from "./sub/MechantCard";
 import CategoryTitleAndArrow from "./sub/CategoryTitleAndArrow";
 import HomeCardCommunity from "./sub/HomeCardCommunity";
 import SearchFilterBar from "./sub/SearchFilterBar";
+import HomeCardNews from "./sub/HomeCardNews";
+import HomeLearningCard from "./sub/HomeLearningCard";
+import HomeCardEvent from "./sub/HomeCardEvent";
 
 export{
     Header,
@@ -31,5 +34,8 @@ export{
     MechantCard,
     CategoryTitleAndArrow,
     HomeCardCommunity,
-    SearchFilterBar
+    SearchFilterBar,
+    HomeCardNews,
+    HomeLearningCard,
+    HomeCardEvent
 }

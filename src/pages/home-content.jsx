@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 import {
   HomeCard,
@@ -6,10 +6,13 @@ import {
   MechantCard,
   CategoryTitleAndArrow,
   HomeCardCommunity,
-  SearchFilterBar
+  SearchFilterBar,
+  HomeCardNews,
+  HomeLearningCard,
+  HomeCardEvent
 } from '../component/index'
 
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import { Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -32,6 +35,14 @@ import ForTestDisplay3 from '../assets/images/ten/forTestDisplay3.jpg'
 const HomeContent = () =>{
 
   const [startDate, setStartDate] = useState(new Date());
+  const [showBottomRegistration, setShowBottomRegistration] = useState(true);
+
+  // const progressCircle = useRef(null);
+  // const progressContent = useRef(null);
+  // const onAutoplayTimeLeft = (s, time, progress) => {
+  //   // progressCircle.current.style.setProperty('--progress', 1 - progress);
+  //   // progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
+  // };
 
   return (
     <div>
@@ -52,12 +63,70 @@ const HomeContent = () =>{
             src={Logo1} />
         </div>
 
-        <SearchFilterBar/>
-
         {/* contents */}
         <div className='flex justify-center my-5'>
           <div className='md:w-[75%] w-[100%]'>
+
+            <div className='block sm:hidden'>
+              <SearchFilterBar/>
+            </div>
+
+            <CategoryTitleAndArrow title={"Happenings"}/>
+            <Swiper
+              coverflowEffect={{
+                rotate: 50,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+              }}
+              effect={'coverflow'}
+              grabCursor={true}
+              pagination={{
+                dynamicBullets: true,
+                clickable: true,
+              }}
+              centeredSlides={true}
+              autoplay={{
+                delay: 2000,
+                disableOnInteraction: false,
+              }}
+              // onAutoplayTimeLeft={onAutoplayTimeLeft}
+              // navigation={true}
+              modules={[Autoplay,EffectCoverflow, Pagination, Navigation]}
+              spaceBetween={5}
+              slidesPerView={2}
+              onSlideChange={() => console.log('slide change')}
+              onSwiper={(swiper) => console.log(swiper)}
+              breakpoints={{
+                300: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
+                400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
+                500: { slidesPerView: 1, spaceBetween: 0 }, // 2 slides on tablets
+                600: { slidesPerView: 2, spaceBetween: 60 }, // 2 slides on tablets
+                700: { slidesPerView: 2, spaceBetween: 50 }, // 2 slides on tablets
+                800: { slidesPerView: 2, spaceBetween: 10 }, // 2 slides on tablets
+                1024: { slidesPerView: 3,  spaceBetween: 10} // 3 slides on desktops
+                // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
+              }}
+            >
+              <SwiperSlide className='flex justify-center mb-10'>
+                <HomeCardNews image={ForTestDisplay3} isLiked caption={'Planning a trip soon? join me'}/>
+              </SwiperSlide>
+              <SwiperSlide className='flex justify-center mb-10'>
+                <HomeCardNews image={ForTestDisplay} caption={'join my community discussions'}/>
+              </SwiperSlide>
+              <SwiperSlide className='flex justify-center mb-10'>
+                <HomeCardNews image={ForTestDisplay2} caption={"who's in?"}/>
+              </SwiperSlide>
+              <SwiperSlide className='flex justify-center mb-10'>
+                <HomeCardNews image={EmptyImage} />
+              </SwiperSlide>
+            </Swiper>
             
+            <div className='hidden sm:block'>
+              <SearchFilterBar/>
+            </div>
+
             <CategoryTitleAndArrow title={"Destinations"}/>
             <Swiper
               pagination={{
@@ -96,10 +165,21 @@ const HomeContent = () =>{
 
             <CategoryTitleAndArrow title={"Community"}/>
             <Swiper
+              coverflowEffect={{
+                rotate: 50,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+              }}
               pagination={{
                 dynamicBullets: true,
+                clickable: true,
               }}
-              modules={[Navigation, Pagination, Scrollbar, A11y]}
+              centeredSlides={true}
+              effect={'coverflow'}
+              grabCursor={true}
+              modules={[Navigation, EffectCoverflow, Pagination, Scrollbar, A11y]}
               spaceBetween={5}
               slidesPerView={1}
               onSlideChange={() => console.log('slide change')}
@@ -151,16 +231,16 @@ const HomeContent = () =>{
               }}
             >
               <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCard image={EmptyImage}/>
+                <HomeCardEvent image={EmptyImage}/>
               </SwiperSlide>
               <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCard image={EmptyImage}/>
+                <HomeCardEvent image={EmptyImage}/>
               </SwiperSlide>
               <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCard image={EmptyImage}/>
+                <HomeCardEvent image={EmptyImage}/>
               </SwiperSlide>
               <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCard image={EmptyImage}/>
+                <HomeCardEvent image={EmptyImage}/>
               </SwiperSlide>
             </Swiper>
 
@@ -171,11 +251,11 @@ const HomeContent = () =>{
               }}
                modules={[Navigation, Pagination, Scrollbar, A11y]}
                spaceBetween={5}
-               slidesPerView={1}
+               slidesPerView={2}
                onSlideChange={() => console.log('slide change')}
                onSwiper={(swiper) => console.log(swiper)}
                breakpoints={{
-                 300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
+                 300: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
                  400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
                  500: { slidesPerView: 1, spaceBetween: 0 }, // 2 slides on tablets
                  600: { slidesPerView: 2, spaceBetween: 60 }, // 2 slides on tablets
@@ -186,16 +266,16 @@ const HomeContent = () =>{
                }}
             >
               <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCard image={EmptyImage}/>
+                <HomeLearningCard image={EmptyImage}/>
               </SwiperSlide>
               <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCard image={EmptyImage}/>
+                <HomeLearningCard image={EmptyImage}/>
               </SwiperSlide>
               <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCard image={EmptyImage}/>
+                <HomeLearningCard image={EmptyImage}/>
               </SwiperSlide>
               <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCard image={EmptyImage}/>
+                <HomeLearningCard image={EmptyImage}/>
               </SwiperSlide>
             </Swiper>
 
@@ -236,10 +316,14 @@ const HomeContent = () =>{
           </div>
         </div>
         {/* end contents */}
-        <div className='flex justify-center'>
-          <BottomCreateAccountFloat/>
-        </div>
-        
+
+        {
+          showBottomRegistration
+          &&
+          <div className='flex justify-center'>
+            <BottomCreateAccountFloat noThanks={() => setShowBottomRegistration(false)}/>
+          </div>
+        }
       </main>
     </div>
   )

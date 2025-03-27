@@ -18,6 +18,7 @@ import Hearth from "./Hearth";
 import Chat from "./Chat";
 import Group from "./Group";
 import ThreeDot from "./ThreeDot";
+import SettingsFilter from "./SettingsFilter";
 
 export{
     WebDesign,
@@ -39,5 +40,6 @@ export{
     Hearth,
     Chat,
     Group,
-    ThreeDot
+    ThreeDot,
+    SettingsFilter
 }

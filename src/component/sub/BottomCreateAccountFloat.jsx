@@ -2,7 +2,7 @@ import React from 'react'
 
 import Logo2 from '../../assets/images/ten/logo2.png'
 
-function BottomCreateAccountFloat() {
+function BottomCreateAccountFloat({noThanks}) {
   return (
     <div className="fixed bottom-10 w-[75%] max-w-sm p-4 bg-white shadow-lg rounded-xl z-50">
         <div className="flex items-center p-4 space-x-3 bg-white rounded-lg shadow-md">
@@ -26,7 +26,7 @@ function BottomCreateAccountFloat() {
             <button className="w-full py-2 text-sm font-semibold border rounded-lg bg-[#063970]">
                 <p className='text-white'>Create account</p>
             </button>
-            <button className="w-full py-2 text-sm ">
+            <button onClick={noThanks} className="w-full py-2 text-sm ">
             No, Thanks
             </button>
         </div>
