@@ -2694,6 +2694,10 @@ details.collapse summary::-webkit-details-marker {
   padding: 2rem;
 }
 
+.p-3 {
+  padding: 0.75rem;
+}
+
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -2827,6 +2831,10 @@ details.collapse summary::-webkit-details-marker {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
+}
+
+.text-\[20px\] {
+  font-size: 20px;
 }
 
 .font-bold {

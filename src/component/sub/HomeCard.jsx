@@ -96,7 +96,7 @@ const HomeCard = ({
                     <div onClick={clickSeeDetails} dangerouslySetInnerHTML={{ __html: (collapseDetails ? details : limitText(details)) }} />
                     {/* <p className='text-[18px] py-1'>{collapseDetails ? details : limitText(details)}</p> */}
                 </div>
-                <div className='px-2 border rounded-lg'>
+                <div className='p-4 px-2 bg-white border rounded-lg shadow-md'>
                     <p className='font-bold text-[15px] my-1'>{duration}</p>
                     <div className='flex justify-between'>
                         <div className='flex items-center justify-start'>
@@ -113,7 +113,7 @@ const HomeCard = ({
                     collapseDetails
                     &&
                     <>
-                        <div className='px-2 my-2 border rounded-lg'>
+                        <div className='p-4 px-2 my-2 bg-white border rounded-lg shadow-md'>
                             <p className='font-bold text-[15px] my-1'>Early Bird Price</p>
                             <div className='flex justify-between'>
                                 <div className='flex items-center justify-start'>
@@ -124,7 +124,7 @@ const HomeCard = ({
                                 </div>
                             </div>
                         </div>
-                        <div className='px-2 my-2 border rounded-lg'>
+                        <div className='p-4 px-2 my-2 bg-white border rounded-lg shadow-md'>
                             <p className='font-bold text-[15px] my-1'>Regular Price</p>
                             <div className='flex justify-between'>
                                 <div className=''>
@@ -140,7 +140,7 @@ const HomeCard = ({
                             <a
                                 key={key}
                                 role="tab"
-                                className={`tab ${activeTab === key ? "tab-active font-bold" : ""}`}
+                                className={`tab text-[20px] ${activeTab === key ? "tab-active font-extrabold" : ""}`}
                                 onClick={() => setActiveTab(key)}
                             >
                                 {pricingData[key].title}
