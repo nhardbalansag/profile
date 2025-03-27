@@ -12,8 +12,10 @@
 
 
 ### Design Inspiration
-1. https://img.daisyui.com/images/store/screenshots/agency-landingpage-react.webp
-2. https://github.com/merakiuilabs/hero-header-template
+1. https://dribbble.com/shots/8353756-Travel-Community-App
+2. https://dribbble.com/shots/14808704-Travel-Community
+3. https://dribbble.com/shots/19241884-Travel-Community-App
+4. https://dribbble.com/shots/8171324-Travel-Community-App 
 
 ## Running the application
 

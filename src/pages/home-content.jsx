@@ -23,6 +23,11 @@ import { format } from "date-fns";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
+import DOMPurify from "dompurify";
+
 import EmptyImage  from  '../assets/images/glorijan/empty.jpg'
 
 import Logo1 from '../assets/images/ten/logo.png'
@@ -31,11 +36,20 @@ import test from '../assets/images/glorijan/glorijanmob.png'
 import ForTestDisplay from '../assets/images/ten/forTestDisplay.jpg'
 import ForTestDisplay2 from '../assets/images/ten/forTestDisplay2.jpg'
 import ForTestDisplay3 from '../assets/images/ten/forTestDisplay3.jpg'
+import Chengdu from '../assets/images/ten/Chengdu1.jpg'
+
 
 const HomeContent = () =>{
+  
+  const rawHTML = `<h2><strong>Discover Chengdu China with Club T.E.N.&nbsp;</strong></h2><p><br></p><h3><strong>Embark on a 5-day, 4-nightjourney to Chengdu, China. Experience the charm of giant pandas, savor authentic Sichuan hotpot, and explore historical sites like Dujiangyan and the Sanxingdui Museum. This trip promises unforgettable memories and cultural immersion.&nbsp;</strong></h3><p><br></p><p><br></p><p><strong>Day 1:&nbsp;</strong></p><p><br></p><ul><li>Begin your adventure in Chengdu China. </li><li>We will pick your party up from Chengdu Shuangliu Airport or Tianfu International Airport and transfer you to the amazing 5 stars luxury Intercontinental Century City Hotel by IHG. You can take a good rest or explore the city.</li></ul><p><br></p><p><strong style="color: oklch(0.278078 0.029596 256.848);">Day 2:&nbsp;</strong></p><ul><li>After breakfast at your hotel, we will go for a 2 hours traditional Shu Embroidery experience where you will be amazed by traditional chinese artistry. Then we will savor cultural heritage Guanghan food for lunch before embarking to the San Xing Dui Museum, one of the greatest archaelogical discoveries of the 20th century. In the evening, we will arrive at Du Jiang Yan to enjoy traditional Sichuan Hotpot for dinner.</li></ul><p><br></p><p><strong>Day 3:</strong> </p><ul><li>After breakfast, we will depart for the China Panda Base and volunteer to feed the Pandas up close and personal with amazing photo opportunities. After lunch, we will visit the historical shopping street called Kuanzhai Xiangzi. And during dinner, we will experience traditional Sichuan opera where you will be blown away by the Bianlian performance and Kungfu Tea Pouring Acrobatics show.</li></ul><p><br></p><p><strong>Day 4: </strong></p><ul><li>Free and Easy Day for you to explore the city on your own. We recommend you to explore places like the Chengdu Museum, Wuhou Temple, Yulin Road, Jiuyan Bridge, Du Fu Thatched Cottages. You can also visit Jinli or People’s Park and get a local feel of how the locals live their daily lifestyles playing chess and drinking tea as their pastimes. You can also try out ear-picking if you dare.</li></ul><p><br></p><p><strong>Day 5:</strong> </p><ul><li>Enjoy breakfast at the hotel at your own convenience in the morning. Check out from the hotel and according to your flight time, we will transfer you back to the airport, and take a flight back home.</li></ul><h2><br></h2><h2><strong>*Optional add on 4 Days 3 Nights to Jiu Zhai Gou UNESCO Heritage National Park. </strong></h2><h2><strong>Please contact us for details.</strong></h2>hook.js:377 <h2><strong>Discover Chengdu China with Club T.E.N.&nbsp;</strong></h2><p><br></p><h3><strong>Embark on a 5-day, 4-nightjourney to Chengdu, China. Experience the charm of giant pandas, savor authentic Sichuan hotpot, and explore historical sites like Dujiangyan and the Sanxingdui Museum. This trip promises unforgettable memories and cultural immersion.&nbsp;</strong></h3><p><br></p><p><br></p><p><strong>Day 1:&nbsp;</strong></p><p><br></p><ul><li>Begin your adventure in Chengdu China. </li><li>We will pick your party up from Chengdu Shuangliu Airport or Tianfu International Airport and transfer you to the amazing 5 stars luxury Intercontinental Century City Hotel by IHG. You can take a good rest or explore the city.</li></ul><p><br></p><p><strong style="color: oklch(0.278078 0.029596 256.848);">Day 2:&nbsp;</strong></p><ul><li>After breakfast at your hotel, we will go for a 2 hours traditional Shu Embroidery experience where you will be amazed by traditional chinese artistry. Then we will savor cultural heritage Guanghan food for lunch before embarking to the San Xing Dui Museum, one of the greatest archaelogical discoveries of the 20th century. In the evening, we will arrive at Du Jiang Yan to enjoy traditional Sichuan Hotpot for dinner.</li></ul><p><br></p><p><strong>Day 3:</strong> </p><ul><li>After breakfast, we will depart for the China Panda Base and volunteer to feed the Pandas up close and personal with amazing photo opportunities. After lunch, we will visit the historical shopping street called Kuanzhai Xiangzi. And during dinner, we will experience traditional Sichuan opera where you will be blown away by the Bianlian performance and Kungfu Tea Pouring Acrobatics show.</li></ul><p><br></p><p><strong>Day 4: </strong></p><ul><li>Free and Easy Day for you to explore the city on your own. We recommend you to explore places like the Chengdu Museum, Wuhou Temple, Yulin Road, Jiuyan Bridge, Du Fu Thatched Cottages. You can also visit Jinli or People’s Park and get a local feel of how the locals live their daily lifestyles playing chess and drinking tea as their pastimes. You can also try out ear-picking if you dare.</li></ul><p><br></p><p><strong>Day 5:</strong> </p><ul><li>Enjoy breakfast at the hotel at your own convenience in the morning. Check out from the hotel and according to your flight time, we will transfer you back to the airport, and take a flight back home.</li></ul><h2><br></h2><h2><strong>*Optional add on 4 Days 3 Nights to Jiu Zhai Gou UNESCO Heritage National Park. </strong></h2><h2><strong>Please contact us for details.</strong></h2>home-content.jsx:45 <h2><strong>Discover Chengdu China with Club T.E.N.&nbsp;</strong></h2><p><br></p><h3><strong>Embark on a 5-day, 4-nightjourney to Chengdu, China. Experience the charm of giant pandas, savor authentic Sichuan hotpot, and explore historical sites like Dujiangyan and the Sanxingdui Museum. This trip promises unforgettable memories and cultural immersion.&nbsp;</strong></h3><p><br></p><p><br></p><p><strong>Day 1:&nbsp;</strong></p><p><br></p><ul><li>Begin your adventure in Chengdu China. </li><li>We will pick your party up from Chengdu Shuangliu Airport or Tianfu International Airport and transfer you to the amazing 5 stars luxury Intercontinental Century City Hotel by IHG. You can take a good rest or explore the city.</li></ul><p><br></p><p><strong style="color: oklch(0.278078 0.029596 256.848);">Day 2:&nbsp;</strong></p><ul><li>After breakfast at your hotel, we will go for a 2 hours traditional Shu Embroidery experience where you will be amazed by traditional chinese artistry. Then we will savor cultural heritage Guanghan food for lunch before embarking to the San Xing Dui Museum, one of the greatest archaelogical discoveries of the 20th century. In the evening, we will arrive at Du Jiang Yan to enjoy traditional Sichuan Hotpot for dinner.</li></ul><p><br></p><p><strong>Day 3:</strong> </p><ul><li>After breakfast, we will depart for the China Panda Base and volunteer to feed the Pandas up close and personal with amazing photo opportunities. After lunch, we will visit the historical shopping street called Kuanzhai Xiangzi. And during dinner, we will experience traditional Sichuan opera where you will be blown away by the Bianlian performance and Kungfu Tea Pouring Acrobatics show.</li></ul><p><br></p><p><strong>Day 4: </strong></p><ul><li>Free and Easy Day for you to explore the city on your own. We recommend you to explore places like the Chengdu Museum, Wuhou Temple, Yulin Road, Jiuyan Bridge, Du Fu Thatched Cottages. You can also visit Jinli or People’s Park and get a local feel of how the locals live their daily lifestyles playing chess and drinking tea as their pastimes. You can also try out ear-picking if you dare.</li></ul><p><br></p><p><strong>Day 5:</strong> </p><ul><li>Enjoy breakfast at the hotel at your own convenience in the morning. Check out from the hotel and according to your flight time, we will transfer you back to the airport, and take a flight back home.</li></ul><h2><br></h2><h2><strong>*Optional add on 4 Days 3 Nights to Jiu Zhai Gou UNESCO Heritage National Park. </strong></h2><h2><strong>Please contact us for details.</strong></h2>hook.js:377 <h2><strong>Discover Chengdu China with Club T.E.N.&nbsp;</strong></h2><p><br></p><h3><strong>Embark on a 5-day, 4-nightjourney to Chengdu, China. Experience the charm of giant pandas, savor authentic Sichuan hotpot, and explore historical sites like Dujiangyan and the Sanxingdui Museum. This trip promises unforgettable memories and cultural immersion.&nbsp;</strong></h3><p><br></p><p><br></p><p><strong>Day 1:&nbsp;</strong></p><p><br></p><ul><li>Begin your adventure in Chengdu China. </li><li>We will pick your party up from Chengdu Shuangliu Airport or Tianfu International Airport and transfer you to the amazing 5 stars luxury Intercontinental Century City Hotel by IHG. You can take a good rest or explore the city.</li></ul><p><br></p><p><strong style="color: oklch(0.278078 0.029596 256.848);">Day 2:&nbsp;</strong></p><ul><li>After breakfast at your hotel, we will go for a 2 hours traditional Shu Embroidery experience where you will be amazed by traditional chinese artistry. Then we will savor cultural heritage Guanghan food for lunch before embarking to the San Xing Dui Museum, one of the greatest archaelogical discoveries of the 20th century. In the evening, we will arrive at Du Jiang Yan to enjoy traditional Sichuan Hotpot for dinner.</li></ul><p><br></p><p><strong>Day 3:</strong> </p><ul><li>After breakfast, we will depart for the China Panda Base and volunteer to feed the Pandas up close and personal with amazing photo opportunities. After lunch, we will visit the historical shopping street called Kuanzhai Xiangzi. And during dinner, we will experience traditional Sichuan opera where you will be blown away by the Bianlian performance and Kungfu Tea Pouring Acrobatics show.</li></ul><p><br></p><p><strong>Day 4: </strong></p><ul><li>Free and Easy Day for you to explore the city on your own. We recommend you to explore places like the Chengdu Museum, Wuhou Temple, Yulin Road, Jiuyan Bridge, Du Fu Thatched Cottages. You can also visit Jinli or People’s Park and get a local feel of how the locals live their daily lifestyles playing chess and drinking tea as their pastimes. You can also try out ear-picking if you dare.</li></ul><p><br></p><p><strong>Day 5:</strong> </p><ul><li>Enjoy breakfast at the hotel at your own convenience in the morning. Check out from the hotel and according to your flight time, we will transfer you back to the airport, and take a flight back home.</li></ul><h2><br></h2><h2><strong>*Optional add on 4 Days 3 Nights to Jiu Zhai Gou UNESCO Heritage National Park. </strong></h2><h2><strong>Please contact us for details.</strong></h2>`
+
+  const sanitizedHTML = DOMPurify.sanitize(rawHTML);
 
   const [startDate, setStartDate] = useState(new Date());
   const [showBottomRegistration, setShowBottomRegistration] = useState(true);
+  const [collapseDetails, setCollapseDetails] = useState(false);
+
+  const [text, setText] = useState("");
 
   // const progressCircle = useRef(null);
   // const progressContent = useRef(null);
@@ -126,7 +140,7 @@ const HomeContent = () =>{
             <div className='hidden sm:block'>
               <SearchFilterBar/>
             </div>
-
+            {/* <ReactQuill theme="snow" value={text} onChange={setText} /> */}
             <CategoryTitleAndArrow title={"Destinations"}/>
             <Swiper
               pagination={{
@@ -135,7 +149,7 @@ const HomeContent = () =>{
               modules={[Navigation, Pagination, Scrollbar, A11y]}
               spaceBetween={5}
               slidesPerView={1}
-              onSlideChange={() => console.log('slide change')}
+              onSlideChange={() => setCollapseDetails(false)}
               onSwiper={(swiper) => console.log(swiper)}
               breakpoints={{
                 300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
@@ -150,7 +164,14 @@ const HomeContent = () =>{
               }}
             >
               <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCard image={ForTestDisplay} isLiked/>
+                <HomeCard 
+                title='Chengdu China Cultural Experience'
+                clickSeeDetails={() => setCollapseDetails(!collapseDetails)}
+                details={sanitizedHTML}
+                image={Chengdu} 
+                location='China'
+                collapseDetails={collapseDetails}
+                isLiked/>
               </SwiperSlide>
               <SwiperSlide className='flex justify-center mb-10'>
                 <HomeCard image={ForTestDisplay3}/>
@@ -159,7 +180,7 @@ const HomeContent = () =>{
                 <HomeCard image={ForTestDisplay2}/>
               </SwiperSlide>
               <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCard image={EmptyImage}/>
+                <HomeCard image={ForTestDisplay}/>
               </SwiperSlide>
             </Swiper>
 

@@ -17,6 +17,7 @@ import SearchFilterBar from "./sub/SearchFilterBar";
 import HomeCardNews from "./sub/HomeCardNews";
 import HomeLearningCard from "./sub/HomeLearningCard";
 import HomeCardEvent from "./sub/HomeCardEvent";
+import PricingCard from "./sub/PricingCard";
 
 export{
     Header,
@@ -37,5 +38,6 @@ export{
     SearchFilterBar,
     HomeCardNews,
     HomeLearningCard,
-    HomeCardEvent
+    HomeCardEvent,
+    PricingCard
 }
