@@ -12,6 +12,8 @@ import {
   HomeCardEvent
 } from '../component/index'
 
+import { Link } from "react-router-dom";
+
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -45,18 +47,8 @@ const HomeContent = () =>{
 
   const sanitizedHTML = DOMPurify.sanitize(rawHTML);
 
-  const [startDate, setStartDate] = useState(new Date());
   const [showBottomRegistration, setShowBottomRegistration] = useState(true);
   const [collapseDetails, setCollapseDetails] = useState(false);
-
-  const [text, setText] = useState("");
-
-  // const progressCircle = useRef(null);
-  // const progressContent = useRef(null);
-  // const onAutoplayTimeLeft = (s, time, progress) => {
-  //   // progressCircle.current.style.setProperty('--progress', 1 - progress);
-  //   // progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
-  // };
 
   return (
     <div>
@@ -164,14 +156,16 @@ const HomeContent = () =>{
               }}
             >
               <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCard 
-                title='Chengdu China Cultural Experience'
-                clickSeeDetails={() => setCollapseDetails(!collapseDetails)}
-                details={sanitizedHTML}
-                image={Chengdu} 
-                location='China'
-                collapseDetails={collapseDetails}
-                isLiked/>
+                <Link to={'destination'}>
+                  <HomeCard 
+                    title='Chengdu China Cultural Experience'
+                    clickSeeDetails={() => setCollapseDetails(!collapseDetails)}
+                    details={sanitizedHTML}
+                    image={Chengdu} 
+                    location='China'
+                    collapseDetails={collapseDetails}
+                    isLiked/>
+                </Link>
               </SwiperSlide>
               <SwiperSlide className='flex justify-center mb-10'>
                 <HomeCard image={ForTestDisplay3}/>

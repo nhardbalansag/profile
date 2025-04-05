@@ -2,6 +2,8 @@ import React from 'react'
 
 import Logo2 from '../../assets/images/ten/logo2.png'
 
+import { Link } from "react-router-dom";
+
 import {
   Globe,
   UserCicle
@@ -12,12 +14,14 @@ const Header = ({onPressAction, ActionState}) => {
     <div>
       <header className="bg-[#001d3d]">
         <nav className="container relative flex items-center justify-between px-6 mx-auto text-white">
-          <a href="#" className='flex items-center'>
-             <img
-              className="w-[60px] md:w-[100px]"
-              alt="Tailwind CSS chat bubble component"
-              src={Logo2} />
-          </a>
+          <Link to={'/ReactTenFrontend'}>
+            <a href="#" className='flex items-center'>
+              <img
+                className="w-[60px] md:w-[100px]"
+                alt="Tailwind CSS chat bubble component"
+                src={Logo2} />
+            </a>
+          </Link>
 
           <button onClick={onPressAction} className="md:hidden">
             {!ActionState ? (

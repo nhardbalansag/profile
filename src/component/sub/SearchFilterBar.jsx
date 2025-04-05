@@ -9,8 +9,8 @@ import {
 function SearchFilterBar() {
   return (
 
-    <div className="collapse sm:collapse-open">
-        <input type="checkbox" className="peer" />
+    <div className="">
+        {/* <input type="checkbox" className="peer" />
         <div className="flex justify-end collapse-title">
             <div className='flex items-end justify-end'>
                 <p className='text-[18px] font-semibold mr-3 text-[#829df5]'>Filter</p>
@@ -18,9 +18,9 @@ function SearchFilterBar() {
                     <SettingsFilter color={'white'}/>
                 </div>
             </div>
-        </div>
+        </div> */}
     
-        <div className='flex justify-center collapse-content'>
+        <div className='flex justify-center'>
             <div className='lg:flex lg:justify-center lg:items-center w-[95%] md:w-[100%] p-2 rounded-lg shadow-lg bg-white'>
                 <div  className="flex items-center mx-2 my-1">
                     <Search classes={'text-black mr-3'}/>

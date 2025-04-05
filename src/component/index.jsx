@@ -18,6 +18,7 @@ import HomeCardNews from "./sub/HomeCardNews";
 import HomeLearningCard from "./sub/HomeLearningCard";
 import HomeCardEvent from "./sub/HomeCardEvent";
 import PricingCard from "./sub/PricingCard";
+import DestinationCard from "./sub/DestinationCard";
 
 export{
     Header,
@@ -39,5 +40,6 @@ export{
     HomeCardNews,
     HomeLearningCard,
     HomeCardEvent,
-    PricingCard
+    PricingCard,
+    DestinationCard
 }

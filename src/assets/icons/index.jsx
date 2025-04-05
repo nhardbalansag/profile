@@ -19,6 +19,7 @@ import Chat from "./Chat";
 import Group from "./Group";
 import ThreeDot from "./ThreeDot";
 import SettingsFilter from "./SettingsFilter";
+import PriceTag from "./PriceTag";
 
 export{
     WebDesign,
@@ -41,5 +42,6 @@ export{
     Chat,
     Group,
     ThreeDot,
-    SettingsFilter
+    SettingsFilter,
+    PriceTag
 }

@@ -9,6 +9,10 @@ import {
 import {
     HomePage,
     HomeContent,
+
+    DestinationContent,
+
+    NotFound
 } from '../pages/index'
 
 
@@ -21,9 +25,18 @@ const router = createBrowserRouter([
             {
                 path: "",
                 element: <HomeContent/>
+            },
+            {
+                path: "destination",
+                element: <DestinationContent/>
             }
         ]
-    }
+    },
+    {
+        path:"*",
+        loader: () => ({ message: "Route not found!" }),
+        Component: NotFound,
+    },
 ])
 
 const Routes = () =>{

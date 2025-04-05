@@ -21,7 +21,7 @@ const HomePage = () => {
       {/* pages */}
       <Outlet />
       {/* pages */}
-      <div>
+      <div className='block md:hidden'>
         <Footer/>
       </div>
     </div>
