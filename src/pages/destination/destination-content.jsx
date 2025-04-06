@@ -104,10 +104,10 @@ const DestinationContent = () =>{
             <div>
               <div  className="flex items-center mx-2 my-1">
                   <Search classes={'text-black mr-3'}/>
-                  <input type="text" placeholder="Where to?"  className='placeholder-black border-gray-400 input w-full lg:w-[150px]'/>
+                  <input type="text" placeholder="Where to?"  className='w-full placeholder-black border-gray-400 input'/>
               </div>
             </div>
-            <div className="mx-2 lg:w-[240px]  my-1">
+            <div className="mx-2 my-1">
               <div className='flex items-center justify-between lg:justify-start'>
                   <div className='flex items-start lg:justify-end '>
                       <Calendar classes={'text-black mr-3'}/>
@@ -116,7 +116,7 @@ const DestinationContent = () =>{
                   <input type="date" className="p-2 w-[150px] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
             </div>
-            <div className="mx-2 lg:w-[240px]  my-1">
+            <div className="mx-2 my-1">
               <div className='flex items-center justify-between lg:justify-start'>
                 <div className='flex items-start lg:justify-end'>
                   <Calendar classes={'text-black mr-3'}/>
@@ -171,9 +171,10 @@ const DestinationContent = () =>{
           </div>
         }
       </main>
+
       {open && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black bg-opacity-40">
-          <div className="w-full max-w-md md:p-4 p-2 transition-transform bg-white shadow-lg rounded-t-2xl max-h-[80vh] overflow-y-auto">
+          <div className="w-full max-w-md md:p-4 p-2 transition-transform bg-white shadow-lg rounded-t-2xl max-h-[90%] overflow-y-auto">
             <div className='flex justify-end'>
               <button onClick={() => setOpen(false)} className='flex items-center justify-center p-1 mr-2'>
                 <IoIosCloseCircleOutline  className="text-[23px] text-[#ff4949]" />
@@ -186,7 +187,7 @@ const DestinationContent = () =>{
                   key={key}
                   role="tab"
                   className={`tab text-[20px] ${activeTab === key ? "tab-active text-[#282727] font-extrabold" : ""}`}
-                  onClick={() => setActiveTab(key)}
+                  // onClick={() => setActiveTab(key)}
                 >
                   {pricingData[key].title}
                 </a>

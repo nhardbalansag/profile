@@ -46,12 +46,15 @@ const Header = ({onPressAction, ActionState}) => {
             </div>
             <div className='flex items-center justify-center md:px-10 '>
               <UserCicle/>
-              <a href="#" className="block ml-2 text-white transition-colors duration-300 hover:text-indigo-300">Login</a>
+              <Link to={'login'}>
+                <a href="#" className="block ml-2 text-white transition-colors duration-300 hover:text-indigo-300">Login</a>
+              </Link>
             </div>
-            <button className="px-5 py-2 text-sm font-semibold border rounded-lg">
-            Create account
-            </button>
-           
+            <div className='flex items-center justify-center md:px-10 '>
+              <Link to={'login'}>
+                <a href="#" className="px-5 py-2 text-sm font-semibold border rounded-lg">Create account</a>
+              </Link>
+            </div>
           </div>
         </nav>
       </header>

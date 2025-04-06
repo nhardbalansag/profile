@@ -4,15 +4,19 @@ import {
   CircledArrowRight
 } from '../../assets/icons/index'
 
-function CategoryTitleAndArrow({title}) {
+import { Link } from "react-router-dom";
+
+function CategoryTitleAndArrow({title, path}) {
   return (
-    <div className='flex items-center justify-between px-5'>
-        <h2 h2 className='font-bold text-[25px] text-[#063970] my-5'>{title}</h2>
-        <button className='flex items-center justify-center'>
-            <p className='mr-3 font-semibold text-[#829df5]'>Explore</p>
-            <CircledArrowRight color={'#829df5'}/>
-        </button>
-    </div>
+    <Link to={path}>
+      <div className='flex items-center justify-between px-5'>
+          <h2 h2 className='font-bold text-[25px] text-[#063970] my-5'>{title}</h2>
+          <button className='flex items-center justify-center'>
+              <p className='mr-3 font-semibold text-[#829df5]'>Explore</p>
+              <CircledArrowRight color={'#829df5'}/>
+          </button>
+      </div>
+    </Link>
   )
 }
 

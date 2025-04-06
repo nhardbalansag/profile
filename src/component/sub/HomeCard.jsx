@@ -1,11 +1,25 @@
 import React, {useState} from 'react'
 
+// import {
+//     Calendar,
+//     Location,
+//     Hearth,
+//     Group
+// } from '../../assets/icons/index'
+
 import {
     Calendar,
     Location,
     Hearth,
-    Group
+    Group,
+    PriceTag
 } from '../../assets/icons/index'
+
+import { IoPartlySunnyOutline } from "react-icons/io5";
+import { IoCloudyNightOutline } from "react-icons/io5";
+import { FaTags } from "react-icons/fa";
+import { FaUsers } from "react-icons/fa";
+import { CiLocationOn } from "react-icons/ci";
 
 import {
   PricingCard,
@@ -33,7 +47,8 @@ const HomeCard = ({
     duration = "5 Days 4 Nights",
     location = "Singapore",
     clickSeeDetails = () => alert("no details yet"),
-    collapseDetails = false
+    collapseDetails = false,
+    clickOffers
 }) => {
 
     const [activeTab, setActiveTab] = useState("standard");
@@ -97,142 +112,46 @@ const HomeCard = ({
                     {/* <p className='text-[18px] py-1'>{collapseDetails ? details : limitText(details)}</p> */}
                 </div>
                 <div className='p-4 px-2 bg-white border rounded-lg shadow-md'>
-                    <p className='font-bold text-[15px] my-1'>{duration}</p>
-                    <div className='flex justify-between'>
-                        <div className='flex items-center justify-start'>
-                            <Calendar size={6}/>
-                            <p className=' text-[16px] ml-2 my-1'>{duration}</p>
+                    <div className='flex items-center justify-between'>
+                        <div className="flex items-center justify-start space-x-3">
+                            <div className="flex items-center space-x-2">
+                                <IoPartlySunnyOutline  className="text-[15px] text-[#FF5722]" />
+                                <label className="text-black text-[12px]">3 Days</label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <IoCloudyNightOutline   className="text-[15px] text-[#FF5722]" />
+                                <label className="text-black text-[12px]">3 Nights</label>
+                            </div>
                         </div>
-                        <div className='flex items-center justify-start my-1'>
-                            <Location size={6}/>
-                            <p className='text-[16px] ml-2'>{location}</p>
+                        <div className="flex items-center space-x-2">
+                            <CiLocationOn className="text-[15px] text-[#FF5722]" />
+                            <p className='text-[12px]'>{location}</p>
                         </div>
                     </div>
                 </div>
-                {
-                    collapseDetails
-                    &&
-                    <>
-                        <div className='p-4 px-2 my-2 bg-white border rounded-lg shadow-md'>
-                            <p className='font-bold text-[15px] my-1'>Early Bird Price</p>
-                            <div className='flex justify-between'>
-                                <div className='flex items-center justify-start'>
-                                    <p className=' text-[16px] ml-2 my-1'>Until 18/4/2025 </p>
-                                </div>
-                                <div className='flex items-center justify-start my-1'>
-                                    <p className='text-[16px] ml-2'>Midnight</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='p-4 px-2 my-2 bg-white border rounded-lg shadow-md'>
-                            <p className='font-bold text-[15px] my-1'>Regular Price</p>
-                            <div className='flex justify-between'>
-                                <div className=''>
-                                    <p className=' text-[16px] ml-2 my-1'> from: 19/4/2025 </p>
-                                    <p className=' text-[16px] ml-2 my-1'> to: 1/5/2025</p>
-                                </div>
-                            </div>
-                        </div>
-
-                         {/* Tabs */}
-                        <div role="tablist" className="flex justify-center mb-4 tabs tabs-lift">
-                            {Object.keys(pricingData).map((key) => (
-                            <a
-                                key={key}
-                                role="tab"
-                                className={`tab text-[20px] ${activeTab === key ? "tab-active font-extrabold" : ""}`}
-                                onClick={() => setActiveTab(key)}
-                            >
-                                {pricingData[key].title}
-                            </a>
-                            ))}
-                        </div>
-
-                        {/* Tab Content */}
-                        {/* <div className="p-6 text-center bg-white border rounded-lg shadow-lg">
-                            <h3 className="gap-2 text-xl font-bold capitalize">
-                            early bird
-                            </h3>
-                            <p className='font-thin text-[16px] capitalize'>twin sharing</p>
-                            <p className="text-gray-500">{pricingData[activeTab].subtitle}</p>
-                            <p className="my-3 text-3xl font-bold text-blue-600">{pricingData[activeTab].price}</p>
-                            <p className="text-sm text-gray-400">{pricingData[activeTab].note}</p>
-                        </div> */}
-                        <PricingCard offerTitle='early bird' accommodationType='twin sharing' guestCount={2} amount={1088} hasTP={false} pointsAmount={0}/>
-                        <PricingCard offerTitle='early bird' membershipType='regular' accommodationType='twin sharing' guestCount={2} amount={1088} hasTP={false} pointsAmount={0}/>
-
-                        <div className='px-2 my-2 border border-[#f67e7e] rounded-lg'>
-                            <p className='font-bold text-[15px] my-1 text-[#f67e7e]'>Registration Closing Date</p>
-                            <div className='flex justify-between'>
-                                <div className=''>
-                                    <p className=' text-[16px] ml-2 my-1 text-[#f67e7e]'> 2/5/2025 </p>
-                                    <p className=' text-[16px] ml-2 my-1'><strong>Note:</strong> After this date, we will not accept any more event
-                                        registrations.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </>
-                }
-                
             </div>
-            {
-                collapseDetails
-                &&
-                <div className='block my-5 md:hidden'>
-                    <Swiper
-                        pagination={{
-                            type: 'fraction',
-                        }}
-                        navigation={true}
-                        modules={[Pagination, Navigation]}
-                        className="mySwiper"
-                    >
-                        <SwiperSlide>
-                            <img
-                            className="w-[100%] md:w-[50px] md:hidden block"
-                            alt="Tailwind CSS chat bubble component"
-                            src={image} />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img
-                            className="w-[100%] md:w-[50px] md:hidden block"
-                            alt="Tailwind CSS chat bubble component"
-                            src={image} />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img
-                            className="w-[100%] md:w-[50px] md:hidden block"
-                            alt="Tailwind CSS chat bubble component"
-                            src={image} />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                            <img
-                            className="w-[100%] md:w-[50px] md:hidden block"
-                            alt="Tailwind CSS chat bubble component"
-                            src={image} />
-                        </SwiperSlide>
-                    </Swiper>
-                </div>
-                
-            }
-            <div className='flex items-center justify-start mx-5'>
+            
+            <div className='flex items-center justify-between mx-5'>
                 <div className='flex items-center justify-start p-2'>
-                    <div className='flex items-center justify-center p-1 mr-2 bg-white shadow-lg rounded-badge'>
+                    <button className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'>
                         <Hearth color={isLiked ? 'red' : 'gray'}  size={6} />
-                    </div>
+                    </button>
                     <div className='flex items-center'>
-                        <p className='text-[15px] font-semibold mr-1'>{reactionCount}</p>
-                        <p className='text-[15px] underline'>Reacted</p>
+                        <p className='text-[15px] text-gray-500 mr-1'>{reactionCount}</p>
                     </div>
                 </div>
                 <div className='flex items-center justify-start p-2'>
-                    <div className='flex items-center justify-center p-1 mr-2 bg-white shadow-lg rounded-badge'>
-                        <Group color={'gray'} size={6} />
-                    </div>
+                    <button className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'>
+                        <FaUsers  className="text-[23px] text-blue-500" />
+                    </button>
                     <div className='flex items-center'>
-                        <p className='text-[15px] font-semibold mr-1'>{communityCount}</p>
-                        <p className='text-[15px] underline'>Communities</p>
+                        <p className='text-[15px] text-gray-500 mr-1'>{communityCount}</p>
                     </div>
+                </div>
+                <div className='flex items-center justify-start p-2'>
+                    <button onClick={clickOffers} className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'>
+                        <FaTags className="text-[23px] text-[#FF5722]" />
+                    </button>
                 </div>
             </div>
         </div>
