@@ -60,7 +60,7 @@ const HomeContent = () =>{
   const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' })
 
   const maxGuestCount = useRef(0)
-  const walletRef = useRef(100)
+  const walletRef = useRef(25)
   
   const [showBottomRegistration, setShowBottomRegistration] = useState(true);
   const [collapseDetails, setCollapseDetails] = useState(false);
@@ -86,7 +86,7 @@ const HomeContent = () =>{
     if(!UseTPointsWalletFullAmount){
       const lessToWallet = ((walletRef.current - offers_points_amount) < 0 ? 0 : (walletRef.current - offers_points_amount))
       setTPointsWallet(lessToWallet)
-      setTotalPriceWithPoints(offers_amount - walletRef.current)
+      setTotalPriceWithPoints(offers_amount - (walletRef.current > offers_points_amount ? offers_points_amount : walletRef.current))
       setTPointsCustom(0)
     }else{
       setTotalPriceWithPoints(offers_amount)
@@ -97,16 +97,38 @@ const HomeContent = () =>{
   const handleCustomPoints = (event, item) => {
 
     const offers_amount = parseFloat(item.offers_table.offers_amount)
+    const offers_points_amount = parseFloat(item.offers_table.offers_points_amount)
 
     const { name, type, checked, value } = event.target;
-    
-    setTPointsCustom(prev => (parseInt(value) > walletRef.current ? walletRef.current : (parseInt(value) < 0 ? 0 : parseInt(value))))
 
-    const lessToWallet = ((walletRef.current - (parseInt(value) < 0 ? 0 : parseInt(value))) < 0 ? 0 : (walletRef.current - (parseInt(value) < 0 ? 0 : parseInt(value))))
-    
+    const validatedNaNInput = (Number.isNaN(value) ? parseInt(0) : parseInt(value))
+
     if(!UseTPointsWalletFullAmount){
-      setTPointsWallet(lessToWallet)
-      setTotalPriceWithPoints(offers_amount - ((parseInt(value) < 0 ? 0 : parseInt(value)) > walletRef.current ? walletRef.current : (parseInt(value) < 0 ? 0 : parseInt(value))))
+      if(validatedNaNInput > walletRef.current ){
+        setTPointsCustom(walletRef.current)
+        const lessToWallet = walletRef.current - walletRef.current
+        setTPointsWallet(lessToWallet)
+        setTotalPriceWithPoints(offers_amount - walletRef.current)
+      }else if(validatedNaNInput < walletRef.current ){
+        if(validatedNaNInput > offers_points_amount){
+          setTPointsCustom(offers_points_amount)
+
+          const lessToWallet = walletRef.current - (parseInt(offers_points_amount))
+          setTPointsWallet(lessToWallet)
+          setTotalPriceWithPoints(offers_amount - offers_points_amount)
+
+        }else{
+          const lessToWallet = walletRef.current - (parseInt(validatedNaNInput < 0 ? 0 : validatedNaNInput))
+          setTPointsWallet(lessToWallet)
+          setTPointsCustom(validatedNaNInput < 0 ? 0 : validatedNaNInput)
+          setTotalPriceWithPoints(offers_amount - validatedNaNInput)
+        }
+      }else if(Number.isNaN(validatedNaNInput)){
+        const lessToWallet = walletRef.current - 0
+        setTPointsWallet(lessToWallet)
+        setTPointsCustom(value)
+        setTotalPriceWithPoints(offers_amount - 0)
+      }
     }
   };
 
@@ -131,17 +153,38 @@ const HomeContent = () =>{
   const handleIncreaseCustomPoints = (item) => {
 
     const offers_amount = parseFloat(item.offers_table.offers_amount)
+    const offers_points_amount = parseFloat(item.offers_table.offers_points_amount)
     
     if(!UseTPointsWalletFullAmount){
       setTPointsCustom(prev => {
-        if(parseInt(prev) >= walletRef.current){
-          return walletRef.current
+        if(parseInt(prev + 1) >= walletRef.current){
+
+          if(offers_points_amount > walletRef.current){
+            const lessToWallet = (walletRef.current - walletRef.current)
+            setTPointsWallet(lessToWallet)
+            setTotalPriceWithPoints(offers_amount - walletRef.current)
+
+            return walletRef.current
+          }else{
+            const lessToWallet = (walletRef.current - offers_points_amount)
+            setTPointsWallet(lessToWallet)
+            setTotalPriceWithPoints(offers_amount - offers_points_amount)
+
+            return offers_points_amount
+          }
+
         }else{
-          const validatedNaNInput = (Number.isNaN(prev) ? parseInt(0) : parseInt(prev))
-          const lessToWallet =(walletRef.current - (parseInt(validatedNaNInput) + 1))
-          setTPointsWallet(lessToWallet)
-          setTotalPriceWithPoints(offers_amount - (parseInt(validatedNaNInput) + 1))
-          return (parseInt(validatedNaNInput) + 1)
+          if(parseInt(prev + 1) > offers_points_amount){
+            const lessToWallet = (walletRef.current - offers_points_amount)
+            setTPointsWallet(lessToWallet)
+            setTotalPriceWithPoints(offers_amount - offers_points_amount)
+            return offers_points_amount
+          }else if(parseInt(prev) < offers_points_amount){
+            const lessToWallet = (walletRef.current - parseInt(prev + 1))
+            setTPointsWallet(lessToWallet)
+            setTotalPriceWithPoints(offers_amount - parseInt(prev + 1))
+            return parseInt(prev + 1)
+          }
         }
       })
     }
