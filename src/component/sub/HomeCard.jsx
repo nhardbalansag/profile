@@ -40,15 +40,17 @@ const HomeCard = ({
     width = "350px", 
     image, 
     isLiked = false,
-    reactionCount = 100,
-    communityCount = 5,
+    reactionCount = 0,
+    communityCount = 0,
     title = "Card Title",
     details = "A card component a body part, and ...",
     duration = "5 Days 4 Nights",
     location = "Singapore",
     clickSeeDetails = () => alert("no details yet"),
     collapseDetails = false,
-    clickOffers
+    clickOffers,
+    days = 0,
+    nights = 0,
 }) => {
 
     const [activeTab, setActiveTab] = useState("standard");
@@ -116,11 +118,11 @@ const HomeCard = ({
                         <div className="flex items-center justify-start space-x-3">
                             <div className="flex items-center space-x-2">
                                 <IoPartlySunnyOutline  className="text-[15px] text-[#FF5722]" />
-                                <label className="text-black text-[12px]">3 Days</label>
+                                <label className="text-black text-[12px]">{days} Days</label>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <IoCloudyNightOutline   className="text-[15px] text-[#FF5722]" />
-                                <label className="text-black text-[12px]">3 Nights</label>
+                                <label className="text-black text-[12px]">{nights} Nights</label>
                             </div>
                         </div>
                         <div className="flex items-center space-x-2">

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import {
   HomeCard,
@@ -47,6 +47,7 @@ import ForTestDisplay2 from '../assets/images/ten/forTestDisplay2.jpg'
 import ForTestDisplay3 from '../assets/images/ten/forTestDisplay3.jpg'
 import Chengdu from '../assets/images/ten/Chengdu1.jpg'
 
+import * as api_content from '../services/content/content.api'
 
 const HomeContent = () =>{
 
@@ -57,57 +58,134 @@ const HomeContent = () =>{
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
   const isPortrait = useMediaQuery({ query: '(orientation: portrait)' })
   const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' })
+
+  const maxGuestCount = useRef(0)
+  const walletRef = useRef(100)
   
-  const rawHTML = `<h2><strong>Discover Chengdu China with Club T.E.N.&nbsp;</strong></h2><p><br></p><h3><strong>Embark on a 5-day, 4-nightjourney to Chengdu, China. Experience the charm of giant pandas, savor authentic Sichuan hotpot, and explore historical sites like Dujiangyan and the Sanxingdui Museum. This trip promises unforgettable memories and cultural immersion.&nbsp;</strong></h3><p><br></p><p><br></p><p><strong>Day 1:&nbsp;</strong></p><p><br></p><ul><li>Begin your adventure in Chengdu China. </li><li>We will pick your party up from Chengdu Shuangliu Airport or Tianfu International Airport and transfer you to the amazing 5 stars luxury Intercontinental Century City Hotel by IHG. You can take a good rest or explore the city.</li></ul><p><br></p><p><strong style="color: oklch(0.278078 0.029596 256.848);">Day 2:&nbsp;</strong></p><ul><li>After breakfast at your hotel, we will go for a 2 hours traditional Shu Embroidery experience where you will be amazed by traditional chinese artistry. Then we will savor cultural heritage Guanghan food for lunch before embarking to the San Xing Dui Museum, one of the greatest archaelogical discoveries of the 20th century. In the evening, we will arrive at Du Jiang Yan to enjoy traditional Sichuan Hotpot for dinner.</li></ul><p><br></p><p><strong>Day 3:</strong> </p><ul><li>After breakfast, we will depart for the China Panda Base and volunteer to feed the Pandas up close and personal with amazing photo opportunities. After lunch, we will visit the historical shopping street called Kuanzhai Xiangzi. And during dinner, we will experience traditional Sichuan opera where you will be blown away by the Bianlian performance and Kungfu Tea Pouring Acrobatics show.</li></ul><p><br></p><p><strong>Day 4: </strong></p><ul><li>Free and Easy Day for you to explore the city on your own. We recommend you to explore places like the Chengdu Museum, Wuhou Temple, Yulin Road, Jiuyan Bridge, Du Fu Thatched Cottages. You can also visit Jinli or People’s Park and get a local feel of how the locals live their daily lifestyles playing chess and drinking tea as their pastimes. You can also try out ear-picking if you dare.</li></ul><p><br></p><p><strong>Day 5:</strong> </p><ul><li>Enjoy breakfast at the hotel at your own convenience in the morning. Check out from the hotel and according to your flight time, we will transfer you back to the airport, and take a flight back home.</li></ul><h2><br></h2><h2><strong>*Optional add on 4 Days 3 Nights to Jiu Zhai Gou UNESCO Heritage National Park. </strong></h2><h2><strong>Please contact us for details.</strong></h2>hook.js:377 <h2><strong>Discover Chengdu China with Club T.E.N.&nbsp;</strong></h2><p><br></p><h3><strong>Embark on a 5-day, 4-nightjourney to Chengdu, China. Experience the charm of giant pandas, savor authentic Sichuan hotpot, and explore historical sites like Dujiangyan and the Sanxingdui Museum. This trip promises unforgettable memories and cultural immersion.&nbsp;</strong></h3><p><br></p><p><br></p><p><strong>Day 1:&nbsp;</strong></p><p><br></p><ul><li>Begin your adventure in Chengdu China. </li><li>We will pick your party up from Chengdu Shuangliu Airport or Tianfu International Airport and transfer you to the amazing 5 stars luxury Intercontinental Century City Hotel by IHG. You can take a good rest or explore the city.</li></ul><p><br></p><p><strong style="color: oklch(0.278078 0.029596 256.848);">Day 2:&nbsp;</strong></p><ul><li>After breakfast at your hotel, we will go for a 2 hours traditional Shu Embroidery experience where you will be amazed by traditional chinese artistry. Then we will savor cultural heritage Guanghan food for lunch before embarking to the San Xing Dui Museum, one of the greatest archaelogical discoveries of the 20th century. In the evening, we will arrive at Du Jiang Yan to enjoy traditional Sichuan Hotpot for dinner.</li></ul><p><br></p><p><strong>Day 3:</strong> </p><ul><li>After breakfast, we will depart for the China Panda Base and volunteer to feed the Pandas up close and personal with amazing photo opportunities. After lunch, we will visit the historical shopping street called Kuanzhai Xiangzi. And during dinner, we will experience traditional Sichuan opera where you will be blown away by the Bianlian performance and Kungfu Tea Pouring Acrobatics show.</li></ul><p><br></p><p><strong>Day 4: </strong></p><ul><li>Free and Easy Day for you to explore the city on your own. We recommend you to explore places like the Chengdu Museum, Wuhou Temple, Yulin Road, Jiuyan Bridge, Du Fu Thatched Cottages. You can also visit Jinli or People’s Park and get a local feel of how the locals live their daily lifestyles playing chess and drinking tea as their pastimes. You can also try out ear-picking if you dare.</li></ul><p><br></p><p><strong>Day 5:</strong> </p><ul><li>Enjoy breakfast at the hotel at your own convenience in the morning. Check out from the hotel and according to your flight time, we will transfer you back to the airport, and take a flight back home.</li></ul><h2><br></h2><h2><strong>*Optional add on 4 Days 3 Nights to Jiu Zhai Gou UNESCO Heritage National Park. </strong></h2><h2><strong>Please contact us for details.</strong></h2>home-content.jsx:45 <h2><strong>Discover Chengdu China with Club T.E.N.&nbsp;</strong></h2><p><br></p><h3><strong>Embark on a 5-day, 4-nightjourney to Chengdu, China. Experience the charm of giant pandas, savor authentic Sichuan hotpot, and explore historical sites like Dujiangyan and the Sanxingdui Museum. This trip promises unforgettable memories and cultural immersion.&nbsp;</strong></h3><p><br></p><p><br></p><p><strong>Day 1:&nbsp;</strong></p><p><br></p><ul><li>Begin your adventure in Chengdu China. </li><li>We will pick your party up from Chengdu Shuangliu Airport or Tianfu International Airport and transfer you to the amazing 5 stars luxury Intercontinental Century City Hotel by IHG. You can take a good rest or explore the city.</li></ul><p><br></p><p><strong style="color: oklch(0.278078 0.029596 256.848);">Day 2:&nbsp;</strong></p><ul><li>After breakfast at your hotel, we will go for a 2 hours traditional Shu Embroidery experience where you will be amazed by traditional chinese artistry. Then we will savor cultural heritage Guanghan food for lunch before embarking to the San Xing Dui Museum, one of the greatest archaelogical discoveries of the 20th century. In the evening, we will arrive at Du Jiang Yan to enjoy traditional Sichuan Hotpot for dinner.</li></ul><p><br></p><p><strong>Day 3:</strong> </p><ul><li>After breakfast, we will depart for the China Panda Base and volunteer to feed the Pandas up close and personal with amazing photo opportunities. After lunch, we will visit the historical shopping street called Kuanzhai Xiangzi. And during dinner, we will experience traditional Sichuan opera where you will be blown away by the Bianlian performance and Kungfu Tea Pouring Acrobatics show.</li></ul><p><br></p><p><strong>Day 4: </strong></p><ul><li>Free and Easy Day for you to explore the city on your own. We recommend you to explore places like the Chengdu Museum, Wuhou Temple, Yulin Road, Jiuyan Bridge, Du Fu Thatched Cottages. You can also visit Jinli or People’s Park and get a local feel of how the locals live their daily lifestyles playing chess and drinking tea as their pastimes. You can also try out ear-picking if you dare.</li></ul><p><br></p><p><strong>Day 5:</strong> </p><ul><li>Enjoy breakfast at the hotel at your own convenience in the morning. Check out from the hotel and according to your flight time, we will transfer you back to the airport, and take a flight back home.</li></ul><h2><br></h2><h2><strong>*Optional add on 4 Days 3 Nights to Jiu Zhai Gou UNESCO Heritage National Park. </strong></h2><h2><strong>Please contact us for details.</strong></h2>hook.js:377 <h2><strong>Discover Chengdu China with Club T.E.N.&nbsp;</strong></h2><p><br></p><h3><strong>Embark on a 5-day, 4-nightjourney to Chengdu, China. Experience the charm of giant pandas, savor authentic Sichuan hotpot, and explore historical sites like Dujiangyan and the Sanxingdui Museum. This trip promises unforgettable memories and cultural immersion.&nbsp;</strong></h3><p><br></p><p><br></p><p><strong>Day 1:&nbsp;</strong></p><p><br></p><ul><li>Begin your adventure in Chengdu China. </li><li>We will pick your party up from Chengdu Shuangliu Airport or Tianfu International Airport and transfer you to the amazing 5 stars luxury Intercontinental Century City Hotel by IHG. You can take a good rest or explore the city.</li></ul><p><br></p><p><strong style="color: oklch(0.278078 0.029596 256.848);">Day 2:&nbsp;</strong></p><ul><li>After breakfast at your hotel, we will go for a 2 hours traditional Shu Embroidery experience where you will be amazed by traditional chinese artistry. Then we will savor cultural heritage Guanghan food for lunch before embarking to the San Xing Dui Museum, one of the greatest archaelogical discoveries of the 20th century. In the evening, we will arrive at Du Jiang Yan to enjoy traditional Sichuan Hotpot for dinner.</li></ul><p><br></p><p><strong>Day 3:</strong> </p><ul><li>After breakfast, we will depart for the China Panda Base and volunteer to feed the Pandas up close and personal with amazing photo opportunities. After lunch, we will visit the historical shopping street called Kuanzhai Xiangzi. And during dinner, we will experience traditional Sichuan opera where you will be blown away by the Bianlian performance and Kungfu Tea Pouring Acrobatics show.</li></ul><p><br></p><p><strong>Day 4: </strong></p><ul><li>Free and Easy Day for you to explore the city on your own. We recommend you to explore places like the Chengdu Museum, Wuhou Temple, Yulin Road, Jiuyan Bridge, Du Fu Thatched Cottages. You can also visit Jinli or People’s Park and get a local feel of how the locals live their daily lifestyles playing chess and drinking tea as their pastimes. You can also try out ear-picking if you dare.</li></ul><p><br></p><p><strong>Day 5:</strong> </p><ul><li>Enjoy breakfast at the hotel at your own convenience in the morning. Check out from the hotel and according to your flight time, we will transfer you back to the airport, and take a flight back home.</li></ul><h2><br></h2><h2><strong>*Optional add on 4 Days 3 Nights to Jiu Zhai Gou UNESCO Heritage National Park. </strong></h2><h2><strong>Please contact us for details.</strong></h2>`
-
-  const sanitizedHTML = DOMPurify.sanitize(rawHTML);
-
   const [showBottomRegistration, setShowBottomRegistration] = useState(true);
   const [collapseDetails, setCollapseDetails] = useState(false);
   const [collapseBottomDetails, setCollapseBottomDetails] = useState(true);
-
   const [openBottomOffer, setOpenBottomOffer] = useState(false);
-
-  const handleOpenBottomDetails = () => {
-  };
-
-  const handleCloseBottomDetails = () => {
-  };
+  const [ResultGetHomeContents, ResultSetHomeContents] = useState([]);
+  const [ResultGetHomeContentsDetails, ResultSetHomeContentsDetails] = useState([]);
+  const [getBottomDetailsOpen, setBottomDetailsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState([]);
+  const [count, setCount] = useState(0);
+  const [totalPriceWithPoints, setTotalPriceWithPoints] = useState(0);
+  const [TPointsWallet, setTPointsWallet] = useState(walletRef.current);
+  const [TPointsCustom, setTPointsCustom] = useState(walletRef.current);
+  const [UseTPointsWalletFullAmount, setUseTPointsWalletFullAmount] = useState(false);
   
-  const [count, setCount] = useState(2);
+  const handleTpoints = (item) => {
+    setUseTPointsWalletFullAmount(!UseTPointsWalletFullAmount)
 
+    const offers_amount = parseFloat(item.offers_table.offers_amount)
+    const offers_points_amount = parseFloat(item.offers_table.offers_points_amount)
+    const total = offers_amount - offers_points_amount
+
+    if(!UseTPointsWalletFullAmount){
+      const lessToWallet = ((walletRef.current - offers_points_amount) < 0 ? 0 : (walletRef.current - offers_points_amount))
+      setTPointsWallet(lessToWallet)
+      setTotalPriceWithPoints(offers_amount - walletRef.current)
+      setTPointsCustom(0)
+    }else{
+      setTotalPriceWithPoints(offers_amount)
+      setTPointsWallet(walletRef.current)
+    }
+  };
+
+  const handleCustomPoints = (event, item) => {
+
+    const offers_amount = parseFloat(item.offers_table.offers_amount)
+
+    const { name, type, checked, value } = event.target;
+    
+    setTPointsCustom(prev => (parseInt(value) > walletRef.current ? walletRef.current : (parseInt(value) < 0 ? 0 : parseInt(value))))
+
+    const lessToWallet = ((walletRef.current - (parseInt(value) < 0 ? 0 : parseInt(value))) < 0 ? 0 : (walletRef.current - (parseInt(value) < 0 ? 0 : parseInt(value))))
+    
+    if(!UseTPointsWalletFullAmount){
+      setTPointsWallet(lessToWallet)
+      setTotalPriceWithPoints(offers_amount - ((parseInt(value) < 0 ? 0 : parseInt(value)) > walletRef.current ? walletRef.current : (parseInt(value) < 0 ? 0 : parseInt(value))))
+    }
+  };
+
+  const handleDecreaseCustomPoints = (item) => {
+
+    const offers_amount = parseFloat(item.offers_table.offers_amount)
+
+    if(!UseTPointsWalletFullAmount){
+      setTPointsCustom(prev => {
+        if(parseInt(prev) <= 0){
+          return 0
+        }else{
+          const lessToWallet =(walletRef.current - (parseInt(prev) - 1))
+          setTPointsWallet(lessToWallet)
+          setTotalPriceWithPoints(offers_amount - (parseInt(prev) - 1))
+          return (parseInt(prev) - 1)
+        }
+      })
+    }
+  };
+
+  const handleIncreaseCustomPoints = (item) => {
+
+    const offers_amount = parseFloat(item.offers_table.offers_amount)
+    
+    if(!UseTPointsWalletFullAmount){
+      setTPointsCustom(prev => {
+        if(parseInt(prev) >= walletRef.current){
+          return walletRef.current
+        }else{
+          const validatedNaNInput = (Number.isNaN(prev) ? parseInt(0) : parseInt(prev))
+          const lessToWallet =(walletRef.current - (parseInt(validatedNaNInput) + 1))
+          setTPointsWallet(lessToWallet)
+          setTotalPriceWithPoints(offers_amount - (parseInt(validatedNaNInput) + 1))
+          return (parseInt(validatedNaNInput) + 1)
+        }
+      })
+    }
+  };
+ 
   const handleDecreaseFunc = () => {
     if (count > 0) setCount(count - 1);
   };
 
   const handleIncreaseFunc = () => {
-    setCount(count + 1);
+    if (count < maxGuestCount.current) setCount(count + 1)
   };
 
-  const [getBottomDetailsOpen, setBottomDetailsOpen] = useState(false);
+  const HandleOfferTabSelection = (item) =>{
+    setActiveTab(item)
+  }
 
-  const [activeTab, setActiveTab] = useState("standard");
-  
-  const pricingData = {
-    standard: {
-      title: "STANDARD",
-      subtitle: "2 Guests Per Room",
-      price: "$1088",
-      note: "TP not applicable",
-    },
-    vip: {
-      title: "VIP",
-      subtitle: "2 Guests Per Room",
-      price: "$1288",
-      note: "Includes TP",
-    },
-    pca: {
-      title: "PCA",
-      subtitle: "Private Room",
-      price: "$1588",
-      note: "All-inclusive package",
-    },
-  }  
+  const HandleSeeDetails = (item) =>{
+    isDesktopOrLaptop ? setBottomDetailsOpen(true) : setCollapseDetails(!collapseDetails)
+    ResultSetHomeContentsDetails(item)
+  }
+
+  const HandleOfferDetails = (item) =>{
+    setOpenBottomOffer(true)
+    ResultSetHomeContentsDetails(item)
+    setActiveTab(item.content_offers_table[0])
+    setCount(item.content_guest_count)
+    maxGuestCount.current = item.content_guest_count
+  }
+
+  const GetHomeContents = async() =>{
+    await api_content.GetHomeContents().then((result) =>{
+      if(result.status){
+        console.log("GetHomeContents", result)
+        ResultSetHomeContents(result.data.data)
+      }
+    }).catch((err) =>{
+      console.log("GetHomeContents", err)
+    })
+  }
+
+  useEffect(() =>{
+    GetHomeContents()
+  },[])
 
   return (
     <div>
@@ -161,8 +239,8 @@ const HomeContent = () =>{
               modules={[Autoplay,EffectCoverflow, Pagination, Navigation]}
               spaceBetween={5}
               slidesPerView={2}
-              onSlideChange={() => console.log('slide change')}
-              onSwiper={(swiper) => console.log(swiper)}
+              // onSlideChange={() => console.log('slide change')}
+              // onSwiper={(swiper) => console.log(swiper)}
               breakpoints={{
                 300: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
                 400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
@@ -201,7 +279,7 @@ const HomeContent = () =>{
               spaceBetween={5}
               slidesPerView={1}
               onSlideChange={() => setCollapseDetails(false)}
-              onSwiper={(swiper) => console.log(swiper)}
+              // onSwiper={(swiper) => console.log(swiper)}
               breakpoints={{
                 300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
                 400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
@@ -214,26 +292,26 @@ const HomeContent = () =>{
                 // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
               }}
             >
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCard 
-                clickOffers={() => setOpenBottomOffer(true)}
-                title='Chengdu China Cultural Experience'
-                clickSeeDetails={() => isDesktopOrLaptop ? setBottomDetailsOpen(true) : setCollapseDetails(!collapseDetails)}
-                details={sanitizedHTML}
-                image={Chengdu} 
-                location='China'
-                collapseDetails={collapseDetails}
-                isLiked/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCard image={ForTestDisplay3}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCard image={ForTestDisplay2}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCard image={ForTestDisplay}/>
-              </SwiperSlide>
+              {
+                ResultGetHomeContents.length > 0
+                ?
+                  ResultGetHomeContents.map((item, index) =>(
+                    <SwiperSlide key={index} className='flex justify-center mb-10'>
+                      <HomeCard 
+                      clickOffers={() => HandleOfferDetails(item)}
+                      title={item.content_title}
+                      clickSeeDetails={() => HandleSeeDetails(item)}
+                      details={DOMPurify.sanitize(item.content_description)}
+                      image={'http://clubten.localtest.me/storage/' + item.uploads_table_main_view.upload_url} 
+                      days={item.content_days_count}
+                      nights={item.content_night_count}
+                      location='--'
+                      collapseDetails={collapseDetails}
+                      isLiked={false}/>
+                    </SwiperSlide>
+                  ))
+                : <></>
+              }
             </Swiper>
 
             <CategoryTitleAndArrow title={"Community"}/>
@@ -255,8 +333,8 @@ const HomeContent = () =>{
               modules={[Navigation, EffectCoverflow, Pagination, Scrollbar, A11y]}
               spaceBetween={5}
               slidesPerView={1}
-              onSlideChange={() => console.log('slide change')}
-              onSwiper={(swiper) => console.log(swiper)}
+              // onSlideChange={() => console.log('slide change')}
+              // onSwiper={(swiper) => console.log(swiper)}
               breakpoints={{
                 300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
                 400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
@@ -290,8 +368,8 @@ const HomeContent = () =>{
                modules={[Navigation, Pagination, Scrollbar, A11y]}
                spaceBetween={5}
                slidesPerView={1}
-               onSlideChange={() => console.log('slide change')}
-               onSwiper={(swiper) => console.log(swiper)}
+              //  onSlideChange={() => console.log('slide change')}
+              //  onSwiper={(swiper) => console.log(swiper)}
                breakpoints={{
                 300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
                 400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
@@ -325,8 +403,8 @@ const HomeContent = () =>{
                modules={[Navigation, Pagination, Scrollbar, A11y]}
                spaceBetween={5}
                slidesPerView={2}
-               onSlideChange={() => console.log('slide change')}
-               onSwiper={(swiper) => console.log(swiper)}
+              //  onSlideChange={() => console.log('slide change')}
+              //  onSwiper={(swiper) => console.log(swiper)}
                breakpoints={{
                  300: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
                  400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
@@ -360,8 +438,8 @@ const HomeContent = () =>{
                modules={[Navigation, Pagination, Scrollbar, A11y]}
                spaceBetween={5}
                slidesPerView={1}
-               onSlideChange={() => console.log('slide change')}
-               onSwiper={(swiper) => console.log(swiper)}
+              //  onSlideChange={() => console.log('slide change')}
+              //  onSwiper={(swiper) => console.log(swiper)}
                breakpoints={{
                  300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
                  400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
@@ -407,18 +485,20 @@ const HomeContent = () =>{
                       <IoIosCloseCircleOutline  className="text-[23px] text-[#ff4949]" />
                     </button>
                 </div>
-                <DestinationCard 
-                clickOffers={() => {
-                  setOpenBottomOffer(!openBottomOffer)
-                  setBottomDetailsOpen(false)
-                }}
-                title='Chengdu China Cultural Experience'
-                clickSeeDetails={() => setCollapseBottomDetails(!collapseBottomDetails)}
-                details={sanitizedHTML}
-                image={Chengdu} 
-                location='China'
-                collapseDetails={collapseBottomDetails}
-                isLiked/>
+                <div className='flex justify-center'>
+                  <DestinationCard 
+                  clickOffers={() => {
+                    setOpenBottomOffer(!openBottomOffer)
+                    setBottomDetailsOpen(false)
+                  }}
+                  title={ResultGetHomeContentsDetails.content_title}
+                  clickSeeDetails={() => setCollapseBottomDetails(!collapseBottomDetails)}
+                  details={DOMPurify.sanitize(ResultGetHomeContentsDetails.content_description)}
+                  image={'http://clubten.localtest.me/storage/' + ResultGetHomeContentsDetails.uploads_table_main_view.upload_url} 
+                  location='--'
+                  collapseDetails={collapseBottomDetails}
+                  isLiked={false}/>
+                </div>
               </div>
             </div>
           )
@@ -430,11 +510,30 @@ const HomeContent = () =>{
             handleClose={() => setOpenBottomOffer(!openBottomOffer)}
             handleIncrease={() => handleIncreaseFunc()}
             handleDecrease={() => handleDecreaseFunc()}
+            handleCustomTPoints={(text) => handleCustomPoints(text, activeTab)}
+            handleRedeemFullTPoints={() => handleTpoints(activeTab)}
+            handleDecreaseCustomPoints={() => handleDecreaseCustomPoints(activeTab)}
+            handleIncreaseCustomPoints={() => handleIncreaseCustomPoints(activeTab)}
+            isRedeemFull={UseTPointsWalletFullAmount}
             count={count}
-            activeTab={activeTab}
-            // selectTab={() => setActiveTab()}
-            tabData={pricingData}
-            />
+            customTPoints={TPointsCustom}
+            tabData={activeTab}
+            wallet={TPointsWallet}
+            finalAmount={totalPriceWithPoints}
+            offersData={ResultGetHomeContentsDetails}
+            >
+              <div className="flex justify-center mb-4 space-x-5">
+                {
+                  ResultGetHomeContentsDetails.content_offers_table.map((item, key) =>(
+                    <button onClick={() => HandleOfferTabSelection(item)} key={key} className=''>
+                      <p className={`${activeTab.offers_id == item.offers_id ? 'font-extrabold' : 'font-normal'}  text-[25px] uppercase`}>
+                        {item.offers_table.membership_type_table.type_title}
+                      </p>
+                    </button>
+                  ))
+                }
+              </div>
+            </OffersBottomSheet>
           )
         }
       </main>
