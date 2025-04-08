@@ -75,6 +75,7 @@ const HomeContent = () =>{
   const [TPointsWallet, setTPointsWallet] = useState(walletRef.current);
   const [TPointsCustom, setTPointsCustom] = useState(walletRef.current);
   const [UseTPointsWalletFullAmount, setUseTPointsWalletFullAmount] = useState(false);
+  const [loadingContent, setLoadingContent] = useState(true);
   
   const handleTpoints = (item) => {
     setUseTPointsWalletFullAmount(!UseTPointsWalletFullAmount)
@@ -216,9 +217,11 @@ const HomeContent = () =>{
   }
 
   const GetHomeContents = async() =>{
+    setLoadingContent(true)
     await api_content.GetHomeContents().then((result) =>{
       if(result.status){
         console.log("GetHomeContents", result)
+        setLoadingContent(false)
         ResultSetHomeContents(result.data.data)
       }
     }).catch((err) =>{
@@ -341,6 +344,7 @@ const HomeContent = () =>{
                   ResultGetHomeContents.map((item, index) =>(
                     <SwiperSlide key={index} className='flex justify-center mb-10'>
                       <HomeCard 
+                      loading={loadingContent}
                       clickOffers={() => HandleOfferDetails(item)}
                       title={item.content_title}
                       clickSeeDetails={() => HandleSeeDetails(item)}
@@ -353,7 +357,12 @@ const HomeContent = () =>{
                       isLiked={false}/>
                     </SwiperSlide>
                   ))
-                : <></>
+                : 
+                  [1, 2].map((item, index) =>(
+                    <SwiperSlide key={index} className='flex justify-center mb-10'>
+                      <HomeCard loading={loadingContent}/>
+                    </SwiperSlide>
+                  ))
               }
             </Swiper>
 
@@ -532,7 +541,9 @@ const HomeContent = () =>{
                   <DestinationCard 
                   clickOffers={() => {
                     setOpenBottomOffer(!openBottomOffer)
+                    HandleOfferDetails(item)
                     setBottomDetailsOpen(false)
+                    setCollapseBottomDetails(false)
                   }}
                   title={ResultGetHomeContentsDetails.content_title}
                   clickSeeDetails={() => setCollapseBottomDetails(!collapseBottomDetails)}
