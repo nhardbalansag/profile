@@ -1,53 +1,31 @@
 import React, { useState, useRef, useEffect  } from 'react';
 
+import {useSelector} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 import {
   BottomCreateAccountFloat,
   DestinationCard,
   OffersBottomSheet
 } from '../../component/index'
 
-import { RiCoinsLine } from "react-icons/ri";
-
-import { IoIosCloseCircleOutline } from "react-icons/io";
-import { CiCirclePlus } from "react-icons/ci";
-import { CiCircleMinus } from "react-icons/ci";
-import { HiOutlineUsers } from "react-icons/hi2";
-import { BsCalendar2Check } from "react-icons/bs";
-import { LuCalendarClock } from "react-icons/lu";
-import { IoPartlySunnyOutline } from "react-icons/io5";
-import { IoCloudyNightOutline } from "react-icons/io5";
-import { SlWallet } from "react-icons/sl";
-
-import { format } from "date-fns";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-
 import DOMPurify from "dompurify";
-
-import { FiHelpCircle } from "react-icons/fi";
 
 import EmptyImage  from  '../../assets/images/glorijan/empty.jpg'
 
 import Logo1 from '../../assets/images/ten/logo.png'
-import TenBG2 from '../../assets/images/ten/tenBg2.png'
-import test from '../../assets/images/glorijan/glorijanmob.png'
-import ForTestDisplay from '../../assets/images/ten/forTestDisplay.jpg'
-import ForTestDisplay2 from '../../assets/images/ten/forTestDisplay2.jpg'
-import ForTestDisplay3 from '../../assets/images/ten/forTestDisplay3.jpg'
-import Chengdu from '../../assets/images/ten/Chengdu1.jpg'
 
 import {
   Search,
   Calendar,
-  SettingsFilter
 } from '../../assets/icons/index'
 
 import * as api_content from '../../services/content/content.api'
 
 const DestinationContent = () =>{
+
+    const navigate = useNavigate();
+    const auth_states = useSelector(state => state.AuthReducer);
 
     const maxGuestCount = useRef(0)
     const walletRef = useRef(25)
@@ -69,6 +47,12 @@ const DestinationContent = () =>{
 
   const [open, setOpen] = useState(false);
 
+  const handleCheckout = () =>{
+    if(!auth_states.StateToken){
+      setShowBottomRegistration(true)
+      navigate('/login');
+    }
+  }
 
   const handleTpoints = (item) => {
     setUseTPointsWalletFullAmount(!UseTPointsWalletFullAmount)
@@ -318,6 +302,7 @@ const DestinationContent = () =>{
       {
         openBottomOffer &&(
           <OffersBottomSheet
+          handleCheckout={() => handleCheckout()}
           handleClose={() => setOpenBottomOffer(!openBottomOffer)}
           handleIncrease={() => handleIncreaseFunc()}
           handleDecrease={() => handleDecreaseFunc()}

@@ -11,3 +11,14 @@ export const GetHomeContents = async () => {
         url: `${PublicAPI}contents`
     });
 }
+
+export const GetClientSecret = async (token, reqBody) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'POST', 
+        url: `${PublicAPI}create-payment-intent`,
+        data: reqBody
+    });
+}

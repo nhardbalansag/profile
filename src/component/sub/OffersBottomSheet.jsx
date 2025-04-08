@@ -18,6 +18,7 @@ const OffersBottomSheet = ({
     handleClose,
     handleDecrease,
     handleIncrease,
+    handleCheckout,
     count,
     activeTab,
     selectTab,
@@ -31,7 +32,7 @@ const OffersBottomSheet = ({
     handleCustomTPoints,
     handleDecreaseCustomPoints,
     handleIncreaseCustomPoints,
-    children
+    children,
 }) => {
 
   return (
@@ -196,7 +197,7 @@ const OffersBottomSheet = ({
                         </div>
                         <div className="flex gap-3">
                             <button  onClick={handleClose} className="px-2 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-100">Cancel</button>
-                            <button className="px-2 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700">Checkout</button>
+                            <button onClick={handleCheckout} className="px-2 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700">Checkout</button>
                         </div>
                     </div>
                 </div>

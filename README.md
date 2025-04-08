@@ -118,3 +118,11 @@ npm run build
     example: 
             <script type="module" crossorigin src="/<repository name>/assets/index-sCSJl_wq.js"></script>
             <link rel="stylesheet" crossorigin href="/<repository name>/assets/index-n_ryQ3BS.css">
+
+
+
+
+reference
+
+https://docs.stripe.com/sdks/server-side
+https://docs.stripe.com/sandboxes

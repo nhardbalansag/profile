@@ -4,7 +4,7 @@ import {
 } from "./authAction"
 
 const InitialStates  = {
-    StateToken:                  null,
+    StateToken:                  "test token",
     StateUserInformation:        []
 }
 

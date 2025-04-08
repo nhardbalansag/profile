@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+import { useDispatch } from "react-redux";
+import {useSelector} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 import {
   HomeCard,
   BottomCreateAccountFloat,
@@ -14,10 +18,12 @@ import {
   OffersBottomSheet
 } from '../component/index'
 
+import {
+  Checkout
+} from './index'
+
 import { useMediaQuery } from 'react-responsive'
 import MediaQuery from 'react-responsive'
-
-import { Link } from "react-router-dom";
 
 import { IoIosCloseCircleOutline } from "react-icons/io";
 
@@ -28,44 +34,36 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
-import { format } from "date-fns";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-
 import DOMPurify from "dompurify";
 
 import EmptyImage  from  '../assets/images/glorijan/empty.jpg'
 
 import Logo1 from '../assets/images/ten/logo.png'
 import TenBG2 from '../assets/images/ten/tenBg2.png'
-import test from '../assets/images/glorijan/glorijanmob.png'
 import ForTestDisplay from '../assets/images/ten/forTestDisplay.jpg'
 import ForTestDisplay2 from '../assets/images/ten/forTestDisplay2.jpg'
 import ForTestDisplay3 from '../assets/images/ten/forTestDisplay3.jpg'
-import Chengdu from '../assets/images/ten/Chengdu1.jpg'
 
 import * as api_content from '../services/content/content.api'
 
 const HomeContent = () =>{
 
-  const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 601px)'
-  })
-  const isBigScreen = useMediaQuery({ query: '(min-width: 1824px)' })
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
-  const isPortrait = useMediaQuery({ query: '(orientation: portrait)' })
-  const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' })
+  //#region implementations
+  const navigate = useNavigate();
+  const auth_states = useSelector(state => state.AuthReducer);
 
+  //#region useRefs
   const maxGuestCount = useRef(0)
-  const walletRef = useRef(25)
-  
-  const [showBottomRegistration, setShowBottomRegistration] = useState(true);
+  const walletRef = useRef(100)
+  const paymentBContent = useRef({})
+  //#endregion 
+
+  //#region states
+  const [showBottomRegistration, setShowBottomRegistration] = useState(false);
   const [collapseDetails, setCollapseDetails] = useState(false);
   const [collapseBottomDetails, setCollapseBottomDetails] = useState(true);
   const [openBottomOffer, setOpenBottomOffer] = useState(false);
+  const [openBottomPayment, setOpenBottomPayment] = useState(false);
   const [ResultGetHomeContents, ResultSetHomeContents] = useState([]);
   const [ResultGetHomeContentsDetails, ResultSetHomeContentsDetails] = useState([]);
   const [getBottomDetailsOpen, setBottomDetailsOpen] = useState(false);
@@ -76,22 +74,66 @@ const HomeContent = () =>{
   const [TPointsCustom, setTPointsCustom] = useState(walletRef.current);
   const [UseTPointsWalletFullAmount, setUseTPointsWalletFullAmount] = useState(false);
   const [loadingContent, setLoadingContent] = useState(true);
+ //#endregion
+
+  //#region methods
+  const isDesktopOrLaptop = useMediaQuery({
+    query: '(min-width: 601px)'
+  })
+  
+  const handleCheckout = (selectedTab, AllContentData) =>{
+    if(!auth_states.StateToken){
+      setShowBottomRegistration(true)
+      navigate('login');
+    }else{
+
+      const reqBody = {
+        content_id: selectedTab.content_id,
+        offers_id: selectedTab.offers_id,
+        finalAmount: totalPriceWithPoints,
+        content_title: AllContentData.content_title,
+        content_days_count: AllContentData.content_days_count,
+        content_night_count: AllContentData.content_night_count,
+        membership_type: selectedTab.offers_table.membership_type_table.type_title,
+        room_type_name: selectedTab.offers_table.supplier_table.room_type.room_type_name,
+        tier_category_name: selectedTab.offers_table.tier_category_table.tier_category_name,
+        content_date_from: AllContentData.content_date_from,
+        content_date_to: AllContentData.content_date_to,
+
+        points_applied: TPointsCustom,
+        points_allowed: selectedTab.offers_table.offers_points_amount,
+        points_wallet_before: walletRef.current,
+        points_wallet_after: TPointsWallet
+      }
+
+      paymentBContent.current = reqBody
+
+      setOpenBottomPayment(true)
+    }
+  }
   
   const handleTpoints = (item) => {
     setUseTPointsWalletFullAmount(!UseTPointsWalletFullAmount)
 
     const offers_amount = parseFloat(item.offers_table.offers_amount)
     const offers_points_amount = parseFloat(item.offers_table.offers_points_amount)
-    const total = offers_amount - offers_points_amount
 
     if(!UseTPointsWalletFullAmount){
-      const lessToWallet = ((walletRef.current - offers_points_amount) < 0 ? 0 : (walletRef.current - offers_points_amount))
-      setTPointsWallet(lessToWallet)
-      setTotalPriceWithPoints(offers_amount - (walletRef.current > offers_points_amount ? offers_points_amount : walletRef.current))
-      setTPointsCustom(0)
+      if(walletRef.current > offers_points_amount){
+        const lessToWallet = walletRef.current - offers_points_amount
+        setTPointsWallet(lessToWallet)
+        setTotalPriceWithPoints(offers_amount - offers_points_amount)
+        setTPointsCustom(offers_points_amount)
+      }else if(walletRef.current < offers_points_amount){
+        const lessToWallet = walletRef.current - walletRef.current
+        setTPointsWallet(lessToWallet)
+        setTotalPriceWithPoints(offers_amount - walletRef.current)
+        setTPointsCustom(walletRef.current)
+      }
     }else{
       setTotalPriceWithPoints(offers_amount)
       setTPointsWallet(walletRef.current)
+      setTPointsCustom(0)
     }
   };
 
@@ -212,6 +254,7 @@ const HomeContent = () =>{
     setOpenBottomOffer(true)
     ResultSetHomeContentsDetails(item)
     setActiveTab(item.content_offers_table[0])
+    setTotalPriceWithPoints(item.content_offers_table[0].offers_table.offers_amount)
     setCount(item.content_guest_count)
     maxGuestCount.current = item.content_guest_count
   }
@@ -228,10 +271,21 @@ const HomeContent = () =>{
       console.log("GetHomeContents", err)
     })
   }
+  //#endregion
 
+  //#region useEffects
   useEffect(() =>{
     GetHomeContents()
   },[])
+
+  useEffect(() =>{
+    if(!auth_states.StateToken){
+      setShowBottomRegistration(true)
+    }
+  },[])
+  //#endregion
+
+  //#endregion
 
   return (
     <div>
@@ -358,7 +412,7 @@ const HomeContent = () =>{
                     </SwiperSlide>
                   ))
                 : 
-                  [1, 2].map((item, index) =>(
+                  [1, 2, 3].map((item, index) =>(
                     <SwiperSlide key={index} className='flex justify-center mb-10'>
                       <HomeCard loading={loadingContent}/>
                     </SwiperSlide>
@@ -541,7 +595,7 @@ const HomeContent = () =>{
                   <DestinationCard 
                   clickOffers={() => {
                     setOpenBottomOffer(!openBottomOffer)
-                    HandleOfferDetails(item)
+                    HandleOfferDetails(ResultGetHomeContentsDetails)
                     setBottomDetailsOpen(false)
                     setCollapseBottomDetails(false)
                   }}
@@ -551,6 +605,7 @@ const HomeContent = () =>{
                   image={'http://clubten.localtest.me/storage/' + ResultGetHomeContentsDetails.uploads_table_main_view.upload_url} 
                   location='--'
                   collapseDetails={collapseBottomDetails}
+                  loading={loadingContent}
                   isLiked={false}/>
                 </div>
               </div>
@@ -561,6 +616,7 @@ const HomeContent = () =>{
         {
           openBottomOffer &&(
             <OffersBottomSheet
+            handleCheckout={() => handleCheckout(activeTab, ResultGetHomeContentsDetails)}
             handleClose={() => setOpenBottomOffer(!openBottomOffer)}
             handleIncrease={() => handleIncreaseFunc()}
             handleDecrease={() => handleDecreaseFunc()}
@@ -589,6 +645,9 @@ const HomeContent = () =>{
               </div>
             </OffersBottomSheet>
           )
+        }
+        {
+          openBottomPayment && <Checkout dataContent={paymentBContent.current} handleClose={() => setOpenBottomPayment(false)}/>
         }
       </main>
     </div>

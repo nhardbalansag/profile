@@ -14,7 +14,7 @@ const Header = ({onPressAction, ActionState}) => {
     <div>
       <header className="bg-[#001d3d]">
         <nav className="container relative flex items-center justify-between px-6 mx-auto text-white">
-          <Link to={'/ReactTenFrontend'}>
+          <Link to={'/'}>
             <a href="#" className='flex items-center'>
               <img
                 className="w-[60px] md:w-[100px]"

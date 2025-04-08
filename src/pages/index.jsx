@@ -9,6 +9,8 @@ import NotFound from './partials/not-found'
 import LoginContent from "./auth/login-content";
 import LoginPage from "./auth/login-index";
 
+import Checkout from "./payment/checkout";
+
 export{
     HomePage,
     HomeContent,
@@ -19,5 +21,7 @@ export{
     LoginContent,
     LoginPage,
 
-    NotFound
+    NotFound,
+
+    Checkout
 }
