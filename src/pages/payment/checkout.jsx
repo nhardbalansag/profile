@@ -11,13 +11,15 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 
 import * as api_content from '../../services/content/content.api'
 
+const env = import.meta.env;
+
 function Checkout({
     token,
     totalAmount = 0,
     statusMessage,
     dataContent,
     handleClose,
-    stripePublicKey = 'pk_test_51R8NVkDYKDfq48pB5FVoOD0aXJHJVmoNgaw8jnZAXw1c3zqeFveySSUTlWk5d4VXYM8dGGXvM6KSWpPwXuVtCoGc00J87KmHVo'
+    stripePublicKey = env.VITE_APP_STRIPE_PUBLIC_KEY
 }) {
 
     const [getclientSecret, setclientSecret] = useState(null)

@@ -9,6 +9,10 @@ import {
   OffersBottomSheet
 } from '../../component/index'
 
+import {
+  Checkout
+} from '../index'
+
 import DOMPurify from "dompurify";
 
 import EmptyImage  from  '../../assets/images/glorijan/empty.jpg'
@@ -22,53 +26,93 @@ import {
 
 import * as api_content from '../../services/content/content.api'
 
+const env = import.meta.env;
+
 const DestinationContent = () =>{
 
+    //#region implementations
     const navigate = useNavigate();
     const auth_states = useSelector(state => state.AuthReducer);
-
+  
+    //#region useRefs
     const maxGuestCount = useRef(0)
-    const walletRef = useRef(25)
-    
-    const [showBottomRegistration, setShowBottomRegistration] = useState(true);
-    const [collapseDetails, setCollapseDetails] = useState(false);
-    const [collapseBottomDetails, setCollapseBottomDetails] = useState(true);
-    const [openBottomOffer, setOpenBottomOffer] = useState(false);
-    const [ResultGetHomeContents, ResultSetHomeContents] = useState([]);
-    const [ResultGetHomeContentsDetails, ResultSetHomeContentsDetails] = useState([]);
-    const [getBottomDetailsOpen, setBottomDetailsOpen] = useState(false);
-    const [activeTab, setActiveTab] = useState([]);
-    const [count, setCount] = useState(0);
-    const [totalPriceWithPoints, setTotalPriceWithPoints] = useState(0);
-    const [TPointsWallet, setTPointsWallet] = useState(walletRef.current);
-    const [TPointsCustom, setTPointsCustom] = useState(walletRef.current);
-    const [UseTPointsWalletFullAmount, setUseTPointsWalletFullAmount] = useState(false);
-    const [loadingContent, setLoadingContent] = useState(true);
+    const walletRef = useRef(100)
+    const paymentBContent = useRef({})
+    //#endregion 
+  
+  //#region states
+  const [showBottomRegistration, setShowBottomRegistration] = useState(false);
+  const [collapseDetails, setCollapseDetails] = useState(false);
+  const [collapseBottomDetails, setCollapseBottomDetails] = useState(true);
+  const [openBottomOffer, setOpenBottomOffer] = useState(false);
+  const [openBottomPayment, setOpenBottomPayment] = useState(false);
+  const [ResultGetHomeContents, ResultSetHomeContents] = useState([]);
+  const [ResultGetHomeContentsDetails, ResultSetHomeContentsDetails] = useState([]);
+  const [getBottomDetailsOpen, setBottomDetailsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState([]);
+  const [count, setCount] = useState(0);
+  const [totalPriceWithPoints, setTotalPriceWithPoints] = useState(0);
+  const [TPointsWallet, setTPointsWallet] = useState(walletRef.current);
+  const [TPointsCustom, setTPointsCustom] = useState(walletRef.current);
+  const [UseTPointsWalletFullAmount, setUseTPointsWalletFullAmount] = useState(false);
+  const [loadingContent, setLoadingContent] = useState(true);
+  //#endregion
 
-  const [open, setOpen] = useState(false);
+  //#region methods
 
-  const handleCheckout = () =>{
+  const handleCheckout = (selectedTab, AllContentData) =>{
     if(!auth_states.StateToken){
       setShowBottomRegistration(true)
-      navigate('/login');
+      navigate('login');
+    }else{
+
+      const reqBody = {
+        content_id: selectedTab.content_id,
+        offers_id: selectedTab.offers_id,
+        finalAmount: totalPriceWithPoints,
+        content_title: AllContentData.content_title,
+        content_days_count: AllContentData.content_days_count,
+        content_night_count: AllContentData.content_night_count,
+        membership_type: selectedTab.offers_table.membership_type_table.type_title,
+        room_type_name: selectedTab.offers_table.supplier_table.room_type.room_type_name,
+        tier_category_name: selectedTab.offers_table.tier_category_table.tier_category_name,
+        content_date_from: AllContentData.content_date_from,
+        content_date_to: AllContentData.content_date_to,
+
+        points_applied: TPointsCustom,
+        points_allowed: selectedTab.offers_table.offers_points_amount,
+        points_wallet_before: walletRef.current,
+        points_wallet_after: TPointsWallet
+      }
+
+      paymentBContent.current = reqBody
+
+      setOpenBottomPayment(true)
     }
   }
-
+  
   const handleTpoints = (item) => {
     setUseTPointsWalletFullAmount(!UseTPointsWalletFullAmount)
 
     const offers_amount = parseFloat(item.offers_table.offers_amount)
     const offers_points_amount = parseFloat(item.offers_table.offers_points_amount)
-    const total = offers_amount - offers_points_amount
 
     if(!UseTPointsWalletFullAmount){
-      const lessToWallet = ((walletRef.current - offers_points_amount) < 0 ? 0 : (walletRef.current - offers_points_amount))
-      setTPointsWallet(lessToWallet)
-      setTotalPriceWithPoints(offers_amount - (walletRef.current > offers_points_amount ? offers_points_amount : walletRef.current))
-      setTPointsCustom(0)
+      if(walletRef.current > offers_points_amount){
+        const lessToWallet = walletRef.current - offers_points_amount
+        setTPointsWallet(lessToWallet)
+        setTotalPriceWithPoints(offers_amount - offers_points_amount)
+        setTPointsCustom(offers_points_amount)
+      }else if(walletRef.current < offers_points_amount){
+        const lessToWallet = walletRef.current - walletRef.current
+        setTPointsWallet(lessToWallet)
+        setTotalPriceWithPoints(offers_amount - walletRef.current)
+        setTPointsCustom(walletRef.current)
+      }
     }else{
       setTotalPriceWithPoints(offers_amount)
       setTPointsWallet(walletRef.current)
+      setTPointsCustom(0)
     }
   };
 
@@ -167,7 +211,7 @@ const DestinationContent = () =>{
       })
     }
   };
-  
+ 
   const handleDecreaseFunc = () => {
     if (count > 0) setCount(count - 1);
   };
@@ -180,15 +224,11 @@ const DestinationContent = () =>{
     setActiveTab(item)
   }
 
-  const HandleSeeDetails = (item) =>{
-    isDesktopOrLaptop ? setBottomDetailsOpen(true) : setCollapseDetails(!collapseDetails)
-    ResultSetHomeContentsDetails(item)
-  }
-
   const HandleOfferDetails = (item) =>{
     setOpenBottomOffer(true)
     ResultSetHomeContentsDetails(item)
     setActiveTab(item.content_offers_table[0])
+    setTotalPriceWithPoints(item.content_offers_table[0].offers_table.offers_amount)
     setCount(item.content_guest_count)
     maxGuestCount.current = item.content_guest_count
   }
@@ -205,10 +245,19 @@ const DestinationContent = () =>{
       console.log("GetHomeContents", err)
     })
   }
+  //#endregion
 
+    //#region useEffects
   useEffect(() =>{
     GetHomeContents()
   },[])
+
+  useEffect(() =>{
+    if(!auth_states.StateToken){
+      setShowBottomRegistration(true)
+    }
+  },[])
+  //#endregion
 
   return (
     <div className='w-full md:fixed'>
@@ -273,16 +322,19 @@ const DestinationContent = () =>{
                   title={item.content_title}
                   clickSeeDetails={() => setCollapseBottomDetails(!collapseBottomDetails)}
                   details={DOMPurify.sanitize(item.content_description)}
-                  image={'http://clubten.localtest.me/storage/' + item.uploads_table_main_view.upload_url} 
+                  image={env.VITE_APP_BACKEND_STORAGE_URL + item.uploads_table_main_view.upload_url} 
                   location='--'
                   collapseDetails={collapseBottomDetails}
                   loading={loadingContent}
                   isLiked={false}/>
                 ))
               : 
-                [1, 2].map((item, index) =>(
-                  <DestinationCard loading={loadingContent}/>
-                ))
+                (
+                  ResultGetHomeContents.length <= 0 &&
+                  [1, 2, 3].map((item, index) =>(
+                    <DestinationCard loading={true}/>
+                  ))
+                )
             }
           </div>
         </div>
@@ -302,7 +354,7 @@ const DestinationContent = () =>{
       {
         openBottomOffer &&(
           <OffersBottomSheet
-          handleCheckout={() => handleCheckout()}
+          handleCheckout={() => handleCheckout(activeTab, ResultGetHomeContentsDetails)}
           handleClose={() => setOpenBottomOffer(!openBottomOffer)}
           handleIncrease={() => handleIncreaseFunc()}
           handleDecrease={() => handleDecreaseFunc()}
@@ -331,6 +383,10 @@ const DestinationContent = () =>{
             </div>
           </OffersBottomSheet>
         )
+      }
+
+      {
+        openBottomPayment && <Checkout dataContent={paymentBContent.current} handleClose={() => setOpenBottomPayment(false)}/>
       }
     </div>
   )

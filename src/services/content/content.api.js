@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const PublicAPI = 'http://clubten.localtest.me:80/api/public/'
+const env = import.meta.env;
+
+const PublicAPI = env.VITE_APP_BACKEND_API_URL + "public/"
 
 export const GetHomeContents = async () => {
     return await axios({ 

@@ -46,6 +46,8 @@ import ForTestDisplay3 from '../assets/images/ten/forTestDisplay3.jpg'
 
 import * as api_content from '../services/content/content.api'
 
+const env = import.meta.env;
+
 const HomeContent = () =>{
 
   //#region implementations
@@ -403,7 +405,7 @@ const HomeContent = () =>{
                       title={item.content_title}
                       clickSeeDetails={() => HandleSeeDetails(item)}
                       details={DOMPurify.sanitize(item.content_description)}
-                      image={'http://clubten.localtest.me/storage/' + item.uploads_table_main_view.upload_url} 
+                      image={env.VITE_APP_BACKEND_STORAGE_URL + item.uploads_table_main_view.upload_url} 
                       days={item.content_days_count}
                       nights={item.content_night_count}
                       location='--'
@@ -412,11 +414,14 @@ const HomeContent = () =>{
                     </SwiperSlide>
                   ))
                 : 
-                  [1, 2, 3].map((item, index) =>(
-                    <SwiperSlide key={index} className='flex justify-center mb-10'>
-                      <HomeCard loading={loadingContent}/>
-                    </SwiperSlide>
-                  ))
+                  (
+                    ResultGetHomeContents.length <= 0 &&
+                    [1, 2, 3].map((item, index) =>(
+                      <SwiperSlide key={index} className='flex justify-center mb-10'>
+                        <HomeCard loading={true}/>
+                      </SwiperSlide>
+                    ))
+                  )
               }
             </Swiper>
 
