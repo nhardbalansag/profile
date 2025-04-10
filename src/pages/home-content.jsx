@@ -607,7 +607,7 @@ const HomeContent = () =>{
                   title={ResultGetHomeContentsDetails.content_title}
                   clickSeeDetails={() => setCollapseBottomDetails(!collapseBottomDetails)}
                   details={DOMPurify.sanitize(ResultGetHomeContentsDetails.content_description)}
-                  image={'http://clubten.localtest.me/storage/' + ResultGetHomeContentsDetails.uploads_table_main_view.upload_url} 
+                  image={env.VITE_APP_BACKEND_STORAGE_URL + ResultGetHomeContentsDetails.uploads_table_main_view.upload_url} 
                   location='--'
                   collapseDetails={collapseBottomDetails}
                   loading={loadingContent}
