@@ -56,6 +56,7 @@ const DestinationContent = () =>{
   const [TPointsCustom, setTPointsCustom] = useState(walletRef.current);
   const [UseTPointsWalletFullAmount, setUseTPointsWalletFullAmount] = useState(false);
   const [loadingContent, setLoadingContent] = useState(true);
+  const [getcollapseSpecific, setcollapseSpecific] = useState(null);
   //#endregion
 
   //#region methods
@@ -313,6 +314,7 @@ const DestinationContent = () =>{
               ?
                 ResultGetHomeContents.map((item, index) =>(
                   <DestinationCard 
+                  key={index}
                   clickOffers={() => {
                     setOpenBottomOffer(!openBottomOffer)
                     HandleOfferDetails(item)
@@ -320,11 +322,11 @@ const DestinationContent = () =>{
                     setCollapseBottomDetails(false)
                   }}
                   title={item.content_title}
-                  clickSeeDetails={() => setCollapseBottomDetails(!collapseBottomDetails)}
+                  clickSeeDetails={() => setcollapseSpecific(index)}
                   details={DOMPurify.sanitize(item.content_description)}
                   image={env.VITE_APP_BACKEND_STORAGE_URL + item.uploads_table_main_view.upload_url} 
                   location='--'
-                  collapseDetails={collapseBottomDetails}
+                  collapseDetails={getcollapseSpecific == index ? true : false}
                   loading={loadingContent}
                   isLiked={false}/>
                 ))
@@ -332,7 +334,7 @@ const DestinationContent = () =>{
                 (
                   ResultGetHomeContents.length <= 0 &&
                   [1, 2, 3].map((item, index) =>(
-                    <DestinationCard loading={true}/>
+                    <DestinationCard key={index} loading={true}/>
                   ))
                 )
             }
