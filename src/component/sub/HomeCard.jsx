@@ -1,18 +1,8 @@
 import React, {useState} from 'react'
 
-// import {
-//     Calendar,
-//     Location,
-//     Hearth,
-//     Group
-// } from '../../assets/icons/index'
-
+import DOMPurify from 'dompurify';
 import {
-    Calendar,
-    Location,
     Hearth,
-    Group,
-    PriceTag
 } from '../../assets/icons/index'
 
 import { IoPartlySunnyOutline } from "react-icons/io5";
@@ -21,14 +11,6 @@ import { FaTags } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
 import { CiLocationOn } from "react-icons/ci";
 
-import {
-  PricingCard,
-} from '../../component/index'
-
-import Logo2 from '../../assets/images/ten/logo2.png'
-
-import { Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectCoverflow } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -54,40 +36,17 @@ const HomeCard = ({
     loading = true
 }) => {
 
-    const [activeTab, setActiveTab] = useState("standard");
-
-    const pricingData = {
-      standard: {
-        title: "STANDARD",
-        subtitle: "2 Guests Per Room",
-        price: "$1088",
-        note: "TP not applicable",
-      },
-      vip: {
-        title: "VIP",
-        subtitle: "2 Guests Per Room",
-        price: "$1288",
-        note: "Includes TP",
-      },
-      pca: {
-        title: "PCA",
-        subtitle: "Private Room",
-        price: "$1588",
-        note: "All-inclusive package",
-      },
-    }  
-
-    const limitText = (text, limit = 35) =>{
+    const limitText = (text, limit = 100) =>{
         return text.length > limit ? text.slice(0, limit) + "... see more" : text;
     }
 
   return (
-    <div className={`lg:flex lg:justify-center lg:items-center md:w-[${width}] w-[100%] md:p-2 md:m-3 md:rounded-lg pb-[15px] shadow-lg ${classes} md:bg-white`}>
+    <div className={`flex justify-center lg:items-center md:w-[${width}] w-[100%] md:p-2 md:m-3 md:rounded-lg pb-[15px] shadow-lg ${classes} md:bg-white`}>
         {
             loading
             ?
-                <div className='flex justify-center'>
-                    <div className="flex flex-col justify-center gap-4 py-10 w-52">
+                <div className='flex justify-center w-[90%]'>
+                    <div className="flex flex-col justify-center w-full gap-4 py-10">
                         <div className="w-full h-32 skeleton"></div>
                         <div className="h-4 skeleton w-28"></div>
                         <div className="w-full h-4 skeleton"></div>
@@ -123,7 +82,7 @@ const HomeCard = ({
                     <div className="p-2 px-5">
                         <div className='py-1'>
                             <p className="font-bold card-title">{title}</p>
-                            <div onClick={clickSeeDetails} dangerouslySetInnerHTML={{ __html: (collapseDetails ? details : limitText(details)) }} />
+                            <div  onClick={clickSeeDetails}  dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(collapseDetails ? details : limitText(details))}} />
                             {/* <p className='text-[18px] py-1'>{collapseDetails ? details : limitText(details)}</p> */}
                         </div>
                         <div className='p-4 px-2 bg-white border rounded-lg shadow-md'>

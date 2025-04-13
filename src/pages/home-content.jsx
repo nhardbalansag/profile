@@ -58,6 +58,7 @@ const HomeContent = () =>{
   const maxGuestCount = useRef(0)
   const walletRef = useRef(100)
   const paymentBContent = useRef({})
+  const selectedLanguage = useRef(5)  // null means main translation is used
   //#endregion 
 
   //#region states
@@ -300,22 +301,168 @@ const HomeContent = () =>{
             zIndex: -1
           }}
         ></div>
-        <div className="flex flex-col items-center mx-auto text-center">
+        {/* <div className="flex flex-col items-center mx-auto text-center">
             <h1 className="text-[30px] font-extrabold text-[#063970] uppercase relative ">WELCOME TO CLUB </h1>
             <img
             className="w-[40%]"
             alt="Tailwind CSS chat bubble component"
             src={Logo1} />
-        </div>
+        </div> */}
 
         {/* contents */}
         <div className='flex justify-center my-5'>
           <div className='md:w-[75%] w-[100%]'>
 
-            <div className='block sm:hidden'>
+            {/* <div className='block sm:hidden'>
               <SearchFilterBar/>
             </div>
 
+            <div className='hidden sm:block'>
+              <SearchFilterBar/>
+            </div> */}
+
+            {
+              ResultGetHomeContents.length > 0
+              ?
+                ResultGetHomeContents.map((item, index) =>(
+                  <div>
+                    <CategoryTitleAndArrow 
+                    key={index}
+                    title={
+                      selectedLanguage.current == null 
+                      ? item.category_display_content.display.category.title
+                      : (
+                            item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                          ? item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).display_title 
+                          : item.category_display_content.display.category.title
+                        )
+                    } 
+                    path={item.category_display_content.path.path}
+                    redirect_title={
+                      selectedLanguage.current == null 
+                      ? item.category_display_content.display.redirect.title
+                      : (
+                            item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                          ? item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).redirect_title
+                          : item.category_display_content.display.redirect.title
+                        )
+                    }
+                    has_path={item.category_display_content.path.has_path}
+                    title_style={item.category_display_content.display.category.style}
+                    redirect_style={item.category_display_content.display.redirect.style}
+                    />
+                    
+                    <Swiper
+                      key={index}
+                      pagination={{
+                        dynamicBullets: true,
+                      }}
+                      modules={[Navigation, Pagination, Scrollbar, A11y]}
+                      spaceBetween={5}
+                      slidesPerView={1}
+                      onSlideChange={() => setCollapseDetails(false)}
+                      breakpoints={{
+                        300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
+                        400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
+                        500: { slidesPerView: 1, spaceBetween: 0 }, // 2 slides on tablets
+                        600: { slidesPerView: 2, spaceBetween: 60 }, // 2 slides on tablets
+                        700: { slidesPerView: 2, spaceBetween: 50 }, // 2 slides on tablets
+                        800: { slidesPerView: 2, spaceBetween: 10 }, // 2 slides on tablets
+                        1024: { slidesPerView: 2,  spaceBetween: 10}, // 3 slides on desktops
+                        1353: { slidesPerView: 3,  spaceBetween: 10} // 3 slides on desktops
+                      }}
+                    >
+                      {
+                        item.contents_table.length > 0
+                        ?
+                          item.contents_table.map((item_content, index_content) =>(
+                            <SwiperSlide key={index_content} className='flex justify-center mb-10'>
+                              <HomeCard 
+                              loading={loadingContent}
+                              clickOffers={() => HandleOfferDetails(item_content)}
+                              title={
+                                selectedLanguage.current == null 
+                                ? item_content.content_title
+                                : (
+                                      item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                    ? item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
+                                    : item_content.content_title
+                                  )
+                              }
+                              clickSeeDetails={() => HandleSeeDetails(item_content)}
+                              details={
+                                selectedLanguage.current == null 
+                                ? item_content.content_description
+                                : (
+                                      item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                    ? item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
+                                    : item_content.content_description
+                                  )
+                              }
+                              image={env.VITE_APP_BACKEND_STORAGE_URL + item_content.uploads_table_main_view.upload_url} 
+                              days={item_content.content_days_count}
+                              nights={item_content.content_night_count}
+                              location='--'
+                              collapseDetails={collapseDetails}
+                              isLiked={false}/>
+                            </SwiperSlide>
+                          ))
+                        :
+                          (
+                            ResultGetHomeContents.length <= 0 &&
+                            [1, 2, 3].map((item, index) =>(
+                              <SwiperSlide key={index} className='flex justify-center mb-10'>
+                                <HomeCard loading={true}/>
+                              </SwiperSlide>
+                            ))
+                          )
+                      }
+                    </Swiper>
+                  </div>
+                ))
+              :
+              (
+                ResultGetHomeContents.length <= 0 &&
+                <div>
+                  <div className='flex items-center justify-between'>
+                    <div className="w-[30%] h-4 skeleton"></div>
+                    <div className="h-4 skeleton w-[20%]"></div>
+                  </div>
+
+                  <Swiper
+                    pagination={{
+                      dynamicBullets: true,
+                    }}
+                    modules={[Navigation, Pagination, Scrollbar, A11y]}
+                    spaceBetween={5}
+                    slidesPerView={1}
+                    onSlideChange={() => setCollapseDetails(false)}
+                    // onSwiper={(swiper) => console.log(swiper)}
+                    breakpoints={{
+                      300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
+                      400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
+                      500: { slidesPerView: 1, spaceBetween: 0 }, // 2 slides on tablets
+                      600: { slidesPerView: 2, spaceBetween: 60 }, // 2 slides on tablets
+                      700: { slidesPerView: 2, spaceBetween: 50 }, // 2 slides on tablets
+                      800: { slidesPerView: 2, spaceBetween: 10 }, // 2 slides on tablets
+                      1024: { slidesPerView: 2,  spaceBetween: 10}, // 3 slides on desktops
+                      1353: { slidesPerView: 3,  spaceBetween: 10} // 3 slides on desktops
+                      // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
+                    }}
+                  >
+                    {
+                      [1, 2, 3].map((item, index) =>(
+                        <SwiperSlide key={index} className='flex justify-center mb-10'>
+                          <HomeCard loading={true}/>
+                        </SwiperSlide>
+                      ))
+                    }
+                  </Swiper>
+                </div>
+              )
+            }
+            
+    {/* 
             <CategoryTitleAndArrow title={"Happenings"}/>
             <Swiper
               coverflowEffect={{
@@ -367,11 +514,8 @@ const HomeContent = () =>{
                 <HomeCardNews image={EmptyImage} />
               </SwiperSlide>
             </Swiper>
-            
-            <div className='hidden sm:block'>
-              <SearchFilterBar/>
-            </div>
-            {/* <ReactQuill theme="snow" value={text} onChange={setText} /> */}
+           
+            <ReactQuill theme="snow" value={text} onChange={setText} />
             <CategoryTitleAndArrow title={"Destinations"} path={'destination'}/>
             <Swiper
               pagination={{
@@ -405,7 +549,7 @@ const HomeContent = () =>{
                       title={item.content_title}
                       clickSeeDetails={() => HandleSeeDetails(item)}
                       details={DOMPurify.sanitize(item.content_description)}
-                      image={env.VITE_APP_BACKEND_STORAGE_URL + item.uploads_table_main_view.upload_url} 
+                      // image={env.VITE_APP_BACKEND_STORAGE_URL + item.uploads_table_main_view.upload_url} 
                       days={item.content_days_count}
                       nights={item.content_night_count}
                       location='--'
@@ -574,7 +718,7 @@ const HomeContent = () =>{
               <SwiperSlide className='flex justify-center mb-10'>
                 <MechantCard image={EmptyImage}/>
               </SwiperSlide>
-            </Swiper>
+            </Swiper> */}
           </div>
         </div>
         {/* end contents */}
@@ -604,9 +748,27 @@ const HomeContent = () =>{
                     setBottomDetailsOpen(false)
                     setCollapseBottomDetails(false)
                   }}
-                  title={ResultGetHomeContentsDetails.content_title}
+                  title={
+                    selectedLanguage.current == null 
+                    ? ResultGetHomeContentsDetails.content_title
+                    : (
+                          ResultGetHomeContentsDetails.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                        ? ResultGetHomeContentsDetails.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
+                        : ResultGetHomeContentsDetails.content_title
+                      )
+                  }
                   clickSeeDetails={() => setCollapseBottomDetails(!collapseBottomDetails)}
-                  details={DOMPurify.sanitize(ResultGetHomeContentsDetails.content_description)}
+                  details={
+                    DOMPurify.sanitize(
+                      selectedLanguage.current == null 
+                      ? ResultGetHomeContentsDetails.content_description
+                      : (
+                            ResultGetHomeContentsDetails.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                          ? ResultGetHomeContentsDetails.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
+                          : ResultGetHomeContentsDetails.content_description
+                        )
+                    )
+                  }
                   image={env.VITE_APP_BACKEND_STORAGE_URL + ResultGetHomeContentsDetails.uploads_table_main_view.upload_url} 
                   location='--'
                   collapseDetails={collapseBottomDetails}

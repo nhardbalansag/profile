@@ -66,7 +66,7 @@ const DestinationCard = ({
       },
     }  
 
-    const limitText = (text, limit = 35) =>{
+    const limitText = (text, limit = 200) =>{
         return text.length > limit ? text.slice(0, limit) + "... see more" : text;
     }
 
