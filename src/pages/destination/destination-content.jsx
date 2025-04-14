@@ -38,6 +38,7 @@ const DestinationContent = () =>{
     const maxGuestCount = useRef(0)
     const walletRef = useRef(100)
     const paymentBContent = useRef({})
+    const selectedLanguage = useRef(5)  // null means main translation is used
     //#endregion 
   
   //#region states
@@ -248,7 +249,7 @@ const DestinationContent = () =>{
   }
   //#endregion
 
-    //#region useEffects
+  //#region useEffects  
   useEffect(() =>{
     GetHomeContents()
   },[])
@@ -313,22 +314,50 @@ const DestinationContent = () =>{
               ResultGetHomeContents.length > 0
               ?
                 ResultGetHomeContents.map((item, index) =>(
-                  <DestinationCard 
-                  key={index}
-                  clickOffers={() => {
-                    setOpenBottomOffer(!openBottomOffer)
-                    HandleOfferDetails(item)
-                    setBottomDetailsOpen(false)
-                    setCollapseBottomDetails(false)
-                  }}
-                  title={item.content_title}
-                  clickSeeDetails={() => setcollapseSpecific(index)}
-                  details={DOMPurify.sanitize(item.content_description)}
-                  image={env.VITE_APP_BACKEND_STORAGE_URL + item.uploads_table_main_view.upload_url} 
-                  location='--'
-                  collapseDetails={getcollapseSpecific == index ? true : false}
-                  loading={loadingContent}
-                  isLiked={false}/>
+
+                  item.contents_table.length > 0
+                  ?
+                  item.contents_table.map((contents_table_item, contents_table_index) =>(
+                    <DestinationCard 
+                    key={contents_table_index}
+                    clickOffers={() => {
+                      setOpenBottomOffer(!openBottomOffer)
+                      HandleOfferDetails(contents_table_item)
+                      setBottomDetailsOpen(false)
+                      setCollapseBottomDetails(false)
+                    }}
+                    title={
+                      selectedLanguage.current == null 
+                      ? contents_table_item.content_title
+                      : (
+                            contents_table_item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                          ? contents_table_item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
+                          : contents_table_item.content_title
+                        )
+                    }
+                    clickSeeDetails={() => setcollapseSpecific(contents_table_index)}
+                    details={DOMPurify.sanitize(
+                      selectedLanguage.current == null 
+                      ? contents_table_item.content_description
+                      : (
+                            contents_table_item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                          ? contents_table_item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
+                          : contents_table_item.content_description
+                        )
+                    )}
+                    image={env.VITE_APP_BACKEND_STORAGE_URL + contents_table_item.uploads_table_main_view.upload_url} 
+                    location='--'
+                    collapseDetails={getcollapseSpecific == contents_table_index ? true : false}
+                    loading={loadingContent}
+                    isLiked={false}/>
+                    ))
+                  :
+                    (
+                      item.contents_table.length <= 0 &&
+                      [1, 2, 3].map((item, index) =>(
+                        <DestinationCard key={index} loading={true}/>
+                      ))
+                    )
                 ))
               : 
                 (
