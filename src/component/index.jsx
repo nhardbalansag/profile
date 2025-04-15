@@ -20,6 +20,7 @@ import HomeCardEvent from "./sub/HomeCardEvent";
 import PricingCard from "./sub/PricingCard";
 import DestinationCard from "./sub/DestinationCard";
 import OffersBottomSheet from "./sub/OffersBottomSheet";
+import LanguageBottomSheet from "./sub/LanguageBottomSheet";
 
 export{
     Header,
@@ -43,5 +44,6 @@ export{
     HomeCardEvent,
     PricingCard,
     DestinationCard,
-    OffersBottomSheet
+    OffersBottomSheet,
+    LanguageBottomSheet
 }

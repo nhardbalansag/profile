@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import {useSelector} from 'react-redux';
 
 import {
     Outlet,
@@ -6,17 +7,26 @@ import {
 
 import {
   Header,
-  Footer
+  Footer,
+  LanguageBottomSheet
 } from "../component/index"
 
 const HomePage = () => {
 
+  const auth_states = useSelector(state => state.AuthReducer);
+
   const [open, setOpen] = useState(false)
+  const [getOpenLanguageSelection, setOpenLanguageSelection] = useState(false)
+  const [getSelectedLanguage, setSelectedLanguage] = useState("")
 
   return (
     <div>
       <div>
-        <Header onPressAction={ () => setOpen(!open)} ActionState={open}/>
+        <Header 
+        handleLanguageVisibility={() => setOpenLanguageSelection(true)}
+        onPressAction={() => setOpen(!open)} 
+        ActionState={open}
+        />
       </div>
       {/* pages */}
       <Outlet />
@@ -24,6 +34,15 @@ const HomePage = () => {
       <div className='block md:hidden'>
         <Footer/>
       </div>
+      {
+        getOpenLanguageSelection
+        && 
+        <LanguageBottomSheet 
+        selected={getSelectedLanguage}
+        handleSelectContent={(event) => setSelectedLanguage(event)}
+        handleClose={() => setOpenLanguageSelection(false)} 
+        DataContent={auth_states.Languages}/>
+      }
     </div>
   )
 }

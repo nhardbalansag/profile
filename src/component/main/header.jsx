@@ -1,5 +1,5 @@
-import React from 'react'
-
+import React, {useEffect} from 'react'
+import {useSelector} from 'react-redux';
 import Logo2 from '../../assets/images/ten/logo2.png'
 
 import { Link } from "react-router-dom";
@@ -9,7 +9,38 @@ import {
   UserCicle
 } from '../../assets/icons/index'
 
-const Header = ({onPressAction, ActionState}) => {
+const Header = ({
+  handleLanguageVisibility,
+  onPressAction, 
+  ActionState
+}) => {
+
+  //#region translation convertion
+  const auth_states = useSelector(state => state.AuthReducer);
+
+  useEffect(() =>{
+    auth_states.PageLanguages.map((item, key) =>{
+      const translation = item.translation
+      
+      if(translation.length > 0 && auth_states.SelectedLanguage){
+        const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
+        const targetElement = document.getElementsByClassName(item.page_config_id)
+        if (targetElement && filteredTranslation) {
+          if (targetElement.length > 0 && filteredTranslation) {
+            Array.from(targetElement).forEach((el) => {
+              el.textContent = filteredTranslation.page_config_title;
+            });
+          } else if (targetElement.length > 0) {
+            Array.from(targetElement).forEach((el) => {
+              el.textContent = item.page_config_title;
+            });
+          }
+        }
+      }
+    })
+  },[auth_states])
+  //#endregion
+
   return (
     <div>
       <header className="bg-[#001d3d]">
@@ -40,19 +71,21 @@ const Header = ({onPressAction, ActionState}) => {
               ActionState ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'
             }`}
           >
-             <div className='flex items-center justify-center'>
-              <Globe/>
-              <p className='ml-2'>Language</p>
-            </div>
+            <button onClick={handleLanguageVisibility}>
+              <div className='flex items-center justify-center'>
+                <Globe/>
+                <p className='ml-2 language_id'>Language</p>
+              </div>
+            </button>
             <div className='flex items-center justify-center md:px-10 '>
               <UserCicle/>
               <Link to={'login'}>
-                <a href="#" className="block ml-2 text-white transition-colors duration-300 hover:text-indigo-300">Login</a>
+                <a href="#" className="block ml-2 text-white transition-colors duration-300 login_id hover:text-indigo-300">Login</a>
               </Link>
             </div>
             <div className='flex items-center justify-center md:px-10 '>
               <Link to={'login'}>
-                <a href="#" className="px-5 py-2 text-sm font-semibold border rounded-lg">Create account</a>
+                <a href="#"  className="px-5 py-2 text-sm font-semibold border rounded-lg create_account">Create account</a>
               </Link>
             </div>
           </div>

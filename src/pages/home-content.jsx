@@ -14,6 +14,7 @@ import {
   HomeCardNews,
   HomeLearningCard,
   HomeCardEvent,
+  LanguageBottomSheet,
   DestinationCard,
   OffersBottomSheet
 } from '../component/index'
@@ -36,15 +37,12 @@ import 'swiper/css/scrollbar';
 
 import DOMPurify from "dompurify";
 
-import EmptyImage  from  '../assets/images/glorijan/empty.jpg'
-
-import Logo1 from '../assets/images/ten/logo.png'
 import TenBG2 from '../assets/images/ten/tenBg2.png'
-import ForTestDisplay from '../assets/images/ten/forTestDisplay.jpg'
-import ForTestDisplay2 from '../assets/images/ten/forTestDisplay2.jpg'
-import ForTestDisplay3 from '../assets/images/ten/forTestDisplay3.jpg'
+
+import * as AuthAction from '../store/auth/authAction'
 
 import * as api_content from '../services/content/content.api'
+import * as api_page_config from '../services/page/page.api'
 
 const env = import.meta.env;
 
@@ -54,12 +52,21 @@ const HomeContent = () =>{
   const navigate = useNavigate();
   const auth_states = useSelector(state => state.AuthReducer);
 
+  const dispatch = useDispatch(auth_states.SelectedLanguage ?  auth_states.SelectedLanguage.id : null)
+
   //#region useRefs
   const maxGuestCount = useRef(0)
   const walletRef = useRef(100)
   const paymentBContent = useRef({})
-  const selectedLanguage = useRef(5)  // null means main translation is used
+  const selectedLanguage = useRef(null)  // null means main translation is used
   //#endregion 
+
+  useEffect(() =>{
+    if(auth_states.SelectedLanguage){
+      selectedLanguage.current = parseInt(auth_states.SelectedLanguage.id)
+      GetHomeContents()
+    }
+  },[auth_states])
 
   //#region states
   const [showBottomRegistration, setShowBottomRegistration] = useState(false);
@@ -83,6 +90,26 @@ const HomeContent = () =>{
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 601px)'
   })
+
+  const getAllActivePageConfig = async() =>{
+    await api_page_config.getAllActivePageConfig().then((result) =>{
+        if(result.status){
+            dispatch(AuthAction.GetPageLanguageTranslation(result.data.data))
+        }
+    }).catch((err) =>{
+        console.error("getAllActivePageConfig error:", err);
+    })
+  }
+
+  const GetAllLanguages = async() =>{
+    await api_page_config.GetAllLanguages().then((result) =>{
+        if(result.status){
+            dispatch(AuthAction.GetAllLanguages(result.data.data))
+        }
+    }).catch((err) =>{
+        console.error("GetAllLanguages error:", err);
+    })
+  }
   
   const handleCheckout = (selectedTab, AllContentData) =>{
     if(!auth_states.StateToken){
@@ -266,7 +293,6 @@ const HomeContent = () =>{
     setLoadingContent(true)
     await api_content.GetHomeContents().then((result) =>{
       if(result.status){
-        console.log("GetHomeContents", result)
         setLoadingContent(false)
         ResultSetHomeContents(result.data.data)
       }
@@ -278,7 +304,9 @@ const HomeContent = () =>{
 
   //#region useEffects
   useEffect(() =>{
+    GetAllLanguages()
     GetHomeContents()
+    getAllActivePageConfig()
   },[])
 
   useEffect(() =>{
@@ -301,26 +329,9 @@ const HomeContent = () =>{
             zIndex: -1
           }}
         ></div>
-        {/* <div className="flex flex-col items-center mx-auto text-center">
-            <h1 className="text-[30px] font-extrabold text-[#063970] uppercase relative ">WELCOME TO CLUB </h1>
-            <img
-            className="w-[40%]"
-            alt="Tailwind CSS chat bubble component"
-            src={Logo1} />
-        </div> */}
-
         {/* contents */}
         <div className='flex justify-center my-5'>
           <div className='md:w-[75%] w-[100%]'>
-
-            {/* <div className='block sm:hidden'>
-              <SearchFilterBar/>
-            </div>
-
-            <div className='hidden sm:block'>
-              <SearchFilterBar/>
-            </div> */}
-
             {
               ResultGetHomeContents.length > 0
               ?
@@ -399,7 +410,11 @@ const HomeContent = () =>{
                                     : item_content.content_description
                                   )
                               }
-                              image={env.VITE_APP_BACKEND_STORAGE_URL + item_content.uploads_table_main_view.upload_url} 
+                              image={
+                                  item_content.uploads_table_main_view.upload_is_link 
+                                ? item_content.uploads_table_main_view.upload_url 
+                                : env.VITE_APP_BACKEND_STORAGE_URL + item_content.uploads_table_main_view.upload_url
+                              } 
                               days={item_content.content_days_count}
                               nights={item_content.content_night_count}
                               location='--'
@@ -769,7 +784,11 @@ const HomeContent = () =>{
                         )
                     )
                   }
-                  image={env.VITE_APP_BACKEND_STORAGE_URL + ResultGetHomeContentsDetails.uploads_table_main_view.upload_url} 
+                  image={
+                      ResultGetHomeContentsDetails.uploads_table_main_view.upload_is_link 
+                    ? ResultGetHomeContentsDetails.uploads_table_main_view.upload_url
+                    : env.VITE_APP_BACKEND_STORAGE_URL + ResultGetHomeContentsDetails.uploads_table_main_view.upload_url
+                  } 
                   location='--'
                   collapseDetails={collapseBottomDetails}
                   loading={loadingContent}

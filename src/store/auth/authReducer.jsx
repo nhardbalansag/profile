@@ -1,11 +1,17 @@
 import { 
     REDUX_GET_USER_ACCESS_INFORMATION,
-    REDUX_LOGOUT_USER
+    REDUX_LOGOUT_USER,
+    STORAGE_PAGE_LANGUAGES,
+    STORAGE_LANGUAGES,
+    STORAGE_sELECTED_LANGUAGES
 } from "./authAction"
 
 const InitialStates  = {
-    StateToken:                  "test token",
-    StateUserInformation:        []
+    StateToken: null,
+    StateUserInformation:   [],
+    PageLanguages:  [],
+    Languages:  [],
+    SelectedLanguage:  null
 }
 
 export default (state = InitialStates, action) =>{
@@ -20,6 +26,21 @@ export default (state = InitialStates, action) =>{
                 ...state,
                 StateToken              : action.StateToken,
                 StateUserInformation    : action.userInformation
+            }
+        case STORAGE_PAGE_LANGUAGES:
+            return{
+                ...state,
+                PageLanguages   : action.PageLanguages
+            }
+        case STORAGE_LANGUAGES:
+            return{
+                ...state,
+                Languages   : action.Languages
+            }
+        case STORAGE_sELECTED_LANGUAGES:
+            return{
+                ...state,
+                SelectedLanguage   : action.SelectedLanguage
             }
         default :
             return{
