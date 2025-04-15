@@ -31,9 +31,9 @@ const HomePage = () => {
       {/* pages */}
       <Outlet />
       {/* pages */}
-      <div className='block md:hidden'>
+      {/* <div className='block md:hidden'>
         <Footer/>
-      </div>
+      </div> */}
       {
         getOpenLanguageSelection
         && 

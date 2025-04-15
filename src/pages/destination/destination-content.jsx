@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect  } from 'react';
-
+import { useDispatch } from "react-redux";
 import {useSelector} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,17 +30,19 @@ const env = import.meta.env;
 
 const DestinationContent = () =>{
 
-    //#region implementations
-    const navigate = useNavigate();
-    const auth_states = useSelector(state => state.AuthReducer);
-  
-    //#region useRefs
-    const maxGuestCount = useRef(0)
-    const walletRef = useRef(100)
-    const paymentBContent = useRef({})
-    const selectedLanguage = useRef(5)  // null means main translation is used
-    //#endregion 
-  
+  //#region implementations
+  const navigate = useNavigate();
+  const dispatch = useDispatch()
+
+  const auth_states = useSelector(state => state.AuthReducer);
+
+  //#region useRefs
+  const maxGuestCount = useRef(0)
+  const walletRef = useRef(100)
+  const paymentBContent = useRef({})
+  const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
+  //#endregion 
+
   //#region states
   const [showBottomRegistration, setShowBottomRegistration] = useState(false);
   const [collapseDetails, setCollapseDetails] = useState(false);
@@ -255,6 +257,13 @@ const DestinationContent = () =>{
   },[])
 
   useEffect(() =>{
+    if(auth_states.SelectedLanguage){
+      selectedLanguage.current = parseInt(auth_states.SelectedLanguage.id)
+      GetHomeContents()
+    }
+  },[auth_states])
+
+  useEffect(() =>{
     if(!auth_states.StateToken){
       setShowBottomRegistration(true)
     }
@@ -283,7 +292,7 @@ const DestinationContent = () =>{
               <div className='flex items-center justify-between lg:justify-start'>
                   <div className='flex items-start lg:justify-end '>
                       <Calendar classes={'text-black mr-3'}/>
-                      <p className='mr-2 text-black'>From</p>
+                      <p className='mr-2 text-black from_id'>From</p>
                   </div>
                   <input type="date" className="p-2 w-[150px] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
@@ -292,13 +301,13 @@ const DestinationContent = () =>{
               <div className='flex items-center justify-between lg:justify-start'>
                 <div className='flex items-start lg:justify-end'>
                   <Calendar classes={'text-black mr-3'}/>
-                  <p className='mr-2 text-black'>To</p>
+                  <p className='mr-2 text-black to_id'>To</p>
                 </div>
                 <input type="date" className="p-2 w-[150px] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
             </div>
             <div className="mx-2 my-3">
-              <button className='rounded bg-[#2596be] w-full text-white py-3 px-5 font-bold'>
+              <button className='rounded bg-[#2596be] w-full text-white py-3 px-5 font-bold search_id'>
               Search
               </button>
             </div>
@@ -309,66 +318,70 @@ const DestinationContent = () =>{
             
           </div>
           <div className='md:w-[70%] '>
-          <div>
-            {
-              ResultGetHomeContents.length > 0
-              ?
-                ResultGetHomeContents.map((item, index) =>(
+            <div>
+              {
+                ResultGetHomeContents.length > 0
+                ?
+                  ResultGetHomeContents.map((item, index) =>(
 
-                  item.contents_table.length > 0
-                  ?
-                  item.contents_table.map((contents_table_item, contents_table_index) =>(
-                    <DestinationCard 
-                    key={contents_table_index}
-                    clickOffers={() => {
-                      setOpenBottomOffer(!openBottomOffer)
-                      HandleOfferDetails(contents_table_item)
-                      setBottomDetailsOpen(false)
-                      setCollapseBottomDetails(false)
-                    }}
-                    title={
-                      selectedLanguage.current == null 
-                      ? contents_table_item.content_title
-                      : (
-                            contents_table_item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                          ? contents_table_item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
-                          : contents_table_item.content_title
-                        )
-                    }
-                    clickSeeDetails={() => setcollapseSpecific(contents_table_index)}
-                    details={DOMPurify.sanitize(
-                      selectedLanguage.current == null 
-                      ? contents_table_item.content_description
-                      : (
-                            contents_table_item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                          ? contents_table_item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
-                          : contents_table_item.content_description
-                        )
-                    )}
-                    image={env.VITE_APP_BACKEND_STORAGE_URL + contents_table_item.uploads_table_main_view.upload_url} 
-                    location='--'
-                    collapseDetails={getcollapseSpecific == contents_table_index ? true : false}
-                    loading={loadingContent}
-                    isLiked={false}/>
-                    ))
-                  :
-                    (
-                      item.contents_table.length <= 0 &&
-                      [1, 2, 3].map((item, index) =>(
-                        <DestinationCard key={index} loading={true}/>
+                    item.contents_table.length > 0
+                    ?
+                      item.contents_table.map((contents_table_item, contents_table_index) =>(
+                        <DestinationCard 
+                        key={contents_table_index}
+                        clickOffers={() => {
+                          setOpenBottomOffer(!openBottomOffer)
+                          HandleOfferDetails(contents_table_item)
+                          setBottomDetailsOpen(false)
+                          setCollapseBottomDetails(false)
+                        }}
+                        title={
+                          selectedLanguage.current == null 
+                          ? contents_table_item.content_title
+                          : (
+                                contents_table_item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                              ? contents_table_item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
+                              : contents_table_item.content_title
+                            )
+                        }
+                        clickSeeDetails={() => setcollapseSpecific(contents_table_index)}
+                        details={DOMPurify.sanitize(
+                          selectedLanguage.current == null 
+                          ? contents_table_item.content_description
+                          : (
+                                contents_table_item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                              ? contents_table_item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
+                              : contents_table_item.content_description
+                            )
+                        )}
+                        image={
+                            contents_table_item.uploads_table_main_view.upload_is_link 
+                          ? contents_table_item.uploads_table_main_view.upload_url
+                          : env.VITE_APP_BACKEND_STORAGE_URL + contents_table_item.uploads_table_main_view.upload_url
+                        } 
+                        location='--'
+                        collapseDetails={getcollapseSpecific == contents_table_index ? true : false}
+                        loading={loadingContent}
+                        isLiked={false}/>
                       ))
-                    )
-                ))
-              : 
-                (
-                  ResultGetHomeContents.length <= 0 &&
-                  [1, 2, 3].map((item, index) =>(
-                    <DestinationCard key={index} loading={true}/>
+                    :
+                      (
+                        item.contents_table.length <= 0 &&
+                        [1, 2, 3].map((item, index) =>(
+                          <DestinationCard key={index} loading={true}/>
+                        ))
+                      )
                   ))
-                )
-            }
+                : 
+                  (
+                    ResultGetHomeContents.length <= 0 &&
+                    [1, 2, 3].map((item, index) =>(
+                      <DestinationCard key={index} loading={true}/>
+                    ))
+                  )
+              }
+            </div>
           </div>
-        </div>
         </div>
         
         {/* end contents */}

@@ -50,23 +50,16 @@ const HomeContent = () =>{
 
   //#region implementations
   const navigate = useNavigate();
-  const auth_states = useSelector(state => state.AuthReducer);
+  const dispatch = useDispatch()
 
-  const dispatch = useDispatch(auth_states.SelectedLanguage ?  auth_states.SelectedLanguage.id : null)
+  const auth_states = useSelector(state => state.AuthReducer);
 
   //#region useRefs
   const maxGuestCount = useRef(0)
   const walletRef = useRef(100)
   const paymentBContent = useRef({})
-  const selectedLanguage = useRef(null)  // null means main translation is used
+  const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
   //#endregion 
-
-  useEffect(() =>{
-    if(auth_states.SelectedLanguage){
-      selectedLanguage.current = parseInt(auth_states.SelectedLanguage.id)
-      GetHomeContents()
-    }
-  },[auth_states])
 
   //#region states
   const [showBottomRegistration, setShowBottomRegistration] = useState(false);
@@ -90,26 +83,6 @@ const HomeContent = () =>{
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 601px)'
   })
-
-  const getAllActivePageConfig = async() =>{
-    await api_page_config.getAllActivePageConfig().then((result) =>{
-        if(result.status){
-            dispatch(AuthAction.GetPageLanguageTranslation(result.data.data))
-        }
-    }).catch((err) =>{
-        console.error("getAllActivePageConfig error:", err);
-    })
-  }
-
-  const GetAllLanguages = async() =>{
-    await api_page_config.GetAllLanguages().then((result) =>{
-        if(result.status){
-            dispatch(AuthAction.GetAllLanguages(result.data.data))
-        }
-    }).catch((err) =>{
-        console.error("GetAllLanguages error:", err);
-    })
-  }
   
   const handleCheckout = (selectedTab, AllContentData) =>{
     if(!auth_states.StateToken){
@@ -304,10 +277,15 @@ const HomeContent = () =>{
 
   //#region useEffects
   useEffect(() =>{
-    GetAllLanguages()
     GetHomeContents()
-    getAllActivePageConfig()
   },[])
+
+  useEffect(() =>{
+    if(auth_states.SelectedLanguage){
+      selectedLanguage.current = parseInt(auth_states.SelectedLanguage.id)
+      GetHomeContents()
+    }
+  },[auth_states])
 
   useEffect(() =>{
     if(!auth_states.StateToken){

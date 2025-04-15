@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, {useEffect} from 'react'
 
 import { useDispatch } from "react-redux";
 import {useSelector} from 'react-redux';
@@ -31,6 +31,8 @@ import {
 import { STORAGE_TOKEN, STORAGE_USER_INFORMATION } from "../store/auth/authAction";
 
 import * as AuthAction from '../store/auth/authAction'
+
+import * as api_page_config from '../services/page/page.api'
 
 const router = createBrowserRouter([
     {
@@ -80,7 +82,7 @@ const router = createBrowserRouter([
 
 const Routes = () =>{
 
-    const data = useSelector(state => state.AuthReducer);
+    const auth_states = useSelector(state => state.AuthReducer);
     const dispatch = useDispatch()
 
     const validateAccess = async() =>{
@@ -91,6 +93,31 @@ const Routes = () =>{
             dispatch(AuthAction.LoginUser(token, userInformation))
         }
     }
+
+    const GetAllLanguages = async() =>{
+        await api_page_config.GetAllLanguages().then((result) =>{
+            if(result.status){
+                dispatch(AuthAction.GetAllLanguages(result.data.data))
+            }
+        }).catch((err) =>{
+            console.error("GetAllLanguages error:", err);
+        })
+    }
+
+    const getAllActivePageConfig = async() =>{
+        await api_page_config.getAllActivePageConfig().then((result) =>{
+            if(result.status){
+                dispatch(AuthAction.GetPageLanguageTranslation(result.data.data))
+            }
+        }).catch((err) =>{
+            console.error("getAllActivePageConfig error:", err);
+        })
+    }
+
+    useEffect(() =>{
+        GetAllLanguages()
+        getAllActivePageConfig()
+    },[])
 
     // useEffect(() =>{
     //     // if(!data.StateToken){

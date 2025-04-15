@@ -59,7 +59,7 @@ const DestinationCard = ({
                 }
             }
         })
-    },[auth_states])
+    },[auth_states, loading])
     //#endregion
 
     return (
