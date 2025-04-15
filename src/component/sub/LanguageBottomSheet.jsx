@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { useDispatch } from "react-redux";
-
+import {useSelector} from 'react-redux';
 import { IoIosCloseCircleOutline } from "react-icons/io";
 
 import * as AuthAction from '../../store/auth/authAction'
@@ -26,6 +26,32 @@ const LanguageBottomSheet = ({
         selectItem(selected)
         handleSelectContent(selected)
     },[])
+
+    //#region translation convertion
+    const auth_states = useSelector(state => state.AuthReducer);
+
+    useEffect(() =>{
+        auth_states.PageLanguages.map((item, key) =>{
+        const translation = item.translation
+        
+        if(translation.length > 0 && auth_states.SelectedLanguage){
+            const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
+            const targetElement = document.getElementsByClassName(item.page_config_id)
+            if (targetElement && filteredTranslation) {
+            if (targetElement.length > 0 && filteredTranslation) {
+                Array.from(targetElement).forEach((el) => {
+                el.textContent = filteredTranslation.page_config_title;
+                });
+            } else if (targetElement.length > 0) {
+                Array.from(targetElement).forEach((el) => {
+                el.textContent = item.page_config_title;
+                });
+            }
+            }
+        }
+        })
+    },[auth_states])
+    //#endregion
       
     return (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black bg-opacity-40">
@@ -36,7 +62,7 @@ const LanguageBottomSheet = ({
                     </button>
                 </div>
                 <div>
-                    <p className='font-bold text-[20px] md:text-[30px]'>Choose language</p>
+                    <p className='font-bold text-[20px] md:text-[30px] choose_language_id'>Choose language</p>
                 </div>
                 <div className="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3 md:grid-cols-4">
                 {DataContent.map((item_content, item_key) => {
