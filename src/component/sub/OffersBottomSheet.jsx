@@ -143,7 +143,15 @@ const OffersBottomSheet = ({
 
                     <div className="flex items-center justify-between p-4 border border-blue-500 rounded-lg bg-blue-50">
                         <div>
-                            <p className="font-medium capitalize">{tabData.offers_table.supplier_table.room_type.room_type_name}</p>
+                            <p className="font-medium capitalize">{
+                                auth_states.SelectedLanguage == null
+                                ? tabData.offers_table.supplier_table.room_type.room_type_name
+                                : (
+                                    tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id)
+                                    ? tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id).room_type_name 
+                                    : tabData.offers_table.supplier_table.room_type.room_type_name
+                                )
+                            }</p>
                             <p className="text-sm text-gray-500">{tabData.offers_table.supplier_table.room_type.room_type_guest_count} <span className='guest_per_room'>guest per room</span></p>
                             {/* <button className="mt-1 text-sm font-medium text-blue-600">Select offer</button> */}
                         </div>

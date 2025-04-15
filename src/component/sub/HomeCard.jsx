@@ -63,7 +63,7 @@ const HomeCard = ({
                 }
             }
         })
-    },[auth_states])
+    },[auth_states, loading])
     //#endregion
 
     return (
