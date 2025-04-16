@@ -14,7 +14,7 @@ function BottomCreateAccountFloat({noThanks}) {
         if(translation.length > 0 && auth_states.SelectedLanguage){
             const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
             const targetElement = document.getElementsByClassName(item.page_config_id)
-            if (targetElement && filteredTranslation) {
+            if (targetElement) {
                 if (targetElement.length > 0 && filteredTranslation) {
                     Array.from(targetElement).forEach((el) => {
                         el.textContent = filteredTranslation.page_config_title;
