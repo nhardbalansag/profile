@@ -33,10 +33,11 @@ const HomeCard = ({
     clickOffers,
     days = 0,
     nights = 0,
-    loading = true
+    loading = true,
+    contentDetails
 }) => {
 
-    const limitText = (text, limit = 100) =>{
+    const limitText = (text, limit = 20) =>{
         return text.length > limit ? text.slice(0, limit) : text;
     }
 
@@ -66,95 +67,97 @@ const HomeCard = ({
     },[auth_states, loading])
     //#endregion
 
-    return (
-        <div className={`flex justify-center lg:items-center md:w-[${width}] w-[100%] md:p-2 md:m-3 md:rounded-lg pb-[15px] shadow-lg ${classes} md:bg-white`}>
-            {
-                loading
-                ?
-                    <div className='flex justify-center w-[90%]'>
-                        <div className="flex flex-col justify-center w-full gap-4 py-10">
-                            <div className="w-full h-32 skeleton"></div>
-                            <div className="h-4 skeleton w-28"></div>
-                            <div className="w-full h-4 skeleton"></div>
-                            <div className="w-full h-4 skeleton"></div>
-                        </div>
-                    </div>
-                :
-                    <div className="bg-base-100">
-                        <figure className='flex justify-center'>
-                            <div 
-                                style={{
-                                    backgroundImage: `url(${image})`,
-                                    backgroundSize: "cover", 
-                                    backgroundPosition: "center"
-                                }}
-                                className={`h-[150px] rounded-lg w-[230px] hidden md:block`}
-                            >
-                                <div className='flex items-center justify-end py-2'>
-                                    <button onClick={() => alert("liked")} className='mr-2'>
-                                        <div className='flex items-center justify-center p-1 bg-white shadow-lg rounded-badge'>
-                                            <Hearth color={isLiked ? 'red' : 'gray'} size={8} />
-                                        </div>
+
+    const _Card = () =>{
+        return(
+            <div className="w-full overflow-hidden bg-white rounded-xl">
+                <div className="relative">
+                    <img
+                    src={image}
+                    alt=""
+                    className="object-fill w-full h-[200px]"
+                    />
+                </div>
+                <div className="p-3 bg-white">
+                    <div className='flex items-start justify-between '>
+                        <div className='flex items-start justify-between'>
+                            {
+                                contentDetails.content_allow_reaction &&
+                                <div className='flex items-center justify-start p-2'>
+                                    <button className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'>
+                                        <Hearth color={isLiked ? 'red' : 'gray'}  size={6} />
                                     </button>
-                                </div>
-                            </div>
-                        </figure>
-                        <div className=''>
-                            <img
-                            className="w-[100%] md:w-[50px] md:hidden block"
-                            alt="Tailwind CSS chat bubble component"
-                            src={image} />
-                        </div>
-                        <div className="p-2 px-5">
-                            <div className='py-1'>
-                                <p className="font-bold card-title">{title}</p>
-                                <div  onClick={clickSeeDetails}  dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(collapseDetails ? details : limitText(details))}} /> 
-                                {!collapseDetails && <p className='see_more'>... see more</p>} 
-                            </div>
-                            <div className='p-4 px-2 bg-white border rounded-lg shadow-md'>
-                                <div className='flex items-center justify-between'>
-                                    <div className="flex items-center justify-start space-x-3">
-                                        <div className="flex items-center space-x-2">
-                                            <IoPartlySunnyOutline  className="text-[15px] text-[#FF5722]" />
-                                            <label className="text-black text-[12px]">{days} <span className="days_id">Days</span> </label>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            <IoCloudyNightOutline   className="text-[15px] text-[#FF5722]" />
-                                            <label className="text-black text-[12px]">{nights} <span className="nights_id">Nights</span></label>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <CiLocationOn className="text-[15px] text-[#FF5722]" />
-                                        <p className='text-[12px]'>{location}</p>
+                                    <div className='flex items-center'>
+                                        <p className='text-[15px] text-gray-500 mr-1'>{reactionCount}</p>
                                     </div>
                                 </div>
-                            </div>
+                            }
+                            {
+                                contentDetails.content_allow_community &&
+                                <div className='flex items-center justify-start p-2'>
+                                    <button className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'>
+                                        <FaUsers  className="text-[23px] text-blue-500" />
+                                    </button>
+                                    <div className='flex items-center'>
+                                        <p className='text-[15px] text-gray-500 mr-1'>{communityCount}</p>
+                                    </div>
+                                </div>
+                            }
                         </div>
-                        
-                        <div className='flex items-center justify-between mx-5'>
-                            <div className='flex items-center justify-start p-2'>
-                                <button className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'>
-                                    <Hearth color={isLiked ? 'red' : 'gray'}  size={6} />
-                                </button>
-                                <div className='flex items-center'>
-                                    <p className='text-[15px] text-gray-500 mr-1'>{reactionCount}</p>
-                                </div>
-                            </div>
-                            <div className='flex items-center justify-start p-2'>
-                                <button className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'>
-                                    <FaUsers  className="text-[23px] text-blue-500" />
-                                </button>
-                                <div className='flex items-center'>
-                                    <p className='text-[15px] text-gray-500 mr-1'>{communityCount}</p>
-                                </div>
-                            </div>
+                        {
+                            contentDetails.content_offers_table.length > 0 &&
                             <div className='flex items-center justify-start p-2'>
                                 <button onClick={clickOffers} className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'>
                                     <FaTags className="text-[23px] text-[#FF5722]" />
                                 </button>
                             </div>
-                        </div>
+                        }
                     </div>
+                    {
+                        contentDetails.content_date_from && contentDetails.content_date_to &&
+                        <div className="flex items-center justify-start my-2 space-x-3">
+                            <div className="flex items-center space-x-2">
+                                <IoPartlySunnyOutline  className="text-[15px] text-[#FF5722]" />
+                                <label className="text-black text-[12px]">{days} <span className="days_id">Days</span> </label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <IoCloudyNightOutline   className="text-[15px] text-[#FF5722]" />
+                                <label className="text-black text-[12px]">{nights} <span className="nights_id">Nights</span></label>
+                            </div>
+                        </div>
+                    }
+                    <div className="mt-1 text-sm font-semibold text-black line-clamp-2">
+                    {title}
+                    </div>
+            
+                    <div onClick={clickSeeDetails}  className="mt-1 text-sm text-gray-700">
+                        <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(collapseDetails ? details : limitText(details))}} /> 
+                        {!collapseDetails && <p className='see_more'>... see more</p>} 
+                    </div>
+                </div> 
+            </div>
+        )
+    }
+
+    const LoadComp = () =>{
+        return(
+            <div className='flex justify-center w-[90%]'>
+                <div className="flex flex-col justify-center w-full gap-4 py-10">
+                    <div className="w-full h-32 skeleton"></div>
+                    <div className="h-4 skeleton w-28"></div>
+                    <div className="w-full h-4 skeleton"></div>
+                    <div className="w-full h-4 skeleton"></div>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className={`flex justify-center lg:items-start md:w-[${width}] w-[100%] md:m-3 md:rounded-lg pb-[15px] ${classes} md:bg-white`}>
+            {
+                loading
+                ? LoadComp()
+                : _Card()
             }
         </div>
     )

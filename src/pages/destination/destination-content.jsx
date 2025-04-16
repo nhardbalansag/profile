@@ -349,7 +349,7 @@ const DestinationContent = () =>{
                   ResultGetHomeContents.map((item, index) =>(
 
                     item.contents_table.length > 0
-                    ?
+                    &&
                       item.contents_table.map((contents_table_item, contents_table_index) =>(
                         <DestinationCard 
                         key={contents_table_index}
@@ -388,13 +388,6 @@ const DestinationContent = () =>{
                         loading={loadingContent}
                         isLiked={false}/>
                       ))
-                    :
-                      (
-                        item.contents_table.length <= 0 &&
-                        [1, 2, 3].map((item, index) =>(
-                          <DestinationCard key={index} loading={true}/>
-                        ))
-                      )
                   ))
                 : 
                   (

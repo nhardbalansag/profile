@@ -367,6 +367,7 @@ const HomeContent = () =>{
                           item.contents_table.map((item_content, index_content) =>(
                             <SwiperSlide key={index_content} className='flex justify-center mb-10'>
                               <HomeCard 
+                              contentDetails={item_content}
                               loading={loadingContent}
                               clickOffers={() => HandleOfferDetails(item_content)}
                               title={
