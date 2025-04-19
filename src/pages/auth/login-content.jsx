@@ -85,7 +85,7 @@ const LoginContent = () =>{
 
               {/* Signup Form */}
               <div className="p-6 space-y-4 bg-white rounded-lg shadow">
-                <h2 className="text-xl font-bold">Sign Up</h2>
+                <h2 className="text-xl font-bold sign_in_id">Sign Up</h2>
                 <p className="text-sm font-medium text-gray-600 its_quick_and_easy_id">It’s quick and easy.</p>
                 <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:grid-cols-2 md:space-x-3">
                   <input
