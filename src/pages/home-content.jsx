@@ -81,7 +81,7 @@ const HomeContent = () =>{
 
   //#region methods
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 601px)'
+    query: '(min-width: 400px)'
   })
   
   const handleCheckout = (selectedTab, AllContentData) =>{
@@ -309,13 +309,14 @@ const HomeContent = () =>{
         ></div>
         {/* contents */}
         <div className='flex justify-center my-5'>
-          <div className='md:w-[75%] w-[100%]'>
+          <div className='md:w-[75%] w-[95%]'>
             {
               ResultGetHomeContents.length > 0
               ?
                 ResultGetHomeContents.map((item, index) =>(
                   <div>
                     <CategoryTitleAndArrow 
+                    //#region CategoryTitleAndArrow parameters
                     key={index}
                     title={
                       selectedLanguage.current == null 
@@ -339,9 +340,10 @@ const HomeContent = () =>{
                     has_path={item.category_display_content.path.has_path}
                     title_style={item.category_display_content.display.category.style}
                     redirect_style={item.category_display_content.display.redirect.style}
+                    //#endregion
                     />
-                    
                     <Swiper
+                    //#region swiper parameter
                       key={index}
                       pagination={{
                         dynamicBullets: true,
@@ -353,20 +355,22 @@ const HomeContent = () =>{
                       breakpoints={{
                         300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
                         400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
-                        500: { slidesPerView: 1, spaceBetween: 0 }, // 2 slides on tablets
-                        600: { slidesPerView: 2, spaceBetween: 60 }, // 2 slides on tablets
-                        700: { slidesPerView: 2, spaceBetween: 50 }, // 2 slides on tablets
-                        800: { slidesPerView: 2, spaceBetween: 10 }, // 2 slides on tablets
-                        1024: { slidesPerView: 2,  spaceBetween: 10}, // 3 slides on desktops
-                        1353: { slidesPerView: 3,  spaceBetween: 10} // 3 slides on desktops
+                        500: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
+                        600: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
+                        700: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
+                        800: { slidesPerView: 3, spaceBetween: 5 }, // 2 slides on tablets
+                        1024: { slidesPerView: 3,  spaceBetween: 10}, // 3 slides on desktops
+                        1353: { slidesPerView: 4,  spaceBetween: 10} // 3 slides on desktops
                       }}
+                    //#endregion
                     >
                       {
                         item.contents_table.length > 0
                         ?
                           item.contents_table.map((item_content, index_content) =>(
-                            <SwiperSlide key={index_content} className='flex justify-center mb-10'>
+                            <SwiperSlide key={index_content} className='flex justify-center'>
                               <HomeCard 
+                              categoryConfig={item.category_display_content.display.content_home_style}
                               contentDetails={item_content}
                               loading={loadingContent}
                               clickOffers={() => HandleOfferDetails(item_content)}
@@ -397,8 +401,9 @@ const HomeContent = () =>{
                               days={item_content.content_days_count}
                               nights={item_content.content_night_count}
                               location='--'
-                              collapseDetails={collapseDetails}
-                              isLiked={false}/>
+                              collapseDetails={ResultGetHomeContentsDetails.id == item_content.id ? collapseDetails : false} 
+                              isLiked={false}
+                              />
                             </SwiperSlide>
                           ))
                         :
@@ -412,7 +417,7 @@ const HomeContent = () =>{
                           )
                       }
                     </Swiper>
-                  </div>
+                  </div>  
                 ))
               :
               (
@@ -455,264 +460,6 @@ const HomeContent = () =>{
                 </div>
               )
             }
-            
-    {/* 
-            <CategoryTitleAndArrow title={"Happenings"}/>
-            <Swiper
-              coverflowEffect={{
-                rotate: 50,
-                stretch: 0,
-                depth: 100,
-                modifier: 1,
-                slideShadows: true,
-              }}
-              effect={'coverflow'}
-              grabCursor={true}
-              pagination={{
-                dynamicBullets: true,
-                clickable: true,
-              }}
-              centeredSlides={true}
-              autoplay={{
-                delay: 2000,
-                disableOnInteraction: false,
-              }}
-              // onAutoplayTimeLeft={onAutoplayTimeLeft}
-              // navigation={true}
-              modules={[Autoplay,EffectCoverflow, Pagination, Navigation]}
-              spaceBetween={5}
-              slidesPerView={2}
-              // onSlideChange={() => console.log('slide change')}
-              // onSwiper={(swiper) => console.log(swiper)}
-              breakpoints={{
-                300: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
-                400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
-                500: { slidesPerView: 1, spaceBetween: 0 }, // 2 slides on tablets
-                600: { slidesPerView: 2, spaceBetween: 60 }, // 2 slides on tablets
-                700: { slidesPerView: 2, spaceBetween: 50 }, // 2 slides on tablets
-                800: { slidesPerView: 2, spaceBetween: 10 }, // 2 slides on tablets
-                1024: { slidesPerView: 3,  spaceBetween: 10} // 3 slides on desktops
-                // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
-              }}
-            >
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCardNews image={ForTestDisplay3} isLiked caption={'Planning a trip soon? join me'}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCardNews image={ForTestDisplay} caption={'join my community discussions'}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCardNews image={ForTestDisplay2} caption={"who's in?"}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCardNews image={EmptyImage} />
-              </SwiperSlide>
-            </Swiper>
-           
-            <ReactQuill theme="snow" value={text} onChange={setText} />
-            <CategoryTitleAndArrow title={"Destinations"} path={'destination'}/>
-            <Swiper
-              pagination={{
-                dynamicBullets: true,
-              }}
-              modules={[Navigation, Pagination, Scrollbar, A11y]}
-              spaceBetween={5}
-              slidesPerView={1}
-              onSlideChange={() => setCollapseDetails(false)}
-              // onSwiper={(swiper) => console.log(swiper)}
-              breakpoints={{
-                300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
-                400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
-                500: { slidesPerView: 1, spaceBetween: 0 }, // 2 slides on tablets
-                600: { slidesPerView: 2, spaceBetween: 60 }, // 2 slides on tablets
-                700: { slidesPerView: 2, spaceBetween: 50 }, // 2 slides on tablets
-                800: { slidesPerView: 2, spaceBetween: 10 }, // 2 slides on tablets
-                1024: { slidesPerView: 2,  spaceBetween: 10}, // 3 slides on desktops
-                1353: { slidesPerView: 3,  spaceBetween: 10} // 3 slides on desktops
-                // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
-              }}
-            >
-              {
-                ResultGetHomeContents.length > 0
-                ?
-                  ResultGetHomeContents.map((item, index) =>(
-                    <SwiperSlide key={index} className='flex justify-center mb-10'>
-                      <HomeCard 
-                      loading={loadingContent}
-                      clickOffers={() => HandleOfferDetails(item)}
-                      title={item.content_title}
-                      clickSeeDetails={() => HandleSeeDetails(item)}
-                      details={DOMPurify.sanitize(item.content_description)}
-                      // image={env.VITE_APP_BACKEND_STORAGE_URL + item.uploads_table_main_view.upload_url} 
-                      days={item.content_days_count}
-                      nights={item.content_night_count}
-                      location='--'
-                      collapseDetails={collapseDetails}
-                      isLiked={false}/>
-                    </SwiperSlide>
-                  ))
-                : 
-                  (
-                    ResultGetHomeContents.length <= 0 &&
-                    [1, 2, 3].map((item, index) =>(
-                      <SwiperSlide key={index} className='flex justify-center mb-10'>
-                        <HomeCard loading={true}/>
-                      </SwiperSlide>
-                    ))
-                  )
-              }
-            </Swiper>
-
-            <CategoryTitleAndArrow title={"Community"}/>
-            <Swiper
-              coverflowEffect={{
-                rotate: 50,
-                stretch: 0,
-                depth: 100,
-                modifier: 1,
-                slideShadows: true,
-              }}
-              pagination={{
-                dynamicBullets: true,
-                clickable: true,
-              }}
-              centeredSlides={true}
-              effect={'coverflow'}
-              grabCursor={true}
-              modules={[Navigation, EffectCoverflow, Pagination, Scrollbar, A11y]}
-              spaceBetween={5}
-              slidesPerView={1}
-              // onSlideChange={() => console.log('slide change')}
-              // onSwiper={(swiper) => console.log(swiper)}
-              breakpoints={{
-                300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
-                400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
-                500: { slidesPerView: 1, spaceBetween: 0 }, // 2 slides on tablets
-                600: { slidesPerView: 2, spaceBetween: 60 }, // 2 slides on tablets
-                700: { slidesPerView: 2, spaceBetween: 50 }, // 2 slides on tablets
-                800: { slidesPerView: 2, spaceBetween: 10 }, // 2 slides on tablets
-                1024: { slidesPerView: 3,  spaceBetween: 10} // 3 slides on desktops
-                // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
-              }}
-            >
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCardCommunity image={ForTestDisplay3} isLiked caption={'Planning a trip soon? join me'}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCardCommunity image={ForTestDisplay} caption={'join my community discussions'}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCardCommunity image={ForTestDisplay2} caption={"who's in?"}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCardCommunity image={EmptyImage} />
-              </SwiperSlide>
-            </Swiper>
-            
-            <CategoryTitleAndArrow title={"Event Deals"}/>
-              <Swiper
-              pagination={{
-                dynamicBullets: true,
-              }}
-               modules={[Navigation, Pagination, Scrollbar, A11y]}
-               spaceBetween={5}
-               slidesPerView={1}
-              //  onSlideChange={() => console.log('slide change')}
-              //  onSwiper={(swiper) => console.log(swiper)}
-               breakpoints={{
-                300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
-                400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
-                500: { slidesPerView: 1, spaceBetween: 0 }, // 2 slides on tablets
-                600: { slidesPerView: 2, spaceBetween: 60 }, // 2 slides on tablets
-                700: { slidesPerView: 2, spaceBetween: 50 }, // 2 slides on tablets
-                800: { slidesPerView: 2, spaceBetween: 10 }, // 2 slides on tablets
-                1024: { slidesPerView: 3,  spaceBetween: 10} // 3 slides on desktops
-                // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
-              }}
-            >
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCardEvent image={EmptyImage}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCardEvent image={EmptyImage}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCardEvent image={EmptyImage}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeCardEvent image={EmptyImage}/>
-              </SwiperSlide>
-            </Swiper>
-
-            <CategoryTitleAndArrow title={"Learnings"}/>
-            <Swiper
-              pagination={{
-                dynamicBullets: true,
-              }}
-               modules={[Navigation, Pagination, Scrollbar, A11y]}
-               spaceBetween={5}
-               slidesPerView={2}
-              //  onSlideChange={() => console.log('slide change')}
-              //  onSwiper={(swiper) => console.log(swiper)}
-               breakpoints={{
-                 300: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
-                 400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
-                 500: { slidesPerView: 1, spaceBetween: 0 }, // 2 slides on tablets
-                 600: { slidesPerView: 2, spaceBetween: 60 }, // 2 slides on tablets
-                 700: { slidesPerView: 2, spaceBetween: 50 }, // 2 slides on tablets
-                 800: { slidesPerView: 2, spaceBetween: 10 }, // 2 slides on tablets
-                 1024: { slidesPerView: 3,  spaceBetween: 10} // 3 slides on desktops
-                 // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
-               }}
-            >
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeLearningCard image={EmptyImage}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeLearningCard image={EmptyImage}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeLearningCard image={EmptyImage}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <HomeLearningCard image={EmptyImage}/>
-              </SwiperSlide>
-            </Swiper>
-
-            <CategoryTitleAndArrow title={"Merchants"}/>
-            <Swiper
-              pagination={{
-                dynamicBullets: true,
-              }}
-               modules={[Navigation, Pagination, Scrollbar, A11y]}
-               spaceBetween={5}
-               slidesPerView={1}
-              //  onSlideChange={() => console.log('slide change')}
-              //  onSwiper={(swiper) => console.log(swiper)}
-               breakpoints={{
-                 300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
-                 400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
-                 500: { slidesPerView: 1, spaceBetween: 0 }, // 2 slides on tablets
-                 600: { slidesPerView: 2, spaceBetween: 60 }, // 2 slides on tablets
-                 700: { slidesPerView: 2, spaceBetween: 50 }, // 2 slides on tablets
-                 800: { slidesPerView: 2, spaceBetween: 10 }, // 2 slides on tablets
-                 1024: { slidesPerView: 3,  spaceBetween: 10} // 3 slides on desktops
-                 // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
-               }}
-            >
-              <SwiperSlide className='flex justify-center mb-10'>
-                <MechantCard image={EmptyImage}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <MechantCard image={EmptyImage}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <MechantCard image={EmptyImage}/>
-              </SwiperSlide>
-              <SwiperSlide className='flex justify-center mb-10'>
-                <MechantCard image={EmptyImage}/>
-              </SwiperSlide>
-            </Swiper> */}
           </div>
         </div>
         {/* end contents */}
@@ -728,7 +475,7 @@ const HomeContent = () =>{
         {
           getBottomDetailsOpen &&(
             <div className="fixed inset-0 z-50 flex items-end justify-center bg-black bg-opacity-40">
-              <div className="w-[50%] md:p-4 p-2 transition-transform bg-white shadow-lg rounded-t-2xl max-h-[90%] overflow-y-auto">
+              <div className="w-full md:w-[50%] md:p-4 p-2 transition-transform bg-white shadow-lg rounded-t-2xl max-h-[90%] overflow-y-auto">
                 <div className='flex justify-end'>
                     <button onClick={() => setBottomDetailsOpen(false)} className='flex items-center justify-center p-1 mr-2'>
                       <IoIosCloseCircleOutline  className="text-[23px] text-[#ff4949]" />

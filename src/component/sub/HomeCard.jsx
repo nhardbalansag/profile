@@ -18,6 +18,7 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/free-mode';
 
 const HomeCard = ({
+    categoryConfig,
     classes, 
     width = "350px", 
     image, 
@@ -37,8 +38,10 @@ const HomeCard = ({
     contentDetails
 }) => {
 
-    const limitText = (text, limit = 20) =>{
-        return text.length > limit ? text.slice(0, limit) : text;
+    const limitText = (text, limit = 30) =>{
+        if(text){
+            return text.length > limit ? text.slice(0, limit) : text;
+        }
     }
 
     //#region translation convertion
@@ -67,8 +70,61 @@ const HomeCard = ({
     },[auth_states, loading])
     //#endregion
 
+    const _SocialComp = () =>{
+        return(
+            <div className='flex items-start justify-between'>
+                {
+                    contentDetails.content_allow_reaction && categoryConfig.show_reaction &&
+                    <div className='flex items-center justify-start p-2'>
+                        <button className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'>
+                            <Hearth color={isLiked ? 'red' : 'gray'}  size={6} />
+                        </button>
+                        <div className='flex items-center'>
+                            <p className='text-[15px] text-gray-500 mr-1'>{reactionCount}</p>
+                        </div>
+                    </div>
+                }
+                {
+                    contentDetails.content_allow_community && categoryConfig.show_community &&
+                    <div className='flex items-center justify-start p-2'>
+                        <button className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'>
+                            <FaUsers  className="text-[23px] text-blue-500" />
+                        </button>
+                        <div className='flex items-center'>
+                            <p className='text-[15px] text-gray-500 mr-1'>{communityCount}</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        )
+    }
 
-    const _Card = () =>{
+    const _DateRangeComp = () =>{
+        return(
+            <div className="flex items-center justify-start my-2 space-x-3">
+                <div className="flex items-center space-x-2">
+                    <IoPartlySunnyOutline  className="text-[18px] text-[#FF5722]" />
+                    <label className="text-black text-[15px]">{days} <span className="days_id">Days</span> </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <IoCloudyNightOutline   className="text-[18px] text-[#FF5722]" />
+                    <label className="text-black text-[15px]">{nights} <span className="nights_id">Nights</span></label>
+                </div>
+            </div>
+        )
+    }
+
+    const _OfferTag = () =>{
+        return(
+            <div className='flex items-center justify-start p-2'>
+                <button onClick={clickOffers} className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'>
+                    <FaTags className="text-[23px] text-[#FF5722]" />
+                </button>
+            </div>
+        )
+    }
+
+    const _Card1 = () =>{
         return(
             <div className="w-full overflow-hidden bg-white rounded-xl">
                 <div className="relative">
@@ -80,51 +136,15 @@ const HomeCard = ({
                 </div>
                 <div className="p-3 bg-white">
                     <div className='flex items-start justify-between '>
-                        <div className='flex items-start justify-between'>
-                            {
-                                contentDetails.content_allow_reaction &&
-                                <div className='flex items-center justify-start p-2'>
-                                    <button className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'>
-                                        <Hearth color={isLiked ? 'red' : 'gray'}  size={6} />
-                                    </button>
-                                    <div className='flex items-center'>
-                                        <p className='text-[15px] text-gray-500 mr-1'>{reactionCount}</p>
-                                    </div>
-                                </div>
-                            }
-                            {
-                                contentDetails.content_allow_community &&
-                                <div className='flex items-center justify-start p-2'>
-                                    <button className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'>
-                                        <FaUsers  className="text-[23px] text-blue-500" />
-                                    </button>
-                                    <div className='flex items-center'>
-                                        <p className='text-[15px] text-gray-500 mr-1'>{communityCount}</p>
-                                    </div>
-                                </div>
-                            }
-                        </div>
+                        {_SocialComp()}
                         {
                             contentDetails.content_offers_table.length > 0 &&
-                            <div className='flex items-center justify-start p-2'>
-                                <button onClick={clickOffers} className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'>
-                                    <FaTags className="text-[23px] text-[#FF5722]" />
-                                </button>
-                            </div>
+                            _OfferTag()
                         }
                     </div>
                     {
                         contentDetails.content_date_from && contentDetails.content_date_to &&
-                        <div className="flex items-center justify-start my-2 space-x-3">
-                            <div className="flex items-center space-x-2">
-                                <IoPartlySunnyOutline  className="text-[15px] text-[#FF5722]" />
-                                <label className="text-black text-[12px]">{days} <span className="days_id">Days</span> </label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <IoCloudyNightOutline   className="text-[15px] text-[#FF5722]" />
-                                <label className="text-black text-[12px]">{nights} <span className="nights_id">Nights</span></label>
-                            </div>
-                        </div>
+                        _DateRangeComp()
                     }
                     <div className="mt-1 text-sm font-semibold text-black line-clamp-2">
                     {title}
@@ -134,6 +154,75 @@ const HomeCard = ({
                         <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(collapseDetails ? details : limitText(details))}} /> 
                         {!collapseDetails && <p className='see_more'>... see more</p>} 
                     </div>
+                </div> 
+            </div>
+        )
+    }
+
+    const _Card2 = () => {
+        return (
+            <div className='flex flex-col'>
+                <div 
+                style={{
+                    backgroundImage: `url(${image})`,
+                    // opacity: 0.3,  // Only affects the background
+                    // zIndex: -1
+                }}
+                className="relative w-full h-64 max-w-xl overflow-hidden shadow-lg rounded-xl">
+                    <img
+                    src={image}
+                    alt=""  
+                    className="absolute inset-0 object-contain w-full h-full"
+                    />
+                    {/* Overlay */}
+                    {
+                        categoryConfig.has_gradient &&
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 to-transparent" />
+                    }
+                    {/* Content */}
+                    <div className="relative z-10 flex flex-col justify-between h-full p-6 text-white">
+                        {
+                            categoryConfig.is_details_on_card &&
+                            <div>
+                                <h2 className="mb-2 text-xl font-bold">{limitText(title)}</h2>
+                                <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(collapseDetails ? details : limitText(details))}} /> 
+                            </div>
+                        }
+                        {
+                            categoryConfig.link_on_card_button &&
+                            <button 
+                            onClick={() => window.location.href = (categoryConfig.allow_redirect_to_external_link && contentDetails.content_external_link)} 
+                            className="px-4 py-2 mt-4 font-medium text-black bg-white rounded-md w-fit hover:bg-gray-100">
+                            See Details
+                            </button>
+                        }
+                    </div>
+                </div>
+                <div className="">
+                    <div className='flex items-start justify-between '>
+                        {_SocialComp()}
+                        {
+                            contentDetails.content_offers_table.length > 0 && categoryConfig.show_offers &&
+                            _OfferTag()
+                        }
+                    </div>
+                    {
+                        contentDetails.content_date_from && contentDetails.content_date_to && categoryConfig.show_date_range &&
+                        _DateRangeComp()
+                    }
+                    {
+                       categoryConfig.show_bottom_title &&
+                       <div className="mt-1 text-lg font-semibold text-black line-clamp-2">
+                        {title}
+                        </div>
+                    }
+                    {
+                        categoryConfig.show_bottom_description &&
+                        <div onClick={clickSeeDetails}  className="mt-1 text-lg text-gray-700">
+                            <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(collapseDetails ? details : limitText(details))}} /> 
+                            {!collapseDetails && <p className='see_more text-lg'>... see more</p>} 
+                        </div>
+                    }
                 </div> 
             </div>
         )
@@ -153,11 +242,11 @@ const HomeCard = ({
     }
 
     return (
-        <div className={`flex justify-center lg:items-start md:w-[${width}] w-[100%] md:m-3 md:rounded-lg pb-[15px] ${classes} md:bg-white`}>
+        <div className={` lg:items-start md:w-[${width}] w-[100%] md:rounded-lg ${classes} md:bg-white`}>
             {
                 loading
                 ? LoadComp()
-                : _Card()
+                : _Card2()
             }
         </div>
     )

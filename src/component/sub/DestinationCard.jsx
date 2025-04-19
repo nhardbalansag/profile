@@ -63,7 +63,7 @@ const DestinationCard = ({
     //#endregion
 
     return (
-        <div className={`lg:flex lg:justify-center lg:items-center md:w-[${width}] w-[100%] md:p-2 md:m-3 md:rounded-lg pb-[15px] shadow-lg ${classes} md:bg-white`}>
+        <div className={`lg:flex lg:justify-center lg:items-center  w-[100%] md:p-2 md:m-3 md:rounded-lg pb-[15px] ${classes} md:bg-white`}>
             {
                 loading
                 ?
