@@ -230,7 +230,7 @@ const HomeCard = ({
 
     const LoadComp = () =>{
         return(
-            <div className='flex justify-center w-[90%]'>
+            <div className=''>
                 <div className="flex flex-col justify-center w-full gap-4 py-10">
                     <div className="w-full h-32 skeleton"></div>
                     <div className="h-4 skeleton w-28"></div>
@@ -242,7 +242,7 @@ const HomeCard = ({
     }
 
     return (
-        <div className={` lg:items-start md:w-[${width}] w-[100%] md:rounded-lg ${classes} md:bg-white`}>
+        <div className={` lg:items-start md:w-[${width}] w-[100%] md:rounded-lg ${classes} `}>
             {
                 loading
                 ? LoadComp()
