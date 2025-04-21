@@ -103,12 +103,12 @@ const DestinationCard = ({
     }
 
     return (
-        <div className={`lg:flex lg:justify-center lg:items-center  w-[100%] md:p-2 md:m-3 md:rounded-lg pb-[15px] ${classes} md:bg-white`}>
+        <div className={`md:w-[80%] w-full md:p-2 md:m-3 md:rounded-lg pb-[15px] ${classes} md:bg-white`}>
             {
                 loading
                 ?
                     <div className='flex justify-center'>
-                        <div className="flex flex-col justify-center gap-4 py-10 md:w-[500px] w-[100%] p-5 ">
+                        <div className="flex flex-col justify-center gap-4 py-10 w-[80%] p-5 ">
                             <div className="w-full h-32 skeleton"></div>
                             <div className="h-4 skeleton w-28"></div>
                             <div className="w-full h-4 skeleton"></div>
@@ -118,7 +118,7 @@ const DestinationCard = ({
                 :
                 <div className="bg-base-100">
                     <div className='flex justify-center'>
-                        <div className='border rounded-b-none rounded-lg md:w-[500px] w-[100%]'>
+                        <div className='border rounded-b-none rounded-lg w-[97%] md:w-[80%]'>
                             <div className='flex items-center justify-start p-2 px-5 '>
                                 <div className="w-8 h-8 mr-2 overflow-hidden rounded-full">
                                     <img src={Logo2} alt={`Avatar`} className="object-cover w-full h-full" />
@@ -129,13 +129,14 @@ const DestinationCard = ({
                             </div>
                             <div className='px-6 py-2'>
                                 <p className="font-semibold text-[17px]">{title}</p>
-                                <div className='text-[16px] py-1 md:w-[450px]'  onClick={clickSeeDetails} dangerouslySetInnerHTML={{ __html: (collapseDetails ? details : limitText(details)) }} />
+                                <div className='text-[16px] py-1'  onClick={clickSeeDetails} dangerouslySetInnerHTML={{ __html: (collapseDetails ? details : limitText(details)) }} />
                                 {!collapseDetails && <p className='see_more'>... see more</p>} 
                             </div>
                         </div>
                     </div>
         
-                    <div className='flex items-center justify-between mx-5'>
+                    <div className='flex items-center justify-center'>
+                        <div className='flex items-center justify-between w-[80%]'>
                         {
                             _SocialComp()
                         }
@@ -143,11 +144,12 @@ const DestinationCard = ({
                             contentDetails.content_offers_table.length > 0 && contentDetails.content_has_payment &&
                             _OfferTag()
                         }
+                        </div>
                     </div>
                     
                     <div className='flex justify-center'>
                         <img
-                        className="w-[100%] md:w-[500px]"
+                        className="w-[100%] md:w-[80%]"
                         alt="Tailwind CSS chat bubble component"
                         src={image} />
                     </div>

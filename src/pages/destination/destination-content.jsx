@@ -341,7 +341,7 @@ const DestinationContent = () =>{
           <div className='md:w-[30%]'>
             
           </div>
-          <div className='md:w-[70%] '>
+          <div className='md:w-[60%]'>
             <div>
               {
                 ResultGetHomeContents.length > 0

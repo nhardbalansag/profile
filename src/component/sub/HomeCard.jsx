@@ -193,7 +193,7 @@ const HomeCard = ({
                             <button 
                             onClick={() => window.location.href = (categoryConfig.allow_redirect_to_external_link && contentDetails.content_external_link)} 
                             className="px-4 py-2 mt-4 font-medium text-black bg-white rounded-md w-fit hover:bg-gray-100">
-                            See Details
+                            <p className='see_details_button_id'>See Details</p>
                             </button>
                         }
                     </div>
