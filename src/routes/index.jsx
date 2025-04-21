@@ -3,6 +3,7 @@ import React, {useEffect} from 'react'
 
 import { useDispatch } from "react-redux";
 import {useSelector} from 'react-redux';
+import { Navigate } from "react-router-dom";
 
 import {
     createBrowserRouter,
@@ -33,6 +34,17 @@ import { STORAGE_TOKEN, STORAGE_USER_INFORMATION } from "../store/auth/authActio
 import * as AuthAction from '../store/auth/authAction'
 
 import * as api_page_config from '../services/page/page.api'
+
+const GuestRoute = ({ children }) => {
+    const auth_states = useSelector(state => state.AuthReducer);
+    var token = getItem(STORAGE_TOKEN)
+
+    if (auth_states.StateToken) {
+        return <Navigate to="/" replace />;
+    }
+
+    return children;
+};
 
 const router = createBrowserRouter([
     {
@@ -69,7 +81,11 @@ const router = createBrowserRouter([
         children:[
             {
                 path: "login",
-                element: <LoginContent/>
+                element: ( 
+                    <GuestRoute>
+                        <LoginContent />
+                    </GuestRoute> 
+                )
             },
         ]
     },
@@ -88,7 +104,6 @@ const Routes = () =>{
     const validateAccess = async() =>{
         var token = await getItem(STORAGE_TOKEN)
         var userInformation = await getItem(STORAGE_USER_INFORMATION)
-
         if(token && userInformation){
             dispatch(AuthAction.LoginUser(token, userInformation))
         }
@@ -119,11 +134,11 @@ const Routes = () =>{
         getAllActivePageConfig()
     },[])
 
-    // useEffect(() =>{
-    //     // if(!data.StateToken){
-    //     //     validateAccess()
-    //     // }
-    // })
+    useEffect(() =>{
+        if(!auth_states.StateToken){
+            validateAccess()
+        }
+    },[])
 
     return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
 }

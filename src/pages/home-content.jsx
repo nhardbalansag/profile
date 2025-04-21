@@ -7,14 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   HomeCard,
   BottomCreateAccountFloat,
-  MechantCard,
   CategoryTitleAndArrow,
-  HomeCardCommunity,
-  SearchFilterBar,
-  HomeCardNews,
-  HomeLearningCard,
-  HomeCardEvent,
-  LanguageBottomSheet,
   DestinationCard,
   OffersBottomSheet
 } from '../component/index'
@@ -24,7 +17,6 @@ import {
 } from './index'
 
 import { useMediaQuery } from 'react-responsive'
-import MediaQuery from 'react-responsive'
 
 import { IoIosCloseCircleOutline } from "react-icons/io";
 
@@ -39,10 +31,7 @@ import DOMPurify from "dompurify";
 
 import TenBG2 from '../assets/images/ten/tenBg2.png'
 
-import * as AuthAction from '../store/auth/authAction'
-
 import * as api_content from '../services/content/content.api'
-import * as api_page_config from '../services/page/page.api'
 
 const env = import.meta.env;
 
@@ -50,7 +39,6 @@ const HomeContent = () =>{
 
   //#region implementations
   const navigate = useNavigate();
-  const dispatch = useDispatch()
 
   const auth_states = useSelector(state => state.AuthReducer);
 
@@ -62,7 +50,7 @@ const HomeContent = () =>{
   //#endregion 
 
   //#region states
-  const [showBottomRegistration, setShowBottomRegistration] = useState(false);
+  const [showBottomRegistration, setShowBottomRegistration] = useState(auth_states.StateToken ? false : true);
   const [collapseDetails, setCollapseDetails] = useState(false);
   const [collapseBottomDetails, setCollapseBottomDetails] = useState(true);
   const [openBottomOffer, setOpenBottomOffer] = useState(false);
@@ -90,16 +78,51 @@ const HomeContent = () =>{
       navigate('login');
     }else{
 
+      console.log('selectedTab', selectedTab)
+      console.log('AllContentData', AllContentData)
+
+      const content_title = selectedLanguage.current == null 
+      ? AllContentData.content_title
+      : (
+            AllContentData.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+          ? AllContentData.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
+          : AllContentData.content_title
+        )
+
+      const membership_type = selectedLanguage.current == null 
+      ? selectedTab.offers_table.membership_type_table.type_title
+      : (
+            selectedTab.offers_table.membership_type_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+          ? selectedTab.offers_table.membership_type_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
+          : selectedTab.offers_table.membership_type_table.type_title
+        )
+
+      const room_type_name = selectedLanguage.current == null 
+      ? selectedTab.offers_table.supplier_table.room_type.room_type_name
+      : (
+            selectedTab.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+          ? selectedTab.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).room_type_name
+          : selectedTab.offers_table.supplier_table.room_type.room_type_name
+        )
+
+      const tier_category_name = selectedLanguage.current == null 
+      ? selectedTab.offers_table.tier_category_table.tier_category_name
+      : (
+            selectedTab.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+          ? selectedTab.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
+          : selectedTab.offers_table.tier_category_table.tier_category_name
+        )
+      
       const reqBody = {
         content_id: selectedTab.content_id,
         offers_id: selectedTab.offers_id,
         finalAmount: totalPriceWithPoints,
-        content_title: AllContentData.content_title,
+        content_title: content_title,
         content_days_count: AllContentData.content_days_count,
         content_night_count: AllContentData.content_night_count,
-        membership_type: selectedTab.offers_table.membership_type_table.type_title,
-        room_type_name: selectedTab.offers_table.supplier_table.room_type.room_type_name,
-        tier_category_name: selectedTab.offers_table.tier_category_table.tier_category_name,
+        membership_type: membership_type,
+        room_type_name: room_type_name,
+        tier_category_name: tier_category_name,
         content_date_from: AllContentData.content_date_from,
         content_date_to: AllContentData.content_date_to,
 
@@ -291,7 +314,7 @@ const HomeContent = () =>{
     if(!auth_states.StateToken){
       setShowBottomRegistration(true)
     }
-  },[])
+  },[auth_states.StateToken])
   //#endregion
 
   //#endregion
@@ -465,10 +488,9 @@ const HomeContent = () =>{
         {/* end contents */}
 
         {
-          showBottomRegistration
-          &&
+          showBottomRegistration &&
           <div className='flex justify-center'>
-            <BottomCreateAccountFloat noThanks={() => setShowBottomRegistration(false)}/>
+            <BottomCreateAccountFloat onPressAction={ () => navigate("/login")} noThanks={() => setShowBottomRegistration(false)}/>
           </div>
         }
         
@@ -567,6 +589,7 @@ const HomeContent = () =>{
             </OffersBottomSheet>
           )
         }
+
         {
           openBottomPayment && <Checkout dataContent={paymentBContent.current} handleClose={() => setOpenBottomPayment(false)}/>
         }

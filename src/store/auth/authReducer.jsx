@@ -25,7 +25,7 @@ export default (state = InitialStates, action) =>{
             return{
                 ...state,
                 StateToken              : action.StateToken,
-                StateUserInformation    : action.userInformation
+                StateUserInformation    : action.StateUserInformation
             }
         case STORAGE_PAGE_LANGUAGES:
             return{

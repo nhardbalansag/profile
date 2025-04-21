@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react'
+import { useDispatch } from "react-redux";
 import {useSelector} from 'react-redux';
 import Logo2 from '../../assets/images/ten/logo2.png'
 
@@ -9,11 +10,19 @@ import {
   UserCicle
 } from '../../assets/icons/index'
 
+import {
+  clear
+} from '../../store/store-index'
+
+import * as AuthAction from '../../store/auth/authAction'
+
 const Header = ({
   handleLanguageVisibility,
   onPressAction, 
   ActionState
 }) => {
+
+  const dispatch = useDispatch()
 
   //#region translation convertion
   const auth_states = useSelector(state => state.AuthReducer);
@@ -40,6 +49,15 @@ const Header = ({
     })
   },[auth_states])
   //#endregion
+
+  const LogoutUser = async () =>{
+    await clear().then((result) =>{
+      dispatch(AuthAction.LogoutUser())
+    }).catch((err) =>{
+      console.log(err.message)
+    })
+  }
+
 
   return (
     <div>
@@ -79,9 +97,18 @@ const Header = ({
             </button>
             <div className='flex items-center justify-center md:px-10 '>
               <UserCicle/>
-              <Link to={'login'}>
-                <a href="#" className="block ml-2 text-white transition-colors duration-300 login_id hover:text-indigo-300">Login</a>
-              </Link>
+              {
+                auth_states.StateToken
+                ?
+                  <button onClick={() => LogoutUser()}>
+                    <p className="block ml-2 text-white transition-colors duration-300 logout_id hover:text-indigo-300">Logout</p>
+                  </button>
+                :
+                  <Link to={'login'}>
+                    <a href="#" className="block ml-2 text-white transition-colors duration-300 login_id hover:text-indigo-300">Login</a>
+                  </Link>
+              }
+              
             </div>
             <div className='flex items-center justify-center md:px-10 '>
               <Link to={'login'}>

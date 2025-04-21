@@ -1,6 +1,7 @@
 
 import React, { useCallback, useState, useEffect } from "react";
-
+import { useDispatch } from "react-redux";
+import {useSelector} from 'react-redux';
 import {loadStripe} from '@stripe/stripe-js';
 import {
   EmbeddedCheckoutProvider,
@@ -22,14 +23,43 @@ function Checkout({
     stripePublicKey = env.VITE_APP_STRIPE_PUBLIC_KEY
 }) {
 
+    const dispatch = useDispatch()
+
     const [getclientSecret, setclientSecret] = useState(null)
     const [getLoading, setLoading] = useState(false)
     
     const stripePromise = loadStripe(stripePublicKey);
 
+    //#region translation convertion
+    const auth_states = useSelector(state => state.AuthReducer);
+  
+    useEffect(() =>{
+      auth_states.PageLanguages.map((item, key) =>{
+        const translation = item.translation
+        
+        if(translation.length > 0 && auth_states.SelectedLanguage){
+          const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
+          const targetElement = document.getElementsByClassName(item.page_config_id)
+          if (targetElement) {
+            if (targetElement.length > 0 && filteredTranslation) {
+              Array.from(targetElement).forEach((el) => {
+                el.textContent = filteredTranslation.page_config_title;
+              })
+            } else if (targetElement.length > 0) {
+              Array.from(targetElement).forEach((el) => {
+                el.textContent = item.page_config_title;
+              })
+            }
+          }
+        }
+      })
+
+    },[auth_states, getLoading])
+    //#endregion
+
     const fetchClientSecret = async() => {
         setLoading(true)
-        await api_content.GetClientSecret(token, dataContent).then((result) =>{
+        await api_content.GetClientSecret(auth_states.StateToken, dataContent).then((result) =>{
             if(result.status){
                 setclientSecret(result.data.clientSecret)
             }
@@ -38,10 +68,13 @@ function Checkout({
             console.log("fetchClientSecret", err)
         })
     };
-    
-    useEffect(() =>{
-        fetchClientSecret()
-    },[])
+
+    useEffect(() => {
+        console.log(token)
+        if (auth_states.StateToken) {
+            fetchClientSecret()
+        }
+    }, []);
 
     return (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black bg-opacity-40">
@@ -66,8 +99,8 @@ function Checkout({
                         <main className="grid min-h-full px-6 py-24 bg-white place-items-center sm:py-32 lg:px-8">
                             <div className="text-center">
                                 <span className="loading loading-ring loading-xl"></span>
-                                <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">Initializing secure payment</h1>
-                                <p className="mt-6 text-base leading-7 text-gray-600">Loading payment form, please wait...</p>
+                                <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl initializing_secure_payment_id">Initializing secure payment</h1>
+                                <p className="mt-6 text-base leading-7 text-gray-600 payment_form_loading_id">Loading payment form, please wait...</p>
                             </div>
                         </main>
                 }   

@@ -1,14 +1,33 @@
-import React, {useEffect} from 'react'
-import {useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from "react-redux";
+
+import Swal from 'sweetalert2';
 
 import Logo1 from '../../assets/images/ten/logo.png'
 import Logo2 from '../../assets/images/ten/logo2.png'
 import TenBG2 from '../../assets/images/ten/tenBg2.png'
 
+import {
+  setItem,
+  clear
+} from '../../store/store-index'
+
+import { STORAGE_USER_INFORMATION, STORAGE_TOKEN } from '../../store/auth/authAction';
+import * as auth_service_api from '../../services/auth/auth.api'
+import * as AuthAction from '../../store/auth/authAction'
+
 const LoginContent = () =>{
 
   //#region translation convertion
   const auth_states = useSelector(state => state.AuthReducer);
+
+  const dispatch = useDispatch()
+
+  const [isLoading, setLoading] = useState(false)
+  const [getRequest, setRequest] = useState({
+    email: "admin@email.com",
+    password: "admin123"
+  })
 
   useEffect(() =>{
     auth_states.PageLanguages.map((item, key) =>{
@@ -32,6 +51,49 @@ const LoginContent = () =>{
     })
   },[auth_states])
   //#endregion
+
+  
+  const handleChange = (e) => {
+    const { name, type, checked, value } = e.target;
+    
+    setRequest((prevFormData) => ({
+      ...prevFormData,
+      [name]: value
+    }));
+  };
+
+  
+  const LoginUser = async (event) =>{
+    event.preventDefault();
+
+    if (!getRequest.email || !getRequest.password) {
+      return;
+    }
+    
+    setLoading(true)
+
+    const requestBody = {
+      "email": getRequest.email,
+      "password": getRequest.password
+    }
+
+    await auth_service_api.LoginUser(requestBody).then((result) =>{
+
+      var token = result.data.token
+      var userInformation = result.data.data.user_information
+
+      setItem(STORAGE_TOKEN, token)
+      setItem(STORAGE_USER_INFORMATION, userInformation)
+
+      dispatch(AuthAction.LoginUser(token, userInformation))
+      setLoading(false)
+      
+    }).catch((err) =>{
+      setLoading(false)
+      setToastVisibility(true)
+      setToastMessage(err)
+    })
+  }
 
   return (
     <div className=''>
@@ -61,28 +123,33 @@ const LoginContent = () =>{
             {/* Right Section */}
             <div className="p-4 space-y-6 bg-blue-600 md:p-10">
               {/* Login Form */}
-              <div className="p-6 space-y-4 bg-white rounded-lg shadow">
-                <h2 className="text-xl font-bold login_id">Log In</h2>
-                <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:space-x-3 md:grid-cols-2">
-                  <input
-                    type="text"
-                    placeholder="Email"
-                    className="input input-bordered"
-                  />
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    className="input input-bordered"
-                  />
+              <form onSubmit={(event) => LoginUser(event)}>
+                <div className="p-6 space-y-4 bg-white rounded-lg shadow">
+                  <h2 className="text-xl font-bold login_id">Log In</h2>
+                  <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:space-x-3 md:grid-cols-2">
+                    <input
+                      type="text"
+                      placeholder="Email"
+                      className="input input-bordered"
+                      value={getRequest.email} 
+                      onChange={handleChange}
+                    />
+                    <input
+                      type="password"
+                      placeholder="Password"
+                      className="input input-bordered"
+                      value={getRequest.password} 
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between space-x-5">
+                    <button className="text-white bg-blue-600 btn login_id">Login</button>
+                    <a href="#" className="text-sm font-medium text-blue-500 forgot_your_password_id">
+                      Forgot your password?
+                    </a>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between space-x-5">
-                  <button className="text-white bg-blue-600 btn login_id">Login</button>
-                  <a href="#" className="text-sm font-medium text-blue-500 forgot_your_password_id">
-                    Forgot your password?
-                  </a>
-                </div>
-              </div>
-
+              </form>
               {/* Signup Form */}
               <div className="p-6 space-y-4 bg-white rounded-lg shadow">
                 <h2 className="text-xl font-bold sign_in_id">Sign Up</h2>
