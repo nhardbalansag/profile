@@ -483,6 +483,7 @@ const HomeContent = () =>{
                 </div>
                 <div className='flex justify-center'>
                   <DestinationCard 
+                  contentDetails={ResultGetHomeContentsDetails}
                   clickOffers={() => {
                     setOpenBottomOffer(!openBottomOffer)
                     HandleOfferDetails(ResultGetHomeContentsDetails)

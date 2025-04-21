@@ -202,7 +202,7 @@ const HomeCard = ({
                     <div className='flex items-start justify-between '>
                         {_SocialComp()}
                         {
-                            contentDetails.content_offers_table.length > 0 && categoryConfig.show_offers &&
+                            contentDetails.content_offers_table.length > 0 && categoryConfig.show_offers && contentDetails.content_has_payment && 
                             _OfferTag()
                         }
                     </div>
@@ -220,7 +220,7 @@ const HomeCard = ({
                         categoryConfig.show_bottom_description &&
                         <div onClick={clickSeeDetails}  className="mt-1 text-lg text-gray-700">
                             <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(collapseDetails ? details : limitText(details))}} /> 
-                            {!collapseDetails && <p className='see_more text-lg'>... see more</p>} 
+                            {!collapseDetails && details.length > 30 && <p className='see_more text-lg'>... see more</p>} 
                         </div>
                     }
                 </div> 
