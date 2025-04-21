@@ -550,7 +550,15 @@ const HomeContent = () =>{
                   ResultGetHomeContentsDetails.content_offers_table.map((item, key) =>(
                     <button onClick={() => HandleOfferTabSelection(item)} key={key} className=''>
                       <p className={`${activeTab.offers_id == item.offers_id ? 'font-extrabold' : 'font-normal'}  text-[25px] uppercase`}>
-                        {item.offers_table.membership_type_table.type_title}
+                        {
+                          selectedLanguage.current == null 
+                          ? item.offers_table.membership_type_table.type_title
+                          : (
+                                item.offers_table.membership_type_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                              ? item.offers_table.membership_type_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
+                              : item.offers_table.membership_type_table.type_title
+                            )
+                        }
                       </p>
                     </button>
                   ))
