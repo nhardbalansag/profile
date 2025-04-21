@@ -311,9 +311,7 @@ const HomeContent = () =>{
   },[auth_states])
 
   useEffect(() =>{
-    if(!auth_states.StateToken){
-      setShowBottomRegistration(true)
-    }
+    setShowBottomRegistration(auth_states.StateToken ? false : true)
   },[auth_states.StateToken])
   //#endregion
 

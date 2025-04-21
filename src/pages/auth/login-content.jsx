@@ -143,7 +143,11 @@ const LoginContent = () =>{
                     />
                   </div>
                   <div className="flex items-center justify-between space-x-5">
-                    <button className="text-white bg-blue-600 btn login_id">Login</button>
+                    <button className="text-white bg-blue-600 btn login_id flex justify-center items-center">
+                      {
+                        isLoading ? <span className="loading loading-spinner loading-sm"></span> : "Log In"
+                      }
+                    </button>
                     <a href="#" className="text-sm font-medium text-blue-500 forgot_your_password_id">
                       Forgot your password?
                     </a>
