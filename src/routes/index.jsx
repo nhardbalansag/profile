@@ -22,7 +22,10 @@ import {
 
     NotFound,
 
-    Checkout
+    Checkout,
+
+    AccountContent,
+    AccountPage
 } from '../pages/index'
 
 import {
@@ -35,16 +38,25 @@ import * as AuthAction from '../store/auth/authAction'
 
 import * as api_page_config from '../services/page/page.api'
 
-const GuestRoute = ({ children }) => {
+const GuestRoute = ({ children, route }) => {
     const auth_states = useSelector(state => state.AuthReducer);
-    var token = getItem(STORAGE_TOKEN)
 
     if (auth_states.StateToken) {
-        return <Navigate to="/" replace />;
+        return <Navigate to={route} replace />;
     }
 
     return children;
-};
+}
+
+const AuthenticatedUsers = ({ children, route }) => {
+    const auth_states = useSelector(state => state.AuthReducer);
+
+    if (auth_states.StateToken) {
+        return children;
+    }
+
+    return <Navigate to={route} replace />
+}
 
 const router = createBrowserRouter([
     {
@@ -58,11 +70,6 @@ const router = createBrowserRouter([
             },
         ]
     },
-    // {
-    //     path: "/checkout",
-    //     loader: () => ({ message: "Hello Data Router!" }),
-    //     Component: Checkout,  
-    // },
     {
         path: "/",
         loader: () => ({ message: "Hello Data Router!" }),
@@ -82,9 +89,24 @@ const router = createBrowserRouter([
             {
                 path: "login",
                 element: ( 
-                    <GuestRoute>
+                    <GuestRoute route={'/'}>
                         <LoginContent />
                     </GuestRoute> 
+                )
+            },
+        ]
+    },
+    {
+        path: "/",
+        loader: () => ({ message: "Hello Data Router!" }),
+        Component: AccountPage,  
+        children:[
+            {
+                path: "account",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <AccountContent />
+                    </AuthenticatedUsers> 
                 )
             },
         ]

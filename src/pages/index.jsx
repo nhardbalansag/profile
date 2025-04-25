@@ -11,6 +11,9 @@ import LoginPage from "./auth/login-index";
 
 import Checkout from "./payment/checkout";
 
+import AccountContent from "./account/account-content";
+import AccountPage from "./account/account-index";
+
 export{
     HomePage,
     HomeContent,
@@ -23,5 +26,8 @@ export{
 
     NotFound,
 
-    Checkout
+    Checkout,
+
+    AccountContent,
+    AccountPage
 }

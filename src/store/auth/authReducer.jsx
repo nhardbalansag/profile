@@ -7,7 +7,8 @@ import {
 } from "./authAction"
 
 const InitialStates  = {
-    StateToken: null,
+    // StateToken: null,
+    StateToken: "null",
     StateUserInformation:   [],
     PageLanguages:  [],
     Languages:  [],

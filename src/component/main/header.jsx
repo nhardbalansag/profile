@@ -111,9 +111,17 @@ const Header = ({
               
             </div>
             <div className='flex items-center justify-center md:px-10 '>
-              <Link to={'login'}>
-                <a href="#"  className="px-5 py-2 text-sm font-semibold border rounded-lg create_account">Create account</a>
-              </Link>
+              {
+                auth_states.StateToken
+                ?
+                  <Link to={'account'}>
+                    <a href="#" className="px-5 py-2 text-sm font-semibold border rounded-lg create_account">Account</a>
+                  </Link>
+                :
+                  <Link to={'login'}>
+                    <a href="#"  className="px-5 py-2 text-sm font-semibold border rounded-lg create_account">Create account</a>
+                  </Link>
+              }
             </div>
           </div>
         </nav>
