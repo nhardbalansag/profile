@@ -25,7 +25,9 @@ import {
     Checkout,
 
     AccountContent,
-    AccountPage
+    AccountPage,
+
+    AccountDetails
 } from '../pages/index'
 
 import {
@@ -106,6 +108,14 @@ const router = createBrowserRouter([
                 element: ( 
                     <AuthenticatedUsers route={'/login'}>
                         <AccountContent />
+                    </AuthenticatedUsers> 
+                )
+            },
+            {
+                path: "details",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <AccountDetails />
                     </AuthenticatedUsers> 
                 )
             },

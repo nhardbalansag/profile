@@ -14,6 +14,8 @@ import Checkout from "./payment/checkout";
 import AccountContent from "./account/account-content";
 import AccountPage from "./account/account-index";
 
+import AccountDetails from "./account/account-details";
+
 export{
     HomePage,
     HomeContent,
@@ -29,5 +31,7 @@ export{
     Checkout,
 
     AccountContent,
-    AccountPage
+    AccountPage,
+
+    AccountDetails,
 }
