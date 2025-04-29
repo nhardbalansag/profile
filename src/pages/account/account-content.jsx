@@ -4,6 +4,9 @@ import { MdOutlineCardGiftcard } from "react-icons/md";
 import { LuHandshake } from "react-icons/lu";
 import { BsGraphUpArrow } from "react-icons/bs";
 import { PiBankBold } from "react-icons/pi";
+import { LuQrCode } from "react-icons/lu";
+
+import QRCode from "react-qr-code";
 
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -69,7 +72,7 @@ const AccountContent = () =>{
 
   const _WalletCard = ({title, amount, buttons}) =>{
     return(
-      <div className="w-[90%] border rounded-2xl p-5 bg-white shadow-lg space-y-3">
+      <div className="w-[90%] border rounded-2xl p-5 bg-white shadow-lg space-y-3 relative z-0">
         <p className="text-[18px] md:text-[25px] uppercase font-semibold">{title}</p>
         <div>
           <p className="text-[15px] md:text-[18px] capitalize">balance</p>
@@ -172,6 +175,33 @@ const AccountContent = () =>{
     )
   }
 
+  const ModalComp = () =>{
+    return(
+      <div>
+        {/* Put this part before </body> tag */}
+        <input type="checkbox" id="my_modal_7" className="modal-toggle" />
+        <div className="modal" role="dialog">
+          <div className="modal-box">
+            <div className="flex flex-col items-center justify-center space-y-5">
+              <div className="text-center">
+                <p className="text-[18px] font-semibold uppercase">bernard balansag</p>
+                <p className="text-[15px] font-thin">123456789102</p>
+              </div>
+              <div>
+                <QRCode
+                  value="asdfafda/lkja;sdflkadf asdfafl;kj asdf asdf asdfa asdf  adf asdf  asdfasd"
+                  size={150}
+                  viewBox={`0 0 256 256`}
+                />
+              </div>
+            </div>
+          </div>
+          <label className="modal-backdrop" htmlFor="my_modal_7">Close</label>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2">
@@ -179,7 +209,11 @@ const AccountContent = () =>{
           <div className="flex items-center justify-between px-10">
             <p className="capitalize text-[15px] md:text-[18px]">account number</p>
             <p className="font-semibold capitalize text-[18px] md:text-[20px]">123456789102</p>
+            <label htmlFor="my_modal_7">
+              <LuQrCode />
+            </label>
           </div>
+
           <div className="flex items-center justify-center mb-5">
             <_SlideComponent/>
           </div>
@@ -194,6 +228,7 @@ const AccountContent = () =>{
           <_TransactionTable/>
         </div>
       </div>
+      <ModalComp/>
     </div>
   ) 
 }

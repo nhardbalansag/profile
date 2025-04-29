@@ -19,21 +19,6 @@ const AccountDetails = () =>{
     return (
       <div>
         <div className="flex min-h-screen p-6 bg-gray-50">
-          {/* Sidebar */}
-          <aside className="w-64 p-4 mr-6 bg-white rounded-lg shadow">
-            <div className="mb-6 text-center">
-              <div className="w-20 h-20 mx-auto mb-2 bg-gray-200 rounded-full"></div>
-              <h3 className="font-semibold">Irakli talavadze</h3>
-              <p className="text-sm text-gray-500">ikakodesign@gmail.com</p>
-            </div>
-            <nav className="flex flex-col space-y-2">
-              <a href="#" className="font-medium text-orange-600">Personal information</a>
-              <a href="#" className="text-gray-600 hover:text-orange-600">Billing & Payments</a>
-              <a href="#" className="text-gray-600 hover:text-orange-600">Order History</a>
-              <a href="#" className="text-gray-600 hover:text-orange-600">Gift Cards</a>
-            </nav>
-          </aside>
-
           {/* Main Content */}
           <div className="flex-1">
             <p className="mb-4 text-sm text-gray-500">
