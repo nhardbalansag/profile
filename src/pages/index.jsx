@@ -16,6 +16,8 @@ import AccountPage from "./account/account-index";
 
 import AccountDetails from "./account/account-details";
 
+import AccountOrders from "./account/account-orders";
+
 export{
     HomePage,
     HomeContent,
@@ -34,4 +36,6 @@ export{
     AccountPage,
 
     AccountDetails,
+
+    AccountOrders
 }

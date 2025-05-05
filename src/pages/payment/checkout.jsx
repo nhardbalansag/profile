@@ -19,14 +19,16 @@ function Checkout({
     totalAmount = 0,
     statusMessage,
     dataContent,
+    clientSecret,
+    getLoading,
     handleClose,
     stripePublicKey = env.VITE_APP_STRIPE_PUBLIC_KEY
 }) {
 
     const dispatch = useDispatch()
 
-    const [getclientSecret, setclientSecret] = useState(null)
-    const [getLoading, setLoading] = useState(false)
+    // const [getclientSecret, setclientSecret] = useState(null)
+    // const [getLoading, setLoading] = useState(false)
     
     const stripePromise = loadStripe(stripePublicKey);
 
@@ -57,24 +59,23 @@ function Checkout({
     },[auth_states, getLoading])
     //#endregion
 
-    const fetchClientSecret = async() => {
-        setLoading(true)
-        await api_content.GetClientSecret(auth_states.StateToken, dataContent).then((result) =>{
-            if(result.status){
-                setclientSecret(result.data.clientSecret)
-            }
-            setLoading(false)
-        }).catch((err) =>{
-            console.log("fetchClientSecret", err)
-        })
-    };
+    // const fetchClientSecret = async() => {
+    //     setLoading(true)
+    //     await api_content.GetClientSecret(auth_states.StateToken, dataContent).then((result) =>{
+    //         if(result.status){
+    //             setclientSecret(result.data.clientSecret)
+    //         }
+    //         setLoading(false)
+    //     }).catch((err) =>{
+    //         console.log("fetchClientSecret", err)
+    //     })
+    // };
 
-    useEffect(() => {
-        console.log(token)
-        if (auth_states.StateToken) {
-            fetchClientSecret()
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (auth_states.StateToken) {
+    //         fetchClientSecret()
+    //     }
+    // }, []);
 
     return (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black bg-opacity-40">
@@ -90,7 +91,7 @@ function Checkout({
                         <div id="checkout">
                             <EmbeddedCheckoutProvider
                             stripe={stripePromise}
-                            options={{clientSecret: getclientSecret }}
+                            options={{clientSecret: clientSecret }}
                             >
                                 <EmbeddedCheckout />
                             </EmbeddedCheckoutProvider>

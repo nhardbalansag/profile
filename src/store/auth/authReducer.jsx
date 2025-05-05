@@ -8,7 +8,7 @@ import {
 
 const InitialStates  = {
     // StateToken: null,
-    StateToken: "null",
+    StateToken: null,
     StateUserInformation:   [],
     PageLanguages:  [],
     Languages:  [],

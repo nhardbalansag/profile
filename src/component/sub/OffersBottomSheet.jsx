@@ -188,7 +188,7 @@ const OffersBottomSheet = ({
                     <div className="pb-3 text-right border-b"> 
                         <div className='flex items-center justify-between'>
                             <p className="text-[11px] price_id">Price</p>
-                            <p className="text-lg font-semibold">{tabData.offers_table.currency_table.currency_symbol}{tabData.offers_table.offers_amount}</p>
+                            <p className="text-lg font-semibold">{tabData.offers_table.currency_table.currency_symbol}{(parseFloat(tabData.offers_table.offers_amount) * count)}</p>
                         </div>
                         <div className='flex items-center justify-between'>
                             <p className="text-[11px] applied_t_point_id">Applied T-Points</p>
@@ -196,7 +196,7 @@ const OffersBottomSheet = ({
                         </div>
                         <div className='flex items-center justify-between'>
                             <p className="text-[11px] total_price">Total Price</p>
-                            <p className="text-lg text-[24px] font-bold">${parseFloat(tabData.offers_table.offers_amount) - parseFloat(tabData.offers_table.offers_points_amount)}</p>
+                            <p className="text-lg text-[24px] font-bold">${(parseFloat(tabData.offers_table.offers_amount) * count) - parseFloat(tabData.offers_table.offers_points_amount)}</p>
                         </div>
                     </div>
 

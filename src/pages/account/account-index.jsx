@@ -101,9 +101,9 @@ const AccountPage = () => {
                 <FaRegEnvelopeOpen />
                 {_link("/content/", "Subscription")}
               </a>
-              <a href="#" class={`${("/content/add-content").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+              <a href="#" class={`${("orders").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <TfiReceipt />
-                {_link("/content/", "Orders")}
+                {_link("/orders", "Orders")}
               </a>
               <a href="#" class={`${("/content/add-content").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <FaHistory  />
@@ -122,9 +122,9 @@ const AccountPage = () => {
   }
 
   return (
-    <div className="h-svh bg-[#001d3d] flex flex-col items-center justify-end">
+    <div className="h-[90%] bg-[#001d3d] flex flex-col items-center justify-end">
       {/* Logo */}
-      <div className="flex items-center justify-between w-full px-10 py-2 text-white ">
+      <div className="flex items-center justify-between w-full px-10 py-2 text-white">
         <div className="">
           <Link to={'/'}>
             <a href="#" className='flex items-center'>
@@ -137,7 +137,7 @@ const AccountPage = () => {
         </div>
       </div>
       
-      <div className="h-[90%] w-full bg-[#f7f8fa] rounded-t-[50px] py-14">
+      <div className="h-[90%] w-full bg-[#f7f8fa] bg-white rounded-t-[50px] py-14">
         {/* <Outlet /> */}
         <DrawerComp/>
        

@@ -27,7 +27,9 @@ import {
     AccountContent,
     AccountPage,
 
-    AccountDetails
+    AccountDetails,
+
+    AccountOrders
 } from '../pages/index'
 
 import {
@@ -119,6 +121,14 @@ const router = createBrowserRouter([
                     </AuthenticatedUsers> 
                 )
             },
+            {
+                path: "orders",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <AccountOrders />
+                    </AuthenticatedUsers> 
+                )
+            },
         ]
     },
     {
@@ -136,8 +146,11 @@ const Routes = () =>{
     const validateAccess = async() =>{
         var token = await getItem(STORAGE_TOKEN)
         var userInformation = await getItem(STORAGE_USER_INFORMATION)
+        console.log(userInformation)
+        console.log("test")
+
         if(token && userInformation){
-            dispatch(AuthAction.LoginUser(token, userInformation))
+            dispatch(AuthAction.LoginUser(token, JSON.parse(userInformation)))
         }
     }
 

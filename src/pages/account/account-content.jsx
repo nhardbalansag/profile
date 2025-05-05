@@ -1,10 +1,13 @@
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from 'react';
+import {useSelector} from 'react-redux';
 import { TbTransfer } from "react-icons/tb";
 import { MdOutlineCardGiftcard } from "react-icons/md";
 import { LuHandshake } from "react-icons/lu";
 import { BsGraphUpArrow } from "react-icons/bs";
 import { PiBankBold } from "react-icons/pi";
 import { LuQrCode } from "react-icons/lu";
+import { TbWorldDollar } from "react-icons/tb";
+import { BsBarChartLine } from "react-icons/bs";
 
 import QRCode from "react-qr-code";
 
@@ -15,7 +18,11 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
+import * as api_orders from '../../services/account/orders.api.js'
+
 const AccountContent = () =>{
+
+  const auth_states = useSelector(state => state.AuthReducer);
 
   const _SlideComponent = ({children}) =>{
     return(
@@ -34,7 +41,7 @@ const AccountContent = () =>{
           [
             {
               title: 't-points',
-              balance: 100.00,
+              balance: 0.00,
               button:[
                 {
                   title: 'Redeem',
@@ -48,7 +55,7 @@ const AccountContent = () =>{
             },
             {
               title: 't-bucks',
-              balance: 100.00,
+              balance: 0.00,
               button:[
                 {
                   title: 'Redeem',
@@ -115,7 +122,7 @@ const AccountContent = () =>{
         </div>
         <div className="my-8 space-y-6">
           {
-            [1,2, 3].map((item, index) => (
+            [1,2].map((item, index) => (
               <div className="flex justify-between">
                 <div className="w-[200px]">
                   <p className="font-medium uppercase ">pca activation</p>
@@ -138,7 +145,7 @@ const AccountContent = () =>{
 
   const _BonusCard = ({icon, title, value, rate, rateStatus = true}) =>{
     return(
-      <div className="flex flex-col w-[48%] gap-2 p-4 bg-white shadow-md rounded-xl">
+      <div className="flex flex-col w-[100%] gap-2 p-4 bg-white shadow-md rounded-xl border">
         <div className="flex items-center gap-2 text-sm text-gray-500">
           <div className="">
             {icon}
@@ -155,20 +162,36 @@ const AccountContent = () =>{
 
   const FinanceSummary = () => {
     return (
-      <div className="flex w-[90%] justify-between">
+      <div className="w-[90%] grid grid-cols-2 gap-3">
         <_BonusCard
-          icon={<LuHandshake className="w-4 h-4 text-gray-600" />}
+          icon={<LuHandshake size={18} className="text-gray-600" />}
           title={'Direct Bonus'}
-          value={100.00}
-          rate={2.4}
+          value={0.00}
+          rate={0.0}
           rateStatus={true}
         />
         
         <_BonusCard
-          icon={<BsGraphUpArrow className="w-4 h-4 text-gray-600" />}
+          icon={<BsGraphUpArrow size={18} className="text-gray-600" />}
           title={'Market Bonus'}
-          value={100.00}
-          rate={1.2}
+          value={0.00}
+          rate={0.0}
+          rateStatus={false}
+        />
+
+        <_BonusCard
+          icon={<TbWorldDollar size={18} className="text-gray-600" />}
+          title={'Global Bonus'}
+          value={0.00}
+          rate={0.0}
+          rateStatus={false}
+        />
+
+        <_BonusCard
+          icon={<BsBarChartLine size={18} className="text-gray-600" />}
+          title={'Milestone Bonus'}
+          value={0.00}
+          rate={0.0}
           rateStatus={false}
         />
       </div>
@@ -184,12 +207,12 @@ const AccountContent = () =>{
           <div className="modal-box">
             <div className="flex flex-col items-center justify-center space-y-5">
               <div className="text-center">
-                <p className="text-[18px] font-semibold uppercase">bernard balansag</p>
-                <p className="text-[15px] font-thin">123456789102</p>
+                <p className="text-[18px] font-semibold uppercase">{`${auth_states.StateUserInformation.first_name} ${auth_states.StateUserInformation.last_name}`}</p>
+                <p className="text-[15px] font-thin">{auth_states.StateUserInformation.accounts_table.account_number}</p>
               </div>
               <div>
                 <QRCode
-                  value="asdfafda/lkja;sdflkadf asdfafl;kj asdf asdf asdfa asdf  adf asdf  asdfasd"
+                  value={auth_states.StateUserInformation.accounts_table.account_number}
                   size={150}
                   viewBox={`0 0 256 256`}
                 />
@@ -203,12 +226,12 @@ const AccountContent = () =>{
   }
 
   return (
-    <div>
+    <div className="">
       <div className="grid grid-cols-1 md:grid-cols-2">
         <div className="">
           <div className="flex items-center justify-between px-10">
             <p className="capitalize text-[15px] md:text-[18px]">account number</p>
-            <p className="font-semibold capitalize text-[18px] md:text-[20px]">123456789102</p>
+            <p className="font-semibold capitalize text-[18px] md:text-[20px]">{auth_states.StateUserInformation.accounts_table.account_number}</p>
             <label htmlFor="my_modal_7">
               <LuQrCode />
             </label>

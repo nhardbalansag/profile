@@ -46,6 +46,8 @@ const HomeContent = () =>{
   const maxGuestCount = useRef(0)
   const walletRef = useRef(100)
   const paymentBContent = useRef({})
+  const initialFinalPrice = useRef(0)
+  const countRef = useRef(0)
   const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
   //#endregion 
 
@@ -62,9 +64,11 @@ const HomeContent = () =>{
   const [count, setCount] = useState(0);
   const [totalPriceWithPoints, setTotalPriceWithPoints] = useState(0);
   const [TPointsWallet, setTPointsWallet] = useState(walletRef.current);
-  const [TPointsCustom, setTPointsCustom] = useState(walletRef.current);
+  const [TPointsCustom, setTPointsCustom] = useState(0);
   const [UseTPointsWalletFullAmount, setUseTPointsWalletFullAmount] = useState(false);
   const [loadingContent, setLoadingContent] = useState(true);
+  const [getclientSecret, setclientSecret] = useState(null)
+  const [getLoading, setLoading] = useState(false)
  //#endregion
 
   //#region methods
@@ -72,7 +76,7 @@ const HomeContent = () =>{
     query: '(min-width: 400px)'
   })
   
-  const handleCheckout = (selectedTab, AllContentData) =>{
+  const handleCheckout = async (selectedTab, AllContentData) =>{
     if(!auth_states.StateToken){
       setShowBottomRegistration(true)
       navigate('login');
@@ -116,6 +120,7 @@ const HomeContent = () =>{
       const reqBody = {
         content_id: selectedTab.content_id,
         offers_id: selectedTab.offers_id,
+        guest_count: count,
         finalAmount: totalPriceWithPoints,
         content_title: content_title,
         content_days_count: AllContentData.content_days_count,
@@ -133,15 +138,24 @@ const HomeContent = () =>{
       }
 
       paymentBContent.current = reqBody
-
       setOpenBottomPayment(true)
+      
+      setLoading(true)
+      await api_content.GetClientSecret(auth_states.StateToken, paymentBContent.current).then((result) =>{
+        if(result.status){
+          setclientSecret(result.data.clientSecret)
+          setLoading(false)
+        }
+      }).catch((err) =>{
+          console.log("fetchClientSecret", err)
+      })
     }
   }
-  
+
   const handleTpoints = (item) => {
     setUseTPointsWalletFullAmount(!UseTPointsWalletFullAmount)
 
-    const offers_amount = parseFloat(item.offers_table.offers_amount)
+    const offers_amount = parseFloat(item.offers_table.offers_amount) * count
     const offers_points_amount = parseFloat(item.offers_table.offers_points_amount)
 
     if(!UseTPointsWalletFullAmount){
@@ -157,7 +171,7 @@ const HomeContent = () =>{
         setTPointsCustom(walletRef.current)
       }
     }else{
-      setTotalPriceWithPoints(offers_amount)
+      setTotalPriceWithPoints(offers_amount )
       setTPointsWallet(walletRef.current)
       setTPointsCustom(0)
     }
@@ -165,7 +179,7 @@ const HomeContent = () =>{
 
   const handleCustomPoints = (event, item) => {
 
-    const offers_amount = parseFloat(item.offers_table.offers_amount)
+    const offers_amount = parseFloat(item.offers_table.offers_amount)  * count
     const offers_points_amount = parseFloat(item.offers_table.offers_points_amount)
 
     const { name, type, checked, value } = event.target;
@@ -203,7 +217,7 @@ const HomeContent = () =>{
 
   const handleDecreaseCustomPoints = (item) => {
 
-    const offers_amount = parseFloat(item.offers_table.offers_amount)
+    const offers_amount = parseFloat(item.offers_table.offers_amount)  * count
 
     if(!UseTPointsWalletFullAmount){
       setTPointsCustom(prev => {
@@ -221,7 +235,7 @@ const HomeContent = () =>{
 
   const handleIncreaseCustomPoints = (item) => {
 
-    const offers_amount = parseFloat(item.offers_table.offers_amount)
+    const offers_amount = parseFloat(item.offers_table.offers_amount) * count
     const offers_points_amount = parseFloat(item.offers_table.offers_points_amount)
     
     if(!UseTPointsWalletFullAmount){
@@ -261,11 +275,15 @@ const HomeContent = () =>{
  
   const handleDecreaseFunc = () => {
     if (count > 0) setCount(count - 1);
-  };
+
+    setTotalPriceWithPoints((initialFinalPrice.current * (count - 1)) - TPointsCustom)
+  }
 
   const handleIncreaseFunc = () => {
     if (count < maxGuestCount.current) setCount(count + 1)
-  };
+   
+    setTotalPriceWithPoints((initialFinalPrice.current * (count + 1)) - TPointsCustom)
+  }
 
   const HandleOfferTabSelection = (item) =>{
     setActiveTab(item)
@@ -280,7 +298,8 @@ const HomeContent = () =>{
     setOpenBottomOffer(true)
     ResultSetHomeContentsDetails(item)
     setActiveTab(item.content_offers_table[0])
-    setTotalPriceWithPoints(item.content_offers_table[0].offers_table.offers_amount)
+    setTotalPriceWithPoints(parseFloat(item.content_offers_table[0].offers_table.offers_amount) * item.content_guest_count)
+    initialFinalPrice.current = item.content_offers_table[0].offers_table.offers_amount
     setCount(item.content_guest_count)
     maxGuestCount.current = item.content_guest_count
   }
@@ -589,7 +608,7 @@ const HomeContent = () =>{
         }
 
         {
-          openBottomPayment && <Checkout dataContent={paymentBContent.current} handleClose={() => setOpenBottomPayment(false)}/>
+          openBottomPayment && <Checkout clientSecret={getclientSecret} getLoading={getLoading} dataContent={paymentBContent.current} handleClose={() => setOpenBottomPayment(false)}/>
         }
       </main>
     </div>

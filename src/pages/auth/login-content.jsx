@@ -24,10 +24,19 @@ const LoginContent = () =>{
   const dispatch = useDispatch()
 
   const [isLoading, setLoading] = useState(false)
+  const [isLoadingRegister, setLoadingRegister] = useState(false)
   const [getRequest, setRequest] = useState({
-    email: "admin@email.com",
-    password: "admin123"
+    email: "",
+    password: ""
   })
+
+  const [getRegisterForm, setRegisterForm] = useState({
+    first_name  : "",
+    last_name   : "",
+    email       : "",
+    password    : "",
+  })
+
 
   useEffect(() =>{
     auth_states.PageLanguages.map((item, key) =>{
@@ -62,6 +71,52 @@ const LoginContent = () =>{
     }));
   };
 
+  const handleChangeForRegister = (e) => {
+    const { name, type, checked, value } = e.target;
+    
+    setRegisterForm((prevFormData) => ({
+      ...prevFormData,
+      [name]: value
+    }));
+  };
+
+  const RegisterUser = async (event) =>{
+    event.preventDefault();
+
+    if (
+      !getRegisterForm.email || 
+      !getRegisterForm.password || 
+      !getRegisterForm.first_name || 
+      !getRegisterForm.last_name) {
+      return;
+    }
+    
+    setLoadingRegister(true)
+
+    const requestBody = {
+      "first_name": getRegisterForm.first_name,
+      "last_name": getRegisterForm.last_name,
+      "email": getRegisterForm.email,
+      "password": getRegisterForm.password
+    }
+
+    await auth_service_api.RegisterUser(requestBody).then((result) =>{
+
+      var token = result.data.token
+      var userInformation = result.data.data
+
+      setItem(STORAGE_TOKEN, token)
+      setItem(STORAGE_USER_INFORMATION, JSON.stringify(userInformation))
+
+      dispatch(AuthAction.LoginUser(token, userInformation))
+      setLoadingRegister(false)
+      
+    }).catch((err) =>{
+      setLoadingRegister(false)
+      setToastVisibility(true)
+      setToastMessage(err)
+    })
+  }
   
   const LoginUser = async (event) =>{
     event.preventDefault();
@@ -80,10 +135,10 @@ const LoginContent = () =>{
     await auth_service_api.LoginUser(requestBody).then((result) =>{
 
       var token = result.data.token
-      var userInformation = result.data.data.user_information
+      var userInformation = result.data.data
 
       setItem(STORAGE_TOKEN, token)
-      setItem(STORAGE_USER_INFORMATION, userInformation)
+      setItem(STORAGE_USER_INFORMATION, JSON.stringify(userInformation))
 
       dispatch(AuthAction.LoginUser(token, userInformation))
       setLoading(false)
@@ -131,6 +186,7 @@ const LoginContent = () =>{
                       type="text"
                       placeholder="Email"
                       className="input input-bordered"
+                      name='email'
                       value={getRequest.email} 
                       onChange={handleChange}
                     />
@@ -138,12 +194,13 @@ const LoginContent = () =>{
                       type="password"
                       placeholder="Password"
                       className="input input-bordered"
+                      name='password'
                       value={getRequest.password} 
                       onChange={handleChange}
                     />
                   </div>
                   <div className="flex items-center justify-between space-x-5">
-                    <button className="text-white bg-blue-600 btn login_id flex justify-center items-center">
+                    <button className="flex items-center justify-center text-white bg-blue-600 btn login_id">
                       {
                         isLoading ? <span className="loading loading-spinner loading-sm"></span> : "Log In"
                       }
@@ -155,46 +212,70 @@ const LoginContent = () =>{
                 </div>
               </form>
               {/* Signup Form */}
-              <div className="p-6 space-y-4 bg-white rounded-lg shadow">
-                <h2 className="text-xl font-bold sign_in_id">Sign Up</h2>
-                <p className="text-sm font-medium text-gray-600 its_quick_and_easy_id">It’s quick and easy.</p>
-                <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:grid-cols-2 md:space-x-3">
+              <form onSubmit={(event) => RegisterUser(event)}>
+                <div className="p-6 space-y-4 bg-white rounded-lg shadow">
+                  <h2 className="text-xl font-bold sign_in_id">Sign Up</h2>
+                  <p className="text-sm font-medium text-gray-600 its_quick_and_easy_id">It’s quick and easy.</p>
+                  <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:grid-cols-2 md:space-x-3">
+                    <input
+                      type="text"
+                      placeholder="First name"
+                      className="input input-bordered input-md"
+                      name='first_name'
+                      value={getRegisterForm.first_name} 
+                      onChange={handleChangeForRegister}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Last name"
+                      className="input input-bordered input-md"
+                      name='last_name'
+                      value={getRegisterForm.last_name} 
+                      onChange={handleChangeForRegister}
+                    />
+                  </div>
                   <input
-                    type="text"
-                    placeholder="First name"
-                    className="input input-bordered input-md"
+                    type="email"
+                    placeholder="Mobile number or Email"
+                    className="w-full input input-bordered input-md"
+                    name='email'
+                    value={getRegisterForm.email} 
+                    onChange={handleChangeForRegister}
                   />
-                  <input
-                    type="text"
-                    placeholder="Last name"
-                    className="input input-bordered input-md"
-                  />
-                </div>
-                <input
-                  type="email"
-                  placeholder="Mobile number or Email"
-                  className="w-full input input-bordered input-md"
-                />
-                <p className="text-sm text-gray-500 you_need_to_confirm_email_id">
-                  You’ll need to confirm that email or phone belongs to you.
-                </p>
-                <div className="grid grid-cols-1 space-y-3 md:grid-cols-2 md:space-y-0 md:space-x-3">
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    className=" input input-bordered input-md"
-                  />
-                  <input
-                    type="password"
-                    placeholder="Confirm password"
-                    className=" input input-bordered input-md"
-                  />
-                </div>
-                <p className="text-sm text-gray-500 use_more_character_id">
-                  Use 8 or more characters with a mix of letters, numbers & symbols
-                </p>
-                <button className="text-white bg-blue-600 btn sign_in_id">Sign In</button>
-              </div>
+                  <p className="text-sm text-gray-500 you_need_to_confirm_email_id">
+                    You’ll need to confirm that email or phone belongs to you.
+                  </p>
+                  <div className="grid grid-cols-1 space-y-3 md:grid-cols-2 md:space-y-0 md:space-x-3">
+                    <input
+                      type="password"
+                      placeholder="Password"
+                      className=" input input-bordered input-md"
+                      name='password'
+                      value={getRegisterForm.password} 
+                      onChange={handleChangeForRegister}
+                    />
+                    <input
+                      type="password"
+                      placeholder="Confirm password"
+                      className=" input input-bordered input-md"
+                      name='password'
+                      value={getRegisterForm.password} 
+                      onChange={handleChangeForRegister}
+                    />
+                  </div>
+                  <p className="text-sm text-gray-500 use_more_character_id">
+                    Use 8 or more characters with a mix of letters, numbers & symbols
+                  </p>
+                  
+                  <button 
+                  onClick={() => RegisterUser()} 
+                  className="text-white bg-blue-600 btn sign_in_id">
+                  {
+                    isLoadingRegister ? <span className="loading loading-spinner loading-sm"></span> : "Sign In"
+                  }
+                  </button>
+                  </div>
+              </form>
             </div>
           </div>
         </div>
