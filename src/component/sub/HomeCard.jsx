@@ -5,6 +5,8 @@ import {
     Hearth,
 } from '../../assets/icons/index'
 
+import { Link } from "react-router-dom";
+
 import { IoPartlySunnyOutline } from "react-icons/io5";
 import { IoCloudyNightOutline } from "react-icons/io5";
 import { FaTags } from "react-icons/fa";
@@ -18,6 +20,7 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/free-mode';
 
 const HomeCard = ({
+    inlineRendering = false,
     categoryConfig,
     classes, 
     width = "350px", 
@@ -161,14 +164,16 @@ const HomeCard = ({
 
     const _Card2 = () => {
         return (
-            <div className='flex flex-col'>
+            
+            <div className={`flex ${inlineRendering ? 'flex-row space-x-5' : 'flex-col'}   w-full`}>
                 <div 
                 style={{
                     backgroundImage: `url(${image})`,
                     // opacity: 0.3,  // Only affects the background
                     // zIndex: -1
                 }}
-                className="relative w-full h-64 max-w-xl overflow-hidden shadow-lg rounded-xl">
+                className="relative w-full h-64 overflow-hidden shadow-lg rounded-xl">
+                {/* // className="relative w-[60%] h-64 overflow-hidden shadow-lg rounded-xl "> */}
                     <img
                     src={image}
                     alt=""  
@@ -184,7 +189,14 @@ const HomeCard = ({
                         {
                             categoryConfig.is_details_on_card &&
                             <div>
-                                <h2 className="mb-2 text-xl font-bold">{limitText(title)}</h2>
+                                <Link 
+                                    to={{
+                                        pathname: "/content-details",
+                                        search: "?view=" + contentDetails.id,
+                                    }}
+                                >
+                                    <h2 className="mb-2 text-xl font-bold">{limitText(title)}</h2>
+                                </Link>
                                 <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(collapseDetails ? details : limitText(details))}} /> 
                             </div>
                         }
@@ -192,7 +204,7 @@ const HomeCard = ({
                             categoryConfig.link_on_card_button &&
                             <button 
                             onClick={() => window.location.href = (categoryConfig.allow_redirect_to_external_link && contentDetails.content_external_link)} 
-                            className="px-4 py-2 mt-4 font-medium text-black bg-white rounded-md w-fit hover:bg-gray-100">
+                            className="px-4 py-2 mt-4 font-medium text-white bg-[#001d3d] rounded-md w-fit hover:bg-gray-100 hover:text-[#001d3d] ">
                             <p className='see_details_button_id'>See Details</p>
                             </button>
                         }
@@ -212,15 +224,22 @@ const HomeCard = ({
                     }
                     {
                        categoryConfig.show_bottom_title &&
-                       <div className="mt-1 text-lg font-semibold text-black line-clamp-2">
-                        {title}
-                        </div>
+                       <Link 
+                        to={{
+                            pathname: "/content-details",
+                            search: "?view=" + contentDetails.id,
+                        }}
+                       >
+                            <p className="mt-1 text-lg font-semibold text-black line-clamp-2">
+                            {title }
+                            </p>
+                       </Link>
                     }
                     {
                         categoryConfig.show_bottom_description &&
                         <div onClick={clickSeeDetails}  className="mt-1 text-lg text-gray-700">
                             <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(collapseDetails ? details : limitText(details))}} /> 
-                            {!collapseDetails && details.length > 30 && <p className='see_more text-lg'>... see more</p>} 
+                            {!collapseDetails && details.length > 30 && <p className='text-lg see_more'>... see more</p>} 
                         </div>
                     }
                 </div> 
@@ -242,11 +261,14 @@ const HomeCard = ({
     }
 
     return (
-        <div className={` lg:items-start md:w-[${width}] w-[100%] md:rounded-lg ${classes} `}>
+        <div className={` lg:items-start md:w-[${width}] w-[100%]  md:rounded-lg ${classes} `}>
             {
                 loading
                 ? LoadComp()
-                : _Card2()
+                : 
+                    <div className='flex justify-center '>
+                        <_Card2/>
+                    </div>
             }
         </div>
     )

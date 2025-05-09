@@ -3,6 +3,7 @@ import {useSelector} from 'react-redux';
 import {
     Outlet,
 } from "react-router";
+import { useLocation } from 'react-router-dom';
 
 import { FiBell } from "react-icons/fi";
 import { FaChevronRight } from "react-icons/fa"; 
@@ -15,15 +16,21 @@ import { BiBasket } from "react-icons/bi";
 import { TfiReceipt } from "react-icons/tfi";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 
-import Logo2 from '../../assets/images/ten/logo2.png'
+import { FaUsers, FaShoppingBag, FaUser } from "react-icons/fa";
+import { HiMiniBuildingOffice2 } from "react-icons/hi2";
+import { FaRegCircleUser } from "react-icons/fa6";
+import { LuTickets } from "react-icons/lu";
+import { AiFillNotification } from "react-icons/ai";
 
-import { FaUser, FaCalendarAlt, FaMapMarkerAlt, FaLanguage, FaEnvelope } from 'react-icons/fa';
+import Logo2 from '../../assets/images/ten/logo2.png'
 
 import { Link } from "react-router-dom";
 
 const AccountPage = () => {
 
   const [getBottomDetailsOpen, setBottomDetailsOpen] = useState(false);
+
+  const location = useLocation();
 
   const Header = ({onPressDropDown}) =>{
     return (
@@ -121,6 +128,35 @@ const AccountPage = () => {
     )
   }
 
+  const TabItem = ({ icon, label, active, path }) =>{
+    return (
+      <Link to={path}>
+        <div className={`flex flex-col items-center ${(location.pathname.split('/')).includes(path)  ? "text-white" : "text-gray-400"} `}>
+          <div className="text-lg mb-1">{icon}</div>
+          <span className="text-[14px]">{label}</span>
+        </div>
+      </Link>
+    )
+  }
+
+  const BottomTabNavigator = () =>{
+    return (
+      <div 
+      style={{
+        position: 'fixed',
+        height: '70px',
+        zIndex: 1000
+      }}
+      className="md:hidden bottom-4 left-1/2 transform -translate-x-1/2 bg-[#031956] text-white rounded-xl px-4 py-1 flex justify-between items-center w-[90%] space-x-6 shadow-lg">
+        <TabItem icon={<AiFillNotification size={20}/>} path={'/'} label="Social" active />
+        <TabItem icon={<LuTickets size={20}/>} path={'/event'} label="Events" />
+        <TabItem icon={<FaShoppingBag size={20}/>} path={'mall'} label="Mall" />
+        <TabItem icon={<HiMiniBuildingOffice2 size={20}/>} path={'account'} label="Office" />
+        <TabItem icon={<FaRegCircleUser size={20}/>} path={'details'} label="Profile" />
+      </div>
+    )
+  }
+
   return (
     <div className="h-[90%] bg-[#001d3d] flex flex-col items-center justify-end">
       {/* Logo */}
@@ -140,9 +176,10 @@ const AccountPage = () => {
       <div className="h-[90%] w-full bg-[#f7f8fa] bg-white rounded-t-[50px] py-14">
         {/* <Outlet /> */}
         <DrawerComp/>
-       
       </div>
       {/* pages */}
+
+      <BottomTabNavigator/>
     </div>
   )
 }

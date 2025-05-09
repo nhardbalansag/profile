@@ -62,7 +62,11 @@ const OffersBottomSheet = ({
     //#endregion
 
     return (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black bg-opacity-40">
+        <div 
+        style={{
+            zIndex: 4000
+        }}
+        className="fixed inset-0 z-50 flex items-end justify-center bg-black bg-opacity-40">
             <div className="w-full max-w-md md:p-4 p-2 transition-transform bg-white shadow-lg rounded-t-2xl max-h-[90%] overflow-y-auto">
                 <div className='flex justify-end'>
                     <button onClick={handleClose} className='flex items-center justify-center p-1 mr-2'>

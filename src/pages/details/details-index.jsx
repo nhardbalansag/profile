@@ -4,22 +4,21 @@ import { useDispatch } from "react-redux";
 import {useSelector} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
-import { MdOutlineAirplanemodeActive } from "react-icons/md";
-import { MdOutlineStorefront } from "react-icons/md";
-import { RiGraduationCapLine } from "react-icons/ri";
-import { HiShoppingBag } from "react-icons/hi2";
-
+import { useLocation } from 'react-router-dom';
 import {
-  HomeCard,
-  BottomCreateAccountFloat,
-  CategoryTitleAndArrow,
-  DestinationCard,
-  OffersBottomSheet
-} from '../component/index'
+    HomeCard,
+    BottomCreateAccountFloat,
+    CategoryTitleAndArrow,
+    DestinationCard,
+    OffersBottomSheet,
+    Header,
+    Footer,
+    LanguageBottomSheet
+} from '../../component/index'
 
 import {
   Checkout
-} from './index'
+} from '../index'
 
 import { useMediaQuery } from 'react-responsive'
 
@@ -32,16 +31,29 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
-import * as api_content from '../services/content/content.api'
+import { FaUsers, FaShoppingBag, FaUser } from "react-icons/fa";
+import { HiMiniBuildingOffice2 } from "react-icons/hi2";
+import { FaRegCircleUser } from "react-icons/fa6";
+import { LuTickets } from "react-icons/lu";
+import { AiFillNotification } from "react-icons/ai";
+
+import * as api_content from '../../services/content/content.api'
 
 const env = import.meta.env;
 
-const HomeContent = () =>{
+const DetailsPage = () =>{
 
   //#region implementations
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
 
   const auth_states = useSelector(state => state.AuthReducer);
+
+    const [open, setOpen] = useState(false)
+    const [getOpenLanguageSelection, setOpenLanguageSelection] = useState(false)
+    const [getSelectedLanguage, setSelectedLanguage] = useState("")
+  
 
   //#region useRefs
   const maxGuestCount = useRef(0)
@@ -305,15 +317,18 @@ const HomeContent = () =>{
     maxGuestCount.current = item.content_guest_count
   }
 
-  const GetHomeContents = async() =>{
+  const ShowContent = async() =>{
     setLoadingContent(true)
-    await api_content.GetHomeContents().then((result) =>{
+
+    const id = searchParams.get('view')
+    await api_content.ShowContent(id).then((result) =>{
       if(result.status){
         setLoadingContent(false)
         ResultSetHomeContents(result.data.data)
+        console.log(result)
       }
     }).catch((err) =>{
-      console.log("GetHomeContents", err)
+      console.log("ShowContent", err)
     })
   }
 
@@ -326,13 +341,13 @@ const HomeContent = () =>{
 
   //#region useEffects
   useEffect(() =>{
-    GetHomeContents()
+    ShowContent()
   },[])
 
   useEffect(() =>{
     if(auth_states.SelectedLanguage){
       selectedLanguage.current = parseInt(auth_states.SelectedLanguage.id)
-      GetHomeContents()
+      ShowContent()
     }
   },[auth_states])
 
@@ -365,26 +380,32 @@ const HomeContent = () =>{
 
   //#endregion
 
-  const CategorizeButton  = ({icon, label, active}) =>{
-    return(
-      <div
-        className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-          active ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-        }`}
-      >
-        <div className="mb-1 text-xl">{icon}</div>
-        <span className="text-[14px] md:text-[15px]">{label}</span>
-      </div>
+  const TabItem = ({ icon, label, active, path }) =>{
+
+    return (
+      <Link to={path}>
+        <div className={`flex flex-col items-center ${active ? "text-white" : "text-gray-400"} `}>
+          <div className="mb-1 text-lg">{icon}</div>
+          <span className="text-[14px]">{label}</span>
+        </div>
+      </Link>
     )
   }
 
-  const TopCategories = () =>{
-    return(
-      <div className="flex items-center justify-center space-x-2">
-          <CategorizeButton icon={ <MdOutlineAirplanemodeActive />} label={"Travel"} active={false}/>
-          <CategorizeButton icon={ <MdOutlineStorefront />} label={"Merchants"} active={false}/>
-          <CategorizeButton icon={ <RiGraduationCapLine  />} label={"Academy"} active={false}/>
-          <CategorizeButton icon={ <HiShoppingBag />} label={"Shopping"} active={false}/>
+  const BottomTabNavigator = () =>{
+    return (
+      <div 
+      style={{
+        position: 'fixed',
+        height: '70px',
+        zIndex: 1000
+      }}
+      className="md:hidden bottom-4 left-1/2 transform -translate-x-1/2 bg-[#031956] text-white rounded-xl px-4 py-1 flex justify-between items-center w-[90%] space-x-6 shadow-lg">
+        <TabItem icon={<AiFillNotification size={20}/>} path={'/'} label="News" active />
+        <TabItem icon={<LuTickets size={20}/>} path={'/event'} label="Events" />
+        <TabItem icon={<FaShoppingBag size={20}/>} path={'/mall'} label="Mall" />
+        <TabItem icon={<HiMiniBuildingOffice2 size={20}/>} path={'/account'} label="Office" />
+        <TabItem icon={<FaRegCircleUser size={20}/>} path={'/details'} label="Profile" />
       </div>
     )
   }
@@ -402,7 +423,7 @@ const HomeContent = () =>{
     )
   }
 
-  const EmbededVideoUrl = ({ videoId, categoryConfig, title, details, clickSeeDetails, contentDetails }) => {
+    const EmbededVideoUrl = ({ videoId, title, details, clickSeeDetails, contentDetails }) => {
     return (
       <div  className=' w-[100%] h-[100%] '>
         <div className='flex justify-center'>
@@ -420,245 +441,65 @@ const HomeContent = () =>{
             }}
           />
         </div>
-          
-        <div>
-          {
-              categoryConfig.show_bottom_title &&
-              <Link 
-                  to={{
-                      pathname: "/content-details",
-                      search: "?view=" + contentDetails.id,
-                  }}
-              >
-                <p className="mt-1 text-lg font-semibold text-black line-clamp-2">
-                {title}
-                </p>
-              </Link>
-              
-          }
-          {
-              categoryConfig.show_bottom_description &&
-              <div onClick={clickSeeDetails}  className="mt-1 text-lg text-gray-700">
-                  <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(collapseDetails ? details : limitText(details))}} /> 
-                  {!collapseDetails && details.length > 30 && <p className='text-lg see_more'>... see more</p>} 
-              </div>
-          }
-        </div>
       </div>
     )
   }
-  
+
   return (
     <div>
+        <div>
+            <Header 
+            handleLanguageVisibility={() => setOpenLanguageSelection(true)}
+            onPressAction={() => setOpen(!open)} 
+            ActionState={open}
+            />
+        </div>
       <main >
-        <div className='flex justify-center my-5'>
-          <div className='md:w-[75%] w-[95%]'>
-            <p className='text-gray-500 text-[20px] font-semibold'>Hello {`${auth_states.StateToken ? auth_states.StateUserInformation.first_name : ","}`}</p>
-            <p className='font-extrabold text-[#001d3d] text-[30px]'>Welcome to Club</p>
-          </div>
-        </div>
 
-        {/* <div className='flex justify-center my-5'>
-          <div className='md:w-[75%] w-[95%]'>
-            <TopCategories/>
-          </div>
-        </div> */}
-
-        {/* contents */}
-        <div className='flex justify-center my-5 mb-[150px]'>
-          <div className='md:w-[75%] w-[95%]'>
-            {
-              ResultGetHomeContents.length > 0
-              ?
-                ResultGetHomeContents.map((item, index) =>(
-                  <div>
-                    <CategoryTitleAndArrow 
-                    //#region CategoryTitleAndArrow parameters
-                    key={index}
-                    title={
-                      selectedLanguage.current == null 
-                      ? item.category_display_content.display.category.title
-                      : (
-                            item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                          ? item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).display_title 
-                          : item.category_display_content.display.category.title
-                        )
-                    } 
-                    path={item.category_display_content.path.path}
-                    redirect_title={
-                      selectedLanguage.current == null 
-                      ? item.category_display_content.display.redirect.title
-                      : (
-                            item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                          ? item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).redirect_title
-                          : item.category_display_content.display.redirect.title
-                        )
-                    }
-                    has_path={item.category_display_content.path.has_path}
-                    title_style={item.category_display_content.display.category.style}
-                    redirect_style={item.category_display_content.display.redirect.style}
-                    //#endregion
-                    />
-                    {
-                      item.category_display_content.display.content_home_style.embed_video_url
-                      ?
-                        <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 place-content-center'>
-                          {
-                            item.contents_table.map((item_content, index_content) =>(
-
-                              loadingContent
-                              ? LoadComp()
-                              :
-                                <EmbededVideoUrl 
-                                // clickSeeDetails={() => HandleSeeDetails(item_content)}
-                                contentDetails={item_content}
-                                title={
-                                  selectedLanguage.current == null 
-                                  ? item_content.content_title
-                                  : (
-                                        item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                      ? item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
-                                      : item_content.content_title
-                                    )
-                                }
-                                details={
-                                  selectedLanguage.current == null 
-                                  ? item_content.content_description
-                                  : (
-                                        item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                      ? item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
-                                      : item_content.content_description
-                                    )
-                                }
-                                categoryConfig={item.category_display_content.display.content_home_style}
-                                videoId={item_content.uploads_table_main_view.upload_url}/>
-                            ))
-                          }
-                        </div>
-                      :
-                    <Swiper
-                    //#region swiper parameter
-                      key={index}
-                      pagination={{
-                        dynamicBullets: true,
-                      }}
-                      modules={[Navigation, Pagination, Scrollbar, A11y]}
-                      spaceBetween={10}
-                      slidesPerView={item.category_display_content.display.content_home_style.mobile_view_render_count}
-                      onSlideChange={() => setCollapseDetails(false)}
-                      breakpoints={{
-                        300: { slidesPerView: item.category_display_content.display.content_home_style.mobile_view_render_count, spaceBetween: 10 }, // 2 slides on tablets
-                        400: { slidesPerView: item.category_display_content.display.content_home_style.mobile_view_render_count, spaceBetween: 10 }, // 2 slides on tablets
-                        500: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
-                        600: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
-                        700: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
-                        800: { slidesPerView: 3, spaceBetween: 5 }, // 2 slides on tablets
-                        1024: { slidesPerView: 3,  spaceBetween: 10}, // 3 slides on desktops
-                        1353: { slidesPerView: 4,  spaceBetween: 10} // 3 slides on desktops
-                      }}
-                    //#endregion
-                    >
-                      {
-                        item.contents_table.length > 0
-                        ?
-                          item.contents_table.map((item_content, index_content) =>(
-                            <SwiperSlide key={index_content} className='flex justify-center'>
-                              <HomeCard 
-                              categoryConfig={item.category_display_content.display.content_home_style}
-                              contentDetails={item_content}
-                              loading={loadingContent}
-                              clickOffers={() => HandleOfferDetails(item_content)}
-                              title={
-                                selectedLanguage.current == null 
-                                ? item_content.content_title
-                                : (
-                                      item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                    ? item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
-                                    : item_content.content_title
-                                  )
-                              }
-                              // clickSeeDetails={() => HandleSeeDetails(item_content)}
-                              details={
-                                selectedLanguage.current == null 
-                                ? item_content.content_description
-                                : (
-                                      item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                    ? item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
-                                    : item_content.content_description
-                                  )
-                              }
-                              image={
-                                  item_content.uploads_table_main_view.upload_is_link 
-                                ? item_content.uploads_table_main_view.upload_url 
-                                : env.VITE_APP_BACKEND_STORAGE_URL + item_content.uploads_table_main_view.upload_url
-                              } 
-                              days={item_content.content_days_count}
-                              nights={item_content.content_night_count}
-                              location='--'
-                              collapseDetails={ResultGetHomeContentsDetails.id == item_content.id ? collapseDetails : false} 
-                              isLiked={false}
-                              />
-                            </SwiperSlide>
-                          ))
-                        :
-                          (
-                            ResultGetHomeContents.length <= 0 &&
-                            [1, 2, 3].map((item, index) =>(
-                              <SwiperSlide key={index} className='flex justify-center mb-10'>
-                                <HomeCard loading={true}/>
-                              </SwiperSlide>
-                            ))
-                          )
+        {
+          loadingContent
+          ? 
+            <div className='flex justify-center my-5'>
+              <div className='md:w-[75%] w-[95%]'>
+                <LoadComp/>
+              </div>
+            </div>
+          :
+          <div className='mb-[150px]'>
+              <div className='flex justify-center my-5'>
+                  <div className='md:w-[75%] w-[95%]'>
+                      <p className='font-bold text-[#001d3d] text-[35px] capitalize'>{ResultGetHomeContents.content_title}</p>
+                      <img
+                      src={
+                          ResultGetHomeContents.uploads_table_main_view.upload_is_link 
+                          ? ResultGetHomeContents.uploads_table_main_view.upload_url 
+                          : env.VITE_APP_BACKEND_STORAGE_URL + ResultGetHomeContents.uploads_table_main_view.upload_url
                       }
-                    </Swiper>
-                    }
-                  </div>  
-                ))
-              :
-              (
-                ResultGetHomeContents.length <= 0 &&
-                <div>
-                  <div className='flex items-center justify-between'>
-                    <div className="w-[30%] h-4 skeleton"></div>
-                    <div className="h-4 skeleton w-[20%]"></div>
+                      alt=""  
+                      className="object-contain w-full "
+                      />
+                      <div className='my-5 text-left'>
+                          <p className='text-[#001d3d] capitalize'> 
+                              <span className='font-bold'>from </span> 
+                              <span>{ResultGetHomeContents.content_date_from}</span>
+                          </p>
+                          <p className='text-[#001d3d] capitalize'>
+                              <span className='font-bold'>to </span> 
+                              <span>{ResultGetHomeContents.content_date_to}</span>
+                          </p>
+                      </div>
+
+                      <p className='text-[#001d3d] capitalize space-x-3 text-left my-5'>
+                          <span className='font-bold'>Duration </span> 
+                          <span>{ResultGetHomeContents.content_days_count} days</span>
+                          <span>{ResultGetHomeContents.content_night_count} nights</span>
+                      </p>
+
+                    <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(ResultGetHomeContents.content_description)}} /> 
                   </div>
-
-                  <Swiper
-                    pagination={{
-                      dynamicBullets: true,
-                    }}
-                    modules={[Navigation, Pagination, Scrollbar, A11y]}
-                    spaceBetween={5}
-                    slidesPerView={1}
-                    onSlideChange={() => setCollapseDetails(false)}
-                    // onSwiper={(swiper) => console.log(swiper)}
-                    breakpoints={{
-                      300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
-                      400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
-                      500: { slidesPerView: 1, spaceBetween: 0 }, // 2 slides on tablets
-                      600: { slidesPerView: 2, spaceBetween: 60 }, // 2 slides on tablets
-                      700: { slidesPerView: 2, spaceBetween: 50 }, // 2 slides on tablets
-                      800: { slidesPerView: 2, spaceBetween: 10 }, // 2 slides on tablets
-                      1024: { slidesPerView: 2,  spaceBetween: 10}, // 3 slides on desktops
-                      1353: { slidesPerView: 3,  spaceBetween: 10} // 3 slides on desktops
-                      // 1024: { slidesPerView: 3, spaceBetween: 200 } // 3 slides on desktops
-                    }}
-                  >
-                    {
-                      [1, 2, 3].map((item, index) =>(
-                        <SwiperSlide key={index} className='flex justify-center mb-10'>
-                          <HomeCard loading={true}/>
-                        </SwiperSlide>
-                      ))
-                    }
-                  </Swiper>
-                </div>
-              )
-            }
+              </div>
           </div>
-        </div>
-        {/* end contents */}
-
+        }
         {
           showBottomRegistration &&
           <div className='flex justify-center'>
@@ -766,8 +607,9 @@ const HomeContent = () =>{
           openBottomPayment && <Checkout clientSecret={getclientSecret} getLoading={getLoading} dataContent={paymentBContent.current} handleClose={() => setOpenBottomPayment(false)}/>
         }
       </main>
+      <BottomTabNavigator/>
     </div>
   )
 }
 
-export default HomeContent
+export default DetailsPage

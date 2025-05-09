@@ -15,6 +15,16 @@ export const GetHomeContents = async () => {
     });
 }
 
+export const ShowContent = async (id) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'GET', 
+        url: `${PublicAPI}show-content/${id}`
+    });
+}
+
 export const GetClientSecret = async (token, reqBody) => {
     return await axios({ 
         headers: {
@@ -24,5 +34,25 @@ export const GetClientSecret = async (token, reqBody) => {
         method: 'POST', 
         url: `${BaseAPIUrl}create-payment-intent`,
         data: reqBody
+    });
+}
+
+export const GetTravelBucketListContent = async () => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'GET', 
+        url: `${PublicAPI}bucket-list`
+    });
+}
+
+export const GetEventListContent = async () => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'GET', 
+        url: `${PublicAPI}event-list`
     });
 }

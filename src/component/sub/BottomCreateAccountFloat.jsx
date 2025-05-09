@@ -30,7 +30,7 @@ function BottomCreateAccountFloat({noThanks, onPressAction}) {
     //#endregion
 
     return (
-        <div className="fixed bottom-10 w-[75%] max-w-sm p-4 bg-white shadow-lg rounded-xl z-50">
+        <div className="fixed bottom-24 w-[75%] max-w-sm p-4 bg-white shadow-lg rounded-xl z-50 ">
             <div className="flex items-center p-4 space-x-3 bg-white rounded-lg shadow-md">
                 <div className="flex items-center justify-center w-10 h-10 bg-yellow-400 rounded-full">
                     <img

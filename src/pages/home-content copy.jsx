@@ -1,13 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import DOMPurify from 'dompurify';
+
 import { useDispatch } from "react-redux";
 import {useSelector} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Link } from "react-router-dom";
-import { MdOutlineAirplanemodeActive } from "react-icons/md";
-import { MdOutlineStorefront } from "react-icons/md";
-import { RiGraduationCapLine } from "react-icons/ri";
-import { HiShoppingBag } from "react-icons/hi2";
 
 import {
   HomeCard,
@@ -31,6 +26,10 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+
+import DOMPurify from "dompurify";
+
+import TenBG2 from '../assets/images/ten/tenBg2.png'
 
 import * as api_content from '../services/content/content.api'
 
@@ -316,12 +315,6 @@ const HomeContent = () =>{
       console.log("GetHomeContents", err)
     })
   }
-
-  const limitText = (text, limit = 30) =>{
-    if(text){
-        return text.length > limit ? text.slice(0, limit) : text;
-    }
-  }
   //#endregion
 
   //#region useEffects
@@ -339,133 +332,23 @@ const HomeContent = () =>{
   useEffect(() =>{
     setShowBottomRegistration(auth_states.StateToken ? false : true)
   },[auth_states.StateToken])
-
-  useEffect(() =>{
-      auth_states.PageLanguages.map((item, key) =>{
-          const translation = item.translation
-          
-          if(translation.length > 0 && auth_states.SelectedLanguage){
-              const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
-              const targetElement = document.getElementsByClassName(item.page_config_id)
-              if (targetElement) {
-                  if (targetElement.length > 0 && filteredTranslation) {
-                      Array.from(targetElement).forEach((el) => {
-                          el.textContent = filteredTranslation.page_config_title;
-                      });
-                  } else if (targetElement.length > 0) {
-                      Array.from(targetElement).forEach((el) => {
-                          el.textContent = item.page_config_title;
-                      });
-                  }
-              }
-          }
-      })
-  },[auth_states, loadingContent])
   //#endregion
 
   //#endregion
 
-  const CategorizeButton  = ({icon, label, active}) =>{
-    return(
-      <div
-        className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-          active ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-        }`}
-      >
-        <div className="mb-1 text-xl">{icon}</div>
-        <span className="text-[14px] md:text-[15px]">{label}</span>
-      </div>
-    )
-  }
-
-  const TopCategories = () =>{
-    return(
-      <div className="flex items-center justify-center space-x-2">
-          <CategorizeButton icon={ <MdOutlineAirplanemodeActive />} label={"Travel"} active={false}/>
-          <CategorizeButton icon={ <MdOutlineStorefront />} label={"Merchants"} active={false}/>
-          <CategorizeButton icon={ <RiGraduationCapLine  />} label={"Academy"} active={false}/>
-          <CategorizeButton icon={ <HiShoppingBag />} label={"Shopping"} active={false}/>
-      </div>
-    )
-  }
-
-  const LoadComp = () =>{
-    return(
-      <div className=''>
-        <div className="flex flex-col justify-center w-full gap-4 py-10">
-          <div className="w-full h-32 skeleton"></div>
-          <div className="h-4 skeleton w-28"></div>
-          <div className="w-full h-4 skeleton"></div>
-          <div className="w-full h-4 skeleton"></div>
-        </div>
-      </div>
-    )
-  }
-
-  const EmbededVideoUrl = ({ videoId, categoryConfig, title, details, clickSeeDetails, contentDetails }) => {
-    return (
-      <div  className=' w-[100%] h-[100%] '>
-        <div className='flex justify-center'>
-          <iframe
-          className='rounded-lg'
-            src={`https://www.youtube.com/embed/${videoId}`}
-            // src={videoId}
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            title="YouTube Video"
-            style={{
-              width: '100%',
-              height: '200px',
-            }}
-          />
-        </div>
-          
-        <div>
-          {
-              categoryConfig.show_bottom_title &&
-              <Link 
-                  to={{
-                      pathname: "/content-details",
-                      search: "?view=" + contentDetails.id,
-                  }}
-              >
-                <p className="mt-1 text-lg font-semibold text-black line-clamp-2">
-                {title}
-                </p>
-              </Link>
-              
-          }
-          {
-              categoryConfig.show_bottom_description &&
-              <div onClick={clickSeeDetails}  className="mt-1 text-lg text-gray-700">
-                  <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(collapseDetails ? details : limitText(details))}} /> 
-                  {!collapseDetails && details.length > 30 && <p className='text-lg see_more'>... see more</p>} 
-              </div>
-          }
-        </div>
-      </div>
-    )
-  }
-  
   return (
     <div>
       <main >
-        <div className='flex justify-center my-5'>
-          <div className='md:w-[75%] w-[95%]'>
-            <p className='text-gray-500 text-[20px] font-semibold'>Hello {`${auth_states.StateToken ? auth_states.StateUserInformation.first_name : ","}`}</p>
-            <p className='font-extrabold text-[#001d3d] text-[30px]'>Welcome to Club</p>
-          </div>
-        </div>
-
-        {/* <div className='flex justify-center my-5'>
-          <div className='md:w-[75%] w-[95%]'>
-            <TopCategories/>
-          </div>
-        </div> */}
-
+        <div
+          className="absolute inset-0 bg-center bg-cover"
+          style={{
+            backgroundImage: `url(${TenBG2})`,
+            opacity: 0.3,  // Only affects the background
+            zIndex: -1
+          }}
+        ></div>
         {/* contents */}
-        <div className='flex justify-center my-5 mb-[150px]'>
+        <div className='flex justify-center my-5'>
           <div className='md:w-[75%] w-[95%]'>
             {
               ResultGetHomeContents.length > 0
@@ -499,43 +382,6 @@ const HomeContent = () =>{
                     redirect_style={item.category_display_content.display.redirect.style}
                     //#endregion
                     />
-                    {
-                      item.category_display_content.display.content_home_style.embed_video_url
-                      ?
-                        <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 place-content-center'>
-                          {
-                            item.contents_table.map((item_content, index_content) =>(
-
-                              loadingContent
-                              ? LoadComp()
-                              :
-                                <EmbededVideoUrl 
-                                // clickSeeDetails={() => HandleSeeDetails(item_content)}
-                                contentDetails={item_content}
-                                title={
-                                  selectedLanguage.current == null 
-                                  ? item_content.content_title
-                                  : (
-                                        item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                      ? item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
-                                      : item_content.content_title
-                                    )
-                                }
-                                details={
-                                  selectedLanguage.current == null 
-                                  ? item_content.content_description
-                                  : (
-                                        item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                      ? item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
-                                      : item_content.content_description
-                                    )
-                                }
-                                categoryConfig={item.category_display_content.display.content_home_style}
-                                videoId={item_content.uploads_table_main_view.upload_url}/>
-                            ))
-                          }
-                        </div>
-                      :
                     <Swiper
                     //#region swiper parameter
                       key={index}
@@ -543,12 +389,12 @@ const HomeContent = () =>{
                         dynamicBullets: true,
                       }}
                       modules={[Navigation, Pagination, Scrollbar, A11y]}
-                      spaceBetween={10}
-                      slidesPerView={item.category_display_content.display.content_home_style.mobile_view_render_count}
+                      spaceBetween={5}
+                      slidesPerView={1}
                       onSlideChange={() => setCollapseDetails(false)}
                       breakpoints={{
-                        300: { slidesPerView: item.category_display_content.display.content_home_style.mobile_view_render_count, spaceBetween: 10 }, // 2 slides on tablets
-                        400: { slidesPerView: item.category_display_content.display.content_home_style.mobile_view_render_count, spaceBetween: 10 }, // 2 slides on tablets
+                        300: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
+                        400: { slidesPerView: 1, spaceBetween: 5 }, // 2 slides on tablets
                         500: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
                         600: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
                         700: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
@@ -577,7 +423,7 @@ const HomeContent = () =>{
                                     : item_content.content_title
                                   )
                               }
-                              // clickSeeDetails={() => HandleSeeDetails(item_content)}
+                              clickSeeDetails={() => HandleSeeDetails(item_content)}
                               details={
                                 selectedLanguage.current == null 
                                 ? item_content.content_description
@@ -611,7 +457,6 @@ const HomeContent = () =>{
                           )
                       }
                     </Swiper>
-                    }
                   </div>  
                 ))
               :

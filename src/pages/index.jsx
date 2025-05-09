@@ -18,6 +18,16 @@ import AccountDetails from "./account/account-details";
 
 import AccountOrders from "./account/account-orders";
 
+import MallPage from "./mall/mall-index";
+import MallContent from "./mall/mall-content";
+import MallTravel from "./mall/mall-travel";
+import MallMerchant from './mall/mall-merchant'
+
+import EventPage from "./events/event-index";
+import EventContent from "./events/event-travel";
+
+import DetailsPage from "./details/details-index";
+
 export{
     HomePage,
     HomeContent,
@@ -37,5 +47,14 @@ export{
 
     AccountDetails,
 
-    AccountOrders
+    AccountOrders,
+
+    MallPage,
+    MallContent,
+    MallTravel,
+    MallMerchant,
+
+    EventPage,
+    EventContent,
+    DetailsPage
 }

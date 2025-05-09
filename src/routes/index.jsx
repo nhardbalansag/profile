@@ -29,7 +29,17 @@ import {
 
     AccountDetails,
 
-    AccountOrders
+    AccountOrders,
+
+    MallContent,
+    MallPage,
+    MallTravel,
+    MallMerchant,
+
+    EventPage,
+    EventContent,
+
+    DetailsPage
 } from '../pages/index'
 
 import {
@@ -132,6 +142,48 @@ const router = createBrowserRouter([
         ]
     },
     {
+        path: "mall",
+        Component: MallPage,  
+        children:[
+            {
+                path: "",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <MallTravel />
+                    </AuthenticatedUsers> 
+                )
+            },
+            {
+                path: "merchant",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <MallMerchant />
+                    </AuthenticatedUsers> 
+                )
+            },
+        ]
+    },
+    {
+        path: "event",
+        Component: EventPage,  
+        children:[
+            {
+                path: "",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <EventContent />
+                    </AuthenticatedUsers> 
+                )
+            },
+        ]
+    },
+    {
+        path: "content-details",
+        element: ( 
+            <DetailsPage />
+        )
+    },
+    {
         path:"*",
         loader: () => ({ message: "Route not found!" }),
         Component: NotFound,
@@ -146,8 +198,6 @@ const Routes = () =>{
     const validateAccess = async() =>{
         var token = await getItem(STORAGE_TOKEN)
         var userInformation = await getItem(STORAGE_USER_INFORMATION)
-        console.log(userInformation)
-        console.log("test")
 
         if(token && userInformation){
             dispatch(AuthAction.LoginUser(token, JSON.parse(userInformation)))
