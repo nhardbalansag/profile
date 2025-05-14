@@ -441,7 +441,7 @@ const MallTravel = () =>{
                         )
                     }
                     image={
-                        item_content.uploads_table_main_view.upload_is_link 
+                        item_content.uploads_table_main_view.upload_type == "url"
                       ? item_content.uploads_table_main_view.upload_url 
                       : env.VITE_APP_BACKEND_STORAGE_URL + item_content.uploads_table_main_view.upload_url
                     } 

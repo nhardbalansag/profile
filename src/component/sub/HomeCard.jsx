@@ -105,14 +105,20 @@ const HomeCard = ({
     const _DateRangeComp = () =>{
         return(
             <div className="flex items-center justify-start my-2 space-x-3">
-                <div className="flex items-center space-x-2">
-                    <IoPartlySunnyOutline  className="text-[18px] text-[#FF5722]" />
-                    <label className="text-black text-[15px]">{days} <span className="days_id">Days</span> </label>
-                </div>
-                <div className="flex items-center space-x-2">
-                    <IoCloudyNightOutline   className="text-[18px] text-[#FF5722]" />
-                    <label className="text-black text-[15px]">{nights} <span className="nights_id">Nights</span></label>
-                </div>
+                {
+                    days > 0 &&
+                    <div className="flex items-center space-x-2">
+                        <IoPartlySunnyOutline  className="text-[18px] text-[#FF5722]" />
+                        <label className="text-black text-[15px]">{days} <span className="days_id">Days</span> </label>
+                    </div>
+                }
+                {
+                    nights > 0 &&
+                    <div className="flex items-center space-x-2">
+                        <IoCloudyNightOutline   className="text-[18px] text-[#FF5722]" />
+                        <label className="text-black text-[15px]">{nights} <span className="nights_id">Nights</span></label>
+                    </div>
+                }
             </div>
         )
     }
@@ -239,7 +245,7 @@ const HomeCard = ({
                         categoryConfig.show_bottom_description &&
                         <div onClick={clickSeeDetails}  className="mt-1 text-lg text-gray-700">
                             <div dangerouslySetInnerHTML={{__html: collapseDetails ? details : limitText(details)}} /> 
-                            {!collapseDetails && details.length > 30 && <p className='text-lg see_more'>... see more</p>} 
+                            {/* {!collapseDetails && details.length > 30 && <p className='text-lg see_more'>... see more</p>}  */}
                         </div>
                     }
                 </div> 

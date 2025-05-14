@@ -263,6 +263,8 @@ const EventContent = () =>{
 
   const HandleOfferTabSelection = (item) =>{
     setActiveTab(item)
+    setCount(item.offers_table.supplier_table.room_type.room_type_guest_count)
+    maxGuestCount.current = item.offers_table.supplier_table.room_type.room_type_guest_count
   }
 
   const HandleSeeDetails = (item) =>{
@@ -276,8 +278,10 @@ const EventContent = () =>{
     setActiveTab(item.content_offers_table[0])
     setTotalPriceWithPoints(parseFloat(item.content_offers_table[0].offers_table.offers_amount) * item.content_guest_count)
     initialFinalPrice.current = item.content_offers_table[0].offers_table.offers_amount
-    setCount(item.content_guest_count)
-    maxGuestCount.current = item.content_guest_count
+    // setCount(item.content_guest_count)
+    setCount(item.content_offers_table[0].offers_table.supplier_table.room_type.room_type_guest_count)
+    // maxGuestCount.current = item.content_guest_count
+    maxGuestCount.current = item.content_offers_table[0].offers_table.supplier_table.room_type.room_type_guest_count
   }
 
   const GetEventListContent = async() =>{
@@ -343,11 +347,11 @@ const EventContent = () =>{
       </div>
     )
   }
-  
+
   return (
     <div>
       <div className='flex justify-center my-5 mb-[150px]'>
-        <div className='md:w-[75%] w-[95%] gap-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2'>
+        <div className='md:w-[75%] w-[95%] gap-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3'>
           {
              ResultGetHomeContents.length > 0
              ?
@@ -355,59 +359,59 @@ const EventContent = () =>{
                 item.contents_table.length > 0
                 ?
                   item.contents_table.map((item_content, index_content) =>(
-                    <HomeCard 
-                    width={'500px'}
-                    inlineRendering={true}
-                    categoryConfig={item.category_display_content.display.content_home_style}
-                    contentDetails={item_content}
-                    loading={loadingContent}
-                    clickOffers={() => HandleOfferDetails(item_content)}
-                    title={
-                      selectedLanguage.current == null 
-                      ? item_content.content_title
-                      : (
-                            item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                          ? item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
-                          : item_content.content_title
-                        )
-                    }
-                    // clickSeeDetails={() => HandleSeeDetails(item_content)}
-                    details={
-                      selectedLanguage.current == null 
-                      ? item_content.content_description
-                      : (
-                            item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                          ? item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
-                          : item_content.content_description
-                        )
-                    }
-                    image={
-                        item_content.uploads_table_main_view.upload_is_link 
-                      ? item_content.uploads_table_main_view.upload_url 
-                      : env.VITE_APP_BACKEND_STORAGE_URL + item_content.uploads_table_main_view.upload_url
-                    } 
-                    days={item_content.content_days_count}
-                    nights={item_content.content_night_count}
-                    location='--'
-                    collapseDetails={ResultGetHomeContentsDetails.id == item_content.id ? collapseDetails : false} 
-                    isLiked={false}
-                    />
+                    <div className='p-3 border shadow-lg rounded-xl'>
+                      <HomeCard 
+                      categoryConfig={item.category_display_content.display.content_home_style}
+                      contentDetails={item_content}
+                      loading={loadingContent}
+                      clickOffers={() => HandleOfferDetails(item_content)}
+                      title={
+                        selectedLanguage.current == null 
+                        ? item_content.content_title
+                        : (
+                              item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                            ? item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
+                            : item_content.content_title
+                          )
+                      }
+                      clickSeeDetails={() => HandleSeeDetails(item_content)}
+                      details={
+                        selectedLanguage.current == null 
+                        ? item_content.content_description
+                        : (
+                              item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                            ? item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
+                            : item_content.content_description
+                          )
+                      }
+                      image={
+                          item_content.uploads_table_main_view.upload_type === "url" 
+                        ? item_content.uploads_table_main_view.upload_url 
+                        : env.VITE_APP_BACKEND_STORAGE_URL + item_content.uploads_table_main_view.upload_url
+                      } 
+                      days={item_content.content_days_count}
+                      nights={item_content.content_night_count}
+                      location='--'
+                      collapseDetails={ResultGetHomeContentsDetails.id == item_content.id ? collapseDetails : false} 
+                      isLiked={false}
+                      />
+                    </div>
                   ))
                 :
                   (
                     ResultGetHomeContents.length <= 0 &&
-                    <div className='flex justify-center mb-10'>
+                    [1,2,3].map((item_content, index_content) =>(
                       <HomeCard loading={true}/>
-                    </div>
+                    ))
                   )
               ))
              :
               (
-                  ResultGetHomeContents.length <= 0 &&
-                  <div className='flex justify-center mb-10'>
-                    <HomeCard loading={true}/>
-                  </div>
-                )
+                ResultGetHomeContents.length <= 0 &&
+                [1,2,3].map((item_content, index_content) =>(
+                  <HomeCard loading={true}/>
+                ))
+              )
           }
         </div>
       </div>
@@ -438,20 +442,46 @@ const EventContent = () =>{
           finalAmount={totalPriceWithPoints}
           offersData={ResultGetHomeContentsDetails}
           >
-            <div className="flex justify-center mb-4 space-x-5">
+           <div className="grid grid-cols-2 gap-5 my-5">
               {
                 ResultGetHomeContentsDetails.content_offers_table.map((item, key) =>(
-                  <button onClick={() => HandleOfferTabSelection(item)} key={key} className=''>
-                    <p className={`${activeTab.offers_id == item.offers_id ? 'font-extrabold' : 'font-normal'}  text-[25px] uppercase`}>
-                      {
-                        selectedLanguage.current == null 
-                        ? item.offers_table.membership_type_table.type_title
-                        : (
-                              item.offers_table.membership_type_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                            ? item.offers_table.membership_type_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
-                            : item.offers_table.membership_type_table.type_title
-                          )
-                      }
+                  <button onClick={() => HandleOfferTabSelection(item)} key={key} className={`${activeTab.offers_id == item.offers_id ? 'bg-blue-400 text-white border-blue-800' : ''} border p-2  rounded-lg shadow-sm`}>
+                    <p className={`${activeTab.offers_id == item.offers_id ? 'font-extrabold' : 'font-normal'}  text-[25px] uppercase flex flex-col items-center`}>
+                      <span className='mr-1'>
+                        {     
+                          selectedLanguage.current == null 
+                          ? item.offers_table.tier_category_table.tier_category_name
+                          : (
+                                item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                              ? item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
+                              : item.offers_table.tier_category_table.tier_category_name
+                            )
+                        }
+                      </span>
+                      <span>
+                        {
+                          selectedLanguage.current == null 
+                          ? item.offers_table.membership_type_table.type_title
+                          : (
+                                item.offers_table.membership_type_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                              ? item.offers_table.membership_type_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
+                              : item.offers_table.membership_type_table.type_title
+                            )
+                        }
+                      </span>
+                      <span className='text-[18px] font-normal'>
+                        (
+                          {
+                            selectedLanguage.current == null 
+                            ? item.offers_table.supplier_table.room_type.room_type_name
+                            : (
+                                  item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                ? item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).room_type_name
+                                : item.offers_table.supplier_table.room_type.room_type_name
+                              )
+                          }
+                        )
+                      </span>
                     </p>
                   </button>
                 ))
