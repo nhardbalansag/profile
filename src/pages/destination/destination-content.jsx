@@ -370,7 +370,7 @@ const DestinationContent = () =>{
                             )
                         }
                         clickSeeDetails={() => setcollapseSpecific(contents_table_index)}
-                        details={DOMPurify.sanitize(
+                        details={
                           selectedLanguage.current == null 
                           ? contents_table_item.content_description
                           : (
@@ -378,7 +378,7 @@ const DestinationContent = () =>{
                               ? contents_table_item.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
                               : contents_table_item.content_description
                             )
-                        )}
+                        }
                         image={
                             contents_table_item.uploads_table_main_view.upload_is_link 
                           ? contents_table_item.uploads_table_main_view.upload_url

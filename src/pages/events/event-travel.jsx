@@ -300,7 +300,7 @@ const EventContent = () =>{
   useEffect(() =>{
     if(auth_states.SelectedLanguage){
       selectedLanguage.current = parseInt(auth_states.SelectedLanguage.id)
-      GetHomeContents()
+      GetEventListContent()
     }
   },[auth_states])
 
@@ -469,3 +469,7 @@ const EventContent = () =>{
 }
 
 export default EventContent
+
+
+
+// https://dribbble.com/shots/19222455-Event-App-Kondang-kuy-Next-pages

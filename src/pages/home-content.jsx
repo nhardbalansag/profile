@@ -402,13 +402,33 @@ const HomeContent = () =>{
     )
   }
 
+  const extractIframeSrc = (htmlString) =>{
+    try {
+      // Try to use the DOM for parsing (safer and cleaner)
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlString, 'text/html');
+      const iframe = doc.querySelector('iframe');
+      
+      if (iframe && iframe.src) {
+        return iframe.src.trim();
+      }
+    } catch (e) {
+      // Fallback: use regex if DOMParser fails
+      const match = htmlString.match(/<iframe[^>]+src=["']([^"']+)["']/i);
+      return match ? match[1].trim() : null;
+    }
+
+    return null;
+  }
+
+
   const EmbededVideoUrl = ({ videoId, categoryConfig, title, details, clickSeeDetails, contentDetails }) => {
     return (
       <div  className=' w-[100%] h-[100%] '>
         <div className='flex justify-center'>
           <iframe
           className='rounded-lg'
-            src={`https://www.youtube.com/embed/${videoId}`}
+            src={videoId}
             // src={videoId}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -439,8 +459,8 @@ const HomeContent = () =>{
           {
               categoryConfig.show_bottom_description &&
               <div onClick={clickSeeDetails}  className="mt-1 text-lg text-gray-700">
-                  <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(collapseDetails ? details : limitText(details))}} /> 
-                  {!collapseDetails && details.length > 30 && <p className='text-lg see_more'>... see more</p>} 
+                  <div dangerouslySetInnerHTML={{__html: collapseDetails ? details : limitText(details, 50)}} /> 
+                  {/* {!collapseDetails && details.length > 30 && <p className='text-lg see_more'>... see more</p>}  */}
               </div>
           }
         </div>
@@ -588,7 +608,7 @@ const HomeContent = () =>{
                                   )
                               }
                               image={
-                                  item_content.uploads_table_main_view.upload_is_link 
+                                  item_content.uploads_table_main_view.upload_type === "url" 
                                 ? item_content.uploads_table_main_view.upload_url 
                                 : env.VITE_APP_BACKEND_STORAGE_URL + item_content.uploads_table_main_view.upload_url
                               } 
@@ -695,15 +715,13 @@ const HomeContent = () =>{
                   }
                   clickSeeDetails={() => setCollapseBottomDetails(!collapseBottomDetails)}
                   details={
-                    DOMPurify.sanitize(
-                      selectedLanguage.current == null 
-                      ? ResultGetHomeContentsDetails.content_description
-                      : (
-                            ResultGetHomeContentsDetails.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                          ? ResultGetHomeContentsDetails.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
-                          : ResultGetHomeContentsDetails.content_description
-                        )
-                    )
+                    selectedLanguage.current == null 
+                    ? ResultGetHomeContentsDetails.content_description
+                    : (
+                          ResultGetHomeContentsDetails.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                        ? ResultGetHomeContentsDetails.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
+                        : ResultGetHomeContentsDetails.content_description
+                      )
                   }
                   image={
                       ResultGetHomeContentsDetails.uploads_table_main_view.upload_is_link 

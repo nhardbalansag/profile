@@ -36,7 +36,7 @@ const EventPage = () => {
     return (
       <Link to={path}>
         <div className={`flex flex-col items-center ${active  ? "text-white" : "text-gray-400"} `}>
-          <div className="text-lg mb-1">{icon}</div>
+          <div className="mb-1 text-lg">{icon}</div>
           <span className="text-[14px]">{label}</span>
         </div>
       </Link>
@@ -69,7 +69,7 @@ const EventPage = () => {
             active ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
           }`}
         >
-          <div className="text-xl mb-1">{icon}</div>
+          <div className="mb-1 text-xl">{icon}</div>
           <span className="text-[14px] md:text-[15px]">{label}</span>
         </div>
       </Link>
@@ -78,7 +78,7 @@ const EventPage = () => {
 
   const TopCategories = () =>{
     return(
-      <div className="flex justify-center items-center space-x-2">
+      <div className="flex items-center justify-center space-x-2">
           <CategorizeButton icon={ <MdOutlineAirplanemodeActive />} path={"/mall"} label={"Travel"} active={("/mall").includes(location.pathname) ? true : false}/>
           <CategorizeButton icon={ <MdOutlineStorefront />} path={"merchant"} label={"Merchants"} active={(location.pathname.split("/")).includes('merchant') ? true : false}/>
           <CategorizeButton icon={ <RiGraduationCapLine  />} label={"Academy"} active={false}/>

@@ -154,7 +154,7 @@ const HomeCard = ({
                     </div>
             
                     <div onClick={clickSeeDetails}  className="mt-1 text-sm text-gray-700">
-                        <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(collapseDetails ? details : limitText(details))}} /> 
+                        <div dangerouslySetInnerHTML={{__html: collapseDetails ? details : limitText(details)}} /> 
                         {!collapseDetails && <p className='see_more'>... see more</p>} 
                     </div>
                 </div> 
@@ -197,7 +197,7 @@ const HomeCard = ({
                                 >
                                     <h2 className="mb-2 text-xl font-bold">{limitText(title)}</h2>
                                 </Link>
-                                <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(collapseDetails ? details : limitText(details))}} /> 
+                                <p dangerouslySetInnerHTML={{__html:collapseDetails ? details : limitText(details)}} /> 
                             </div>
                         }
                         {
@@ -238,7 +238,7 @@ const HomeCard = ({
                     {
                         categoryConfig.show_bottom_description &&
                         <div onClick={clickSeeDetails}  className="mt-1 text-lg text-gray-700">
-                            <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(collapseDetails ? details : limitText(details))}} /> 
+                            <div dangerouslySetInnerHTML={{__html: collapseDetails ? details : limitText(details)}} /> 
                             {!collapseDetails && details.length > 30 && <p className='text-lg see_more'>... see more</p>} 
                         </div>
                     }

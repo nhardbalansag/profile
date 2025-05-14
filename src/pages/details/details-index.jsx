@@ -423,13 +423,13 @@ const DetailsPage = () =>{
     )
   }
 
-    const EmbededVideoUrl = ({ videoId, title, details, clickSeeDetails, contentDetails }) => {
+    const EmbededVideoUrl = ({ videoId}) => {
     return (
-      <div  className=' w-[100%] h-[100%] '>
+      <div  className=' w-[100%] h-[200px]'>
         <div className='flex justify-center'>
           <iframe
           className='rounded-lg'
-            src={`https://www.youtube.com/embed/${videoId}`}
+            src={videoId}
             // src={videoId}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -467,35 +467,96 @@ const DetailsPage = () =>{
           :
           <div className='mb-[150px]'>
               <div className='flex justify-center my-5'>
-                  <div className='md:w-[75%] w-[95%]'>
-                      <p className='font-bold text-[#001d3d] text-[35px] capitalize'>{ResultGetHomeContents.content_title}</p>
-                      <img
-                      src={
-                          ResultGetHomeContents.uploads_table_main_view.upload_is_link 
-                          ? ResultGetHomeContents.uploads_table_main_view.upload_url 
-                          : env.VITE_APP_BACKEND_STORAGE_URL + ResultGetHomeContents.uploads_table_main_view.upload_url
+                  <div className='md:w-[75%] w-[95%] space-y-5'>
+                      <p className='font-bold text-[#001d3d] text-[35px] capitalize'>
+                        {
+                          selectedLanguage.current == null 
+                          ? ResultGetHomeContents.content_title
+                          : (
+                                ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                              ? ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
+                              : ResultGetHomeContents.content_title
+                            )
+                        }
+                      </p>
+                      {
+                        ResultGetHomeContents.content_category.category_display_content.display.content_home_style.embed_video_url
+                        ?
+                          <EmbededVideoUrl videoId={ResultGetHomeContents.uploads_table_main_view.upload_url}/>
+                        :
+                          <img
+                          src={
+                              ResultGetHomeContents.uploads_table_main_view.upload_type === "url" 
+                              ? ResultGetHomeContents.uploads_table_main_view.upload_url 
+                              : env.VITE_APP_BACKEND_STORAGE_URL + ResultGetHomeContents.uploads_table_main_view.upload_url
+                          }
+                          alt=""  
+                          className="object-contain w-full "
+                          />
                       }
-                      alt=""  
-                      className="object-contain w-full "
-                      />
-                      <div className='my-5 text-left'>
+
+                      <div className='grid grid-cols-1 gap-5 sm:grid-cols-3'>
+                        {
+                          ResultGetHomeContents.uploads_table.map((item) => (
+                            item.upload_type === "url"
+                            ?
+                              <img
+                              src={item.upload_url }
+                              alt=""  
+                              className="object-contain w-full h-[400px]"
+                              />
+                            :
+                            (
+                              item.upload_type === "image"
+                              ?
+                                <img
+                                src={env.VITE_APP_BACKEND_STORAGE_URL + item.upload_url}
+                                alt=""  
+                                className="object-contain w-full h-[400px]"
+                                />
+                              :
+                                <EmbededVideoUrl videoId={item.upload_url}/>
+                            )
+                          ))
+                        }
+                      </div>
+
+                      {
+                        ResultGetHomeContents.content_date_from &&
+                        ResultGetHomeContents.content_date_to &&
+                        <div className='my-5 text-left'>
                           <p className='text-[#001d3d] capitalize'> 
-                              <span className='font-bold'>from </span> 
+                              <span className='font-bold from_id'>from </span> 
                               <span>{ResultGetHomeContents.content_date_from}</span>
                           </p>
                           <p className='text-[#001d3d] capitalize'>
-                              <span className='font-bold'>to </span> 
+                              <span className='font-bold to_id'>to </span> 
                               <span>{ResultGetHomeContents.content_date_to}</span>
                           </p>
-                      </div>
+                        </div>
+                      }
 
-                      <p className='text-[#001d3d] capitalize space-x-3 text-left my-5'>
-                          <span className='font-bold'>Duration </span> 
-                          <span>{ResultGetHomeContents.content_days_count} days</span>
-                          <span>{ResultGetHomeContents.content_night_count} nights</span>
-                      </p>
-
-                    <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(ResultGetHomeContents.content_description)}} /> 
+                      {
+                        ResultGetHomeContents.content_date_from &&
+                        ResultGetHomeContents.content_date_to &&
+                        <p className='text-[#001d3d] capitalize space-x-3 text-left my-5'>
+                          <span className='font-bold duration_id'>Duration </span> 
+                          <span className='days_id'>{ResultGetHomeContents.content_days_count} days</span>
+                          <span className='nights_id'>{ResultGetHomeContents.content_night_count} nights</span>
+                        </p>
+                      }
+                      
+                    <div 
+                      dangerouslySetInnerHTML={{
+                      __html: selectedLanguage.current == null 
+                              ? ResultGetHomeContents.content_description
+                              : (
+                                    ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                  ? ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
+                                  : ResultGetHomeContents.content_description
+                                )
+                      }} 
+                    /> 
                   </div>
               </div>
           </div>
@@ -536,15 +597,13 @@ const DetailsPage = () =>{
                   }
                   clickSeeDetails={() => setCollapseBottomDetails(!collapseBottomDetails)}
                   details={
-                    DOMPurify.sanitize(
-                      selectedLanguage.current == null 
-                      ? ResultGetHomeContentsDetails.content_description
-                      : (
-                            ResultGetHomeContentsDetails.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                          ? ResultGetHomeContentsDetails.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
-                          : ResultGetHomeContentsDetails.content_description
-                        )
-                    )
+                    selectedLanguage.current == null 
+                    ? ResultGetHomeContentsDetails.content_description
+                    : (
+                          ResultGetHomeContentsDetails.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                        ? ResultGetHomeContentsDetails.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
+                        : ResultGetHomeContentsDetails.content_description
+                      )
                   }
                   image={
                       ResultGetHomeContentsDetails.uploads_table_main_view.upload_is_link 
@@ -607,6 +666,17 @@ const DetailsPage = () =>{
           openBottomPayment && <Checkout clientSecret={getclientSecret} getLoading={getLoading} dataContent={paymentBContent.current} handleClose={() => setOpenBottomPayment(false)}/>
         }
       </main>
+
+      {
+        getOpenLanguageSelection
+        && 
+        <LanguageBottomSheet 
+        selected={getSelectedLanguage}
+        handleSelectContent={(event) => setSelectedLanguage(event)}
+        handleClose={() => setOpenLanguageSelection(false)} 
+        DataContent={auth_states.Languages}/>
+      }
+
       <BottomTabNavigator/>
     </div>
   )
