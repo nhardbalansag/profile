@@ -9,6 +9,8 @@ import { LuQrCode } from "react-icons/lu";
 import { TbWorldDollar } from "react-icons/tb";
 import { BsBarChartLine } from "react-icons/bs";
 
+import { format } from 'date-fns';
+
 import QRCode from "react-qr-code";
 
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectCoverflow } from 'swiper/modules';
@@ -19,10 +21,44 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
 import * as api_orders from '../../services/account/orders.api.js'
+import * as api_account from '../../services/account/account.api.js'
 
 const AccountContent = () =>{
 
   const auth_states = useSelector(state => state.AuthReducer);
+
+  const [loadingContent, setLoadingContent] = useState(true);
+  const [walletData, setWalletData] = useState({
+    t_points: 0,
+    t_bucks: 0,
+    AccountTransaction:[]
+  });
+
+  const getTBucksAndTPoints = async() =>{
+    setLoadingContent(true)
+    await api_account.getTBucksAndTPoints(auth_states.StateToken).then((result) =>{
+      if(result.status){
+        setLoadingContent(false)
+        // setWalletData(result.data.data)
+        Object.keys(result.data.data).map((item, key) =>{
+          setWalletData((prev) => ({
+            ...prev,
+            [item]: result.data.data[item]
+          }));
+        })
+      }
+      setLoadingContent(false)
+
+    }).catch((err) =>{
+      setLoadingContent(false)
+      console.log("getTBucksAndTPoints", err)
+    })
+  }
+
+  useEffect(() => {
+    getTBucksAndTPoints()
+  },[])
+  
 
   const _SlideComponent = ({children}) =>{
     return(
@@ -41,7 +77,7 @@ const AccountContent = () =>{
           [
             {
               title: 't-points',
-              balance: 0.00,
+              balance: walletData.t_points,
               button:[
                 {
                   title: 'Redeem',
@@ -55,7 +91,7 @@ const AccountContent = () =>{
             },
             {
               title: 't-bucks',
-              balance: 0.00,
+              balance: walletData.t_bucks,
               button:[
                 {
                   title: 'Redeem',
@@ -121,22 +157,34 @@ const AccountContent = () =>{
           <_Buttons title={'amount'}/>
         </div>
         <div className="my-8 space-y-6">
+          
           {
-            [1,2].map((item, index) => (
-              <div className="flex justify-between">
-                <div className="w-[200px]">
-                  <p className="font-medium uppercase ">pca activation</p>
-                  <p className="font-thin uppercase ">02/24/2025</p>
-                </div>
-                <div className="w-[200px] text-right">
-                  <p className="space-x-2 font-medium uppercase">
-                    <span>+</span>
-                    <span>100</span>
-                  </p>
-                  <p className="font-thin uppercase ">150</p>
+            loadingContent 
+            ?
+              <div className=''>
+                <div className="flex flex-col justify-center w-full gap-4 py-10">
+                  {/* <div className="w-full h-32 skeleton"></div> */}
+                  <div className="h-4 skeleton w-28"></div>
+                  <div className="w-full h-4 skeleton"></div>
+                  <div className="w-full h-4 skeleton"></div>
                 </div>
               </div>
-            ))
+            :
+              walletData.AccountTransaction.map((item, index) => (
+                <div key={index} className="flex justify-between">
+                  <div className="w-[200px]">
+                    <p className="font-medium uppercase ">{item.description}</p>
+                    <p className="font-thin uppercase ">{format(new Date(item.created_at), 'MMM dd, yyyy')}</p>
+                  </div>
+                  <div className="w-[200px] text-right">
+                    <p className="space-x-2 font-medium uppercase">
+                      <span>+</span>
+                      <span>{item.t_bucks}</span>
+                    </p>
+                    <p className="font-thin uppercase ">{item.t_points}</p>
+                  </div>
+                </div>
+              ))
           }
         </div>
       </div>
@@ -238,7 +286,21 @@ const AccountContent = () =>{
           </div>
 
           <div className="flex items-center justify-center mb-5">
-            <_SlideComponent/>
+            {
+              loadingContent
+              ?
+                <div className='w-full'>
+                  <div className="flex flex-col justify-center w-full gap-4 py-10">
+                    <div className="w-full h-32 skeleton"></div>
+                    <div className='flex items-center justify-between p-5'>
+                      <div className="h-4 skeleton w-28"></div>
+                      <div className="h-4 skeleton w-28"></div>
+                    </div>
+                  </div>
+                </div>
+              :
+                <_SlideComponent/>
+            }
           </div>
           <div className="flex items-center justify-center my-5">
             <FinanceSummary/>

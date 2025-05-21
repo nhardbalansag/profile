@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { FaUser, FaCalendarAlt, FaMapMarkerAlt, FaLanguage, FaEnvelope } from 'react-icons/fa';
+import {useSelector} from 'react-redux';
 
 const AccountDetails = () =>{
+
+  const auth_states = useSelector(state => state.AuthReducer);
 
   const InfoCard = ({ label, value, icon }) =>{
     return (
@@ -26,11 +29,11 @@ const AccountDetails = () =>{
             </p>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <InfoCard label="Name" value="irakli talavadze" icon={<FaUser />} />
-              <InfoCard label="Date of Birth" value="07 July 1993" icon={<FaCalendarAlt />} />
+              {/* <InfoCard label="Name" value={`${auth_states.StateUserInformation.first_name} ${auth_states.StateUserInformation.last_name}`} icon={<FaUser />} /> */}
+              {/* <InfoCard label="Date of Birth" value="07 July 1993" icon={<FaCalendarAlt />} />
               <InfoCard label="Country Region" value="Georgia , Tbilisi" icon={<FaMapMarkerAlt />} />
               <InfoCard label="Language" value="English ( UK ) - English" icon={<FaLanguage />} />
-              <InfoCard label="Contactable at" value="ikakodesign@gmail.com" icon={<FaEnvelope />} />
+              <InfoCard label="Contactable at" value="ikakodesign@gmail.com" icon={<FaEnvelope />} /> */}
             </div>
           </div>
         </div>

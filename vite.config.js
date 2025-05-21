@@ -11,9 +11,9 @@ export default defineConfig({
       includeAssets: ['favicon.ico', '/src/assets/images/ten/logo2.png', 'mask-icon.svg'],
        registerType: 'autoUpdate',
       manifest: {
-        name: 'My Awesome App',
-        short_name: 'MyApp',
-        description: 'My Awesome App description',
+        name: 'Club TEN',
+        short_name: 'ClubTEN',
+        description: 'Club TEN',
         theme_color: '#ffffff',
         icons: [
           {

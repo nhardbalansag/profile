@@ -153,7 +153,7 @@ const LoginContent = () =>{
   return (
     <div className=''>
       <main className=''>
-        <div className="flex items-center justify-center bg-gray-100">
+        <div className="flex items-center justify-center bg-white">
           <div className="grid grid-cols-1 md:grid-cols-2">
             {/* Left Section */}
             <div className="flex flex-col items-center justify-center p-10 space-y-5 text-center">
@@ -167,12 +167,12 @@ const LoginContent = () =>{
               <p className="mb-6 md:text-2xl md:w-[300px] connect_with_friends_caption_id">
                 Connect with friends and create community in CLUB TEN
               </p>
-              <div>
+              {/* <div>
                 <img
                 className="w-[100%]"
                 alt="Tailwind CSS chat bubble component"
                 src={TenBG2} />
-              </div>
+              </div> */}
             </div>
 
             {/* Right Section */}
@@ -212,7 +212,7 @@ const LoginContent = () =>{
                 </div>
               </form>
               {/* Signup Form */}
-              <form onSubmit={(event) => RegisterUser(event)}>
+              {/* <form onSubmit={(event) => RegisterUser(event)}>
                 <div className="p-6 space-y-4 bg-white rounded-lg shadow">
                   <h2 className="text-xl font-bold sign_in_id">Sign Up</h2>
                   <p className="text-sm font-medium text-gray-600 its_quick_and_easy_id">It’s quick and easy.</p>
@@ -275,7 +275,7 @@ const LoginContent = () =>{
                   }
                   </button>
                   </div>
-              </form>
+              </form> */}
             </div>
           </div>
         </div>
