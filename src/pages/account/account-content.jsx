@@ -30,8 +30,6 @@ const AccountContent = () =>{
 
   const auth_states = useSelector(state => state.AuthReducer);
 
-  console.log(auth_states)
-
   const [loadingContent, setLoadingContent] = useState(true);
   const [walletData, setWalletData] = useState({
     t_points: 0,
@@ -64,23 +62,47 @@ const AccountContent = () =>{
     getTBucksAndTPoints()
   },[])
 
+  // const handleShare = async (dataToShare) => {
+  //   if (navigator.share) {
+  //     try {
+  //       await navigator.share({
+  //         title: 'CLUB TEN Referral',
+  //         text: 'Start your journey with CLUB TEN',
+  //         url: env.VITE_APP_PORTAL + "login?sponsor=" + dataToShare,
+  //       });
+  //       console.log('Content shared successfully');
+  //     } catch (error) {
+  //       console.error('Error sharing', error);
+  //     }
+  //   } else {
+  //     alert('Web Share API not supported in your browser.');
+  //   }
+  // }
+
   const handleShare = async (dataToShare) => {
+    const shareUrl = `${env.VITE_APP_PORTAL}clubten/login?sponsor=${dataToShare}`;
+
     if (navigator.share) {
       try {
         await navigator.share({
           title: 'CLUB TEN Referral',
           text: 'Start your journey with CLUB TEN',
-          url: env.VITE_APP_PORTAL + "login?sponsor=" + dataToShare,
+          url: shareUrl,
         });
         console.log('Content shared successfully');
       } catch (error) {
         console.error('Error sharing', error);
       }
     } else {
-      alert('Web Share API not supported in your browser.');
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        alert('Share link copied to clipboard!');
+      } catch (error) {
+        console.error('Clipboard copy failed:', error);
+        alert('Unable to copy link. Please copy it manually:\n' + shareUrl);
+      }
     }
   }
-  
 
   const _SlideComponent = ({children}) =>{
     return(
