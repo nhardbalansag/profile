@@ -46,7 +46,7 @@ import {
     getItem
 } from '../store/store-index'
 
-import { STORAGE_TOKEN, STORAGE_USER_INFORMATION } from "../store/auth/authAction";
+import { STORAGE_TOKEN, STORAGE_USER_INFORMATION, REDUX_PAYLOAD_INFORMATION } from "../store/auth/authAction";
 
 import * as AuthAction from '../store/auth/authAction'
 
@@ -74,7 +74,7 @@ const AuthenticatedUsers = ({ children, route }) => {
 
 const router = createBrowserRouter([
     {
-        path: "/",
+        path: "/clubten",
         loader: () => ({ message: "Hello Data Router!" }),
         Component: HomePage,  
         children:[
@@ -96,14 +96,14 @@ const router = createBrowserRouter([
         ]
     },
     {
-        path: "/",
+        path: "/clubten",
         loader: () => ({ message: "Hello Data Router!" }),
         Component: LoginPage,  
         children:[
             {
                 path: "login",
                 element: ( 
-                    <GuestRoute route={'/'}>
+                    <GuestRoute route={'/clubten'}>
                         <LoginContent />
                     </GuestRoute> 
                 )
@@ -111,14 +111,14 @@ const router = createBrowserRouter([
         ]
     },
     {
-        path: "/",
+        path: "/clubten",
         loader: () => ({ message: "Hello Data Router!" }),
         Component: AccountPage,  
         children:[
             {
                 path: "account",
                 element: ( 
-                    <AuthenticatedUsers route={'/login'}>
+                    <AuthenticatedUsers route={'/clubten/login'}>
                         <AccountContent />
                     </AuthenticatedUsers> 
                 )
@@ -126,7 +126,7 @@ const router = createBrowserRouter([
             {
                 path: "details",
                 element: ( 
-                    <AuthenticatedUsers route={'/login'}>
+                    <AuthenticatedUsers route={'/clubten/login'}>
                         <AccountDetails />
                     </AuthenticatedUsers> 
                 )
@@ -134,7 +134,7 @@ const router = createBrowserRouter([
             {
                 path: "orders",
                 element: ( 
-                    <AuthenticatedUsers route={'/login'}>
+                    <AuthenticatedUsers route={'/clubten/login'}>
                         <AccountOrders />
                     </AuthenticatedUsers> 
                 )
@@ -148,7 +148,7 @@ const router = createBrowserRouter([
             {
                 path: "",
                 element: ( 
-                    <AuthenticatedUsers route={'/login'}>
+                    <AuthenticatedUsers route={'/clubten/login'}>
                         <MallTravel />
                     </AuthenticatedUsers> 
                 )
@@ -156,7 +156,7 @@ const router = createBrowserRouter([
             {
                 path: "merchant",
                 element: ( 
-                    <AuthenticatedUsers route={'/login'}>
+                    <AuthenticatedUsers route={'/clubten/login'}>
                         <MallMerchant />
                     </AuthenticatedUsers> 
                 )
@@ -170,7 +170,7 @@ const router = createBrowserRouter([
             {
                 path: "",
                 element: ( 
-                    <AuthenticatedUsers route={'/login'}>
+                    <AuthenticatedUsers route={'/clubten/login'}>
                         <EventContent />
                     </AuthenticatedUsers> 
                 )
@@ -198,9 +198,10 @@ const Routes = () =>{
     const validateAccess = async() =>{
         var token = await getItem(STORAGE_TOKEN)
         var userInformation = await getItem(STORAGE_USER_INFORMATION)
+        var payload = await getItem(REDUX_PAYLOAD_INFORMATION)
 
         if(token && userInformation){
-            dispatch(AuthAction.LoginUser(token, JSON.parse(userInformation)))
+            dispatch(AuthAction.LoginUser(token, JSON.parse(userInformation), payload))
         }
     }
 

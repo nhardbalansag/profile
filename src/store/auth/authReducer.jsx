@@ -9,6 +9,7 @@ import {
 const InitialStates  = {
     // StateToken: null,
     StateToken: null,
+    payload: null,
     StateUserInformation:   [],
     PageLanguages:  [],
     Languages:  [],
@@ -26,7 +27,8 @@ export default (state = InitialStates, action) =>{
             return{
                 ...state,
                 StateToken              : action.StateToken,
-                StateUserInformation    : action.StateUserInformation
+                StateUserInformation    : action.StateUserInformation,
+                payload                 : action.payload
             }
         case STORAGE_PAGE_LANGUAGES:
             return{

@@ -8,6 +8,7 @@ import { PiBankBold } from "react-icons/pi";
 import { LuQrCode } from "react-icons/lu";
 import { TbWorldDollar } from "react-icons/tb";
 import { BsBarChartLine } from "react-icons/bs";
+import { FaRegShareFromSquare } from "react-icons/fa6";
 
 import { format } from 'date-fns';
 
@@ -23,9 +24,13 @@ import 'swiper/css/scrollbar';
 import * as api_orders from '../../services/account/orders.api.js'
 import * as api_account from '../../services/account/account.api.js'
 
+const env = import.meta.env;
+
 const AccountContent = () =>{
 
   const auth_states = useSelector(state => state.AuthReducer);
+
+  console.log(auth_states)
 
   const [loadingContent, setLoadingContent] = useState(true);
   const [walletData, setWalletData] = useState({
@@ -58,6 +63,23 @@ const AccountContent = () =>{
   useEffect(() => {
     getTBucksAndTPoints()
   },[])
+
+  const handleShare = async (dataToShare) => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'CLUB TEN Referral',
+          text: 'Start your journey with CLUB TEN',
+          url: env.VITE_APP_PORTAL + "login?sponsor=" + dataToShare,
+        });
+        console.log('Content shared successfully');
+      } catch (error) {
+        console.error('Error sharing', error);
+      }
+    } else {
+      alert('Web Share API not supported in your browser.');
+    }
+  }
   
 
   const _SlideComponent = ({children}) =>{
@@ -265,6 +287,12 @@ const AccountContent = () =>{
                   viewBox={`0 0 256 256`}
                 />
               </div>
+              <button onClick={() => handleShare(auth_states.payload)} className="px-4 py-2 text-black ">
+                <div className='flex items-center justify-center space-x-2'>
+                  <p className='text-[18px]'>Share</p>
+                  <FaRegShareFromSquare size={18}/>
+                </div>
+              </button>
             </div>
           </div>
           <label className="modal-backdrop" htmlFor="my_modal_7">Close</label>

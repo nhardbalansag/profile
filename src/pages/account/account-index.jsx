@@ -28,6 +28,8 @@ import { Link } from "react-router-dom";
 
 const AccountPage = () => {
 
+  const auth_states = useSelector(state => state.AuthReducer);
+
   const [getBottomDetailsOpen, setBottomDetailsOpen] = useState(false);
 
   const location = useLocation();
@@ -40,7 +42,9 @@ const AccountPage = () => {
           <div className="flex items-center space-x-10">
             <div className="text-sm ">
               <p className="text-xs text-gray-400">Welcome back!</p>
-              <p className="font-medium text-black">Bernard Balansag</p>
+              <p className="font-medium text-black">
+                {`${auth_states.StateToken ? auth_states.StateUserInformation.first_name : ","}`}
+              </p>
             </div>
             <label htmlFor="my-drawer" className="btn btn-square btn-ghost drawer-button">
               <FaChevronRight className="text-xs" color='black'/>
@@ -132,7 +136,7 @@ const AccountPage = () => {
     return (
       <Link to={path}>
         <div className={`flex flex-col items-center ${(location.pathname.split('/')).includes(path)  ? "text-white" : "text-gray-400"} `}>
-          <div className="text-lg mb-1">{icon}</div>
+          <div className="mb-1 text-lg">{icon}</div>
           <span className="text-[14px]">{label}</span>
         </div>
       </Link>
@@ -162,7 +166,7 @@ const AccountPage = () => {
       {/* Logo */}
       <div className="flex items-center justify-between w-full px-10 py-2 text-white">
         <div className="">
-          <Link to={'/'}>
+          <Link to={'/clubten'}>
             <a href="#" className='flex items-center'>
               <img
                 className="w-[60px] md:w-[100px]"

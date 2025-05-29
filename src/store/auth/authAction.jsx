@@ -1,4 +1,5 @@
 export const REDUX_GET_USER_ACCESS_INFORMATION = 'REDUX_GET_USER_ACCESS_INFORMATION';
+export const REDUX_PAYLOAD_INFORMATION = 'REDUX_PAYLOAD_INFORMATION';
 export const REDUX_LOGOUT_USER = 'REDUX_LOGOUT_USER';
 
 export const STORAGE_TOKEN = 'STORAGE_TOKEN';
@@ -7,13 +8,14 @@ export const STORAGE_PAGE_LANGUAGES = 'STORAGE_PAGE_LANGUAGES';
 export const STORAGE_LANGUAGES = 'STORAGE_LANGUAGES';
 export const STORAGE_sELECTED_LANGUAGES = 'STORAGE_sELECTED_LANGUAGES';
 
-export const LoginUser = (token, userInformation) =>{
+export const LoginUser = (token, userInformation, payload) =>{
 
     return async (dispatch, getState) =>{
         dispatch({
             type                    :  REDUX_GET_USER_ACCESS_INFORMATION,
             StateToken              :  token,
-            StateUserInformation    :  userInformation
+            StateUserInformation    :  userInformation,
+            payload                 :  payload,
         }) 
     }
 }

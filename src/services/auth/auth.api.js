@@ -24,3 +24,12 @@ export const RegisterUser = async (reqBody) => {
     });
 }
 
+export const userSubscriptionCategories = async (id) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'GET', 
+        url: `${PublicAPI}public/subscriptions`
+    });
+} 

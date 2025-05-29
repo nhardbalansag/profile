@@ -15,3 +15,14 @@ export const getTBucksAndTPoints = async (token) => {
         url: `${PublicAPI}home`
     });
 }
+
+export const requestToken = async (token) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET', 
+        url: `${BaseAPIUrl}account/jwt/token`
+    });
+}

@@ -65,12 +65,12 @@ const Header = ({
 
   const Header = () =>{
     return (
-      <div className="my-3 flex justify-center ">
+      <div className="flex justify-center my-3 ">
         {/* Right Section */}
         <div className=" md:w-[75%] w-[95%]">
           <div className="flex items-center justify-between ">
             <div>
-              <Link to={'/'}>
+              <Link to={'/clubten'}>
                 <a href="#">
                   <img
                     className="w-[60px] md:w-[100px]"
@@ -79,7 +79,7 @@ const Header = ({
                 </a>
               </Link>
             </div>
-            <div className=' flex items-center'>
+            <div className='flex items-center '>
               <div className=''>
                 <nav className="container relative flex items-center justify-between px-6 mx-auto text-white">
                   <div
@@ -94,7 +94,7 @@ const Header = ({
                       </a>
                     </button>
 
-                    <div className='flex items-center justify-start md:px-10 space-x-3'>
+                    <div className='flex items-center justify-start space-x-3 md:px-10'>
                       {
                         auth_states.StateToken
                         ?
@@ -105,7 +105,7 @@ const Header = ({
                             </a>
                           </button>
                         :
-                          <Link to={'/login'}>
+                          <Link to={'login'}>
                             <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                               <FaRegCircleUser  size={20}/>
                               <p className='login_id text-[#001d3d] capitalize ml-2 '>Login</p>
@@ -118,14 +118,14 @@ const Header = ({
                       {
                         auth_states.StateToken
                         ?
-                          <Link to={'/account'}>
+                          <Link to={'account'}>
                             <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                               <LuUserRoundCheck  size={20}/>
                               <p className='account_id text-[#001d3d] capitalize ml-2 '>Account</p>
                             </a>
                           </Link>
                         :
-                          <Link to={'/login'}>
+                          <Link to={'login'}>
                             <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                               <LuUserRoundPlus  size={20}/>
                               <p className='signin_id text-[#001d3d] capitalize ml-2 '>Sign-in</p>
