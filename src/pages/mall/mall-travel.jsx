@@ -587,29 +587,33 @@ const MallTravel = () =>{
               href='https://clubten.booking.xeni.com/' className="px-6 py-2 font-bold text-white bg-orange-500 hover:bg-orange-600 rounded-xl">
               LAUNCH
             </a> */}
-               
-              <button 
-                disabled={getPlatformLoading.launchButton}
-                onClick={() => requestToken()}
-                className="px-6 py-2 font-bold text-white bg-orange-500 btn hover:bg-orange-600 rounded-xl">
-                <div>
-                  {
-                    getPlatformLoading.launchButton
-                    ? <span className="loading loading-spinner loading-sm"></span>
-                    : "LAUNCH ACCOUNT"
-                  }
-                </div>
-              </button>
-              
-              <a 
-                target="_blank"
-                rel="noopener noreferrer"
-                href='https://clubten.booking.xeni.com/' className="flex items-center gap-1 font-medium text-orange-500 hover:underline">
-                <div className='flex items-center space-x-3'>
-                  <p>Explore</p>
-                  <FaArrowUpRightFromSquare />
-                </div>
-              </a>
+            {
+              getLoading
+              ?
+                <></>
+              :
+                <button 
+                  disabled={getPlatformLoading.launchButton}
+                  onClick={() => requestToken()}
+                  className="px-6 py-2 font-bold text-white bg-orange-500 btn hover:bg-orange-600 rounded-xl">
+                  <div>
+                    {
+                      getPlatformLoading.launchButton
+                      ? <span className="loading loading-spinner loading-sm"></span>
+                      : "LAUNCH ACCOUNT"
+                    }
+                  </div>
+                </button>
+            }
+            <a 
+              target="_blank"
+              rel="noopener noreferrer"
+              href='https://clubten.booking.xeni.com/' className="flex items-center gap-1 font-medium text-orange-500 hover:underline">
+              <div className='flex items-center space-x-3'>
+                <p>Explore</p>
+                <FaArrowUpRightFromSquare />
+              </div>
+            </a>
           </div>
         </div>
       </div>

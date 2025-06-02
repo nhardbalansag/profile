@@ -32,7 +32,7 @@ const HomePage = () => {
     return (
       <Link to={path}>
         <div className={`flex flex-col items-center ${active ? "text-white" : "text-gray-400"} `}>
-          <div className="text-lg mb-1">{icon}</div>
+          <div className="mb-1 text-lg">{icon}</div>
           <span className="text-[14px]">{label}</span>
         </div>
       </Link>
@@ -50,7 +50,7 @@ const HomePage = () => {
       className="md:hidden bottom-4 left-1/2 transform -translate-x-1/2 bg-[#031956] text-white rounded-xl px-4 py-1 flex justify-between items-center w-[90%] space-x-6 shadow-lg">
         <TabItem icon={<AiFillNotification size={20}/>} path={'/'} label="News" active />
         <TabItem icon={<LuTickets size={20}/>} path={'/event'} label="Events" />
-        <TabItem icon={<FaShoppingBag size={20}/>} path={'mall'} label="Mall" />
+        <TabItem icon={<FaShoppingBag size={20}/>} path={'/mall'} label="Mall" />
         <TabItem icon={<HiMiniBuildingOffice2 size={20}/>} path={'account'} label="Office" />
         <TabItem icon={<FaRegCircleUser size={20}/>} path={'details'} label="Profile" />
       </div>

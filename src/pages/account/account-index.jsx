@@ -154,7 +154,7 @@ const AccountPage = () => {
       className="md:hidden bottom-4 left-1/2 transform -translate-x-1/2 bg-[#031956] text-white rounded-xl px-4 py-1 flex justify-between items-center w-[90%] space-x-6 shadow-lg">
         <TabItem icon={<AiFillNotification size={20}/>} path={'/'} label="Social" active />
         <TabItem icon={<LuTickets size={20}/>} path={'/event'} label="Events" />
-        <TabItem icon={<FaShoppingBag size={20}/>} path={'mall'} label="Mall" />
+        <TabItem icon={<FaShoppingBag size={20}/>} path={'/mall'} label="Mall" />
         <TabItem icon={<HiMiniBuildingOffice2 size={20}/>} path={'account'} label="Office" />
         <TabItem icon={<FaRegCircleUser size={20}/>} path={'details'} label="Profile" />
       </div>
@@ -166,7 +166,7 @@ const AccountPage = () => {
       {/* Logo */}
       <div className="flex items-center justify-between w-full px-10 py-2 text-white">
         <div className="">
-          <Link to={'/clubten'}>
+          <Link to={'/'}>
             <a href="#" className='flex items-center'>
               <img
                 className="w-[60px] md:w-[100px]"

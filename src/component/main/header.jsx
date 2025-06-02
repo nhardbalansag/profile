@@ -70,7 +70,7 @@ const Header = ({
         <div className=" md:w-[75%] w-[95%]">
           <div className="flex items-center justify-between ">
             <div>
-              <Link to={'/clubten'}>
+              <Link to={'/'}>
                 <a href="#">
                   <img
                     className="w-[60px] md:w-[100px]"

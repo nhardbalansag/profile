@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Swal from 'sweetalert2';
 
@@ -21,6 +22,9 @@ import * as AuthAction from '../../store/auth/authAction'
 const LoginContent = () =>{
 
   //#region translation convertion
+
+  const navigate = useNavigate();
+
   const auth_states = useSelector(state => state.AuthReducer);
 
   const location = useLocation();
@@ -34,7 +38,9 @@ const LoginContent = () =>{
   const [isLoadingRegister, setLoadingRegister] = useState(false)
   
   const [subscriptionList, SetSubscriptionList] = useState([])
+  const [countriesList, SetCountriesList] = useState([])
   const [selectedPlan, setSelectedPlan] = useState("");
+  const [GetSponsorDetails, SetSponsorDetails] = useState({});
 
   const [getRequest, setRequest] = useState({
     email: "",
@@ -46,6 +52,7 @@ const LoginContent = () =>{
     last_name   : "",
     email       : "",
     password    : "",
+    country_id  : "",
   })
 
   useEffect(() =>{
@@ -113,7 +120,10 @@ const LoginContent = () =>{
     setLoadingRegister(true)
 
     const requestBody = {
-      "payload": searchParams.get('sponsor'),
+      "payload": {
+        "user_id" : GetSponsorDetails.data.users_table.id,
+        "account_number" : GetSponsorDetails.data.account_number
+      },
       "selected_subscription_category_id": selectedPlan,
       "first_name": getRegisterForm.first_name,
       "last_name": getRegisterForm.last_name,
@@ -134,8 +144,6 @@ const LoginContent = () =>{
       
     }).catch((err) =>{
       setLoadingRegister(false)
-      setToastVisibility(true)
-      setToastMessage(err)
     })
   }
   
@@ -168,8 +176,6 @@ const LoginContent = () =>{
       
     }).catch((err) =>{
       setLoading(false)
-      setToastVisibility(true)
-      setToastMessage(err)
     })
   }
 
@@ -177,16 +183,31 @@ const LoginContent = () =>{
     setLoading(true)
     await auth_service_api.userSubscriptionCategories().then((result) =>{
       SetSubscriptionList(result.data.data)
+      SetCountriesList(result.data.countries)
       setLoading(false)
     }).catch((err) =>{
       setLoading(false)
-      setToastVisibility(true)
-      setToastMessage(err)
+    })
+  }
+
+  const getSponsorDetails = async (event) =>{
+    setLoading(true)
+
+    const requestBody = {
+      "account_number": searchParams.get('sponsor')
+    }
+
+    await auth_service_api.getSponsorDetails(requestBody).then((result) =>{
+      SetSponsorDetails(result.data)
+      setLoading(false)
+    }).catch((err) =>{
+      setLoading(false)
     })
   }
 
   useEffect(() => {
    userSubscriptionCategories()
+   getSponsorDetails()
   }, [])
 
   const _PlanSelect = ({dataList}) => {
@@ -209,9 +230,6 @@ const LoginContent = () =>{
               // onClick={() => setSelectedPlan(item.subscription_earning_table.id)}
               onClick={() => setSelectedPlan(item.id)}
             >
-              {
-                console.log(item.membership_type)
-              }
               <div>
                 <h3 className="text-lg font-semibold">
                   {
@@ -351,24 +369,64 @@ const LoginContent = () =>{
                   <div className="p-6 space-y-4 bg-white rounded-lg shadow">
                     <h2 className="text-xl font-bold sign_in_id">Sign Up</h2>
                     <p className="text-sm font-medium text-gray-600 its_quick_and_easy_id">It’s quick and easy.</p>
-                    <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:grid-cols-2 md:space-x-3">
-                      <input
-                        type="text"
-                        placeholder="First name"
-                        className="input input-bordered input-md"
-                        name='first_name'
-                        value={getRegisterForm.first_name} 
-                        onChange={handleChangeForRegister}
-                      />
-                      <input
-                        type="text"
-                        placeholder="Last name"
-                        className="input input-bordered input-md"
-                        name='last_name'
-                        value={getRegisterForm.last_name} 
-                        onChange={handleChangeForRegister}
-                      />
+                    
+                    {
+                      isLoading
+                      ?
+                        <div className=''>
+                          <div className="flex flex-col justify-center w-full gap-4 py-10">
+                            <div className="w-full h-4 skeleton"></div>
+                          </div>
+                        </div>
+                      :
+                        <div className='flex items-center space-x-2'>
+                          <p className="capitalize text-gray-500 font-bold text-[15px]">sponsor :</p>
+                          <p className="capitalize label text-[18px]">
+                            {
+                              GetSponsorDetails.success
+                              ? GetSponsorDetails.data.users_table.first_name
+                              : "sponsor not exist"
+                            }
+                          </p>
+                        </div>
+                    }
+
+                    <label className="w-full max-w-xs form-control">
+                      <label className="capitalize label font-bold text-gray-500 text-[15px]">Country</label>
+                      <select name='country_id' value={getRegisterForm.country_id} onChange={handleChangeForRegister} className="select select-bordered">
+                        <option value={null}>Select Your Country</option>
+                          {
+                            countriesList.map((item, key) =>
+                              <option key={key} value={item.id}>
+                                {`${item.name} (${item.iso_code_3})`}
+                              </option>
+                            )
+                          }
+                      </select>
+                    </label>
+
+                    <div>
+                      <label className="capitalize label text-gray-500 font-bold text-[15px]">Personal Details</label>
+                      <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:grid-cols-2 md:space-x-3">
+                        <input
+                          type="text"
+                          placeholder="First name"
+                          className="input input-bordered input-md"
+                          name='first_name'
+                          value={getRegisterForm.first_name} 
+                          onChange={handleChangeForRegister}
+                        />
+                        <input
+                          type="text"
+                          placeholder="Last name"
+                          className="input input-bordered input-md"
+                          name='last_name'
+                          value={getRegisterForm.last_name} 
+                          onChange={handleChangeForRegister}
+                        />
+                      </div>
                     </div>
+
                     <input
                       type="email"
                       placeholder="Mobile number or Email"
@@ -377,21 +435,15 @@ const LoginContent = () =>{
                       value={getRegisterForm.email} 
                       onChange={handleChangeForRegister}
                     />
-                    <p className="text-sm text-gray-500 you_need_to_confirm_email_id">
+
+                    <label className="capitalize text-gray-500 label font-bold text-[15px]">Set password</label>
+                    {/* <p className="text-sm text-gray-500 you_need_to_confirm_email_id">
                       You’ll need to confirm that email or phone belongs to you.
-                    </p>
+                    </p> */}
                     <div className="grid grid-cols-1 space-y-3 md:grid-cols-2 md:space-y-0 md:space-x-3">
                       <input
                         type="password"
                         placeholder="Password"
-                        className=" input input-bordered input-md"
-                        name='password'
-                        value={getRegisterForm.password} 
-                        onChange={handleChangeForRegister}
-                      />
-                      <input
-                        type="password"
-                        placeholder="Confirm password"
                         className=" input input-bordered input-md"
                         name='password'
                         value={getRegisterForm.password} 

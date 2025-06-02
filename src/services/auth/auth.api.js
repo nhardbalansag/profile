@@ -33,3 +33,14 @@ export const userSubscriptionCategories = async (id) => {
         url: `${PublicAPI}public/subscriptions`
     });
 } 
+
+export const getSponsorDetails = async (reqBody) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'POST', 
+        url: `${PublicAPI}public/sponsor`, 
+        data: reqBody
+    });
+}

@@ -80,7 +80,7 @@ const AccountContent = () =>{
   // }
 
   const handleShare = async (dataToShare) => {
-    const shareUrl = `${env.VITE_APP_PORTAL}clubten/login?sponsor=${dataToShare}`;
+    const shareUrl = `${env.VITE_APP_PORTAL}login?sponsor=${dataToShare}`;
 
     if (navigator.share) {
       try {

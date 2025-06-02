@@ -74,7 +74,7 @@ const AuthenticatedUsers = ({ children, route }) => {
 
 const router = createBrowserRouter([
     {
-        path: "/clubten",
+        path: "/",
         loader: () => ({ message: "Hello Data Router!" }),
         Component: HomePage,  
         children:[
@@ -96,14 +96,14 @@ const router = createBrowserRouter([
         ]
     },
     {
-        path: "/clubten",
+        path: "/",
         loader: () => ({ message: "Hello Data Router!" }),
         Component: LoginPage,  
         children:[
             {
                 path: "login",
                 element: ( 
-                    <GuestRoute route={'/clubten'}>
+                    <GuestRoute route={'/'}>
                         <LoginContent />
                     </GuestRoute> 
                 )
@@ -111,14 +111,14 @@ const router = createBrowserRouter([
         ]
     },
     {
-        path: "/clubten",
+        path: "/",
         loader: () => ({ message: "Hello Data Router!" }),
         Component: AccountPage,  
         children:[
             {
                 path: "account",
                 element: ( 
-                    <AuthenticatedUsers route={'/clubten/login'}>
+                    <AuthenticatedUsers route={'/login'}>
                         <AccountContent />
                     </AuthenticatedUsers> 
                 )
@@ -126,7 +126,7 @@ const router = createBrowserRouter([
             {
                 path: "details",
                 element: ( 
-                    <AuthenticatedUsers route={'/clubten/login'}>
+                    <AuthenticatedUsers route={'/login'}>
                         <AccountDetails />
                     </AuthenticatedUsers> 
                 )
@@ -134,7 +134,7 @@ const router = createBrowserRouter([
             {
                 path: "orders",
                 element: ( 
-                    <AuthenticatedUsers route={'/clubten/login'}>
+                    <AuthenticatedUsers route={'/login'}>
                         <AccountOrders />
                     </AuthenticatedUsers> 
                 )
@@ -148,7 +148,7 @@ const router = createBrowserRouter([
             {
                 path: "",
                 element: ( 
-                    <AuthenticatedUsers route={'/clubten/login'}>
+                    <AuthenticatedUsers route={'/login'}>
                         <MallTravel />
                     </AuthenticatedUsers> 
                 )
@@ -156,7 +156,7 @@ const router = createBrowserRouter([
             {
                 path: "merchant",
                 element: ( 
-                    <AuthenticatedUsers route={'/clubten/login'}>
+                    <AuthenticatedUsers route={'/login'}>
                         <MallMerchant />
                     </AuthenticatedUsers> 
                 )
@@ -170,7 +170,7 @@ const router = createBrowserRouter([
             {
                 path: "",
                 element: ( 
-                    <AuthenticatedUsers route={'/clubten/login'}>
+                    <AuthenticatedUsers route={'/login'}>
                         <EventContent />
                     </AuthenticatedUsers> 
                 )
