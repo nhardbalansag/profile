@@ -88,7 +88,7 @@ const Header = ({
                     }`}
                   >
                     <button onClick={handleLanguageVisibility}>
-                      <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                      <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                         <IoLanguageOutline  size={20}/>
                         <p className='language_id text-[#001d3d] capitalize ml-2 '>Language</p>
                       </a>
@@ -99,14 +99,14 @@ const Header = ({
                         auth_states.StateToken
                         ?
                           <button onClick={() => LogoutUser()}>
-                            <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                            <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                               <AiOutlineLogout  size={20}/>
                               <p className='logout_id text-[#001d3d] capitalize ml-2 '>Logout</p>
                             </a>
                           </button>
                         :
                           <Link to={'login'}>
-                            <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                            <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                               <FaRegCircleUser  size={20}/>
                               <p className='login_id text-[#001d3d] capitalize ml-2 '>Login</p>
                             </a>
@@ -118,15 +118,15 @@ const Header = ({
                       {
                         auth_states.StateToken
                         ?
-                          <Link to={'account'}>
-                            <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
-                              <LuUserRoundCheck  size={20}/>
+                          <Link to={'/account'}>
+                            <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                              <LuUserRoundCheck size={20}/>
                               <p className='account_id text-[#001d3d] capitalize ml-2 '>Account</p>
                             </a>
                           </Link>
                         :
                           <Link to={'login'}>
-                            <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                            <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                               <LuUserRoundPlus  size={20}/>
                               <p className='signin_id text-[#001d3d] capitalize ml-2 '>Sign-in</p>
                             </a>
@@ -159,19 +159,19 @@ const Header = ({
             <aside class="w-64 bg-white border-r border-gray-200 p-4">
               <nav class="space-y-2 hidden md:block">
                 <Link to={'/'}>
-                  <a href="#" class={`${("/").includes(location.pathname) ? 'bg-gray-100  text-[#001d3d]' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                  <a href="#" class={`${("/").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                     <HiOutlineUserGroup  size={20}/>
                     <p className='social_id text-[#001d3d] capitalize ml-2 '>social</p>
                   </a>
                 </Link>
                 <Link to={'/mall'}>
-                  <a href="#" class={`${("mall").includes(location.pathname) ? 'bg-gray-100  text-[#001d3d]' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                  <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                     <HiOutlineShoppingBag  size={20}/>
                     <p className='mall_id text-[#001d3d] capitalize ml-2 '>mall</p>
                   </a>
                 </Link>
                 <Link to={'/event'}>
-                  <a href="#" class={`${("event").includes(location.pathname) ? 'bg-gray-100  text-[#001d3d]' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                  <a href="#" class={`${("event").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                     <LuTickets  size={20}/>
                     <p className='event_id text-[#001d3d] capitalize ml-2 '>event</p>
                   </a>
@@ -179,7 +179,7 @@ const Header = ({
                 {
                   auth_states.StateToken &&
                   <Link to={'account'}>
-                    <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-[#001d3d]' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                    <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <PiBuildingOfficeLight  size={20}/>
                       <p className='account_id text-[#001d3d] capitalize ml-2 '>office</p>
                     </a>
@@ -188,7 +188,7 @@ const Header = ({
                 {
                   auth_states.StateToken &&
                   <Link to={'/details'}>
-                    <a href="#" class={`${("details").includes(location.pathname) ? 'bg-gray-100  text-[#001d3d]' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                    <a href="#" class={`${("details").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <FaRegUser  size={20}/>
                       <p className='profile_id text-[#001d3d] capitalize ml-2 '>profile</p>
                     </a>
@@ -198,7 +198,7 @@ const Header = ({
 
               <nav class="space-y-2 md:hidden flex flex-col">
                 <button onClick={handleLanguageVisibility}>
-                  <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-[#001d3d]' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                  <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                     <IoLanguageOutline  size={20}/>
                     <p className='language_id text-[#001d3d] capitalize ml-2 '>Language</p>
                   </a>
@@ -208,14 +208,14 @@ const Header = ({
                   auth_states.StateToken
                   ?
                     <button onClick={() => LogoutUser()}>
-                      <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-[#001d3d]' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                      <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                         <AiOutlineLogout  size={20}/>
                         <p className='logout_id text-[#001d3d] capitalize ml-2 '>Logout</p>
                       </a>
                     </button>
                   :
                     <Link to={'/login'}>
-                      <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-[#001d3d]' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                      <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                         <FaRegCircleUser  size={20}/>
                         <p className='login_id text-[#001d3d] capitalize ml-2 '>Login</p>
                       </a>
@@ -226,7 +226,7 @@ const Header = ({
                   auth_states.StateToken
                   ?
                     // <Link to={'account'}>
-                    //   <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-[#001d3d]' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                    //   <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                     //     <LuUserRoundCheck  size={20}/>
                     //     <p className='account_id text-[#001d3d] capitalize ml-2 '>Account</p>
                     //   </a>
@@ -234,7 +234,7 @@ const Header = ({
                     <></>
                   :
                     <Link to={'/login'}>
-                      <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-[#001d3d]' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                      <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                         <LuUserRoundPlus  size={20}/>
                         <p className='signin_id text-[#001d3d] capitalize ml-2 '>Sign-in</p>
                       </a>

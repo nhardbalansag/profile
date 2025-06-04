@@ -26,3 +26,25 @@ export const requestToken = async (token) => {
         url: `${BaseAPIUrl}account/jwt/token`
     });
 }
+
+export const xeniRegisterApi = async (body) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'POST', 
+        url: `https://travelapi.ai:443/api/sso/agencySSOSignup`,
+        data: body
+    });
+}
+
+export const UpdateAccountXeniPlatformAccess = async (token) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET', 
+        url: `${BaseAPIUrl}account/features/xeni`
+    });
+}

@@ -101,7 +101,9 @@ const AccountPage = () => {
           <aside class="w-64 bg-white border-r border-gray-200 p-4">
             <div class="flex items-center space-x-2 my-6">
               <FiUser />
-              <span class="text-sm text-gray-700">Bernard Balansag</span>
+              <span class="text-sm text-gray-700">
+                {`${auth_states.StateUserInformation.first_name} ${auth_states.StateUserInformation.last_name}`}
+              </span>
             </div>
             <nav class="space-y-2">
               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>

@@ -495,32 +495,6 @@ const DetailsPage = () =>{
                           />
                       }
 
-                      <div className='grid grid-cols-1 gap-5 sm:grid-cols-3'>
-                        {
-                          ResultGetHomeContents.uploads_table.map((item) => (
-                            item.upload_type === "url"
-                            ?
-                              <img
-                              src={item.upload_url }
-                              alt=""  
-                              className="object-contain w-full h-[400px]"
-                              />
-                            :
-                            (
-                              item.upload_type === "image"
-                              ?
-                                <img
-                                src={env.VITE_APP_BACKEND_STORAGE_URL + item.upload_url}
-                                alt=""  
-                                className="object-contain w-full h-[400px]"
-                                />
-                              :
-                                <EmbededVideoUrl videoId={item.upload_url}/>
-                            )
-                          ))
-                        }
-                      </div>
-
                       {
                         ResultGetHomeContents.content_date_from &&
                         ResultGetHomeContents.content_date_to &&
@@ -557,6 +531,33 @@ const DetailsPage = () =>{
                                 )
                       }} 
                     /> 
+
+                    <div className='grid grid-cols-1 gap-5 sm:grid-cols-3'>
+                      {
+                        ResultGetHomeContents.uploads_table.map((item) => (
+                          item.upload_type === "url"
+                          ?
+                            <img
+                            src={item.upload_url }
+                            alt=""  
+                            className="object-contain w-full h-[400px]"
+                            />
+                          :
+                          (
+                            item.upload_type === "image"
+                            ?
+                              <img
+                              src={env.VITE_APP_BACKEND_STORAGE_URL + item.upload_url}
+                              alt=""  
+                              className="object-contain w-full h-[400px]"
+                              />
+                            :
+                              <EmbededVideoUrl videoId={item.upload_url}/>
+                          )
+                        ))
+                      }
+                    </div>
+
                   </div>
               </div>
           </div>

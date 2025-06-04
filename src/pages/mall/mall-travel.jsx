@@ -367,7 +367,71 @@ const MallTravel = () =>{
     })
   }
 
-  const requestToken = async (event) =>{
+  const xeniRegisterApi = async () =>{
+
+    setPlatformLoading(prev => ({
+      ...prev,
+      launchButton: true
+    }));
+
+    const requestBody = {
+      "first_name": auth_states.StateUserInformation.first_name,
+      "last_name": auth_states.StateUserInformation.last_name,
+      "email": auth_states.StateUserInformation.email,
+      "agencyCustomDNS": "https://clubten.booking.xeni.com",
+      "agencyName": "Planet Empire FZCO"
+    }
+
+    await api_account.xeniRegisterApi(requestBody).then((result) =>{
+
+      setPlatformLoading(prev => ({
+        ...prev,
+        launchButton: false
+      }));
+
+      UpdateAccountXeniPlatformAccess()
+       
+    }).catch((err) =>{
+      setPlatformLoading(prev => ({
+        ...prev,
+        launchButton: false
+      }));
+
+      if(!err.response.data.status){
+        if(err.response.data.message.includes("duplicate")){
+          UpdateAccountXeniPlatformAccess()
+        }
+      }
+    })
+  }
+
+  const UpdateAccountXeniPlatformAccess = async () =>{
+
+    setPlatformLoading(prev => ({
+      ...prev,
+      launchButton: true
+    }));
+
+    await api_account.UpdateAccountXeniPlatformAccess(auth_states.StateToken).then((result) =>{
+
+      setPlatformLoading(prev => ({
+        ...prev,
+        launchButton: false
+      }));
+
+      if(result.status){
+        requestToken()
+      }
+
+    }).catch((err) =>{
+      setPlatformLoading(prev => ({
+        ...prev,
+        launchButton: false
+      }));
+    })
+  }
+
+  const requestToken = async () =>{
 
     setPlatformLoading(prev => ({
       ...prev,
@@ -385,8 +449,13 @@ const MallTravel = () =>{
         setTimeout(() => {
           modalRef.current?.showModal();
         }, 0); // Delay to ensure DOM is ready
-      }else{
-        window.open(result.data.redirectUrl, '_blank');
+      }
+      else{
+        if(result.data.registered_to_xeni){
+          window.open(result.data.redirectUrl, '_blank');
+        }else{
+          xeniRegisterApi()
+        }
       }
 
     }).catch((err) =>{
@@ -590,21 +659,19 @@ const MallTravel = () =>{
             {
               getLoading
               ?
-                <></>
+                <span className="text-black loading loading-spinner loading-sm"></span>
               :
+                getPlatformLoading.launchButton 
+                ? <span className="text-black loading loading-spinner loading-sm"></span>
+                :
                 <button 
                   disabled={getPlatformLoading.launchButton}
                   onClick={() => requestToken()}
                   className="px-6 py-2 font-bold text-white bg-orange-500 btn hover:bg-orange-600 rounded-xl">
-                  <div>
-                    {
-                      getPlatformLoading.launchButton
-                      ? <span className="loading loading-spinner loading-sm"></span>
-                      : "LAUNCH ACCOUNT"
-                    }
-                  </div>
+                  <div>LAUNCH ACCOUNT</div>
                 </button>
             }
+           
             <a 
               target="_blank"
               rel="noopener noreferrer"
