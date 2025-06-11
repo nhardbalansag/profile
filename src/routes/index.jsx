@@ -39,7 +39,9 @@ import {
     EventPage,
     EventContent,
 
-    DetailsPage
+    DetailsPage,
+
+    AccountSubscription
 } from '../pages/index'
 
 import {
@@ -136,6 +138,14 @@ const router = createBrowserRouter([
                 element: ( 
                     <AuthenticatedUsers route={'/login'}>
                         <AccountOrders />
+                    </AuthenticatedUsers> 
+                )
+            },
+            {
+                path: "subscriptions",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <AccountSubscription />
                     </AuthenticatedUsers> 
                 )
             },

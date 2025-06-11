@@ -28,6 +28,8 @@ import EventContent from "./events/event-travel";
 
 import DetailsPage from "./details/details-index";
 
+import AccountSubscription from "./account/account-subscriptions";
+
 export{
     HomePage,
     HomeContent,
@@ -56,5 +58,7 @@ export{
 
     EventPage,
     EventContent,
-    DetailsPage
+    DetailsPage,
+
+    AccountSubscription
 }

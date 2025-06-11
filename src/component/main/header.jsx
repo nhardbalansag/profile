@@ -178,7 +178,7 @@ const Header = ({
                 </Link>
                 {
                   auth_states.StateToken &&
-                  <Link to={'account'}>
+                  <Link to={'/account'}>
                     <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <PiBuildingOfficeLight  size={20}/>
                       <p className='account_id text-[#001d3d] capitalize ml-2 '>office</p>

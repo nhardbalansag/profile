@@ -30,7 +30,23 @@ const AccountContent = () =>{
 
   const auth_states = useSelector(state => state.AuthReducer);
 
+  const [paginate, setPaginate] = useState(null)
+
+  const [getPaginationButtonNextPrev, setPaginationButtonNextPrev] = useState({
+    prev_page_url:  null,
+    first_page_url:null,
+    last_page_url:null,
+    next_page_url:  null,
+    current_page: null,
+    last_page:null,
+    total:0,
+    from:0,
+    to:0,
+    data:[]
+  })
+
   const [loadingContent, setLoadingContent] = useState(true);
+  const [requestLoading, setRequestLoading] = useState(false);
   const [walletData, setWalletData] = useState({
     t_points: 0,
     t_bucks: 0,
@@ -50,17 +66,40 @@ const AccountContent = () =>{
           }));
         })
       }
+      
       setLoadingContent(false)
 
     }).catch((err) =>{
       setLoadingContent(false)
-      console.log("getTBucksAndTPoints", err)
+    })
+  }
+
+  const getPaginatedContent = async() =>{
+    setRequestLoading(true)
+    await api_account.getAccountTransaction(auth_states.StateToken, paginate).then((result) =>{
+      if(result.status){
+        Object.keys(result.data.data).map((item, key) =>{
+          setPaginationButtonNextPrev((prev) => ({
+            ...prev,
+            [item]: result.data.data[item]
+          }));
+        })
+      }
+
+      setRequestLoading(false)
+    }).catch((err) =>{
+      setRequestLoading(false)
     })
   }
 
   useEffect(() => {
     getTBucksAndTPoints()
   },[])
+
+  useEffect(() =>{
+    getPaginatedContent()
+  },[paginate])
+
 
   // const handleShare = async (dataToShare) => {
   //   if (navigator.share) {
@@ -159,7 +198,7 @@ const AccountContent = () =>{
 
   const _WalletCard = ({title, amount, buttons}) =>{
     return(
-      <div className="w-[90%] border rounded-2xl p-5 bg-white shadow-lg space-y-3 relative z-0">
+      <div className="w-[95%] border rounded-2xl p-5 bg-white shadow-lg space-y-3 relative z-0">
         <p className="text-[18px] md:text-[25px] uppercase font-semibold">{title}</p>
         <div>
           <p className="text-[15px] md:text-[18px] capitalize">balance</p>
@@ -178,9 +217,9 @@ const AccountContent = () =>{
     )
   }
 
-  const _Buttons = ({title, icon, hasBG=true}) =>{
+  const _Buttons = ({title, icon, hasBG=true, onPressAction}) =>{
     return(
-      <button className={`${hasBG ? 'bg-white btn shadow-sm rounded-xl' : "flex flex-col items-center justify-center h-[130px] bg-transparent"} `}>
+      <button onClick={onPressAction} className={`${hasBG ? 'bg-white btn shadow-sm rounded-xl' : "flex flex-col items-center justify-center h-[130px] bg-transparent"} `}>
         {
           icon &&
           <div className={`bg-blue-600 p-2 flex justify-center text-xl w-[35px] h-[35px] font-bold text-white  rounded-full`}>
@@ -214,7 +253,14 @@ const AccountContent = () =>{
                 </div>
               </div>
             :
-              walletData.AccountTransaction.map((item, index) => (
+              getPaginationButtonNextPrev.data.map((item, index) => (
+                requestLoading
+                ?
+                  <div key={index} className="flex flex-row items-center justify-between w-full">
+                    <div className="w-[50%] h-4 skeleton"></div>
+                    <div className="w-[30%] h-4 skeleton"></div>
+                  </div>
+                :
                 <div key={index} className="flex justify-between">
                   <div className="w-[200px]">
                     <p className="font-medium uppercase ">{item.description}</p>
@@ -223,13 +269,17 @@ const AccountContent = () =>{
                   <div className="w-[200px] text-right">
                     <p className="space-x-2 font-medium uppercase">
                       <span>+</span>
-                      <span>{item.t_bucks}</span>
+                      <span>{parseFloat(item.t_bucks).toFixed(2)}</span>
                     </p>
-                    <p className="font-thin uppercase ">{item.t_points}</p>
+                    <p className="font-thin uppercase ">{parseFloat(item.t_points).toFixed(2)}</p>
                   </div>
                 </div>
               ))
           }
+        </div>
+        <div className="pb-16 space-x-3">
+          <_Buttons onPressAction={() => setPaginate(getPaginationButtonNextPrev.prev_page_url)} title={'Previous'}/>
+          <_Buttons onPressAction={() => setPaginate(getPaginationButtonNextPrev.next_page_url)} title={'Next'}/>
         </div>
       </div>
     )
@@ -254,7 +304,7 @@ const AccountContent = () =>{
 
   const FinanceSummary = () => {
     return (
-      <div className="w-[90%] grid grid-cols-2 gap-3">
+      <div className="w-[95%] grid grid-cols-2 gap-3">
         <_BonusCard
           icon={<LuHandshake size={18} className="text-gray-600" />}
           title={'Direct Bonus'}
@@ -327,7 +377,7 @@ const AccountContent = () =>{
     <div className="">
       <div className="grid grid-cols-1 md:grid-cols-2">
         <div className="">
-          <div className="flex items-center justify-between px-10">
+          <div className="flex items-center justify-between px-3">
             <p className="capitalize text-[15px] md:text-[18px]">account number</p>
             <p className="font-semibold capitalize text-[18px] md:text-[20px]">{auth_states.StateUserInformation.accounts_table.account_number}</p>
             <label htmlFor="my_modal_7">
@@ -356,7 +406,7 @@ const AccountContent = () =>{
             <FinanceSummary/>
           </div>
         </div>
-        <div className="px-5 space-y-5">
+        <div className="px-3 space-y-5">
           <div className="flex items-center justify-between">
             <p className="capitalize font-semibold text-[20px]">transaction history</p>
           </div>

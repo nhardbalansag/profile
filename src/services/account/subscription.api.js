@@ -2,60 +2,62 @@ import axios from 'axios';
 
 const env = import.meta.env;
 
-const PublicAPI = env.VITE_APP_BACKEND_API_URL + "account/wallet/"
+const PublicAPI = env.VITE_APP_BACKEND_API_URL + "account/subscriptions/" 
 const BaseAPIUrl = env.VITE_APP_BACKEND_API_URL
 
-export const getTBucksAndTPoints = async (token) => {
+export const getPaginatedOrders = async (token) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
         method: 'GET', 
-        url: `${PublicAPI}home`
+        url: `${PublicAPI}all-subscriptions`
     });
 }
 
-export const requestToken = async (token) => {
+export const AllUserSubscriptionCategories = async (token) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
         method: 'GET', 
-        url: `${BaseAPIUrl}account/jwt/token`
+        url: `${PublicAPI}getAllSubscription`
     });
-}
+} 
 
-export const xeniRegisterApi = async (body) => {
+export const GetClientSecret = async (token, reqBody) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         method: 'POST', 
-        url: `https://travelapi.ai:443/api/sso/agencySSOSignup`,
-        data: body
+        url: `${PublicAPI}create-payment-intent`,
+        data: reqBody
     });
 }
 
-export const UpdateAccountXeniPlatformAccess = async (token) => {
+export const CheckSubscriptionPaymentIntentStatus = async (token, reqBody) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'POST', 
+        url: `${PublicAPI}validate-payment-intent-status`,
+        data: reqBody
+    });
+}
+
+export const GetUserAccountSubscriptionDetails = async (token) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
         method: 'GET', 
-        url: `${BaseAPIUrl}account/features/xeni`
-    });
-}
-
-export const getAccountTransaction = async (token, url) => {
-    return await axios({ 
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        method: 'GET', 
-        url: url ? url : `${PublicAPI}paginated-transaction`
+        url: `${PublicAPI}account-subscription`
     });
 }

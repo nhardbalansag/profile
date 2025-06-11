@@ -34,7 +34,7 @@ const MallTravel = () =>{
 
   //#region useRefs
   const maxGuestCount = useRef(0)
-  const walletRef = useRef(100)
+  const walletRef = useRef(0)
   const paymentBContent = useRef({})
   const initialFinalPrice = useRef(0)
   const countRef = useRef(0)
@@ -60,10 +60,17 @@ const MallTravel = () =>{
   const [loadingContent, setLoadingContent] = useState(true);
   const [getclientSecret, setclientSecret] = useState(null)
   const [getLoading, setLoading] = useState(false)
+  const [getPaymentIntentSession, setPaymentIntentSession] = useState(null)
 
   const [getPlatformLoading, setPlatformLoading] = useState({
     launchButton: false
   })
+
+  const [walletData, setWalletData] = useState({
+    t_points: 0,
+    t_bucks: 0,
+    AccountTransaction:[]
+  });
 
   const [getPlatformAccess, setPlatformAccess] = useState([])
 
@@ -75,9 +82,6 @@ const MallTravel = () =>{
       setShowBottomRegistration(true)
       navigate('login');
     }else{
-
-      console.log('selectedTab', selectedTab)
-      console.log('AllContentData', AllContentData)
 
       const content_title = selectedLanguage.current == null 
       ? AllContentData.content_title
@@ -112,7 +116,7 @@ const MallTravel = () =>{
         )
       
       const reqBody = {
-        content_id: selectedTab.content_id,
+        content_offers_id: selectedTab.id,
         offers_id: selectedTab.offers_id,
         guest_count: count,
         finalAmount: totalPriceWithPoints,
@@ -138,12 +142,28 @@ const MallTravel = () =>{
       await api_content.GetClientSecret(auth_states.StateToken, paymentBContent.current).then((result) =>{
         if(result.status){
           setclientSecret(result.data.clientSecret)
+          setPaymentIntentSession(result.data.sessionId)
           setLoading(false)
         }
       }).catch((err) =>{
           console.log("fetchClientSecret", err)
       })
     }
+  }
+
+  const CheckBookingPaymentIntentStatus = async () =>{
+    const reqBody = {
+      session_id: getPaymentIntentSession,
+    }
+    
+    setLoadingContent(true)
+    await api_content.CheckBookingPaymentIntentStatus(auth_states.StateToken, reqBody).then((result) =>{
+      setclientSecret(null)
+      setPaymentIntentSession(null)
+    }).catch((err) =>{
+      setclientSecret(null)
+      setPaymentIntentSession(null)
+    })
   }
 
   const handleTpoints = (item) => {
@@ -291,7 +311,7 @@ const MallTravel = () =>{
   }
 
   const HandleOfferDetails = (item) =>{
-
+    getTBucksAndTPoints()
     setOpenBottomOffer(true)
     ResultSetHomeContentsDetails(item)
     setActiveTab(item.content_offers_table[0])
@@ -463,6 +483,31 @@ const MallTravel = () =>{
         ...prev,
         launchButton: false
       }));
+    })
+  }
+
+  const getTBucksAndTPoints = async() =>{
+    setLoadingContent(true)
+    await api_account.getTBucksAndTPoints(auth_states.StateToken).then((result) =>{
+      if(result.status){
+        setLoadingContent(false)
+        // setWalletData(result.data.data)
+        Object.keys(result.data.data).map((item, key) =>{
+          setWalletData((prev) => ({
+            ...prev,
+            [item]: result.data.data[item]
+          }));
+        })
+
+        walletRef.current = result.data.data.t_points
+
+        setTPointsWallet(result.data.data.t_points)
+      }
+      
+      setLoadingContent(false)
+
+    }).catch((err) =>{
+      setLoadingContent(false)
     })
   }
   
@@ -774,7 +819,10 @@ const MallTravel = () =>{
         openBottomOffer &&(
           <OffersBottomSheet
           handleCheckout={() => handleCheckout(activeTab, ResultGetHomeContentsDetails)}
-          handleClose={() => setOpenBottomOffer(!openBottomOffer)}
+          handleClose={() => {
+              setOpenBottomOffer(!openBottomOffer)
+            }
+          }
           handleIncrease={() => handleIncreaseFunc()}
           handleDecrease={() => handleDecreaseFunc()}
           handleCustomTPoints={(text) => handleCustomPoints(text, activeTab)}
@@ -785,7 +833,7 @@ const MallTravel = () =>{
           count={count}
           customTPoints={TPointsCustom}
           tabData={activeTab}
-          wallet={TPointsWallet}
+          wallet={parseFloat(TPointsWallet).toFixed(2)}
           finalAmount={totalPriceWithPoints}
           offersData={ResultGetHomeContentsDetails}
           >
@@ -839,7 +887,16 @@ const MallTravel = () =>{
       }
 
       {
-        openBottomPayment && <Checkout clientSecret={getclientSecret} getLoading={getLoading} dataContent={paymentBContent.current} handleClose={() => setOpenBottomPayment(false)}/>
+        openBottomPayment && 
+        <Checkout 
+        clientSecret={getclientSecret} 
+        getLoading={getLoading} 
+        dataContent={paymentBContent.current} 
+        handleClose={() => {
+          CheckBookingPaymentIntentStatus()
+          setOpenBottomPayment(false)
+        }}
+        />
       }
 
       <ModalForUpgradeSubscription/>

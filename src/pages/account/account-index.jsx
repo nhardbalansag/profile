@@ -21,6 +21,7 @@ import { HiMiniBuildingOffice2 } from "react-icons/hi2";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { LuTickets } from "react-icons/lu";
 import { AiFillNotification } from "react-icons/ai";
+import { FiAlignLeft } from "react-icons/fi";
 
 import Logo2 from '../../assets/images/ten/logo2.png'
 
@@ -36,19 +37,17 @@ const AccountPage = () => {
 
   const Header = ({onPressDropDown}) =>{
     return (
-      <header className="flex items-center justify-between w-full px-10 py-2 mb-8 text-white">
+      <header className="flex items-center justify-between w-full px-3 py-2 mb-8 text-white">
         {/* Right Section */}
         <div className="flex items-center space-x-4 ">
-          <div className="flex items-center space-x-10">
-            <div className="text-sm ">
-              <p className="text-xs text-gray-400">Welcome back!</p>
-              <p className="font-medium text-black">
-                {`${auth_states.StateToken ? auth_states.StateUserInformation.first_name : ","}`}
-              </p>
-            </div>
-            <label htmlFor="my-drawer" className="btn btn-square btn-ghost drawer-button">
-              <FaChevronRight className="text-xs" color='black'/>
-            </label>
+          <label htmlFor="my-drawer" className="btn btn-square btn-ghost drawer-button">
+            <FiAlignLeft size={25} color='black'/>
+          </label>
+          <div className="text-sm ">
+            <p className="text-xs text-gray-400">Welcome back!</p>
+            <p className="font-medium text-black">
+              {`${auth_states.StateToken ? auth_states.StateUserInformation.first_name : ","}`}
+            </p>
           </div>
         </div>
         <div>
@@ -84,7 +83,8 @@ const AccountPage = () => {
 
   const DrawerComp = () =>{
     return(
-      <div className="drawer">
+      <div 
+      className="drawer">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
         <Header onPressDropDown={() => setBottomDetailsOpen(true)}/>
@@ -112,16 +112,16 @@ const AccountPage = () => {
               </a>
               <a href="#" class={`${("/content/add-content").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <FaRegEnvelopeOpen />
-                {_link("/content/", "Subscription")}
+                {_link("/subscriptions", "Subscription")}
               </a>
               <a href="#" class={`${("orders").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <TfiReceipt />
                 {_link("/orders", "Orders")}
               </a>
-              <a href="#" class={`${("/content/add-content").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+              {/* <a href="#" class={`${("/content/add-content").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <FaHistory  />
                 {_link("/content/", "Transaction History")}
-              </a>
+              </a> */}
               <a href="#" class={`${("details").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <FaRegUser />
                 {_link("/details", "User Profile")}
@@ -166,7 +166,7 @@ const AccountPage = () => {
   return (
     <div className="h-[90%] bg-[#001d3d] flex flex-col items-center justify-end">
       {/* Logo */}
-      <div className="flex items-center justify-between w-full px-10 py-2 text-white">
+      <div className="flex items-center justify-between w-full px-3 py-2 text-white">
         <div className="">
           <Link to={'/'}>
             <a href="#" className='flex items-center'>
@@ -179,7 +179,7 @@ const AccountPage = () => {
         </div>
       </div>
       
-      <div className="h-[90%] w-full bg-[#f7f8fa] bg-white rounded-t-[50px] py-14">
+      <div className="h-[90%] w-full bg-white rounded-t-[50px] py-14">
         {/* <Outlet /> */}
         <DrawerComp/>
       </div>

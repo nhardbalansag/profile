@@ -56,3 +56,15 @@ export const GetEventListContent = async () => {
         url: `${PublicAPI}event-list`
     });
 }
+
+export const CheckBookingPaymentIntentStatus = async (token, reqBody) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'POST', 
+        url: `${BaseAPIUrl}account/orders/validate-payment-intent-status`,
+        data: reqBody
+    });
+}
