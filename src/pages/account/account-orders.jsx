@@ -16,14 +16,32 @@ const AccountOrders = () =>{
   const [loadingContent, setLoadingContent] = useState(true);
   const [getPaginatedOrdersData, setPaginatedOrdersData] = useState([]);
 
+  const [paginate, setPaginate] = useState(null)
+  const [getPaginationButtonNextPrev, setPaginationButtonNextPrev] = useState({
+    prev_page_url:  null,
+    first_page_url:null,
+    last_page_url:null,
+    next_page_url:  null,
+    current_page: null,
+    last_page:null,
+    total:0,
+    from:0,
+    to:0,
+    data:[]
+  })
+
   const getPaginatedOrders = async() =>{
     setLoadingContent(true)
-    await api_orders.getPaginatedOrders(auth_states.StateToken).then((result) =>{
+    await api_orders.getPaginatedOrders(auth_states.StateToken, paginate).then((result) =>{
       if(result.status){
         setLoadingContent(false)
         setPaginatedOrdersData(result.data.data)
-
-        console.log(result.data.data)
+        Object.keys(result.data.data).map((item, key) =>{
+          setPaginationButtonNextPrev((prev) => ({
+            ...prev,
+            [item]: result.data.data[item]
+          }));
+        })
       }
     }).catch((err) =>{
       console.log("getPaginatedOrders", err)
@@ -60,11 +78,25 @@ const AccountOrders = () =>{
     )
   }
 
+  const _Buttons = ({title, icon, hasBG=true, onPressAction}) =>{
+    return(
+      <button onClick={onPressAction} className={`${hasBG ? 'bg-white btn border shadow-sm rounded-xl' : "flex flex-col items-center justify-center h-[130px] bg-transparent"} `}>
+        {
+          icon &&
+          <div className={`bg-blue-600 p-2 flex justify-center text-xl w-[35px] h-[35px] font-bold text-white  rounded-full`}>
+            {icon}
+          </div>
+        }
+        <p className="mt-1 text-sm capitalize">{title}</p>
+      </button>
+    )
+  }
+
   const OrdersPage = () => {
   
     const tabs = [
       "All Orders",
-      // "Pending",
+      "Pending",
       // "Confirmed",
       // "On It's Way",
       // "Delivered",
@@ -72,7 +104,7 @@ const AccountOrders = () =>{
     ];
   
     return (
-      <div className="min-h-screen p-6 text-gray-800 bg-white">
+      <div className="min-h-screen p-2 text-gray-800 bg-white">
         {/* Page Title */}
         <h1 className="mb-6 text-2xl font-bold">My Orders</h1>
   
@@ -86,9 +118,9 @@ const AccountOrders = () =>{
           </div>
   
           {/* Main Content */}
-          <div className="md:col-span-3">
+          <div className="md:col-span-3 space-y-5">
             {/* Tabs */}
-            <div className="flex flex-wrap gap-2 mb-6">
+            <div className="flex flex-wrap gap-2">
               {tabs.map((tab) => (
                 <button
                   key={tab}
@@ -113,11 +145,15 @@ const AccountOrders = () =>{
                     ? 
                       <_EmptyDataComp/>
                     : 
-                      getPaginatedOrdersData.data.map((item, key) =>(
+                      getPaginationButtonNextPrev.data.map((item, key) =>(
                         <OrderSummaryCard content_data={item}/>
                       ))
                   )
               }
+            </div>
+            <div className="pb-16 space-x-3">
+              <_Buttons onPressAction={() => setPaginate(getPaginationButtonNextPrev.prev_page_url)} title={'Previous'}/>
+              <_Buttons onPressAction={() => setPaginate(getPaginationButtonNextPrev.next_page_url)} title={'Next'}/>
             </div>
           </div>
         </div>
@@ -126,30 +162,21 @@ const AccountOrders = () =>{
   }
 
   const OrderSummaryCard = ({content_data}) => {
-    const products = [
-      {
-        icon: <RiReceiptLine  className="text-2xl text-purple-600" />,
-        name: "HD11 ADAPTER CABLE 655861690",
-        price: "SAR 2000",
-        qty: "2 items",
-      },
-    ]
-  
     return (
       <div className="p-6 space-y-4 text-sm bg-white border rounded-lg shadow-md">
         {/* Order Header */}
         <div className="flex items-center justify-between">
           <div>
             <p className="font-semibold">
-              Order ID: <span className="text-blue-500">{content_data.params.details.orderId}</span>{" "}
-              {/* <span className="text-green-600 uppercase">{content_data.params.payment_status.payment_status}</span> */}
+              {/* Order ID: <span className="text-blue-500">{content_data.params.reference}</span>{" "} */}
+              <span className={`uppercase ${content_data.payment_status ? "text-green-600 " : "text-yellow-600 "} `} >{content_data.payment_status ? "paid" : "pending"}</span>
             </p>
             <p className="text-xs text-gray-500">
               {format(new Date(content_data.created_at), 'MMMM dd, yyyy HH:mm:ss a')}
             </p>
           </div>
           <div className="text-right uppercase">
-            <p className="text-lg font-bold">{content_data.params.payment_status.currency} {content_data.params.payment_status.amount_total}</p>
+            <p className="text-lg font-bold">{parseFloat(content_data.totalAmount).toFixed(2)  }</p>
             <p className="text-xs text-gray-500">Total Items</p>
           </div>
         </div>
@@ -159,21 +186,23 @@ const AccountOrders = () =>{
           <table className="w-full text-left table-auto">
             <thead className="text-xs text-gray-500 uppercase border-b">
               <tr>
-                <th className="py-2">Product</th>
-                <th className="py-2">Unit Price</th>
-                <th className="py-2">Qty</th>
+                <th className="py-2"></th>
+                <th className="py-2">T-Points</th>
+                <th className="py-2">Price</th>
+                <th className="py-2">Qty</th> 
               </tr>
             </thead>
             <tbody className="text-sm">
-              {products.map((product, idx) => (
-                <tr key={idx} className="border-b">
-                  <td className="flex items-center gap-2 py-4 font-medium">
-                  {content_data.params.details.product_data_name}
+              {/* {products.map((product, idx) => ( */}
+                <tr className="border-b">
+                  <td className="flex items-center py-4 font-medium w-[100px]">
+                  {content_data.content_offer.content_table.content_title}
                   </td>
-                  <td>{content_data.baseAmount}</td>
+                  <td>{parseFloat(content_data.appliedTPoints).toFixed(2) }</td>
+                  <td>{parseFloat(content_data.baseAmount).toFixed(2) }</td>
                   <td>{content_data.guest_count}</td>
                 </tr>
-              ))}
+              {/* ))} */}
             </tbody>
           </table>
         </div>
@@ -183,15 +212,31 @@ const AccountOrders = () =>{
   
   const _AccountDetails = () =>{
     return (
-      <div className="flex-1">
+      <div className="flex-1 pb-10">
         <OrdersPage/>
       </div>
     )
   }
 
-  useEffect(() => {
+  useEffect(() =>{
     getPaginatedOrders()
-  },[])
+  },[paginate])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >= document.body.offsetHeight
+      ) {
+        console.log("Reached end of page scroll!");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <div>

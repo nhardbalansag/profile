@@ -840,43 +840,50 @@ const MallTravel = () =>{
             <div className="grid grid-cols-2 gap-5 my-5">
               {
                 ResultGetHomeContentsDetails.content_offers_table.map((item, key) =>(
-                  <button onClick={() => HandleOfferTabSelection(item)} key={key} className={`${activeTab.offers_id == item.offers_id ? 'bg-blue-400 text-white border-blue-800' : ''} border p-2  rounded-lg shadow-sm`}>
-                    <p className={`${activeTab.offers_id == item.offers_id ? 'font-extrabold' : 'font-normal'}  text-[25px] uppercase flex flex-col items-center`}>
-                      <span className='mr-1'>
-                        {     
-                          selectedLanguage.current == null 
-                          ? item.offers_table.tier_category_table.tier_category_name
-                          : (
-                                item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                              ? item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
-                              : item.offers_table.tier_category_table.tier_category_name
-                            )
-                        }
-                      </span>
-                      <span>
-                        {
-                          selectedLanguage.current == null 
-                          ? item.offers_table.membership_type_table.type_title
-                          : (
-                                item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                              ? item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
-                              : item.offers_table.membership_type_table.type_title
-                            )
-                        }
-                      </span>
-                      <span className='text-[18px] font-normal'>
-                        (
+                  <button 
+                  onClick={() => HandleOfferTabSelection(item)} 
+                  key={key} 
+                  className={`${activeTab.offers_id == item.offers_id ? 'bg-yellow-400 text-black ' : ''} border h-auto rounded-lg shadow-sm p-2`}>
+                    <p className={`${activeTab.offers_id == item.offers_id ? 'font-extrabold' : 'font-normal'}  text-[18px] uppercase`}>
+                      <div className='flex items-center justify-between'>
+                        <span>
                           {
                             selectedLanguage.current == null 
-                            ? item.offers_table.supplier_table.room_type.room_type_name
+                            ? item.offers_table.membership_type_table.type_title
                             : (
-                                  item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                ? item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).room_type_name
-                                : item.offers_table.supplier_table.room_type.room_type_name
+                                  item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                ? item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
+                                : item.offers_table.membership_type_table.type_title
                               )
                           }
-                        )
-                      </span>
+                        </span>
+                        <div className='flex flex-col'>
+                          <span className='font-semibold'>
+                            {     
+                              selectedLanguage.current == null 
+                              ? item.offers_table.tier_category_table.tier_category_name
+                              : (
+                                    item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                  ? item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
+                                  : item.offers_table.tier_category_table.tier_category_name
+                                )
+                            }
+                          </span>
+                          <span className='text-[15px] font-normal capitalize'>
+                            (
+                              {
+                                selectedLanguage.current == null 
+                                ? item.offers_table.supplier_table.room_type.room_type_name
+                                : (
+                                      item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                    ? item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).room_type_name
+                                    : item.offers_table.supplier_table.room_type.room_type_name
+                                  )
+                              }
+                            )
+                          </span>
+                        </div>
+                      </div>
                     </p>
                   </button>
                 ))
