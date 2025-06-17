@@ -30,6 +30,8 @@ import DetailsPage from "./details/details-index";
 
 import AccountSubscription from "./account/account-subscriptions";
 
+import AccountTransferTPoints from "./account/account-transfer-tpoints";
+
 export{
     HomePage,
     HomeContent,
@@ -60,5 +62,7 @@ export{
     EventContent,
     DetailsPage,
 
-    AccountSubscription
+    AccountSubscription,
+
+    AccountTransferTPoints
 }

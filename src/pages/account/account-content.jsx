@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {useSelector} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 import { TbTransfer } from "react-icons/tb";
 import { MdOutlineCardGiftcard } from "react-icons/md";
 import { LuHandshake } from "react-icons/lu";
@@ -27,6 +29,8 @@ import * as api_account from '../../services/account/account.api.js'
 const env = import.meta.env;
 
 const AccountContent = () =>{
+
+  const navigate = useNavigate();
 
   const auth_states = useSelector(state => state.AuthReducer);
 
@@ -100,24 +104,6 @@ const AccountContent = () =>{
     getPaginatedContent()
   },[paginate])
 
-
-  // const handleShare = async (dataToShare) => {
-  //   if (navigator.share) {
-  //     try {
-  //       await navigator.share({
-  //         title: 'CLUB TEN Referral',
-  //         text: 'Start your journey with CLUB TEN',
-  //         url: env.VITE_APP_PORTAL + "login?sponsor=" + dataToShare,
-  //       });
-  //       console.log('Content shared successfully');
-  //     } catch (error) {
-  //       console.error('Error sharing', error);
-  //     }
-  //   } else {
-  //     alert('Web Share API not supported in your browser.');
-  //   }
-  // }
-
   const handleShare = async (dataToShare) => {
     const shareUrl = `${env.VITE_APP_PORTAL}login?sponsor=${dataToShare}`;
 
@@ -163,10 +149,12 @@ const AccountContent = () =>{
               balance: walletData.t_points,
               button:[
                 {
+                  onPressAction: () => navigate('/t-points-transfer'),
                   title: 'Redeem',
                   icon: <MdOutlineCardGiftcard className="text-[20px] text-white" />
                 },
                 {
+                  onPressAction: () => navigate('/t-points-transfer'),
                   title: 'Transfer',
                   icon: <TbTransfer className="text-[20px] text-white" />
                 }
@@ -177,10 +165,12 @@ const AccountContent = () =>{
               balance: walletData.t_bucks,
               button:[
                 {
+                  onPressAction: () => navigate('/t-points-transfer'),
                   title: 'Redeem',
                   icon: <MdOutlineCardGiftcard className="text-[20px] text-white" />
                 },
                 {
+                  onPressAction: () => navigate('/t-points-transfer'),
                   title: 'withdraw',
                   icon: <PiBankBold className="text-[20px] text-white" />
                 }
@@ -208,7 +198,10 @@ const AccountContent = () =>{
           <div className="flex items-center justify-start space-x-5">
             {
               buttons.map((item, index) => (
-                <_Buttons icon={item.icon} title={item.title}/>
+                <_Buttons 
+                onPressAction={item.onPressAction}
+                icon={item.icon} 
+                title={item.title} />
               ))
             }
           </div>
@@ -264,14 +257,30 @@ const AccountContent = () =>{
                 <div key={index} className="flex justify-between">
                   <div className="w-[200px]">
                     <p className="font-medium uppercase ">{item.description}</p>
-                    <p className="font-thin uppercase ">{format(new Date(item.created_at), 'MMM dd, yyyy')}</p>
+                    <p className="text-xs font-thin uppercase ">{format(new Date(item.created_at), 'MMM dd, yyyy')}</p>
                   </div>
                   <div className="w-[200px] text-right">
-                    <p className="space-x-2 font-medium uppercase">
-                      <span>+</span>
-                      <span>{parseFloat(item.t_bucks).toFixed(2)}</span>
+                    <p className="font-medium uppercase">
+                      {
+                        parseInt(item.t_bucks) !== 0 &&
+                        <span>{`${item.is_debit ? "-" : (item.is_credit ? "+" : "-")}`}</span>
+                      }
+                      <span className='space-x-1'>
+                        <span>{parseFloat(item.t_bucks).toFixed(2)}</span>
+                        <span className='text-xs font-extralight '>T-BUCKS</span>
+                      </span>
                     </p>
-                    <p className="font-thin uppercase ">{parseFloat(item.t_points).toFixed(2)}</p>
+                    
+                    <p className="font-thin uppercase ">
+                      {
+                        parseInt(item.t_points) !== 0 &&
+                        <span>{`${item.is_debit ? "-" : (item.is_credit ? "+" : "-")}`}</span>
+                      }
+                      <span className='space-x-1'>
+                        <span>{parseFloat(item.t_points).toFixed(2)}</span>
+                        <span className='text-xs font-extralight '>T-POINTS</span>
+                      </span>
+                    </p>
                   </div>
                 </div>
               ))
@@ -379,9 +388,9 @@ const AccountContent = () =>{
         <div className="">
           <div className="flex items-center justify-between px-3">
             <p className="capitalize text-[15px] md:text-[18px]">account number</p>
-            <p className="font-semibold capitalize text-[18px] md:text-[20px]">{auth_states.StateUserInformation.accounts_table.account_number}</p>
+            <p className="font-semibold capitalize text-[25px] md:text-[25px]">{auth_states.StateUserInformation.accounts_table.account_number}</p>
             <label htmlFor="my_modal_7">
-              <LuQrCode />
+              <LuQrCode size={40}/>
             </label>
           </div>
 

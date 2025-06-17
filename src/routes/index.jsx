@@ -4,6 +4,9 @@ import React, {useEffect} from 'react'
 import { useDispatch } from "react-redux";
 import {useSelector} from 'react-redux';
 import { Navigate } from "react-router-dom";
+import { useRouteError } from "react-router-dom";
+import { FaExclamationTriangle } from 'react-icons/fa';
+import { Link } from "react-router-dom";
 
 import {
     createBrowserRouter,
@@ -41,7 +44,9 @@ import {
 
     DetailsPage,
 
-    AccountSubscription
+    AccountSubscription,
+
+    AccountTransferTPoints
 } from '../pages/index'
 
 import {
@@ -53,6 +58,30 @@ import { STORAGE_TOKEN, STORAGE_USER_INFORMATION, REDUX_PAYLOAD_INFORMATION } fr
 import * as AuthAction from '../store/auth/authAction'
 
 import * as api_page_config from '../services/page/page.api'
+
+const ErrorPage = () =>{
+  const error = useRouteError();
+  return (
+    <div>
+      <h1>Oops!</h1>
+      <p>{error.statusText || error.message}</p>
+
+        <div className="flex items-center justify-center p-4">
+            <div className="">
+                <div className='text-center'>
+                    <div className="flex justify-center mb-4">
+                    <FaExclamationTriangle className="text-6xl text-orange-500" />
+                    </div>
+                    <h1 className="mb-2 text-2xl font-bold text-blue-700 uppercase">Something went wrong</h1>
+                    <p className="mb-6 text-gray-600">
+                    We’re sorry, but an unexpected error has occurred. Please try again or return to the homepage.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+  );
+}
 
 const GuestRoute = ({ children, route }) => {
     const auth_states = useSelector(state => state.AuthReducer);
@@ -79,10 +108,12 @@ const router = createBrowserRouter([
         path: "/",
         loader: () => ({ message: "Hello Data Router!" }),
         Component: HomePage,  
+        errorElement: <ErrorPage />,
         children:[
             {
                 path: "",
-                element: <HomeContent/>
+                element: <HomeContent/>,
+                errorElement: <ErrorPage />
             },
         ]
     },
@@ -90,10 +121,12 @@ const router = createBrowserRouter([
         path: "/",
         loader: () => ({ message: "Hello Data Router!" }),
         Component: DestinationPage,  
+        errorElement: <ErrorPage />,
         children:[
             {
                 path: "destination",
-                element: <DestinationContent/>
+                element: <DestinationContent/>,
+                errorElement: <ErrorPage />
             },
         ]
     },
@@ -101,6 +134,7 @@ const router = createBrowserRouter([
         path: "/",
         loader: () => ({ message: "Hello Data Router!" }),
         Component: LoginPage,  
+        errorElement: <ErrorPage />,
         children:[
             {
                 path: "login",
@@ -108,7 +142,8 @@ const router = createBrowserRouter([
                     <GuestRoute route={'/'}>
                         <LoginContent />
                     </GuestRoute> 
-                )
+                ),
+                errorElement: <ErrorPage />
             },
         ]
     },
@@ -116,6 +151,7 @@ const router = createBrowserRouter([
         path: "/",
         loader: () => ({ message: "Hello Data Router!" }),
         Component: AccountPage,  
+        errorElement: <ErrorPage />,
         children:[
             {
                 path: "account",
@@ -123,7 +159,8 @@ const router = createBrowserRouter([
                     <AuthenticatedUsers route={'/login'}>
                         <AccountContent />
                     </AuthenticatedUsers> 
-                )
+                ),
+                errorElement: <ErrorPage />
             },
             {
                 path: "details",
@@ -131,7 +168,8 @@ const router = createBrowserRouter([
                     <AuthenticatedUsers route={'/login'}>
                         <AccountDetails />
                     </AuthenticatedUsers> 
-                )
+                ),
+                errorElement: <ErrorPage />
             },
             {
                 path: "orders",
@@ -139,7 +177,8 @@ const router = createBrowserRouter([
                     <AuthenticatedUsers route={'/login'}>
                         <AccountOrders />
                     </AuthenticatedUsers> 
-                )
+                ),
+                errorElement: <ErrorPage />
             },
             {
                 path: "subscriptions",
@@ -147,13 +186,24 @@ const router = createBrowserRouter([
                     <AuthenticatedUsers route={'/login'}>
                         <AccountSubscription />
                     </AuthenticatedUsers> 
-                )
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "t-points-transfer",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <AccountTransferTPoints />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
             },
         ]
     },
     {
         path: "mall",
         Component: MallPage,  
+        errorElement: <ErrorPage />,
         children:[
             {
                 path: "",
@@ -161,7 +211,8 @@ const router = createBrowserRouter([
                     <AuthenticatedUsers route={'/login'}>
                         <MallTravel />
                     </AuthenticatedUsers> 
-                )
+                ),
+                errorElement: <ErrorPage />
             },
             {
                 path: "merchant",
@@ -169,13 +220,15 @@ const router = createBrowserRouter([
                     <AuthenticatedUsers route={'/login'}>
                         <MallMerchant />
                     </AuthenticatedUsers> 
-                )
+                ),
+                errorElement: <ErrorPage />
             },
         ]
     },
     {
         path: "event",
         Component: EventPage,  
+        errorElement: <ErrorPage />,
         children:[
             {
                 path: "",
@@ -183,7 +236,8 @@ const router = createBrowserRouter([
                     <AuthenticatedUsers route={'/login'}>
                         <EventContent />
                     </AuthenticatedUsers> 
-                )
+                ),
+                errorElement: <ErrorPage />
             },
         ]
     },
@@ -191,7 +245,8 @@ const router = createBrowserRouter([
         path: "content-details",
         element: ( 
             <DetailsPage />
-        )
+        ),
+        errorElement: <ErrorPage />,
     },
     {
         path:"*",

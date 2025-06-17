@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 import Logo1 from '../../assets/images/ten/logo.png'
-import Logo2 from '../../assets/images/ten/logo2.png'
-import TenBG2 from '../../assets/images/ten/tenBg2.png'
-import { IoCheckmarkCircle } from "react-icons/io5";
+
+import {
+  Checkout
+} from '../index.jsx'
 
 import {
   setItem,
@@ -18,6 +19,7 @@ import {
 import { STORAGE_USER_INFORMATION, STORAGE_TOKEN, REDUX_PAYLOAD_INFORMATION } from '../../store/auth/authAction';
 import * as auth_service_api from '../../services/auth/auth.api'
 import * as AuthAction from '../../store/auth/authAction'
+import * as api_subscription from '../../services/account/subscription.api.js'
 
 const LoginContent = () =>{
 
@@ -26,6 +28,11 @@ const LoginContent = () =>{
   const navigate = useNavigate();
 
   const auth_states = useSelector(state => state.AuthReducer);
+
+  const paymentBContent = useRef({})
+  
+  const getTokenRef = useRef(null)
+  const getUserInformationRef = useRef(null)
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -40,7 +47,13 @@ const LoginContent = () =>{
   const [subscriptionList, SetSubscriptionList] = useState([])
   const [countriesList, SetCountriesList] = useState([])
   const [selectedPlan, setSelectedPlan] = useState("");
+  const [selectedPlanDetails, setSelectedPlanDetails] = useState([]);
   const [GetSponsorDetails, SetSponsorDetails] = useState({});
+
+  const [getclientSecret, setclientSecret] = useState(null)
+  const [getPaymentIntentSession, setPaymentIntentSession] = useState(null)
+
+  const [openBottomPayment, setOpenBottomPayment] = useState(false);
 
   const [getRequest, setRequest] = useState({
     email: "",
@@ -104,6 +117,29 @@ const LoginContent = () =>{
     }));
   };
 
+  const CheckSubscriptionPaymentIntentStatus = async () =>{
+    const reqBody = {
+      session_id: getPaymentIntentSession,
+      subscription_categories_id: selectedPlan
+    }
+    
+    setLoadingRegister(true)
+    await api_subscription.CheckSubscriptionPaymentIntentStatus(getTokenRef.current, reqBody).then((result) =>{
+      setPaymentIntentSession(null)
+      setLoadingRegister(false)
+
+      setItem(STORAGE_TOKEN, getTokenRef.current)
+      setItem(STORAGE_USER_INFORMATION, JSON.stringify(getUserInformationRef.current))
+
+      dispatch(AuthAction.LoginUser(getTokenRef.current, getUserInformationRef.current))
+      setLoadingRegister(false)
+
+    }).catch((err) =>{
+      setPaymentIntentSession(null)
+      setLoadingRegister(false)
+    })
+  }
+
   const RegisterUser = async (event) =>{
     event.preventDefault();
 
@@ -119,6 +155,8 @@ const LoginContent = () =>{
     
     setLoadingRegister(true)
 
+    const payment = selectedPlanDetails.membership_type.translation.membership.is_paid_account
+
     const requestBody = {
       "payload": {
         "user_id" : GetSponsorDetails.data.users_table.id,
@@ -128,7 +166,8 @@ const LoginContent = () =>{
       "first_name": getRegisterForm.first_name,
       "last_name": getRegisterForm.last_name,
       "email": getRegisterForm.email,
-      "password": getRegisterForm.password
+      "password": getRegisterForm.password,
+      "is_paid_account": payment,
     }
 
     await auth_service_api.RegisterUser(requestBody).then((result) =>{
@@ -136,10 +175,20 @@ const LoginContent = () =>{
       var token = result.data.token
       var userInformation = result.data.data
 
-      setItem(STORAGE_TOKEN, token)
-      setItem(STORAGE_USER_INFORMATION, JSON.stringify(userInformation))
+      getTokenRef.current = token;
+      getUserInformationRef.current = userInformation;
 
-      dispatch(AuthAction.LoginUser(token, userInformation))
+      if(result.data.payment_intent !== null){
+        setclientSecret(result.data.payment_intent.clientSecret)
+        setPaymentIntentSession(result.data.payment_intent.sessionId)
+        setOpenBottomPayment(true)
+      }else{
+        setItem(STORAGE_TOKEN, token)
+        setItem(STORAGE_USER_INFORMATION, JSON.stringify(userInformation))
+
+        dispatch(AuthAction.LoginUser(token, userInformation))
+      }
+
       setLoadingRegister(false)
       
     }).catch((err) =>{
@@ -205,6 +254,12 @@ const LoginContent = () =>{
     })
   }
 
+  const CloseBottomPayment = () =>{
+    setOpenBottomPayment(false)
+
+    CheckSubscriptionPaymentIntentStatus()
+  }
+
   useEffect(() => {
    userSubscriptionCategories()
    getSponsorDetails()
@@ -228,7 +283,10 @@ const LoginContent = () =>{
                   : "border-gray-200"
               }`}
               // onClick={() => setSelectedPlan(item.subscription_earning_table.id)}
-              onClick={() => setSelectedPlan(item.id)}
+              onClick={() =>{ 
+                setSelectedPlan(item.id);
+                setSelectedPlanDetails(item)
+              }}
             >
               <div>
                 <h3 className="text-lg font-semibold">
@@ -483,6 +541,16 @@ const LoginContent = () =>{
           </div>
         </div>
       </main>
+      {
+        openBottomPayment && 
+        <Checkout 
+        closeButtonMessage={'Go to Account'}
+        clientSecret={getclientSecret} 
+        getLoading={isLoadingRegister} 
+        dataContent={paymentBContent.current} 
+        handleClose={() => CloseBottomPayment()}
+        />
+      }
     </div>
   )
 }

@@ -19,6 +19,7 @@ function Checkout({
     totalAmount = 0,
     statusMessage,
     dataContent,
+    closeButtonMessage,
     clientSecret,
     getLoading,
     handleClose,
@@ -86,7 +87,14 @@ function Checkout({
             <div className="w-full md:max-w-[70%] md:p-4 p-2 transition-transform bg-white shadow-lg rounded-t-2xl max-h-[95%] overflow-y-auto">
                 <div className='flex justify-end'>
                     <button onClick={handleClose} className='flex items-center justify-center p-1 mr-2'>
-                        <IoIosCloseCircleOutline  className="text-[23px] text-[#ff4949]" />
+                        {
+                          closeButtonMessage
+                          ? 
+                            <p className="text-lg font-semibold">
+                              {closeButtonMessage}
+                            </p>
+                          : <IoIosCloseCircleOutline  className="text-[23px] text-[#ff4949]" />
+                        }
                     </button>
                 </div>
                 {

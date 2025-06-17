@@ -44,3 +44,14 @@ export const getSponsorDetails = async (reqBody) => {
         data: reqBody
     });
 }
+
+export const GetClientSecret = async (reqBody) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'POST', 
+        url: `${PublicAPI}create-payment-intent`,
+        data: reqBody
+    });
+}

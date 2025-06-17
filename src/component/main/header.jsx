@@ -121,14 +121,14 @@ const Header = ({
                           <Link to={'/account'}>
                             <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                               <LuUserRoundCheck size={20}/>
-                              <p className='account_id text-[#001d3d] capitalize ml-2 '>Account</p>
+                              <p className='account_id text-[#001d3d] capitalize ml-2 '>My Office</p>
                             </a>
                           </Link>
                         :
                           <Link to={'login'}>
                             <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                               <LuUserRoundPlus  size={20}/>
-                              <p className='signin_id text-[#001d3d] capitalize ml-2 '>Sign-in</p>
+                              <p className='signin_id text-[#001d3d] capitalize ml-2 '>Sign up</p>
                             </a>
                           </Link>
                       }

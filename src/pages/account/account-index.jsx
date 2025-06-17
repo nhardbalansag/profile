@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
 import {useSelector} from 'react-redux';
+import { useDispatch } from "react-redux";
+
 import {
     Outlet,
 } from "react-router";
@@ -15,6 +17,7 @@ import { FaHistory } from "react-icons/fa";
 import { BiBasket } from "react-icons/bi";
 import { TfiReceipt } from "react-icons/tfi";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
+import { AiOutlineLogout } from "react-icons/ai";
 
 import { FaUsers, FaShoppingBag, FaUser } from "react-icons/fa";
 import { HiMiniBuildingOffice2 } from "react-icons/hi2";
@@ -27,13 +30,25 @@ import Logo2 from '../../assets/images/ten/logo2.png'
 
 import { Link } from "react-router-dom";
 
+import * as AuthAction from '../../store/auth/authAction'
+
 const AccountPage = () => {
+
+  const dispatch = useDispatch()
 
   const auth_states = useSelector(state => state.AuthReducer);
 
   const [getBottomDetailsOpen, setBottomDetailsOpen] = useState(false);
 
   const location = useLocation();
+
+  const LogoutUser = async () =>{
+    await clear().then((result) =>{
+      dispatch(AuthAction.LogoutUser())
+    }).catch((err) =>{
+      console.log(err.message)
+    })
+  }
 
   const Header = ({onPressDropDown}) =>{
     return (
@@ -108,7 +123,7 @@ const AccountPage = () => {
             <nav class="space-y-2">
               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <MdOutlineAccountBalanceWallet size={20}/>
-                {_link("/account", "My Account")}
+                {_link("/account", "My Office")}
               </a>
               <a href="#" class={`${("/content/add-content").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <FaRegEnvelopeOpen />
@@ -124,8 +139,14 @@ const AccountPage = () => {
               </a> */}
               <a href="#" class={`${("details").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <FaRegUser />
-                {_link("/details", "User Profile")}
+                {_link("/details", "Profile")}
               </a>
+              <button onClick={() => LogoutUser()}>
+                <a href="#" class={`text-gray-600 flex items-center p-2 rounded-lg`}>
+                  <AiOutlineLogout  size={20}/>
+                  <p className='logout_id text-[#001d3d] capitalize ml-2 '>Logout</p>
+                </a>
+              </button>
             </nav>
           </aside>
         </div>

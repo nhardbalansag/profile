@@ -59,3 +59,27 @@ export const getAccountTransaction = async (token, url) => {
         url: url ? url : `${PublicAPI}paginated-transaction`
     });
 }
+
+export const getAccountToTransfer = async (token, reqBody) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'POST', 
+        url: `${PublicAPI}get-account-to-transfer`,
+        data: reqBody
+    });
+}
+
+export const TransferTPoints = async (token, reqBody) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'POST', 
+        url: `${PublicAPI}transfer-tpoints`,
+        data: reqBody
+    });
+}

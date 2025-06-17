@@ -208,13 +208,13 @@ const AccountSubscription = () =>{
                 <h4 className="font-extrabold text-gray-900">
                   {
                     !loadingRequest &&
-                    AccountSubscriptionDetails.details.commission_earnings.subscription_category.membership_type.type_title
+                    AccountSubscriptionDetails.details.subscription_category.membership_type.type_title
                   }
                 </h4>
                 <p className="text-sm text-gray-600">
                   {
                     !loadingRequest &&
-                    AccountSubscriptionDetails.details.commission_earnings.subscription_category.subscription_range.subscription_range_name
+                    AccountSubscriptionDetails.details.subscription_category.subscription_range.subscription_range_name
                   }
                 </p>
               </div>
