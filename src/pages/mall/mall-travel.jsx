@@ -546,7 +546,10 @@ const MallTravel = () =>{
                   : "border-gray-200"
               }`}
               // onClick={() => setSelectedPlan(item.subscription_earning_table.id)}
-              onClick={() => setSelectedPlan(item.id)}
+              onClick={() => {
+                setSelectedPlan(item.id);
+                navigate('/subscriptions')
+              }}
             >
               <div>
                 <h3 className="text-lg font-semibold">
@@ -686,12 +689,13 @@ const MallTravel = () =>{
   
         {/* Right: Text Content */}
         <div className="flex-1 space-y-1 md:space-y-8">
-          <span className="inline-block px-3 py-1 text-xs font-semibold text-black bg-white rounded-full w-fit">
+          <span className="inline-block px-3 py-1 text-xs font-semibold text-black bg-yellow-400 rounded-full w-fit">
             NEW
           </span>
   
           <h2 className="text-2xl font-semibold leading-tight text-black capitalize md:text-3xl">
-            Launch Club Ten travel platform.
+           Launch Club TEN VIP Online Travel Booking Platform. 
+Book flights, hotels and more at wholesale discount rates!
           </h2>
   
           <div className="flex gap-4 pt-4">
@@ -713,7 +717,7 @@ const MallTravel = () =>{
                   disabled={getPlatformLoading.launchButton}
                   onClick={() => requestToken()}
                   className="px-6 py-2 font-bold text-white bg-orange-500 btn hover:bg-orange-600 rounded-xl">
-                  <div>LAUNCH ACCOUNT</div>
+                  <div>LAUNCH NOW</div>
                 </button>
             }
            
@@ -905,7 +909,7 @@ const MallTravel = () =>{
         }}
         />
       }
-
+      
       <ModalForUpgradeSubscription/>
     </div>  
   ) 

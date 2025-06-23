@@ -54,6 +54,7 @@ const AccountContent = () =>{
   const [walletData, setWalletData] = useState({
     t_points: 0,
     t_bucks: 0,
+    direct: 0,
     AccountTransaction:[]
   });
 
@@ -148,11 +149,11 @@ const AccountContent = () =>{
               title: 't-points',
               balance: walletData.t_points,
               button:[
-                {
-                  onPressAction: () => navigate('/t-points-transfer'),
-                  title: 'Redeem',
-                  icon: <MdOutlineCardGiftcard className="text-[20px] text-white" />
-                },
+                // {
+                //   onPressAction: () => navigate('/t-points-transfer'),
+                //   title: 'Redeem',
+                //   icon: <MdOutlineCardGiftcard className="text-[20px] text-white" />
+                // },
                 {
                   onPressAction: () => navigate('/t-points-transfer'),
                   title: 'Transfer',
@@ -165,12 +166,12 @@ const AccountContent = () =>{
               balance: walletData.t_bucks,
               button:[
                 {
-                  onPressAction: () => navigate('/t-points-transfer'),
-                  title: 'Redeem',
-                  icon: <MdOutlineCardGiftcard className="text-[20px] text-white" />
+                  onPressAction: () => navigate('/t-bucks-transfer'),
+                  title: 'Transfer',
+                  icon: <TbTransfer className="text-[20px] text-white" />
                 },
                 {
-                  onPressAction: () => navigate('/t-points-transfer'),
+                  onPressAction: () => navigate('/t-bucks-withdraw'),
                   title: 'withdraw',
                   icon: <PiBankBold className="text-[20px] text-white" />
                 }
@@ -316,15 +317,15 @@ const AccountContent = () =>{
       <div className="w-[95%] grid grid-cols-2 gap-3">
         <_BonusCard
           icon={<LuHandshake size={18} className="text-gray-600" />}
-          title={'Direct Bonus'}
-          value={0.00}
+          title={'Direct'}
+          value={walletData.direct}
           rate={0.0}
           rateStatus={true}
         />
         
         <_BonusCard
           icon={<BsGraphUpArrow size={18} className="text-gray-600" />}
-          title={'Market Bonus'}
+          title={'Market'}
           value={0.00}
           rate={0.0}
           rateStatus={false}
@@ -332,7 +333,7 @@ const AccountContent = () =>{
 
         <_BonusCard
           icon={<TbWorldDollar size={18} className="text-gray-600" />}
-          title={'Global Bonus'}
+          title={'Global'}
           value={0.00}
           rate={0.0}
           rateStatus={false}
@@ -340,7 +341,7 @@ const AccountContent = () =>{
 
         <_BonusCard
           icon={<BsBarChartLine size={18} className="text-gray-600" />}
-          title={'Milestone Bonus'}
+          title={'Milestone'}
           value={0.00}
           rate={0.0}
           rateStatus={false}

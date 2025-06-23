@@ -126,8 +126,10 @@ const HomeCard = ({
     const _OfferTag = () =>{
         return(
             <div className='flex items-center justify-start p-2'>
-                <button onClick={clickOffers} className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'>
-                    <FaTags className="text-[23px] text-[#FF5722]" />
+                {/* <button onClick={clickOffers} className='flex items-center justify-center p-1 mr-2 bg-white border shadow-lg rounded-badge'> */}
+                <button onClick={clickOffers} className='flex items-center justify-center'>
+                    {/* <FaTags className="text-[23px] text-[#FF5722]" /> */}
+                    <p className='font-medium underline'>Price Details</p>
                 </button>
             </div>
         )

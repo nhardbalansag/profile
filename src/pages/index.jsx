@@ -31,6 +31,8 @@ import DetailsPage from "./details/details-index";
 import AccountSubscription from "./account/account-subscriptions";
 
 import AccountTransferTPoints from "./account/account-transfer-tpoints";
+import AccountTransferTBucks from "./account/account-transfer-tbucks";
+import AccountWithdrawTBucks from "./account/account-withdraw-tbucks";
 
 export{
     HomePage,
@@ -64,5 +66,7 @@ export{
 
     AccountSubscription,
 
-    AccountTransferTPoints
+    AccountTransferTPoints,
+    AccountTransferTBucks,
+    AccountWithdrawTBucks
 }

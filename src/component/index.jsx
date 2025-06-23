@@ -22,6 +22,8 @@ import DestinationCard from "./sub/DestinationCard";
 import OffersBottomSheet from "./sub/OffersBottomSheet";
 import LanguageBottomSheet from "./sub/LanguageBottomSheet";
 
+// import PricingOptions from "./sub/PricingOptions";
+
 export{
     Header,
     Footer,
@@ -45,5 +47,6 @@ export{
     PricingCard,
     DestinationCard,
     OffersBottomSheet,
-    LanguageBottomSheet
+    LanguageBottomSheet,
+    // PricingOptions
 }

@@ -3,10 +3,11 @@ import {useSelector} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { MdOutlineCardGiftcard } from "react-icons/md";
+import { PiBankBold } from "react-icons/pi";
 
 import * as api_account from '../../services/account/account.api.js'
 
-const AccountTransferTPoints = () =>{
+const AccountTransferTBucks = () =>{
 
   const navigate = useNavigate();
 
@@ -60,7 +61,7 @@ const AccountTransferTPoints = () =>{
     }
 
     setLoadingContent(true)
-    await api_account.TransferTPoints(auth_states.StateToken, reqBody).then((result) =>{
+    await api_account.TransferTBucks(auth_states.StateToken, reqBody).then((result) =>{
       if(result.status){
         setLoadingContent(false)
         setCurrentActiveProcess(0)
@@ -201,7 +202,7 @@ const AccountTransferTPoints = () =>{
           <p className="text-gray-500">Balance:</p>
           <p className="text-xl font-bold">
             {
-              (walletData.t_points - getFormData.amount)
+              (walletData.t_bucks - getFormData.amount)
             }
           </p>
         </div>
@@ -294,7 +295,7 @@ const AccountTransferTPoints = () =>{
                   <p className='capitalize'>transfer</p>
 
                   <p className='text-gray-500 capitalize'>wallet type</p>
-                  <p className='uppercase'>t-points</p>
+                  <p className='uppercase'>t-bucks</p>
                 </div>
               }
             </div>
@@ -399,14 +400,15 @@ const AccountTransferTPoints = () =>{
   }, [getProcess.pin])
 
   useEffect(() => {
-    if((walletData.t_points - getFormData.amount) < 0 || getFormData.amount < 0){
+
+    if((walletData.t_bucks - getFormData.amount) < 0 || getFormData.amount < 0){
       setFormData((prevFormData) => ({
         ...prevFormData,
         ['amount']: 0
       }))
     }
-  }, [getFormData.amount]);
 
+  }, [getFormData.amount]);
 
   return (
     <div>
@@ -428,13 +430,13 @@ const AccountTransferTPoints = () =>{
               </div>
             :
               _WalletCard(
-                "t-points",
-                walletData.t_points,
+                "t-bucks",
+                walletData.t_bucks,
                 [
                   {
-                    onPressAction: () => navigate('/t-points-transfer'),
-                    title: 'Redeem',
-                    icon: <MdOutlineCardGiftcard className="text-[20px] text-white" />
+                    onPressAction: () => navigate('/t-bucks-withdraw'),
+                    title: 'Withdraw',
+                    icon: <PiBankBold className="text-[20px] text-white" />
                   }
                 ]
               )
@@ -445,4 +447,4 @@ const AccountTransferTPoints = () =>{
   ) 
 }
 
-export default AccountTransferTPoints
+export default AccountTransferTBucks

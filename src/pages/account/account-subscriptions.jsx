@@ -94,7 +94,7 @@ const AccountSubscription = () =>{
   const CloseBottomPayment = () =>{
     setOpenBottomPayment(false)
 
-    CheckSubscriptionPaymentIntentStatus()
+    // CheckSubscriptionPaymentIntentStatus()
     GetUserAccountSubscriptionDetails()
   }
 

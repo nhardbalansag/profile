@@ -32,6 +32,10 @@ import { Link } from "react-router-dom";
 
 import * as AuthAction from '../../store/auth/authAction'
 
+import {
+  clear
+} from '../../store/store-index'
+
 const AccountPage = () => {
 
   const dispatch = useDispatch()
@@ -65,9 +69,9 @@ const AccountPage = () => {
             </p>
           </div>
         </div>
-        <div>
+        {/* <div>
           <FiBell className="w-5 h-5 cursor-pointer hover:text-lime-400" color='black'/>
-        </div>
+        </div> */}
       </header>
     )
   }
@@ -187,7 +191,7 @@ const AccountPage = () => {
   return (
     <div className="h-[90%] bg-[#001d3d] flex flex-col items-center justify-end">
       {/* Logo */}
-      <div className="flex items-center justify-between w-full px-3 py-2 text-white">
+      {/* <div className="flex items-center justify-between w-full px-3 py-2 text-white">
         <div className="">
           <Link to={'/'}>
             <a href="#" className='flex items-center'>
@@ -198,9 +202,10 @@ const AccountPage = () => {
             </a>
           </Link>
         </div>
-      </div>
+      </div> */}
       
-      <div className="h-[90%] w-full bg-white rounded-t-[50px] py-14">
+      {/* <div className="h-[100%] w-full bg-white rounded-t-[50px] py-14"> */}
+      <div className="h-[100%] w-full bg-white pb-16 pt-5">
         {/* <Outlet /> */}
         <DrawerComp/>
       </div>

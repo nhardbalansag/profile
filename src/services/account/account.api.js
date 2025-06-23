@@ -83,3 +83,69 @@ export const TransferTPoints = async (token, reqBody) => {
         data: reqBody
     });
 }
+
+export const TransferTBucks = async (token, reqBody) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'POST', 
+        url: `${PublicAPI}transfer-tbucks`,
+        data: reqBody
+    });
+}
+
+export const WithdrawTBucks = async (token, reqBody) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'POST', 
+        url: `${PublicAPI}withdraw-tbucks`,
+        data: reqBody
+    });
+}
+
+export const GetUserDetails = async (token) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET', 
+        url: `${BaseAPIUrl}account/details`,
+    });
+}
+
+export const UpdateUserInformation = async (token, reqBody) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'POST', 
+        url: `${BaseAPIUrl}account/update-details`,
+        data: reqBody
+    });
+}
+
+export const UploadFile = async (reqBody, token) => {
+
+    const formData = new FormData();
+    
+    if (reqBody.file || reqBody.file instanceof FileList) {
+        formData.append("file", reqBody.file);
+    }
+
+    return await axios({
+        headers: {
+            "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${token}`,
+        },
+        method: "post",
+        url: `${BaseAPIUrl}account/upload-file`,
+        data: formData
+    })
+}

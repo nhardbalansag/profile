@@ -46,7 +46,9 @@ import {
 
     AccountSubscription,
 
-    AccountTransferTPoints
+    AccountTransferTPoints,
+    AccountTransferTBucks,
+    AccountWithdrawTBucks
 } from '../pages/index'
 
 import {
@@ -194,6 +196,24 @@ const router = createBrowserRouter([
                 element: ( 
                     <AuthenticatedUsers route={'/login'}>
                         <AccountTransferTPoints />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "t-bucks-transfer",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <AccountTransferTBucks />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "t-bucks-withdraw",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <AccountWithdrawTBucks />
                     </AuthenticatedUsers> 
                 ),
                 errorElement: <ErrorPage />
