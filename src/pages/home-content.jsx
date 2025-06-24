@@ -679,12 +679,12 @@ const HomeContent = () =>{
         </div>
         {/* end contents */}
 
-        {
+        {/* {
           showBottomRegistration &&
           <div className='flex justify-center'>
             <BottomCreateAccountFloat onPressAction={ () => navigate("/login")} noThanks={() => setShowBottomRegistration(false)}/>
           </div>
-        }
+        } */}
         
         {
           getBottomDetailsOpen &&(
