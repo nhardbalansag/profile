@@ -18,6 +18,8 @@ import { BiBasket } from "react-icons/bi";
 import { TfiReceipt } from "react-icons/tfi";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { AiOutlineLogout } from "react-icons/ai";
+import { TiHomeOutline } from "react-icons/ti";
+import { GrShieldSecurity } from "react-icons/gr";
 
 import { FaUsers, FaShoppingBag, FaUser } from "react-icons/fa";
 import { HiMiniBuildingOffice2 } from "react-icons/hi2";
@@ -125,6 +127,10 @@ const AccountPage = () => {
               </span>
             </div>
             <nav class="space-y-2">
+              <a href="#" class={`${("h-1/3").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                <TiHomeOutline size={20}/>
+                {_link("/", "Home")}
+              </a>
               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <MdOutlineAccountBalanceWallet size={20}/>
                 {_link("/account", "My Office")}
@@ -144,6 +150,10 @@ const AccountPage = () => {
               <a href="#" class={`${("details").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <FaRegUser />
                 {_link("/details", "Profile")}
+              </a>
+              <a href="#" class={`${("details").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                <GrShieldSecurity />
+                {_link("/security", "Security")}
               </a>
               <button onClick={() => LogoutUser()}>
                 <a href="#" class={`text-gray-600 flex items-center p-2 rounded-lg`}>

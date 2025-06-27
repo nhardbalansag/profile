@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {useSelector} from 'react-redux';
 
 import { GoVerified } from "react-icons/go";
+import { ToastContainer, toast } from 'react-toastify';
 
 import {
   Checkout
@@ -91,6 +92,27 @@ const AccountSubscription = () =>{
     })
   }
 
+  const UnsubscribeToStripe = async () =>{
+    setLoadingRequest(true)
+    await api_subscription.UnsubscribeToStripe(auth_states.StateToken).then((result) =>{
+     
+      setLoadingRequest(false)
+
+      if(!result.status){
+        toast.error("Something went wrong");
+      }
+
+      toast.success("You are successfully unsubscribed");
+
+      GetUserAccountSubscriptionDetails()
+      
+    }).catch((err) =>{
+      toast.error("Something went wrong");
+      setLoadingRequest(false)
+    })
+  }
+
+
   const CloseBottomPayment = () =>{
     setOpenBottomPayment(false)
 
@@ -116,7 +138,10 @@ const AccountSubscription = () =>{
 
   const ButtonComp = ({onPress, title = "button", className = "btn-primary"}) =>{
     return (
-      <button onClick={onPress} className={`btn btn-active ${className} capitalize text-white`}>{title}</button>
+      <button onClick={onPress} className={`btn btn-active ${className} capitalize text-white`}>
+        {loadingRequest && <span className="loading loading-ring loading-sm"></span>}
+        {title}
+      </button>
     )
   }
 
@@ -192,7 +217,7 @@ const AccountSubscription = () =>{
 
   const MembershipStatus = () =>{
     return(
-      <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-md">
+      <div className="p-6 space-y-5 bg-white border border-gray-200 rounded-lg shadow-md">
         <h3 className="mb-4 text-lg font-semibold text-gray-900">Membership Status</h3>
         {
           loadingRequest
@@ -252,6 +277,12 @@ const AccountSubscription = () =>{
               </div>
             </div>
         }
+        {
+          !loadingRequest &&
+          AccountSubscriptionDetails.details.subscription_category.membership_type.translation.membership.is_paid_account &&
+          !AccountSubscriptionDetails.details.is_unsubscribe  &&
+          <ButtonComp onPress={() => UnsubscribeToStripe()} className='btn-error' title='Unsubscribe'/>
+        }
       </div>
     )
   }
@@ -285,6 +316,8 @@ const AccountSubscription = () =>{
         handleClose={() => CloseBottomPayment()}
         />
       }
+
+      <ToastContainer />
     </div>  
   ) 
 }

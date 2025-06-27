@@ -11,10 +11,14 @@ import { LuQrCode } from "react-icons/lu";
 import { TbWorldDollar } from "react-icons/tb";
 import { BsBarChartLine } from "react-icons/bs";
 import { FaRegShareFromSquare } from "react-icons/fa6";
+import { DollarSign, Users, Play, Megaphone } from 'lucide-react';
+import { LuListVideo } from "react-icons/lu";
 
 import { format } from 'date-fns';
 
 import QRCode from "react-qr-code";
+import { MdAttachMoney } from "react-icons/md";
+import { MdVideoLibrary } from "react-icons/md";
 
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectCoverflow } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -22,6 +26,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import { EffectCards } from 'swiper/modules';
 
 import * as api_orders from '../../services/account/orders.api.js'
 import * as api_account from '../../services/account/account.api.js'
@@ -131,9 +136,45 @@ const AccountContent = () =>{
   }
 
   const _SlideComponent = ({children}) =>{
+
+    const wallet_details = [
+      {
+        title: 't-points',
+        balance: walletData.t_points,
+        button:[
+          {
+            onPressAction: () => navigate('/t-points-transfer'),
+            title: 'Transfer',
+            icon: <TbTransfer className="text-[20px] text-white" />
+          }
+        ]
+      },
+      {
+        title: 't-bucks',
+        balance: walletData.t_bucks,
+        button:[
+          {
+            onPressAction: () => navigate('/t-bucks-transfer'),
+            title: 'Transfer',
+            icon: <TbTransfer className="text-[20px] text-white" />
+          },
+          {
+            onPressAction: () => navigate('/t-bucks-withdraw'),
+            title: 'withdraw',
+            icon: <PiBankBold className="text-[20px] text-white" />
+          }
+        ]
+      }
+    ]
+
     return(
       <Swiper
       //#region swiper parameter
+
+      // effect={'cards'}
+      //   grabCursor={true}
+      //   modules={[EffectCards]}
+
         pagination={{
           dynamicBullets: true,
         }}
@@ -144,40 +185,7 @@ const AccountContent = () =>{
       //#endregion
       >
         {
-          [
-            {
-              title: 't-points',
-              balance: walletData.t_points,
-              button:[
-                // {
-                //   onPressAction: () => navigate('/t-points-transfer'),
-                //   title: 'Redeem',
-                //   icon: <MdOutlineCardGiftcard className="text-[20px] text-white" />
-                // },
-                {
-                  onPressAction: () => navigate('/t-points-transfer'),
-                  title: 'Transfer',
-                  icon: <TbTransfer className="text-[20px] text-white" />
-                }
-              ]
-            },
-            {
-              title: 't-bucks',
-              balance: walletData.t_bucks,
-              button:[
-                {
-                  onPressAction: () => navigate('/t-bucks-transfer'),
-                  title: 'Transfer',
-                  icon: <TbTransfer className="text-[20px] text-white" />
-                },
-                {
-                  onPressAction: () => navigate('/t-bucks-withdraw'),
-                  title: 'withdraw',
-                  icon: <PiBankBold className="text-[20px] text-white" />
-                }
-              ]
-            }
-          ].map((item, index) => (
+          wallet_details.map((item, index) => (
             <SwiperSlide key={index} className='flex justify-center py-5'>
               <_WalletCard title={item.title} amount={item.balance} buttons={item.button}/>
             </SwiperSlide>
@@ -189,7 +197,7 @@ const AccountContent = () =>{
 
   const _WalletCard = ({title, amount, buttons}) =>{
     return(
-      <div className="w-[95%] border rounded-2xl p-5 bg-white shadow-lg space-y-3 relative z-0">
+      <div className="w-[90%] border rounded-2xl p-5 bg-white shadow-lg space-y-3 relative z-0">
         <p className="text-[18px] md:text-[25px] uppercase font-semibold">{title}</p>
         <div>
           <p className="text-[15px] md:text-[18px] capitalize">balance</p>
@@ -228,11 +236,11 @@ const AccountContent = () =>{
   const _TransactionTable = () => {
     return(
       <div className="">
-        <div className="space-x-3">
+        {/* <div className="space-x-3">
           <_Buttons title={'date'}/>
           <_Buttons title={'transaction type'}/>
           <_Buttons title={'amount'}/>
-        </div>
+        </div> */}
         <div className="my-8 space-y-6">
           
           {
@@ -295,9 +303,9 @@ const AccountContent = () =>{
     )
   }
 
-  const _BonusCard = ({icon, title, value, rate, rateStatus = true}) =>{
+  const _BonusCard = ({icon, title, value, rate, rateStatus = true, onPressAction}) =>{
     return(
-      <div className="flex flex-col w-[100%] gap-2 p-4 bg-white shadow-md rounded-xl border">
+      <button onClick={onPressAction} className="flex flex-col w-[100%] gap-2 p-4 bg-white shadow-md rounded-xl border">
         <div className="flex items-center gap-2 text-sm text-gray-500">
           <div className="">
             {icon}
@@ -308,7 +316,7 @@ const AccountContent = () =>{
         <div className="px-2 py-1 text-sm font-medium text-green-600 bg-green-100 rounded w-fit">
         {rateStatus ? '+' : '-'}{rate}%
         </div>
-      </div>
+      </button>
     )
   }
 
@@ -316,6 +324,7 @@ const AccountContent = () =>{
     return (
       <div className="w-[95%] grid grid-cols-2 gap-3">
         <_BonusCard
+          onPressAction={() => navigate('/connects')}
           icon={<LuHandshake size={18} className="text-gray-600" />}
           title={'Direct'}
           value={walletData.direct}
@@ -383,10 +392,52 @@ const AccountContent = () =>{
     )
   }
 
+  const NavigationMenu = () => {
+    const menuItems = [
+      {
+        title: 'Commissions',
+        subtitle: 'Report ($)',
+        icon: <MdAttachMoney color='black'/>,
+        color: 'bg-green-500',
+        hoverColor: 'hover:bg-green-600'
+      },
+      {
+        title: 'Trainings',
+        subtitle: '',
+        icon:  <LuListVideo color='black'/>,
+        color: 'bg-orange-500',
+        hoverColor: 'hover:bg-orange-600'
+      },
+    ];
+
+    return (
+      <div className="p-6 w-[95%]  bg-white border rounded-lg shadow-sm">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {menuItems.map((item, index) => (
+            <button
+              key={index}
+              className={` text-white rounded-lg p-6 transition-colors duration-200 shadow-sm hover:shadow-md group`}
+            >
+              <div className="flex flex-col items-center space-y-3 text-center">
+                {item.icon}
+                <div>
+                  <p className="text-sm text-black">{item.title}</p>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="">
       <div className="grid grid-cols-1 md:grid-cols-2">
         <div className="">
+        <div className="flex items-center justify-between">
+            <p className="capitalize font-semibold text-[20px]">your wallet</p>
+          </div>
           <div className="flex items-center justify-between px-3">
             <p className="capitalize text-[15px] md:text-[18px]">account number</p>
             <p className="font-semibold capitalize text-[25px] md:text-[25px]">{auth_states.StateUserInformation.accounts_table.account_number}</p>
@@ -394,6 +445,8 @@ const AccountContent = () =>{
               <LuQrCode size={40}/>
             </label>
           </div>
+
+          
 
           <div className="flex items-center justify-center mb-5">
             {
@@ -412,6 +465,11 @@ const AccountContent = () =>{
                 <_SlideComponent/>
             }
           </div>
+
+          {/* <div className='flex justify-center my-5'>
+            <NavigationMenu/>
+          </div> */}
+          
           <div className="flex items-center justify-center my-5">
             <FinanceSummary/>
           </div>

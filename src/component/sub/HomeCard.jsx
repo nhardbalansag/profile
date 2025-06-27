@@ -12,6 +12,7 @@ import { IoCloudyNightOutline } from "react-icons/io5";
 import { FaTags } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
 import { CiLocationOn } from "react-icons/ci";
+import { Calendar, MapPin, Users, ArrowRight } from 'lucide-react';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -189,8 +190,8 @@ const HomeCard = ({
                     />
                     {/* Overlay */}
                     {
-                        categoryConfig.has_gradient &&
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 to-transparent" />
+                        // categoryConfig.has_gradient &&
+                        // <div className="absolute inset-0 bg-gradient-to-r from-gray-300/80 to-transparent" />
                     }
                     {/* Content */}
                     <div className="relative z-10 flex flex-col justify-between h-full p-6 text-white">
@@ -203,7 +204,7 @@ const HomeCard = ({
                                         search: "?view=" + contentDetails.id,
                                     }}
                                 >
-                                    <h2 className="mb-2 text-xl font-bold">{limitText(title)}</h2>
+                                    <h2 className="mb-2 text-3xl font-bold text-white capitalize drop-shadow-lg">{limitText(title)}</h2>
                                 </Link>
                                 <p dangerouslySetInnerHTML={{__html:collapseDetails ? details : limitText(details)}} /> 
                             </div>
@@ -268,6 +269,69 @@ const HomeCard = ({
         )
     }
 
+    const EventsCard = () => {
+        return (
+            <div className="relative max-w-sm m-3 overflow-hidden transition-all duration-300 transform bg-white shadow-lg group hover:shadow-2xl hover:-translate-y-2">
+                {/* Background Image */}
+                <div className="relative h-64 overflow-hidden">
+                    <img 
+                    src={image}
+                    alt="Hot air balloons floating over a scenic landscape"
+                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+                    />
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    
+                    {/* Title Overlay */}
+                    <div className="absolute bottom-4 left-4 right-4">
+                        <h2 className="mb-2 text-3xl font-bold text-white drop-shadow-lg">Events</h2>
+                        <p className="text-sm text-white/90 drop-shadow-sm">Discover amazing experiences</p>
+                    </div>
+                    
+                    {/* Status Badge */}
+                    <div className="absolute top-4 right-4">
+                        <span className="px-3 py-1 text-xs font-semibold text-white bg-orange-500 rounded-full">
+                            Live Events
+                        </span>
+                    </div>
+                </div>
+
+                <div className="p-6">
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-3 text-gray-600">
+                            <Calendar className="w-4 h-4 text-orange-500" />
+                            <span className="text-sm">Next Event: Dec 15, 2024</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-3 text-gray-600">
+                            <MapPin className="w-4 h-4 text-orange-500" />
+                            <span className="text-sm">Cappadocia, Turkey</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-3 text-gray-600">
+                            <Users className="w-4 h-4 text-orange-500" />
+                            <span className="text-sm">50+ Participants</span>
+                        </div>
+                    </div>
+
+                    <p className="mt-4 text-sm leading-relaxed text-gray-700">
+                    Join us for breathtaking hot air balloon adventures and unforgettable experiences in stunning locations around the world.
+                    </p>
+
+                    <div className="mt-6">
+                        <button className="flex items-center justify-center w-full gap-2 px-4 py-3 font-semibold text-white transition-all duration-200 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 group">
+                            View All Events
+                            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                        </button>
+                    </div>
+                </div>
+
+                {/* Animated Border */}
+                <div className="absolute inset-0 transition-colors duration-300 border-2 border-transparent rounded-lg pointer-events-none group-hover:border-orange-200" />
+            </div>
+        )
+    }
+
     return (
         <div className={` lg:items-start md:w-[${width}] w-[100%]  md:rounded-lg ${classes} `}>
             {
@@ -276,6 +340,7 @@ const HomeCard = ({
                 : 
                     <div className='flex justify-center '>
                         <_Card2/>
+                        {/* <EventsCard/> */}
                     </div>
             }
         </div>

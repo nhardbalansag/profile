@@ -812,12 +812,12 @@ Book flights, hotels and more at wholesale discount rates!
         </div>
       </div>
 
-      {
+      {/* {
         showBottomRegistration &&
         <div className='flex justify-center'>
           <BottomCreateAccountFloat onPressAction={ () => navigate("/login")} noThanks={() => setShowBottomRegistration(false)}/>
         </div>
-      }
+      } */}
 
       {
         openBottomOffer &&(

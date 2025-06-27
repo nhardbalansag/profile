@@ -82,7 +82,11 @@ const HomePage = () => {
         DataContent={auth_states.Languages}/>
       }
 
-      <BottomTabNavigator/>
+      {
+        auth_states.StateToken &&
+        <BottomTabNavigator/>
+      }
+     
     </div>
   )
 }

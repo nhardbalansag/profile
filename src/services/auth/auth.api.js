@@ -13,6 +13,17 @@ export const LoginUser = async (reqBody) => {
     });
 }
 
+export const ForgotPassword = async (reqBody) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'POST', 
+        url: `${PublicAPI}forgot-password`, 
+        data: reqBody
+    });
+}
+
 export const RegisterUser = async (reqBody) => {
     return await axios({ 
         headers: {

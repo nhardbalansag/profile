@@ -80,9 +80,9 @@ const MallPage = () => {
     return(
       <div className="flex items-center justify-center space-x-2">
           <CategorizeButton icon={ <MdOutlineAirplanemodeActive />} path={"/mall"} label={"Travel"} active={("/mall").includes(location.pathname) ? true : false}/>
-          <CategorizeButton icon={ <MdOutlineStorefront />} path={"merchant"} label={"Merchants"} active={(location.pathname.split("/")).includes('merchant') ? true : false}/>
-          <CategorizeButton icon={ <RiGraduationCapLine  />} label={"Academy"} active={false}/>
+          <CategorizeButton icon={ <RiGraduationCapLine  />} path={"academy-index"} label={"Academy"} active={(location.pathname.split("/")).includes('academy-index') ? true : false}/>
           <CategorizeButton icon={ <HiShoppingBag />} label={"Shopping"} active={false}/>
+          <CategorizeButton icon={ <MdOutlineStorefront />} path={"merchant"} label={"Merchants"} active={(location.pathname.split("/")).includes('merchant') ? true : false}/>
       </div>
     )
   }
@@ -103,7 +103,7 @@ const MallPage = () => {
       </div>
       <div className='flex justify-center my-5'>
         <div className='md:w-[75%] w-[95%]'>
-          <p className='font-extrabold text-[#001d3d] text-[25px] capitalize'>discover next adventure</p>
+          <p className='font-extrabold text-[#001d3d] text-[25px] capitalize'>discover what's next</p>
         </div>
       </div>
       {/* pages */}

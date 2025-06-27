@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
+import { ToastContainer, toast } from 'react-toastify';
+
 import Swal from 'sweetalert2';
 
 import Logo1 from '../../assets/images/ten/logo.png'
@@ -20,6 +22,7 @@ import { STORAGE_USER_INFORMATION, STORAGE_TOKEN, REDUX_PAYLOAD_INFORMATION } fr
 import * as auth_service_api from '../../services/auth/auth.api'
 import * as AuthAction from '../../store/auth/authAction'
 import * as api_subscription from '../../services/account/subscription.api.js'
+import * as api_account from '../../services/account/account.api.js'
 
 const LoginContent = () =>{
 
@@ -54,10 +57,12 @@ const LoginContent = () =>{
   const [getPaymentIntentSession, setPaymentIntentSession] = useState(null)
 
   const [openBottomPayment, setOpenBottomPayment] = useState(false);
+  const [enableResetPassword, setenableResetPassword] = useState(false);
 
   const [getRequest, setRequest] = useState({
     email: "",
-    password: ""
+    password: "",
+    resetEmail: "",
   })
 
   const [getRegisterForm, setRegisterForm] = useState({
@@ -178,11 +183,17 @@ const LoginContent = () =>{
       getTokenRef.current = token;
       getUserInformationRef.current = userInformation;
 
+      if(!result.data.status){
+        toast.error("Invalid Credentials");
+        return;
+      }
+
       if(result.data.payment_intent !== null){
         setclientSecret(result.data.payment_intent.clientSecret)
         setPaymentIntentSession(result.data.payment_intent.sessionId)
         setOpenBottomPayment(true)
       }else{
+        toast.success("Login Successful");
         setItem(STORAGE_TOKEN, token)
         setItem(STORAGE_USER_INFORMATION, JSON.stringify(userInformation))
 
@@ -192,6 +203,7 @@ const LoginContent = () =>{
       setLoadingRegister(false)
       
     }).catch((err) =>{
+      toast.error("Something went wrong");
       setLoadingRegister(false)
     })
   }
@@ -216,6 +228,13 @@ const LoginContent = () =>{
       var userInformation = result.data.data
       var payload = result.data.payload
 
+      if(!result.data.status){
+        toast.error("Invalid Credentials");
+        return;
+      }
+
+      toast.success("Login Successful");
+
       setItem(STORAGE_TOKEN, token)
       setItem(STORAGE_USER_INFORMATION, JSON.stringify(userInformation))
       setItem(REDUX_PAYLOAD_INFORMATION, payload)
@@ -224,9 +243,78 @@ const LoginContent = () =>{
       setLoading(false)
       
     }).catch((err) =>{
+      toast.error("Invalid Credentials");
       setLoading(false)
     })
   }
+
+  const ForgotPassword = async (e) =>{
+    e.preventDefault()
+
+    if (!getRequest.email) {
+      return;
+    }
+    
+    const requestBody = {
+      "email": getRequest.email,
+    }
+
+    setLoading(true)
+
+    await auth_service_api.ForgotPassword(requestBody).then((result) =>{
+      if(!result.data.status){
+        toast.error("No records found");
+        return;
+      }
+      toast.success("Email sent successfully to your email");
+      setLoading(false)
+      setenableResetPassword(false)
+    }).catch((err) =>{
+      setLoading(false)
+      setenableResetPassword(false)
+      toast.error("Invalid Credentials");
+    })
+  }
+
+  const validateToken = async(token) =>{
+    try {
+
+      const reqBody = {
+        token: token
+      }
+
+      const result = await api_account.validateToken(reqBody);
+
+      if (result.status) {
+        
+        var token = result.data.token
+        var userInformation = result.data.data
+        var payload = result.data.payload
+
+        setItem(STORAGE_TOKEN, token)
+        setItem(STORAGE_USER_INFORMATION, JSON.stringify(userInformation))
+        setItem(REDUX_PAYLOAD_INFORMATION, payload)
+
+        dispatch(AuthAction.LoginUser(token, userInformation, payload))
+        
+        toast.success("User information updated!");
+      } else {
+        toast.error("Update failed");
+      }
+    } catch (err) {
+      toast.error("Something went wrong");
+    }
+  }
+    
+
+  useEffect(() => {
+    const token = searchParams.get('token');
+
+    if (token) {
+      validateToken(token)
+    } 
+    
+  }, []);
 
   const userSubscriptionCategories = async (event) =>{
     setLoading(true)
@@ -357,6 +445,39 @@ const LoginContent = () =>{
     )
   }
 
+  const SendResetPassword = () =>{
+    return(
+      <div className="p-4 space-y-6 bg-blue-600 md:p-10">
+        <form onSubmit={(event) => ForgotPassword(event)}>
+          <div className="p-6 space-y-4 bg-white rounded-lg shadow">
+            <h2 className="text-xl font-bold login_id">Password Reset</h2>
+            <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:space-x-3 md:grid-cols-2">
+              <input
+                type="text"
+                placeholder="Email"
+                className="input input-bordered"
+                name='getRequest'
+                value={getRequest.getRequest} 
+                onChange={handleChange}
+              />
+            </div>
+            <div className="flex items-center space-x-3">
+              <button className="flex items-center justify-center text-white bg-blue-600 btn login_id">
+                {
+                  isLoading && <span className="loading loading-spinner loading-sm"></span> 
+                }
+                Send Email
+              </button>
+               <button onClick={() => setenableResetPassword(false)} className="flex items-center justify-center text-black">
+                Back
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    )
+  }
+
   return (
     <div className=''>
       <main className=''>
@@ -383,174 +504,184 @@ const LoginContent = () =>{
             </div>
 
             {/* Right Section */}
-            <div className="p-4 space-y-6 bg-blue-600 md:p-10">
-              {/* Login Form */}
-              {
-                !searchParams.get('sponsor') &&
-                <form onSubmit={(event) => LoginUser(event)}>
-                  <div className="p-6 space-y-4 bg-white rounded-lg shadow">
-                    <h2 className="text-xl font-bold login_id">Log In</h2>
-                    <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:space-x-3 md:grid-cols-2">
-                      <input
-                        type="text"
-                        placeholder="Email"
-                        className="input input-bordered"
-                        name='email'
-                        value={getRequest.email} 
-                        onChange={handleChange}
-                      />
-                      <input
-                        type="password"
-                        placeholder="Password"
-                        className="input input-bordered"
-                        name='password'
-                        value={getRequest.password} 
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between space-x-5">
-                      <button className="flex items-center justify-center text-white bg-blue-600 btn login_id">
-                        {
-                          isLoading ? <span className="loading loading-spinner loading-sm"></span> : "Log In"
-                        }
-                      </button>
-                      <a href="#" className="text-sm font-medium text-blue-500 forgot_your_password_id">
-                        Forgot your password?
-                      </a>
-                    </div>
-                  </div>
-                </form>
-              }
-              {
-                searchParams.get('sponsor') &&
-                <form onSubmit={(event) => RegisterUser(event)}>
-                  <div className="p-6 space-y-4 bg-white rounded-lg shadow">
-                    <h2 className="text-xl font-bold sign_in_id">Sign Up</h2>
-                    <p className="text-sm font-medium text-gray-600 its_quick_and_easy_id">It’s quick and easy.</p>
-                    
-                    {
-                      isLoading
-                      ?
-                        <div className=''>
-                          <div className="flex flex-col justify-center w-full gap-4 py-10">
-                            <div className="w-full h-4 skeleton"></div>
-                          </div>
-                        </div>
-                      :
-                        <div className='flex items-center space-x-2'>
-                          <p className="capitalize text-gray-500 font-bold text-[15px]">sponsor :</p>
-                          <p className="capitalize label text-[18px]">
-                            {
-                              GetSponsorDetails.success
-                              ? GetSponsorDetails.data.users_table.first_name
-                              : "sponsor not exist"
-                            }
-                          </p>
-                        </div>
-                    }
-
-                    <label className="w-full max-w-xs form-control">
-                      <label className="capitalize label font-bold text-gray-500 text-[15px]">Country</label>
-                      <select name='country_id' value={getRegisterForm.country_id} onChange={handleChangeForRegister} className="select select-bordered">
-                        <option value={null}>Select Your Country</option>
-                          {
-                            countriesList.map((item, key) =>
-                              <option key={key} value={item.id}>
-                                {`${item.name} (${item.iso_code_3})`}
-                              </option>
-                            )
-                          }
-                      </select>
-                    </label>
-
-                    <div>
-                      <label className="capitalize label text-gray-500 font-bold text-[15px]">Personal Details</label>
-                      <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:grid-cols-2 md:space-x-3">
+            {
+              !enableResetPassword &&
+              <div className="p-4 space-y-6 bg-blue-600 md:p-10">
+                {/* Login Form */}
+                {
+                  !searchParams.get('sponsor') &&
+                  <form onSubmit={(event) => LoginUser(event)}>
+                    <div className="p-6 space-y-4 bg-white rounded-lg shadow">
+                      <h2 className="text-xl font-bold login_id">Log In</h2>
+                      <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:space-x-3 md:grid-cols-2">
                         <input
                           type="text"
-                          placeholder="First name"
-                          className="input input-bordered input-md"
-                          name='first_name'
-                          value={getRegisterForm.first_name} 
-                          onChange={handleChangeForRegister}
+                          placeholder="Email"
+                          className="input input-bordered"
+                          name='email'
+                          value={getRequest.email} 
+                          onChange={handleChange}
                         />
                         <input
-                          type="text"
-                          placeholder="Last name"
-                          className="input input-bordered input-md"
-                          name='last_name'
-                          value={getRegisterForm.last_name} 
+                          type="password"
+                          placeholder="Password"
+                          className="input input-bordered"
+                          name='password'
+                          value={getRequest.password} 
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="flex items-center justify-between space-x-5">
+                        <button className="flex items-center justify-center text-white bg-blue-600 btn login_id">
+                          {
+                            isLoading ? <span className="loading loading-spinner loading-sm"></span> : "Log In"
+                          }
+                        </button>
+                        
+                      </div>
+                    </div>
+                  </form>
+                }
+                {
+                  searchParams.get('sponsor') &&
+                  <form onSubmit={(event) => RegisterUser(event)}>
+                    <div className="p-6 space-y-4 bg-white rounded-lg shadow">
+                      <h2 className="text-xl font-bold sign_in_id">Sign Up</h2>
+                      <p className="text-sm font-medium text-gray-600 its_quick_and_easy_id">It’s quick and easy.</p>
+                      
+                      {
+                        isLoading
+                        ?
+                          <div className=''>
+                            <div className="flex flex-col justify-center w-full gap-4 py-10">
+                              <div className="w-full h-4 skeleton"></div>
+                            </div>
+                          </div>
+                        :
+                          <div className='flex items-center space-x-2'>
+                            <p className="capitalize text-gray-500 font-bold text-[15px]">sponsor :</p>
+                            <p className="capitalize label text-[18px]">
+                              {
+                                GetSponsorDetails.success
+                                ? GetSponsorDetails.data.users_table.first_name
+                                : "sponsor not exist"
+                              }
+                            </p>
+                          </div>
+                      }
+
+                      <label className="w-full max-w-xs form-control">
+                        <label className="capitalize label font-bold text-gray-500 text-[15px]">Country</label>
+                        <select name='country_id' value={getRegisterForm.country_id} onChange={handleChangeForRegister} className="select select-bordered">
+                          <option value={null}>Select Your Country</option>
+                            {
+                              countriesList.map((item, key) =>
+                                <option key={key} value={item.id}>
+                                  {`${item.name} (${item.iso_code_3})`}
+                                </option>
+                              )
+                            }
+                        </select>
+                      </label>
+
+                      <div>
+                        <label className="capitalize label text-gray-500 font-bold text-[15px]">Personal Details</label>
+                        <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:grid-cols-2 md:space-x-3">
+                          <input
+                            type="text"
+                            placeholder="First name"
+                            className="input input-bordered input-md"
+                            name='first_name'
+                            value={getRegisterForm.first_name} 
+                            onChange={handleChangeForRegister}
+                          />
+                          <input
+                            type="text"
+                            placeholder="Last name"
+                            className="input input-bordered input-md"
+                            name='last_name'
+                            value={getRegisterForm.last_name} 
+                            onChange={handleChangeForRegister}
+                          />
+                        </div>
+                      </div>
+
+                      <input
+                        type="email"
+                        placeholder="Mobile number or Email"
+                        className="w-full input input-bordered input-md"
+                        name='email'
+                        value={getRegisterForm.email} 
+                        onChange={handleChangeForRegister}
+                      />
+
+                      <label className="capitalize text-gray-500 label font-bold text-[15px]">Set password</label>
+                      {/* <p className="text-sm text-gray-500 you_need_to_confirm_email_id">
+                        You’ll need to confirm that email or phone belongs to you.
+                      </p> */}
+                      <div className="grid grid-cols-1 space-y-3 md:grid-cols-2 md:space-y-0 md:space-x-3">
+                        <input
+                          type="password"
+                          placeholder="Password"
+                          className=" input input-bordered input-md"
+                          name='password'
+                          value={getRegisterForm.password} 
                           onChange={handleChangeForRegister}
                         />
                       </div>
-                    </div>
-
-                    <input
-                      type="email"
-                      placeholder="Mobile number or Email"
-                      className="w-full input input-bordered input-md"
-                      name='email'
-                      value={getRegisterForm.email} 
-                      onChange={handleChangeForRegister}
-                    />
-
-                    <label className="capitalize text-gray-500 label font-bold text-[15px]">Set password</label>
-                    {/* <p className="text-sm text-gray-500 you_need_to_confirm_email_id">
-                      You’ll need to confirm that email or phone belongs to you.
-                    </p> */}
-                    <div className="grid grid-cols-1 space-y-3 md:grid-cols-2 md:space-y-0 md:space-x-3">
-                      <input
-                        type="password"
-                        placeholder="Password"
-                        className=" input input-bordered input-md"
-                        name='password'
-                        value={getRegisterForm.password} 
-                        onChange={handleChangeForRegister}
-                      />
-                    </div>
-                    
-                    {
-                      isLoading
-                      ?
-                        <div className=''>
-                          <div className="flex flex-col justify-center w-full gap-4 py-10">
-                            <div className="w-full h-32 skeleton"></div>
-                            <div className="h-4 skeleton w-28"></div>
-                            <div className="w-full h-4 skeleton"></div>
+                      
+                      {
+                        isLoading
+                        ?
+                          <div className=''>
+                            <div className="flex flex-col justify-center w-full gap-4 py-10">
+                              <div className="w-full h-32 skeleton"></div>
+                              <div className="h-4 skeleton w-28"></div>
+                              <div className="w-full h-4 skeleton"></div>
+                            </div>
                           </div>
-                        </div>
-                      :
-                      <_PlanSelect dataList={subscriptionList}/>
-                    }
+                        :
+                        <_PlanSelect dataList={subscriptionList}/>
+                      }
 
-                    <p className="text-sm text-gray-500 use_more_character_id">
-                      Use 8 or more characters with a mix of letters, numbers & symbols
-                    </p>
-                    
-                    <button 
-                    onClick={() => RegisterUser()} 
-                    className="text-white bg-blue-600 btn sign_in_id">
-                    {
-                      isLoadingRegister ? <span className="loading loading-spinner loading-sm"></span> : "Sign In"
-                    }
-                    </button>
-                    </div>
-                </form> 
-              }
-            </div>
+                      <p className="text-sm text-gray-500 use_more_character_id">
+                        Use 8 or more characters with a mix of letters, numbers & symbols
+                      </p>
+                      
+                      <button 
+                      onClick={() => RegisterUser()} 
+                      className="text-white bg-blue-600 btn sign_in_id">
+                      {
+                        isLoadingRegister ? <span className="loading loading-spinner loading-sm"></span> : "Sign In"
+                      }
+                      </button>
+                      </div>
+                  </form> 
+                }
+
+                <button onClick={() => setenableResetPassword(true)} className="text-sm font-medium text-white forgot_your_password_id">
+                  Forgot your password?
+                </button>
+              </div>
+            }
+            {
+              enableResetPassword &&
+              SendResetPassword()
+            }
           </div>
         </div>
       </main>
       {
         openBottomPayment && 
         <Checkout 
-        closeButtonMessage={'Go to Account'}
+        // closeButtonMessage={'Go to Account'}
         clientSecret={getclientSecret} 
         getLoading={isLoadingRegister} 
         dataContent={paymentBContent.current} 
         handleClose={() => CloseBottomPayment()}
         />
       }
+      <ToastContainer />
     </div>
   )
 }

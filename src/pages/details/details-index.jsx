@@ -20,6 +20,8 @@ import {
   Checkout
 } from '../index'
 
+import Quill from 'quill';
+
 import { useMediaQuery } from 'react-responsive'
 
 import { IoIosCloseCircleOutline } from "react-icons/io";
@@ -42,6 +44,7 @@ import * as api_content from '../../services/content/content.api'
 const env = import.meta.env;
 
 const DetailsPage = () =>{
+
 
   //#region implementations
   const navigate = useNavigate();
@@ -423,7 +426,31 @@ const DetailsPage = () =>{
     )
   }
 
-    const EmbededVideoUrl = ({ videoId}) => {
+  const editorRef = useRef(ResultGetHomeContents.content_description);
+  const quillRef = useRef(null);
+
+  useEffect(() => {
+    if (editorRef.current) {
+      quillRef.current = new Quill(editorRef.current, {
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            [{ 'header': [1, 2, false] }],
+            ['bold', 'italic'],
+            ['link', 'image'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          ]
+        }
+      });
+
+      // Paste HTML directly
+      quillRef.current.clipboard.dangerouslyPasteHTML(
+        ResultGetHomeContents.content_description
+      );
+    }
+  }, []);
+
+  const EmbededVideoUrl = ({ videoId}) => {
     return (
       <div  className=' w-[100%] h-[200px]'>
         <div className='flex justify-center'>
@@ -465,8 +492,8 @@ const DetailsPage = () =>{
               </div>
             </div>
           :
-          <div className='mb-[150px]'>
-              <div className='flex justify-center my-5'>
+          <div className='mb-[150px] flex justify-center'>
+              <div className='flex justify-center w-[90%] md:w-[70%]'>
                   <div className='md:w-[75%] w-[95%] space-y-5'>
                       <p className='font-bold text-[#001d3d] text-[35px] capitalize'>
                         {
@@ -484,15 +511,17 @@ const DetailsPage = () =>{
                         ?
                           <EmbededVideoUrl videoId={ResultGetHomeContents.uploads_table_main_view.upload_url}/>
                         :
-                          <img
-                          src={
-                              ResultGetHomeContents.uploads_table_main_view.upload_type === "url" 
-                              ? ResultGetHomeContents.uploads_table_main_view.upload_url 
-                              : env.VITE_APP_BACKEND_STORAGE_URL + ResultGetHomeContents.uploads_table_main_view.upload_url
-                          }
-                          alt=""  
-                          className="object-contain w-full "
-                          />
+                          <div className='flex justify-start'>
+                            <img
+                            src={
+                                ResultGetHomeContents.uploads_table_main_view.upload_type === "url" 
+                                ? ResultGetHomeContents.uploads_table_main_view.upload_url 
+                                : env.VITE_APP_BACKEND_STORAGE_URL + ResultGetHomeContents.uploads_table_main_view.upload_url
+                            }
+                            alt=""  
+                            className="object-contain w-full md:w-[500px] "
+                            />
+                          </div>
                       }
 
                       {
@@ -521,6 +550,7 @@ const DetailsPage = () =>{
                       }
                       
                     <div 
+                      className="quill-content"
                       dangerouslySetInnerHTML={{
                       __html: selectedLanguage.current == null 
                               ? ResultGetHomeContents.content_description
@@ -529,10 +559,13 @@ const DetailsPage = () =>{
                                   ? ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
                                   : ResultGetHomeContents.content_description
                                 )
+                        
+                        
                       }} 
-                    /> 
 
-                    <div className='grid grid-cols-1 gap-5 sm:grid-cols-3'>
+                    ></div>
+
+                    <div className='grid grid-cols-1 gap-3 sm:grid-cols-3'>
                       {
                         ResultGetHomeContents.uploads_table.map((item) => (
                           item.upload_type === "url"
@@ -540,7 +573,7 @@ const DetailsPage = () =>{
                             <img
                             src={item.upload_url }
                             alt=""  
-                            className="object-contain w-full h-[400px]"
+                            className="object-contain w-full"
                             />
                           :
                           (
@@ -562,12 +595,13 @@ const DetailsPage = () =>{
               </div>
           </div>
         }
-        {
+        
+        {/* {
           showBottomRegistration &&
           <div className='flex justify-center'>
             <BottomCreateAccountFloat onPressAction={ () => navigate("/login")} noThanks={() => setShowBottomRegistration(false)}/>
           </div>
-        }
+        } */}
         
         {
           getBottomDetailsOpen &&(

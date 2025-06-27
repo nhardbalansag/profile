@@ -61,3 +61,14 @@ export const GetUserAccountSubscriptionDetails = async (token) => {
         url: `${PublicAPI}account-subscription`
     });
 }
+
+export const UnsubscribeToStripe = async (token) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET', 
+        url: `${PublicAPI}unsubscribe-stripe`,
+    });
+}

@@ -48,7 +48,13 @@ import {
 
     AccountTransferTPoints,
     AccountTransferTBucks,
-    AccountWithdrawTBucks
+    AccountWithdrawTBucks,
+
+    AccountCredentials,
+
+    DistributionList,
+    MallAcademy,
+    AcademyIndex
 } from '../pages/index'
 
 import {
@@ -58,7 +64,6 @@ import {
 import { STORAGE_TOKEN, STORAGE_USER_INFORMATION, REDUX_PAYLOAD_INFORMATION } from "../store/auth/authAction";
 
 import * as AuthAction from '../store/auth/authAction'
-
 import * as api_page_config from '../services/page/page.api'
 
 const ErrorPage = () =>{
@@ -97,7 +102,7 @@ const GuestRoute = ({ children, route }) => {
 
 const AuthenticatedUsers = ({ children, route }) => {
     const auth_states = useSelector(state => state.AuthReducer);
-
+    
     if (auth_states.StateToken) {
         return children;
     }
@@ -218,6 +223,24 @@ const router = createBrowserRouter([
                 ),
                 errorElement: <ErrorPage />
             },
+            {
+                path: "security",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <AccountCredentials />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "connects",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <DistributionList />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
         ]
     },
     {
@@ -239,6 +262,24 @@ const router = createBrowserRouter([
                 element: ( 
                     <AuthenticatedUsers route={'/login'}>
                         <MallMerchant />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "academy",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <MallAcademy />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "academy-index",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <AcademyIndex />
                     </AuthenticatedUsers> 
                 ),
                 errorElement: <ErrorPage />

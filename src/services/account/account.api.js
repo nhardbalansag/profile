@@ -27,6 +27,18 @@ export const requestToken = async (token) => {
     });
 }
 
+export const validateToken = async (body) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            // 'Authorization': `Bearer ${token}`
+        },
+        method: 'POST', 
+        url: `${BaseAPIUrl}validate`,
+        data: body
+    });
+}
+
 export const xeniRegisterApi = async (body) => {
     return await axios({ 
         headers: {
@@ -148,4 +160,51 @@ export const UploadFile = async (reqBody, token) => {
         url: `${BaseAPIUrl}account/upload-file`,
         data: formData
     })
+}
+
+export const ProfileMultipleDownload = async (token, reqBody) => {
+
+    const formData = new FormData();
+    
+    if (reqBody.file || reqBody.file instanceof FileList) {
+
+        if (reqBody.file && (Array.isArray(reqBody.file) || reqBody.file instanceof FileList)) {
+            Array.from(reqBody.file).forEach((fileItem) => {
+                formData.append("file[]", fileItem);
+            })
+        }
+
+    }
+
+    return await axios({
+        headers: {
+            "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${token}`,
+        },
+        method: "post",
+        url: `${BaseAPIUrl}account/upload-multiple-file`,
+        data: formData
+    })
+}
+
+export const GetHomeContents = async (token) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET', 
+        url: `${BaseAPIUrl}account/contents`,
+    });
+}
+
+export const getNetworkDetails = async (token, url) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET', 
+        url: url ? url : `${BaseAPIUrl}account/connections`,
+    });
 }

@@ -34,6 +34,14 @@ import AccountTransferTPoints from "./account/account-transfer-tpoints";
 import AccountTransferTBucks from "./account/account-transfer-tbucks";
 import AccountWithdrawTBucks from "./account/account-withdraw-tbucks";
 
+import AccountCredentials from "./account/account-credentials";
+
+import DistributionList from "./account/account-members-connected";
+
+import MallAcademy from "./mall/mall-academy";
+
+import AcademyIndex from "./mall/mall-academy-index";
+
 export{
     HomePage,
     HomeContent,
@@ -68,5 +76,11 @@ export{
 
     AccountTransferTPoints,
     AccountTransferTBucks,
-    AccountWithdrawTBucks
+    AccountWithdrawTBucks,
+
+    AccountCredentials,
+
+    DistributionList,
+    MallAcademy,
+    AcademyIndex
 }
