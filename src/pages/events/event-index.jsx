@@ -14,6 +14,7 @@ import {
 import { FaUsers, FaShoppingBag, FaUser } from "react-icons/fa";
 import { HiMiniBuildingOffice2 } from "react-icons/hi2";
 import { FaRegCircleUser } from "react-icons/fa6";
+import { TiHomeOutline } from "react-icons/ti";
 
 import { MdOutlineAirplanemodeActive } from "react-icons/md";
 import { MdOutlineStorefront } from "react-icons/md";
@@ -52,9 +53,10 @@ const EventPage = () => {
         zIndex: 1000
       }}
       className="md:hidden bottom-4 left-1/2 transform -translate-x-1/2 bg-[#031956] text-white rounded-xl px-4 py-1 flex justify-between items-center w-[90%] space-x-6 shadow-lg">
-        <TabItem icon={<AiFillNotification size={20}/>} path={'/'} label="Social" />
+        {/* <TabItem icon={<AiFillNotification size={20}/>} path={'/'} label="Social" /> */}
+        <TabItem icon={<TiHomeOutline size={20}/>} path={'/'} label="Home" />
         <TabItem icon={<LuTickets size={20}/>} path={'/event'} label="Events"  active={(location.pathname.split('/')).includes("event")}/>
-        <TabItem icon={<FaShoppingBag size={20}/>} path={'/mall'} label="Mall"/>
+        {/* <TabItem icon={<FaShoppingBag size={20}/>} path={'/mall'} label="Mall"/> */}
         <TabItem icon={<HiMiniBuildingOffice2 size={20}/>} path={'/account'} label="Office" />
         <TabItem icon={<FaRegCircleUser size={20}/>} path={'/details'} label="Profile" />
       </div>

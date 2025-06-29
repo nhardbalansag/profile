@@ -6,6 +6,7 @@ import {
     Outlet,
 } from "react-router";
 import { useLocation } from 'react-router-dom';
+import { LuCircleDollarSign } from "react-icons/lu";
 
 import { FiBell } from "react-icons/fi";
 import { FaChevronRight } from "react-icons/fa"; 
@@ -189,9 +190,10 @@ const AccountPage = () => {
         zIndex: 1000
       }}
       className="md:hidden bottom-4 left-1/2 transform -translate-x-1/2 bg-[#031956] text-white rounded-xl px-4 py-1 flex justify-between items-center w-[90%] space-x-6 shadow-lg">
-        <TabItem icon={<AiFillNotification size={20}/>} path={'/'} label="Social" active />
+        {/* <TabItem icon={<AiFillNotification size={20}/>} path={'/'} label="Social" active /> */}
+        <TabItem icon={<TiHomeOutline size={20}/>} path={'/'} label="Home" active />
         <TabItem icon={<LuTickets size={20}/>} path={'/event'} label="Events" />
-        <TabItem icon={<FaShoppingBag size={20}/>} path={'/mall'} label="Mall" />
+        {/* <TabItem icon={<FaShoppingBag size={20}/>} path={'/mall'} label="Mall" /> */}
         <TabItem icon={<HiMiniBuildingOffice2 size={20}/>} path={'account'} label="Office" />
         <TabItem icon={<FaRegCircleUser size={20}/>} path={'details'} label="Profile" />
       </div>

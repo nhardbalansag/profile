@@ -71,8 +71,8 @@ const AcademyIndex = () => {
                         {/* Course Grid */}
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                             {filteredCourses.map((course) => (
-                                <Link key={course.id} to={`/mall/academy`}>
-                                    <div className="overflow-hidden transition-all duration-300 bg-white rounded-xl hover:bg-gray-750 hover:scale-105 hover:shadow-2xl group">
+                                <Link key={course.id} to={`/academy`}>
+                                    <div className="overflow-hidden transition-all duration-300 scale-105 bg-white border shadow-2xl rounded-xl bg-gray-750 hover:bg-gray-750 hover:scale-105 hover:shadow-2xl group">
                                         <div className="relative">
                                             <img
                                                 src={course.image}

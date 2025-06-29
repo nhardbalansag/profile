@@ -54,7 +54,8 @@ import {
 
     DistributionList,
     MallAcademy,
-    AcademyIndex
+    AcademyIndex,
+    PrivacyPolicy
 } from '../pages/index'
 
 import {
@@ -119,7 +120,47 @@ const router = createBrowserRouter([
         children:[
             {
                 path: "",
-                element: <HomeContent/>,
+                element: (
+                    <AuthenticatedUsers route={'/login'}>
+                        <HomeContent/>
+                    </AuthenticatedUsers>
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "travel",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <MallTravel />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "merchant",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <MallMerchant />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "academy",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <MallAcademy />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "academy-index",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <AcademyIndex />
+                    </AuthenticatedUsers> 
+                ),
                 errorElement: <ErrorPage />
             },
         ]
@@ -243,49 +284,49 @@ const router = createBrowserRouter([
             },
         ]
     },
-    {
-        path: "mall",
-        Component: MallPage,  
-        errorElement: <ErrorPage />,
-        children:[
-            {
-                path: "",
-                element: ( 
-                    <AuthenticatedUsers route={'/login'}>
-                        <MallTravel />
-                    </AuthenticatedUsers> 
-                ),
-                errorElement: <ErrorPage />
-            },
-            {
-                path: "merchant",
-                element: ( 
-                    <AuthenticatedUsers route={'/login'}>
-                        <MallMerchant />
-                    </AuthenticatedUsers> 
-                ),
-                errorElement: <ErrorPage />
-            },
-            {
-                path: "academy",
-                element: ( 
-                    <AuthenticatedUsers route={'/login'}>
-                        <MallAcademy />
-                    </AuthenticatedUsers> 
-                ),
-                errorElement: <ErrorPage />
-            },
-            {
-                path: "academy-index",
-                element: ( 
-                    <AuthenticatedUsers route={'/login'}>
-                        <AcademyIndex />
-                    </AuthenticatedUsers> 
-                ),
-                errorElement: <ErrorPage />
-            },
-        ]
-    },
+    // {
+    //     path: "mall",
+    //     Component: MallPage,  
+    //     errorElement: <ErrorPage />,
+    //     children:[
+    //         {
+    //             path: "",
+    //             element: ( 
+    //                 <AuthenticatedUsers route={'/login'}>
+    //                     <MallTravel />
+    //                 </AuthenticatedUsers> 
+    //             ),
+    //             errorElement: <ErrorPage />
+    //         },
+    //         {
+    //             path: "merchant",
+    //             element: ( 
+    //                 <AuthenticatedUsers route={'/login'}>
+    //                     <MallMerchant />
+    //                 </AuthenticatedUsers> 
+    //             ),
+    //             errorElement: <ErrorPage />
+    //         },
+    //         {
+    //             path: "academy",
+    //             element: ( 
+    //                 <AuthenticatedUsers route={'/login'}>
+    //                     <MallAcademy />
+    //                 </AuthenticatedUsers> 
+    //             ),
+    //             errorElement: <ErrorPage />
+    //         },
+    //         {
+    //             path: "academy-index",
+    //             element: ( 
+    //                 <AuthenticatedUsers route={'/login'}>
+    //                     <AcademyIndex />
+    //                 </AuthenticatedUsers> 
+    //             ),
+    //             errorElement: <ErrorPage />
+    //         },
+    //     ]
+    // },
     {
         path: "event",
         Component: EventPage,  
@@ -306,6 +347,13 @@ const router = createBrowserRouter([
         path: "content-details",
         element: ( 
             <DetailsPage />
+        ),
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "policy",
+        element: ( 
+            <PrivacyPolicy />
         ),
         errorElement: <ErrorPage />,
     },

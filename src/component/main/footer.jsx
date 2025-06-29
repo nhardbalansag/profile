@@ -6,6 +6,7 @@ import { FaTiktok } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { IoLogoYoutube } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 export default function FooterWrapper() {
   const [footerData] = useState({
@@ -67,9 +68,11 @@ export default function FooterWrapper() {
               <ul className="space-y-2">
                 {footerData.links.legal.map((link, index) => (
                   <li key={index}>
+                    <Link to={'/policy'}>
                     <a href="#" className="text-sm text-gray-300 transition-colors hover:text-white">
                       {link}
                     </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

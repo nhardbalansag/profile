@@ -163,12 +163,12 @@ const Header = ({
           <div class="flex h-screen">
             <aside class="w-64 bg-white border-r border-gray-200 p-4">
               <nav class="space-y-2 hidden md:block">
-                <Link to={'/'}>
-                  <a href="#" class={`${("/").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                {/* <Link to={'/'}> */}
+                  <a href="https://www.clubtenglobal.com/" class={`${("/").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                     <TbBulb  size={20}/>
                     <p className='social_id text-[#001d3d] capitalize ml-2 '>about us</p>
                   </a>
-                </Link>
+                {/* </Link> */}
                 {
                   auth_states.StateToken &&
                   <Link to={'/event'}>
@@ -178,7 +178,7 @@ const Header = ({
                     </a>
                   </Link>
                 }
-                {
+                {/* {
                   auth_states.StateToken &&
                   <Link to={'/mall'}>
                     <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
@@ -186,21 +186,21 @@ const Header = ({
                       <p className='mall_id text-[#001d3d] capitalize ml-2 '>mall</p>
                     </a>
                   </Link>
-                }
+                } */}
                 
-                <Link to={'/'}>
-                  <a href="#" class={`${("event").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                {/* <Link to={'/'}> */}
+                  <a href="https://www.clubtenglobal.com/blog" class={`${("event").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                     <FaRegNewspaper  size={20}/>
                     <p className='event_id text-[#001d3d] capitalize ml-2 '>blog</p>
                   </a>
-                </Link>
-                <Link to={'/'}>
+                {/* </Link> */}
+                {/* <Link to={'/'}>
                   <a href="#" class={`${("event").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                     <RiContactsLine  size={20}/>
                     <p className='event_id text-[#001d3d] capitalize ml-2 '>contact us</p>
                   </a>
-                </Link>
-                <Link to={'/event'}>
+                </Link> */}
+                <Link to={'/policy'}>
                   <a href="#" class={`${("event").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                     <MdOutlinePolicy  size={20}/>
                     <p className='event_id text-[#001d3d] capitalize ml-2 '>privacy policy</p>

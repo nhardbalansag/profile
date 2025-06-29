@@ -1,16 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {useSelector} from 'react-redux';
-import { useMediaQuery } from 'react-responsive'
-import DOMPurify from 'dompurify';
-
-import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 
 import {
   HomeCard,
-  BottomCreateAccountFloat,
-  CategoryTitleAndArrow,
-  DestinationCard,
   OffersBottomSheet,
 } from '../../component/index'
 
@@ -71,8 +64,6 @@ const MallTravel = () =>{
     t_bucks: 0,
     AccountTransaction:[]
   });
-
-  const [getPlatformAccess, setPlatformAccess] = useState([])
 
   const [subscriptionList, SetSubscriptionList] = useState([])
   const [selectedPlan, setSelectedPlan] = useState("");
@@ -686,25 +677,30 @@ const MallTravel = () =>{
             className="w-full shadow-lg rounded-2xl"
           />
         </div>
-  
+    
         {/* Right: Text Content */}
         <div className="flex-1 space-y-1 md:space-y-8">
           <span className="inline-block px-3 py-1 text-xs font-semibold text-black bg-yellow-400 rounded-full w-fit">
             NEW
           </span>
-  
-          <h2 className="text-2xl font-semibold leading-tight text-black capitalize md:text-3xl">
-           Launch Club TEN VIP Online Travel Booking Platform. 
-Book flights, hotels and more at wholesale discount rates!
-          </h2>
+          <ol className='space-y-2'>
+            <li className='text-2xl leading-tight text-black capitalize md:text-3xl'>
+              <span className='mr-3 font-bold'>1.</span> 
+              Enjoy huge savings and wholesale
+              discounts on hotels worldwide
+            </li>
+             <li className='text-2xl leading-tight text-black capitalize md:text-3xl'>
+              <span className='mr-3 font-bold'>2.</span> 
+              Preferred customers earn 0.5%
+              cashback
+            </li>
+             <li className='text-2xl leading-tight text-black capitalize md:text-3xl'>
+              <span className='mr-3 font-bold'>3.</span> 
+              VIP members earn 1% cashback
+            </li>
+          </ol>
   
           <div className="flex gap-4 pt-4">
-            {/* <a 
-              target="_blank"
-              rel="noopener noreferrer"
-              href='https://clubten.booking.xeni.com/' className="px-6 py-2 font-bold text-white bg-orange-500 hover:bg-orange-600 rounded-xl">
-              LAUNCH
-            </a> */}
             {
               getLoading
               ?
@@ -720,16 +716,6 @@ Book flights, hotels and more at wholesale discount rates!
                   <div>LAUNCH NOW</div>
                 </button>
             }
-           
-            <a 
-              target="_blank"
-              rel="noopener noreferrer"
-              href='https://clubten.booking.xeni.com/' className="flex items-center gap-1 font-medium text-orange-500 hover:underline">
-              <div className='flex items-center space-x-3'>
-                <p>Explore</p>
-                <FaArrowUpRightFromSquare />
-              </div>
-            </a>
           </div>
         </div>
       </div>
@@ -738,6 +724,11 @@ Book flights, hotels and more at wholesale discount rates!
   
   return (
     <div className=''>
+      <div className='flex justify-center my-5'>
+        <div className='md:w-[75%] w-[95%]'>
+          <p className='font-extrabold text-[#001d3d] text-[25px] text-center capitalize'>Travel the world with Club TEN</p>
+        </div>
+      </div>
       <div className='flex justify-center mb-[50px]'>
         <div className='md:w-[75%] w-[95%]'>
           <NoCodePromo/>
@@ -811,14 +802,7 @@ Book flights, hotels and more at wholesale discount rates!
           }
         </div>
       </div>
-
-      {/* {
-        showBottomRegistration &&
-        <div className='flex justify-center'>
-          <BottomCreateAccountFloat onPressAction={ () => navigate("/login")} noThanks={() => setShowBottomRegistration(false)}/>
-        </div>
-      } */}
-
+      
       {
         openBottomOffer &&(
           <OffersBottomSheet
