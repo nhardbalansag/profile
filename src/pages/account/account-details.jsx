@@ -142,11 +142,17 @@ const AccountDetails = () =>{
         file:  multipleUploads,
       }
 
+      if(!multipleUploads){
+        return;
+      }
+
       const result = await api_account.ProfileMultipleDownload(auth_states.StateToken, requestBody);
       if (result.status) {
         toast.success("User information updated!");
         GetUserDetails(); // Refresh after update
         setIsEditing(false);
+
+        setmultipleUploads(null)
       } else {
         toast.error("Update failed");
       }
@@ -176,7 +182,7 @@ const AccountDetails = () =>{
         hobbies: userData.hobbies,
         bucket_list: userData.bucket_list,
         social_media: userData.social_media,
-        photos: multipleUploads,
+        // photos: multipleUploads,
         youtube_videos: userData.youtube_videos
       },
       remove_photos: toRemovePhoto
@@ -193,6 +199,8 @@ const AccountDetails = () =>{
       } else {
         toast.error("Update failed");
       }
+
+      settoRemovePhoto([])
     } catch (err) {
       toast.error("Something went wrong");
     } finally {
@@ -294,7 +302,7 @@ const AccountDetails = () =>{
       // Display default avatar when not editing and no photo
       return (
         <div className="flex items-center justify-center w-[80px] h-[80px] text-2xl font-bold text-white rounded-full bg-gradient-to-r from-blue-600 to-purple-600">
-          {firstName?.charAt(0)?.toUpperCase() || <User className="w-8 h-8" />}
+          {userData.first_name?.charAt(0)?.toUpperCase() || <User className="w-8 h-8" />}
         </div>
       );
     }
@@ -333,7 +341,7 @@ const AccountDetails = () =>{
             </div>
           ) : (
             <div className="flex items-center justify-center w-[80px] h-[80px] text-2xl font-bold text-white rounded-full bg-gradient-to-r from-blue-600 to-purple-600">
-              {firstName?.charAt(0)?.toUpperCase() || <User className="w-8 h-8" />}
+              {userData.first_name?.charAt(0)?.toUpperCase() || <User className="w-8 h-8" />}
             </div>
           )}
         </div>
@@ -378,133 +386,7 @@ const AccountDetails = () =>{
       </div>
     )
   }
-  
-  const ProfileInfo = () =>{ 
-    return(
-       <div className="pb-10 space-y-6 lg:col-span-2">
-        {/* Basic Info */}
-        <div className="p-6 space-y-3 bg-white border border-gray-200 rounded-lg shadow-md">
-          <div className="flex items-start justify-between">
-            <h3 className="mb-4 text-lg font-semibold text-gray-900">Basic Information</h3>
-            <button
-              className="text-sm text-blue-600 hover:underline"
-              onClick={() => setIsEditing((prev) => !prev)}
-            >
-              {isEditing ? "Cancel" : "Edit"}
-            </button>
-          </div>
 
-          <div className="grid items-center grid-cols-1 gap-5 mb-6 md:grid-cols-2">
-            {UploadPhoto()}
-            {/* <div className="flex items-center justify-center w-[50px] h-[50px] text-2xl font-bold text-white rounded-full bg-gradient-to-r from-blue-600 to-purple-600">
-              {userData.first_name?.charAt(0)}
-            </div> */}
-            <div className="flex-1">
-              <h2 className="text-2xl font-bold text-gray-900">
-                {userData.first_name} {userData.last_name}
-              </h2>
-              <p className="text-gray-600">{userData.email}</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {/* First Name */}
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">First Name</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={userData.first_name}
-                  onChange={(e) => handleInputChange("first_name", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              ) : (
-                <div className="flex items-center space-x-2 text-gray-900">
-                  <CiUser className="w-4 h-4 text-gray-500" />
-                  <span>{userData.first_name}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Last Name */}
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">Last Name</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={userData.last_name}
-                  onChange={(e) => handleInputChange("last_name", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              ) : (
-                <div className="flex items-center space-x-2 text-gray-900">
-                  <CiUser className="w-4 h-4 text-gray-500" />
-                  <span>{userData.last_name}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">Email</label>
-              <div className="flex items-center space-x-2 text-gray-900">
-                <CiMail className="w-4 h-4 text-gray-500" />
-                <span>{userData.email}</span>
-              </div>
-            </div>
-
-            {/* Mobile Number */}
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">Mobile</label>
-              {isEditing ? (
-                <input
-                  type="tel"
-                  value={userData.mobile_number}
-                  onChange={(e) => handleInputChange("mobile_number", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              ) : (
-                <div className="flex items-center space-x-2 text-gray-900">
-                  <CiPhone className="w-4 h-4 text-gray-500" />
-                  <span>{userData.mobile_number}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Address */}
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-700">Address</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={userData.current_address}
-                  onChange={(e) => handleInputChange("current_address", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              ) : (
-                <div className="flex items-center space-x-2 text-gray-900">
-                  <FiMapPin className="w-4 h-4 text-gray-500" />
-                  <span>{userData.current_address}</span>
-                </div>
-              )}
-            </div>
-          </div>
-          {
-            isEditing &&(
-              <button disabled={requestLoading} onClick={() => UpdateUserInformation()} className="w-[200px] py-3 mt-6 text-white bg-blue-600 rounded-xl">
-              {
-                requestLoading
-                ? <div className='flex items-center justify-center space-x-2'> <span>Please Wait</span><span className="loading loading-dots loading-lg"></span></div>
-                : "Update Information"
-              }
-              </button>
-            )
-          }
-        </div>
-      </div>
-    )
-  }
-  
   const _AccountDetails = () =>{
     return (
       <div>
@@ -925,15 +807,16 @@ const AccountDetails = () =>{
       }
     };
 
-    const removePhoto = (index) => {
+    const removePhoto = (photo) => {
       setUserData(prev => ({
         ...prev,
-        user_uploads_table: prev.user_uploads_table.filter((_, i) => i !== index)
+        user_uploads_table: prev.user_uploads_table.filter((item, index) => item.id !== photo.id)
       }));
 
       settoRemovePhoto(prev => [
         ...prev, 
-        userData.user_uploads_table.find((_, i) => i === index)
+        // userData.user_uploads_table.find((item, index) => item.id === photo.id)
+        photo.id
       ])
     };
 
@@ -988,7 +871,7 @@ const AccountDetails = () =>{
               </div>
               {isEditing && (
                 <button
-                  onClick={() => removePhoto(index)}
+                  onClick={() => removePhoto(photo)}
                   className="absolute p-1 text-white transition-opacity bg-red-500 rounded-full opacity-0 -top-2 -right-2 group-hover:opacity-100"
                 >
                   <X className="w-3 h-3" />

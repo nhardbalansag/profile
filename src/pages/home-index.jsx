@@ -18,6 +18,7 @@ import { LuTickets } from "react-icons/lu";
 import { AiFillNotification } from "react-icons/ai";
 import { TiHomeOutline } from "react-icons/ti";
 import { LuCircleDollarSign } from "react-icons/lu";
+import { IoFitnessOutline } from "react-icons/io5";
 
 import { MdOutlineAirplanemodeActive } from "react-icons/md";
 import { MdOutlineStorefront } from "react-icons/md";
@@ -85,7 +86,7 @@ const HomePage = () => {
           <CategorizeButton icon={ <MdOutlineAirplanemodeActive />} path={"/travel"} label={"Travel"} active={(location.pathname.split("/")).includes('travel') ? true : false}/>
           <CategorizeButton icon={ <RiGraduationCapLine  />} path={"academy-index"} label={"Learn"} active={location.pathname.includes('academy') ? true : false}/>
           <CategorizeButton icon={ <LuCircleDollarSign />} label={"Earn"} active={false}/>
-          <CategorizeButton icon={ <MdOutlineStorefront />} path={"merchant"} label={"Lifestyle"} active={(location.pathname.split("/")).includes('merchant') ? true : false}/>
+          <CategorizeButton icon={ <IoFitnessOutline />} path={"merchant"} label={"Lifestyle"} active={(location.pathname.split("/")).includes('merchant') ? true : false}/>
       </div>
     )
   }
