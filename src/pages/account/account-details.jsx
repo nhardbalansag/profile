@@ -605,13 +605,15 @@ const AccountDetails = () =>{
                 {/* Profile Photo and Basic Info */}
                 <div className="flex flex-col space-y-4 sm:flex-row sm:items-start sm:space-y-0 sm:space-x-6">
                   <div className="self-center flex-shrink-0 sm:self-start">
-                    {currentPhoto ? (
+                    {/* {currentPhoto ? (
                       <img src={currentPhoto} alt="Profile" className="object-cover w-20 h-20 border-4 border-white rounded-full shadow-lg sm:w-24 sm:h-24" />
                     ) : (
                       <div className="flex items-center justify-center w-20 h-20 text-xl font-bold text-white rounded-full sm:w-24 sm:h-24 bg-gradient-to-r from-blue-600 to-purple-600 sm:text-2xl">
                         {userData.first_name?.charAt(0)}
                       </div>
-                    )}
+                    )} */}
+
+                     {UploadPhoto()}
                   </div>
                   <div className="flex-1 text-center sm:text-left">
                     <h3 className="text-xl font-bold text-gray-900 sm:text-2xl">{userData.first_name} {userData.last_name}</h3>

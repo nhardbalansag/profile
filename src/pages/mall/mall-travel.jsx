@@ -736,7 +736,7 @@ const MallTravel = () =>{
       </div>
       <div className='flex justify-center'>
         <div className='md:w-[75%] w-[95%]'>
-          <p className='font-extrabold text-[#001d3d] text-[25px] capitalize'>club ten bucket list</p>
+          <p className='font-extrabold text-[#001d3d] text-[25px] capitalize'>Upcoming Bucket List Experiences</p>
         </div>
       </div>
       <div className='flex justify-center my-5 mb-[150px]'>
