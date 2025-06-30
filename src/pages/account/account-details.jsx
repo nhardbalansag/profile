@@ -747,72 +747,71 @@ const AccountDetails = () =>{
             )}
           
 
-          {activeTab === 'social' && SocialMediaSection()}
+            {activeTab === 'social' && SocialMediaSection()}
           
-          {activeTab === 'interests' && (
-            <div className="space-y-8">
-              {HobbiesSection()}
-              {BucketListSection()}
-            </div>
-          )}
+            {activeTab === 'interests' && (
+              <div className="space-y-8">
+                {HobbiesSection()}
+                {BucketListSection()}
+              </div>
+            )}
           
-          {activeTab === 'media' && (
-            <div className="space-y-8">
-              {PhotoUpload()}
-              {YouTubeSection()}
-            </div>
-          )}
-
-          {activeTab === 'professional' && (
-            <div className="space-y-6">
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-700">Occupation</label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={userData.occupation}
-                    onChange={(e) => handleInputChange('occupation', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  <div className="flex items-center space-x-2">
-                    <Briefcase className="flex-shrink-0 w-4 h-4 text-gray-500" />
-                    <p className="text-gray-900">{userData.occupation}</p>
-                  </div>
-                )}
+            {activeTab === 'media' && (
+              <div className="space-y-8">
+                {PhotoUpload()}
+                {YouTubeSection()}
               </div>
+            )}
 
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-700">Company</label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    value={userData.company}
-                    onChange={(e) => handleInputChange('company', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  <p className="text-gray-900">{userData.company}</p>
-                )}
+            {activeTab === 'professional' && (
+              <div className="space-y-6">
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-700">Occupation</label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={userData.occupation}
+                      onChange={(e) => handleInputChange('occupation', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    />
+                  ) : (
+                    <div className="flex items-center space-x-2">
+                      <Briefcase className="flex-shrink-0 w-4 h-4 text-gray-500" />
+                      <p className="text-gray-900">{userData.occupation}</p>
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-700">Company</label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={userData.company}
+                      onChange={(e) => handleInputChange('company', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    />
+                  ) : (
+                    <p className="text-gray-900">{userData.company}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-700">Business Description</label>
+                  {isEditing ? (
+                    <textarea
+                      value={userData.business_description}
+                      onChange={(e) => handleInputChange('business_description', e.target.value)}
+                      rows={4}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      placeholder="Describe your business or company..."
+                    />
+                  ) : (
+                    <p className="p-4 text-gray-900 rounded-lg bg-gray-50">{userData.business_description}</p>
+                  )}
+                </div>
               </div>
-
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-700">Business Description</label>
-                {isEditing ? (
-                  <textarea
-                    value={userData.business_description}
-                    onChange={(e) => handleInputChange('business_description', e.target.value)}
-                    rows={4}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    placeholder="Describe your business or company..."
-                  />
-                ) : (
-                  <p className="p-4 text-gray-900 rounded-lg bg-gray-50">{userData.business_description}</p>
-                )}
-              </div>
-            </div>
-          )}
-
+            )}
           </div>
 
           {/* Main Content */}
@@ -978,7 +977,11 @@ const AccountDetails = () =>{
             <div key={index} className="relative border rounded-md shadow-lg group">
               <div className=''>
                 <img
-                  src={ isEditing ? photo.upload_url : env.VITE_APP_BACKEND_STORAGE_URL + photo.upload_url}
+                  src={ 
+                    photo.upload_url.includes('user_uploads')  
+                    ? env.VITE_APP_BACKEND_STORAGE_URL + photo.upload_url
+                    : photo.upload_url
+                  }
                   // alt={photo.name}
                   className="object-cover w-full rounded-lg "
                 />
