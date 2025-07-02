@@ -43,6 +43,8 @@ import MallAcademy from "./mall/mall-academy";
 import AcademyIndex from "./mall/mall-academy-index";
 
 import PrivacyPolicy from "./policy/privacy-policy";
+import MallLifeStyle from "./mall/mall-lifestyle";
+import MallEarn from "./mall/mall-earn";
 
 export{
     HomePage,
@@ -86,5 +88,7 @@ export{
     MallAcademy,
     AcademyIndex,
 
-    PrivacyPolicy
+    PrivacyPolicy,
+    MallLifeStyle,
+    MallEarn
 }

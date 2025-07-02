@@ -99,7 +99,7 @@ const LoginContent = () =>{
   useEffect(() =>{
     if(auth_states.SelectedLanguage){
       selectedLanguage.current = parseInt(auth_states.SelectedLanguage.id)
-      userSubscriptionCategories()
+      // userSubscriptionCategories()
     }
   },[auth_states])
   
@@ -122,27 +122,14 @@ const LoginContent = () =>{
     }));
   };
 
-  const CheckSubscriptionPaymentIntentStatus = async () =>{
-    const reqBody = {
-      session_id: getPaymentIntentSession,
-      subscription_categories_id: selectedPlan
-    }
-    
-    setLoadingRegister(true)
-    await api_subscription.CheckSubscriptionPaymentIntentStatus(getTokenRef.current, reqBody).then((result) =>{
-      setPaymentIntentSession(null)
-      setLoadingRegister(false)
+  const CheckSubscriptionPaymentIntentStatus = () =>{
+    setPaymentIntentSession(null)
+    setLoadingRegister(false)
 
-      setItem(STORAGE_TOKEN, getTokenRef.current)
-      setItem(STORAGE_USER_INFORMATION, JSON.stringify(getUserInformationRef.current))
+    setItem(STORAGE_TOKEN, getTokenRef.current)
+    setItem(STORAGE_USER_INFORMATION, JSON.stringify(getUserInformationRef.current))
 
-      dispatch(AuthAction.LoginUser(getTokenRef.current, getUserInformationRef.current))
-      setLoadingRegister(false)
-
-    }).catch((err) =>{
-      setPaymentIntentSession(null)
-      setLoadingRegister(false)
-    })
+    dispatch(AuthAction.LoginUser(getTokenRef.current, getUserInformationRef.current))
   }
 
   const RegisterUser = async (event) =>{
@@ -344,8 +331,8 @@ const LoginContent = () =>{
 
   const CloseBottomPayment = () =>{
     setOpenBottomPayment(false)
-
-    CheckSubscriptionPaymentIntentStatus()
+    // CheckSubscriptionPaymentIntentStatus()
+    navigate('/login')
   }
 
   useEffect(() => {
@@ -356,8 +343,8 @@ const LoginContent = () =>{
   const _PlanSelect = ({dataList}) => {
     return(
       <div className="w-full p-6 ">
-        <h2 className="mb-2 text-2xl font-bold text-center">Select Membership</h2>
-        <p className="mb-6 text-sm text-center text-gray-600">
+        <h2 className="mb-2 text-2xl font-bold text-center select_membership">Select Membership</h2>
+        <p className="mb-6 text-sm text-center text-gray-600 select_membership_matches_your_goal">
           Select the membership that matches your goals
         </p>
         <div className="space-y-4">
@@ -450,7 +437,7 @@ const LoginContent = () =>{
       <div className="p-4 space-y-6 bg-blue-600 md:p-10">
         <form onSubmit={(event) => ForgotPassword(event)}>
           <div className="p-6 space-y-4 bg-white rounded-lg shadow">
-            <h2 className="text-xl font-bold login_id">Password Reset</h2>
+            <h2 className="text-xl font-bold password_reset">Password Reset</h2>
             <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:space-x-3 md:grid-cols-2">
               <input
                 type="text"
@@ -462,13 +449,13 @@ const LoginContent = () =>{
               />
             </div>
             <div className="flex items-center space-x-3">
-              <button className="flex items-center justify-center text-white bg-blue-600 btn login_id">
+              <button className="flex items-center justify-center text-white bg-blue-600 btn send_email_id">
                 {
                   isLoading && <span className="loading loading-spinner loading-sm"></span> 
                 }
                 Send Email
               </button>
-               <button onClick={() => setenableResetPassword(false)} className="flex items-center justify-center text-black">
+               <button onClick={() => setenableResetPassword(false)} className="flex items-center justify-center text-black back_button_id">
                 Back
               </button>
             </div>
@@ -559,7 +546,7 @@ const LoginContent = () =>{
                           </div>
                         :
                           <div className='flex items-center space-x-2'>
-                            <p className="capitalize text-gray-500 font-bold text-[15px]">sponsor :</p>
+                            <p className="capitalize text-gray-500 font-bold text-[15px] sponsor_id">sponsor :</p>
                             <p className="capitalize label text-[18px]">
                               {
                                 GetSponsorDetails.success
@@ -573,7 +560,7 @@ const LoginContent = () =>{
                       <label className="w-full max-w-xs form-control">
                         <label className="capitalize label font-bold text-gray-500 text-[15px]">Country</label>
                         <select name='country_id' value={getRegisterForm.country_id} onChange={handleChangeForRegister} className="select select-bordered">
-                          <option value={null}>Select Your Country</option>
+                          <option value={null} className='select_country'>Select Your Country</option>
                             {
                               countriesList.map((item, key) =>
                                 <option key={key} value={item.id}>
@@ -585,7 +572,7 @@ const LoginContent = () =>{
                       </label>
 
                       <div>
-                        <label className="capitalize label text-gray-500 font-bold text-[15px]">Personal Details</label>
+                        <label className="capitalize label text-gray-500 font-bold text-[15px] personal_details_id">Personal Details</label>
                         <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:grid-cols-2 md:space-x-3">
                           <input
                             type="text"
@@ -615,7 +602,7 @@ const LoginContent = () =>{
                         onChange={handleChangeForRegister}
                       />
 
-                      <label className="capitalize text-gray-500 label font-bold text-[15px]">Set password</label>
+                      <label className="capitalize text-gray-500 label font-bold text-[15px] set_password_id">Set password</label>
                       {/* <p className="text-sm text-gray-500 you_need_to_confirm_email_id">
                         You’ll need to confirm that email or phone belongs to you.
                       </p> */}

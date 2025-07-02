@@ -85,8 +85,8 @@ const HomePage = () => {
       <div className="flex items-center justify-center space-x-2">
           <CategorizeButton icon={ <MdOutlineAirplanemodeActive />} path={"/travel"} label={"Travel"} active={(location.pathname.split("/")).includes('travel') ? true : false}/>
           <CategorizeButton icon={ <RiGraduationCapLine  />} path={"academy-index"} label={"Learn"} active={location.pathname.includes('academy') ? true : false}/>
-          <CategorizeButton icon={ <LuCircleDollarSign />} label={"Earn"} active={false}/>
-          <CategorizeButton icon={ <IoFitnessOutline />} path={"merchant"} label={"Lifestyle"} active={(location.pathname.split("/")).includes('merchant') ? true : false}/>
+          <CategorizeButton icon={ <LuCircleDollarSign />} path={"/earn"} label={"Earn"} active={location.pathname.includes('earn') ? true : false}/>
+          <CategorizeButton icon={ <IoFitnessOutline />} path={"/lifestyle"} label={"Lifestyle"} active={location.pathname.includes('lifestyle') ? true : false}/>
       </div>
     )
   }

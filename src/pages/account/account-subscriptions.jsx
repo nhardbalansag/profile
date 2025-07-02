@@ -271,7 +271,13 @@ const AccountSubscription = () =>{
                   </span>
                   
                   <span>
-                    days left before expiry
+                    {
+                      !loadingRequest &&
+                      AccountSubscriptionDetails.days_remaining < 0 
+                      ? "days expired"
+                      : "days left before expiry"
+                    }
+                    
                   </span>
                 </p>
               </div>
@@ -281,6 +287,7 @@ const AccountSubscription = () =>{
           !loadingRequest &&
           AccountSubscriptionDetails.details.subscription_category.membership_type.translation.membership.is_paid_account &&
           !AccountSubscriptionDetails.details.is_unsubscribe  &&
+          AccountSubscriptionDetails.paidMembershipCount > 1 &&
           <ButtonComp onPress={() => UnsubscribeToStripe()} className='btn-error' title='Unsubscribe'/>
         }
       </div>
