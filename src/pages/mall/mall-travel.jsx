@@ -14,6 +14,7 @@ import {
 import * as api_content from '../../services/content/content.api'
 import * as auth_service_api from '../../services/auth/auth.api'
 import * as api_account from '../../services/account/account.api.js'
+import * as api_subscription from '../../services/account/subscription.api.js'
 
 import Logo2 from '../../assets/images/ten/logo2.png'
 
@@ -24,10 +25,12 @@ const MallTravel = () =>{
   const navigate = useNavigate();
 
   const auth_states = useSelector(state => state.AuthReducer);
+  const modalSubscriptionRef = useRef(null);
 
   //#region useRefs
   const maxGuestCount = useRef(0)
   const walletRef = useRef(0)
+  const walletTBucksRef = useRef(0)
   const paymentBContent = useRef({})
   const initialFinalPrice = useRef(0)
   const countRef = useRef(0)
@@ -49,7 +52,14 @@ const MallTravel = () =>{
   const [totalPriceWithPoints, setTotalPriceWithPoints] = useState(0);
   const [TPointsWallet, setTPointsWallet] = useState(walletRef.current);
   const [TPointsCustom, setTPointsCustom] = useState(0);
+  const [TBucksCustom, setTBucksCustom] = useState(0);
+
+  const [AccountSubscriptionDetails, SetAccountSubscriptionDetails] = useState([])
+  
+
   const [UseTPointsWalletFullAmount, setUseTPointsWalletFullAmount] = useState(false);
+  const [getUseTBucksWalletFullAmount, setUseTBucksWalletFullAmount] = useState(false);
+
   const [loadingContent, setLoadingContent] = useState(true);
   const [getclientSecret, setclientSecret] = useState(null)
   const [getLoading, setLoading] = useState(false)
@@ -62,6 +72,7 @@ const MallTravel = () =>{
   const [walletData, setWalletData] = useState({
     t_points: 0,
     t_bucks: 0,
+    t_dollars: 0,
     AccountTransaction:[]
   });
 
@@ -123,7 +134,11 @@ const MallTravel = () =>{
         points_applied: TPointsCustom,
         points_allowed: selectedTab.offers_table.offers_points_amount,
         points_wallet_before: walletRef.current,
-        points_wallet_after: TPointsWallet
+        points_wallet_after: TPointsWallet,
+
+        bucks_applied: TBucksCustom,
+        bucks_wallet_before: walletTBucksRef.current,
+        bucks_wallet_after: walletData.t_bucks,
       }
 
       paymentBContent.current = reqBody
@@ -167,20 +182,61 @@ const MallTravel = () =>{
       if(walletRef.current > offers_points_amount){
         const lessToWallet = walletRef.current - offers_points_amount
         setTPointsWallet(lessToWallet)
-        setTotalPriceWithPoints(offers_amount - offers_points_amount)
+
+        const totalPrice =  totalPriceWithPoints > (offers_points_amount)
+                            ? (totalPriceWithPoints - (offers_points_amount))
+                            : ((offers_points_amount) - totalPriceWithPoints)
+
+        setTotalPriceWithPoints(totalPrice)
         setTPointsCustom(offers_points_amount)
       }else if(walletRef.current < offers_points_amount){
         const lessToWallet = walletRef.current - walletRef.current
         setTPointsWallet(lessToWallet)
-        setTotalPriceWithPoints(offers_amount - walletRef.current)
+
+        const totalPrice =  totalPriceWithPoints > (walletRef.current)
+                            ? (totalPriceWithPoints - (walletRef.current))
+                            : ((walletRef.current) - totalPriceWithPoints)
+
+        setTotalPriceWithPoints( totalPrice)
         setTPointsCustom(walletRef.current)
       }
     }else{
-      setTotalPriceWithPoints(offers_amount )
+      setTotalPriceWithPoints(totalPriceWithPoints + offers_points_amount)
       setTPointsWallet(walletRef.current)
       setTPointsCustom(0)
     }
-  };
+  }
+
+  const handleTbucks = (item) => {
+    setUseTBucksWalletFullAmount(!getUseTBucksWalletFullAmount)
+
+    const offers_amount = parseFloat(item.offers_table.offers_amount) * count
+
+    if(!getUseTBucksWalletFullAmount){
+      if(walletTBucksRef.current > offers_amount){
+
+        const lessToWallet = walletData.t_bucks - offers_amount
+        setWalletData({...walletData, t_bucks: lessToWallet})
+        setTotalPriceWithPoints(totalPriceWithPoints - (offers_amount - offers_points_amount))
+        setTBucksCustom(walletData.t_bucks)
+      }else if(walletTBucksRef.current < offers_amount){
+
+        const lessToWallet = offers_amount - walletData.t_bucks
+        setWalletData({...walletData, t_bucks: 0})
+
+        const totalPrice =  totalPriceWithPoints !== 0 
+                            ? (totalPriceWithPoints - walletData.t_bucks)
+                            : lessToWallet
+
+        setTotalPriceWithPoints(totalPrice)
+        setTBucksCustom(walletData.t_bucks)
+      }
+    }else{
+      setTotalPriceWithPoints(totalPriceWithPoints + walletTBucksRef.current)
+      setWalletData({...walletData, t_bucks: walletTBucksRef.current})
+      setTBucksCustom(0)
+    }
+  }
 
   const handleCustomPoints = (event, item) => {
 
@@ -220,9 +276,82 @@ const MallTravel = () =>{
     }
   };
 
-  const handleDecreaseCustomPoints = (item) => {
+  const handleCustomBucks = (event, item) => {
 
     const offers_amount = parseFloat(item.offers_table.offers_amount)  * count
+
+    const { name, type, checked, value } = event.target;
+
+    const validatedNaNInput = (Number.isNaN(value) ? parseInt(0) : parseInt(value))
+
+    if(!getUseTBucksWalletFullAmount){
+      if(validatedNaNInput > walletTBucksRef.current ){
+
+        setTBucksCustom(walletTBucksRef.current)
+        const lessToWallet = walletTBucksRef.current - walletTBucksRef.current
+        setWalletData({...walletData, t_bucks: lessToWallet})
+        setTotalPriceWithPoints(offers_amount - walletTBucksRef.current)
+
+      }else if(validatedNaNInput < walletTBucksRef.current ){
+
+        setTBucksCustom(validatedNaNInput < 0 ? 0 : validatedNaNInput)
+        const lessToWallet = walletTBucksRef.current - (parseInt(validatedNaNInput < 0 ? 0 : validatedNaNInput))
+        setWalletData({...walletData, t_bucks: lessToWallet})
+        setTotalPriceWithPoints(totalPriceWithPoints - validatedNaNInput)
+
+      }else if(Number.isNaN(validatedNaNInput)){
+
+        const lessToWallet = walletTBucksRef.current - 0
+        setWalletData({...walletData, t_bucks: lessToWallet})
+        setTBucksCustom(value)
+        setTotalPriceWithPoints(totalPriceWithPoints - 0)
+
+      }
+    }
+  }
+
+  const handleDecreaseCustomBucks = (item) => {
+    if(!getUseTBucksWalletFullAmount){
+      setTBucksCustom(prev => {
+        if(parseInt(prev) <= 0){
+          return 0
+        }else{
+          const lessToWallet =(walletTBucksRef.current - (parseInt(prev) - 1))
+          setWalletData({...walletData, t_bucks: lessToWallet})
+          setTotalPriceWithPoints(totalPriceWithPoints + 1)
+          return (parseInt(prev) - 1)
+        }
+      })
+    }
+  };
+
+  const handleIncreaseCustomBucks = (item) => {
+
+    const offers_amount = parseFloat(item.offers_table.offers_amount) * count
+    
+    if(!getUseTBucksWalletFullAmount){
+      setTBucksCustom(prev => {
+        if(parseInt(prev + 1) >= walletTBucksRef.current){
+
+          if(offers_amount <= walletTBucksRef.current){
+            return offers_amount
+          }else{
+            return walletTBucksRef.current
+          }
+
+        }else{
+          const lessToWallet = (walletTBucksRef.current - parseInt(prev + 1))
+          setWalletData({...walletData, t_bucks: lessToWallet})
+          setTotalPriceWithPoints(totalPriceWithPoints - 1)
+          return parseInt(prev + 1)
+        }
+      })
+    }
+  };
+
+  const handleDecreaseCustomPoints = (item) => {
+
+    const offers_amount = totalPriceWithPoints !== 0 ? totalPriceWithPoints : parseFloat(item.offers_table.offers_amount)  * count
 
     if(!UseTPointsWalletFullAmount){
       setTPointsCustom(prev => {
@@ -231,7 +360,7 @@ const MallTravel = () =>{
         }else{
           const lessToWallet =(walletRef.current - (parseInt(prev) - 1))
           setTPointsWallet(lessToWallet)
-          setTotalPriceWithPoints(offers_amount - (parseInt(prev) - 1))
+          setTotalPriceWithPoints(offers_amount + 1)
           return (parseInt(prev) - 1)
         }
       })
@@ -240,7 +369,7 @@ const MallTravel = () =>{
 
   const handleIncreaseCustomPoints = (item) => {
 
-    const offers_amount = parseFloat(item.offers_table.offers_amount) * count
+    const offers_amount = totalPriceWithPoints !== 0 ? totalPriceWithPoints : parseFloat(item.offers_table.offers_amount) * count
     const offers_points_amount = parseFloat(item.offers_table.offers_points_amount)
     
     if(!UseTPointsWalletFullAmount){
@@ -270,7 +399,7 @@ const MallTravel = () =>{
           }else if(parseInt(prev) < offers_points_amount){
             const lessToWallet = (walletRef.current - parseInt(prev + 1))
             setTPointsWallet(lessToWallet)
-            setTotalPriceWithPoints(offers_amount - parseInt(prev + 1))
+            setTotalPriceWithPoints(offers_amount - 1)
             return parseInt(prev + 1)
           }
         }
@@ -279,15 +408,23 @@ const MallTravel = () =>{
   };
   
   const handleDecreaseFunc = () => {
-    if (count > 0) setCount(count - 1);
 
-    setTotalPriceWithPoints((initialFinalPrice.current * (count - 1)) - TPointsCustom)
+    if (count > 1) setCount( prev => prev - 1);
+
+    if(count > 1){
+      const offers_amount = parseFloat(initialFinalPrice.current )
+      setTotalPriceWithPoints(((totalPriceWithPoints !== 0 ? totalPriceWithPoints : initialFinalPrice.current)) - offers_amount)
+    }
   }
 
   const handleIncreaseFunc = () => {
-    if (count < maxGuestCount.current) setCount(count + 1)
-    
-    setTotalPriceWithPoints((initialFinalPrice.current * (count + 1)) - TPointsCustom)
+    if (count < maxGuestCount.current) setCount(count + 1);
+
+    if(count < maxGuestCount.current){
+      const offers_amount = parseFloat(initialFinalPrice.current )
+      setTotalPriceWithPoints(((totalPriceWithPoints !== 0 ? totalPriceWithPoints : initialFinalPrice.current)) + offers_amount)
+    }
+   
   }
 
   const HandleOfferTabSelection = (item) =>{
@@ -306,7 +443,12 @@ const MallTravel = () =>{
     setOpenBottomOffer(true)
     ResultSetHomeContentsDetails(item)
     setActiveTab(item.content_offers_table[0])
-    setTotalPriceWithPoints(parseFloat(item.content_offers_table[0].offers_table.offers_amount) * item.content_guest_count)
+    setTotalPriceWithPoints(
+      parseFloat(item.content_offers_table[0].offers_table.offers_amount) 
+      * 
+      // item.content_guest_count
+      item.content_offers_table[0].offers_table.supplier_table.room_type.room_type_guest_count
+    )
     initialFinalPrice.current = item.content_offers_table[0].offers_table.offers_amount
     // setCount(item.content_guest_count)
     setCount(item.content_offers_table[0].offers_table.supplier_table.room_type.room_type_guest_count)
@@ -325,6 +467,20 @@ const MallTravel = () =>{
       console.log("GetTravelBucketListContent", err)
     })
   }
+
+  const GetUserAccountSubscriptionDetails = async () =>{
+    setLoadingContent(true)
+    await api_subscription.GetUserAccountSubscriptionDetails(auth_states.StateToken).then((result) =>{
+      SetAccountSubscriptionDetails(result.data.data)
+      setLoadingContent(false)
+    }).catch((err) =>{
+      setLoadingContent(false)
+    })
+  }
+
+  useEffect(()=>{
+      GetUserAccountSubscriptionDetails()
+  },[])
 
   //#region useEffects
   useEffect(() =>{
@@ -463,7 +619,8 @@ const MallTravel = () =>{
       }
       else{
         if(result.data.registered_to_xeni){
-          window.open(result.data.redirectUrl, '_blank');
+          // window.open(result.data.redirectUrl, '_blank');
+          window.location.href = result.data.redirectUrl;
         }else{
           xeniRegisterApi()
         }
@@ -491,6 +648,7 @@ const MallTravel = () =>{
         })
 
         walletRef.current = result.data.data.t_points
+        walletTBucksRef.current = result.data.data.t_bucks
 
         setTPointsWallet(result.data.data.t_points)
       }
@@ -721,6 +879,47 @@ const MallTravel = () =>{
       </div>
     )
   }
+
+  const ModalForUpgradeSubscriptionWhenVIP = () =>{
+    return(
+      <div>
+        <dialog ref={modalSubscriptionRef} id="my_modal_2" className="modal">
+          <div className="modal-box">
+            <div className="flex-1 mt-5 space-y-1 md:space-y-8">
+                <h2 className="text-2xl font-extrabold leading-tight text-center text-black capitalize md:text-3xl">
+                available only for active VIP members.
+                </h2>
+
+                <div className="flex flex-col items-center space-y-3 ">
+                  <div className="flex items-center justify-center w-10 h-10 bg-yellow-400 rounded-full">
+                    <img
+                    className="w-[60px] md:w-[100px]"
+                    alt="Tailwind CSS chat bubble component"
+                    src={Logo2} />
+                  </div>
+                  {/* Text Content */}
+                  <div className="flex-1 text-center">
+                    <p className="text-sm font-semibold earn_more_points_id">Earn more points</p>
+                    <p className="text-xs text-gray-600 members_could_save_id">
+                      Paid Memberships could save time and money finding great deals.
+                    </p>
+                  </div>
+
+                  <div className='flex justify-center'>
+                    <button onClick={() => navigate('/subscriptions')} className="px-6 py-3 text-white transition-colors bg-[#031956] rounded-lg whitespace-nowrap">
+                    Upgrade Membership
+                    </button>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <form method="dialog" className="modal-backdrop">
+              <button>close</button>
+          </form>
+        </dialog>
+      </div>
+    )
+  }
   
   return (
     <div className=''>
@@ -814,22 +1013,49 @@ const MallTravel = () =>{
           handleIncrease={() => handleIncreaseFunc()}
           handleDecrease={() => handleDecreaseFunc()}
           handleCustomTPoints={(text) => handleCustomPoints(text, activeTab)}
+
           handleRedeemFullTPoints={() => handleTpoints(activeTab)}
+          handleRedeemFullTBucks={() => handleTbucks(activeTab)}
+
           handleDecreaseCustomPoints={() => handleDecreaseCustomPoints(activeTab)}
           handleIncreaseCustomPoints={() => handleIncreaseCustomPoints(activeTab)}
+
+          handleDecreaseCustomBucks={() => handleDecreaseCustomBucks(activeTab)}
+          handleIncreaseCustomBucks={() => handleIncreaseCustomBucks(activeTab)}
+          
           isRedeemFull={UseTPointsWalletFullAmount}
+          isRedeemFullTBucks={getUseTBucksWalletFullAmount}
+
           count={count}
+
           customTPoints={TPointsCustom}
+          customTBucks={TBucksCustom}
+
+          handleCustomTBucks={(text) => handleCustomBucks(text, activeTab)}
+
           tabData={activeTab}
           wallet={parseFloat(TPointsWallet).toFixed(2)}
-          finalAmount={totalPriceWithPoints}
+          tBucksWallet={parseFloat(walletData.t_bucks).toFixed(2)}
+          finalAmount={parseFloat(totalPriceWithPoints).toFixed(2)}
           offersData={ResultGetHomeContentsDetails}
           >
             <div className="grid grid-cols-2 gap-5 my-5">
               {
                 ResultGetHomeContentsDetails.content_offers_table.map((item, key) =>(
                   <button 
-                  onClick={() => HandleOfferTabSelection(item)} 
+                  onClick={() => {
+
+                    var is_paid_membership = item.offers_table.membership_type_table.translation.membership.is_paid_account
+                    const account_membership_is_paid = AccountSubscriptionDetails.details.subscription_category.membership_type.translation.membership.is_paid_account
+
+                    if(is_paid_membership && !account_membership_is_paid){
+                      setTimeout(() => {
+                        modalSubscriptionRef.current?.showModal();
+                      }, 0)
+                    }else{
+                      HandleOfferTabSelection(item)
+                    }
+                  }} 
                   key={key} 
                   className={`${activeTab.offers_id == item.offers_id ? 'bg-yellow-400 text-black ' : ''} border h-auto rounded-lg shadow-sm p-5`}>
                     <p className={`${activeTab.offers_id == item.offers_id ? 'font-extrabold' : 'font-normal'}  text-[18px] uppercase`}>
@@ -888,13 +1114,13 @@ const MallTravel = () =>{
         getLoading={getLoading} 
         dataContent={paymentBContent.current} 
         handleClose={() => {
-          CheckBookingPaymentIntentStatus()
           setOpenBottomPayment(false)
         }}
         />
       }
       
       <ModalForUpgradeSubscription/>
+      <ModalForUpgradeSubscriptionWhenVIP/>
     </div>  
   ) 
 }

@@ -148,7 +148,9 @@ const HomeContent = () =>{
             src={ type == "video" ? env.VITE_APP_BACKEND_STORAGE_URL +  videoId : videoId}
             // src={videoId}
             frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+
+            // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             title="YouTube Video"
             style={{

@@ -26,12 +26,26 @@ const OffersBottomSheet = ({
     offersData,
     finalAmount,
     wallet,
+    tBucksWallet,
+
     handleRedeemFullTPoints,
+    handleRedeemFullTBucks,
+
     isRedeemFull,
+    isRedeemFullTBucks,
+
     customTPoints,
+    customTBucks,
+
     handleCustomTPoints,
+    handleCustomTBucks,
+
     handleDecreaseCustomPoints,
     handleIncreaseCustomPoints,
+
+    handleDecreaseCustomBucks,
+    handleIncreaseCustomBucks,
+
     children,
 }) => {
 
@@ -217,9 +231,22 @@ const OffersBottomSheet = ({
                                 <p className='text-[12px] ml-2 text-black font-semibold'>{wallet}</p>
                             </div>
 
+                            <div className='flex items-center justify-between '>
+                                <div className='flex items-center'>
+                                    <SlWallet   className="text-[15px] text-[#FF5722]" />
+                                    <p className='text-[12px] ml-2 text-black my_t_point_wallet_id'>My T-Bucks Wallet</p>
+                                </div>
+                                <p className='text-[12px] ml-2 text-black font-semibold'>{tBucksWallet}</p>
+                            </div>
+
                             <label className="flex items-center gap-2">
                                 <input type="checkbox" checked={isRedeemFull} onChange={handleRedeemFullTPoints} className="toggle toggle-sm" /> 
-                                <p className='text-[12px] redeem_full_t_point_amount_id'>Redeem Full T-Points Amount</p>
+                                <p className='text-[14px] redeem_full_t_point_amount_id'>Apply Full T-Points Amount</p>
+                            </label>
+
+                             <label className="flex items-center gap-2">
+                                <input type="checkbox" checked={isRedeemFullTBucks} onChange={handleRedeemFullTBucks} className="toggle toggle-sm" /> 
+                                <p className='text-[14px] redeem_full_t_point_amount_id'>Apply Full T-Bucks Amount</p>
                             </label>
                             
                             <div className="flex items-end justify-center space-x-2">
@@ -233,6 +260,21 @@ const OffersBottomSheet = ({
                                     </div>
                                 </div>
                                 <button onClick={handleIncreaseCustomPoints} className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                    <CiCirclePlus   className="text-[25px] text-[#FF5722]" />
+                                </button>
+                            </div>
+
+                            <div className="flex items-end justify-center space-x-2">
+                                <button onClick={handleDecreaseCustomBucks } className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                    <CiCircleMinus   className="text-[25px] text-[#FF5722]" />
+                                </button>
+                                <div className='flex items-center justify-center text-center'>
+                                    <div>
+                                        <label className="label text-[12px] t_points_amount">T-Bucks Amount</label>
+                                        <input type="number" placeholder="0" name='customTBucks' value={customTBucks} onChange={handleCustomTBucks} className="w-[80px] input input-bordered input-md" />
+                                    </div>
+                                </div>
+                                <button onClick={handleIncreaseCustomBucks} className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
                                     <CiCirclePlus   className="text-[25px] text-[#FF5722]" />
                                 </button>
                             </div>

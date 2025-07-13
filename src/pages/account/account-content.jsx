@@ -13,6 +13,8 @@ import { BsBarChartLine } from "react-icons/bs";
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import { DollarSign, Users, Play, Megaphone } from 'lucide-react';
 import { LuListVideo } from "react-icons/lu";
+import { MdOutlineRedeem } from "react-icons/md";
+import { FaRegStar } from "react-icons/fa";
 
 import { format } from 'date-fns';
 
@@ -59,6 +61,7 @@ const AccountContent = () =>{
   const [walletData, setWalletData] = useState({
     t_points: 0,
     t_bucks: 0,
+    t_dollars: 0,
     direct: 0,
     AccountTransaction:[]
   });
@@ -139,6 +142,17 @@ const AccountContent = () =>{
 
     const wallet_details = [
       {
+        title: 'travel dollars',
+        balance: walletData.t_dollars,
+        button:[
+          {
+            onPressAction: () => console.log(),
+            title: 'Redeem',
+            icon: <MdOutlineRedeem className="text-[20px] text-white" />
+          }
+        ]
+      },
+      {
         title: 't-points',
         balance: walletData.t_points,
         button:[
@@ -181,6 +195,8 @@ const AccountContent = () =>{
         modules={[Navigation, Pagination, Scrollbar, A11y]}
         spaceBetween={5}
         slidesPerView={1}
+        navigation={true}
+
         onSlideChange={() => setCollapseDetails(false)}
       //#endregion
       >
@@ -326,15 +342,15 @@ const AccountContent = () =>{
         <_BonusCard
           onPressAction={() => navigate('/connects')}
           icon={<LuHandshake size={18} className="text-gray-600" />}
-          title={'Direct'}
+          title={'Direct Bonus'}
           value={walletData.direct}
           rate={0.0}
           rateStatus={true}
         />
         
         <_BonusCard
-          icon={<BsGraphUpArrow size={18} className="text-gray-600" />}
-          title={'Market'}
+          icon={<FaRegStar size={18} className="text-gray-600" />}
+          title={'Stars Bonus'}
           value={0.00}
           rate={0.0}
           rateStatus={false}
@@ -342,7 +358,7 @@ const AccountContent = () =>{
 
         <_BonusCard
           icon={<TbWorldDollar size={18} className="text-gray-600" />}
-          title={'Global'}
+          title={'Global Bonus'}
           value={0.00}
           rate={0.0}
           rateStatus={false}
@@ -350,7 +366,7 @@ const AccountContent = () =>{
 
         <_BonusCard
           icon={<BsBarChartLine size={18} className="text-gray-600" />}
-          title={'Milestone'}
+          title={'Milestone Bonus'}
           value={0.00}
           rate={0.0}
           rateStatus={false}

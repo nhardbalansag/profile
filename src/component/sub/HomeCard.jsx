@@ -174,14 +174,14 @@ const HomeCard = ({
     const _Card2 = () => {
         return (
             
-            <div className={`flex ${inlineRendering ? 'flex-row space-x-5' : 'flex-col'}   w-full`}>
+            <div className={`flex ${inlineRendering ? 'flex-row space-x-5' : 'flex-col'} rounded-xl  w-full bg-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2`}>
                 <div 
                 style={{
                     backgroundImage: `url(${image})`,
                     // opacity: 0.3,  // Only affects the background
                     // zIndex: -1
                 }}
-                className="relative w-full h-64 overflow-hidden shadow-lg rounded-xl">
+                className="relative w-full h-64 overflow-hidden rounded-b-none shadow-lg rounded-xl">
                 {/* // className="relative w-[60%] h-64 overflow-hidden shadow-lg rounded-xl "> */}
                     <img
                     src={image}
@@ -219,7 +219,7 @@ const HomeCard = ({
                         }
                     </div>
                 </div>
-                <div className="">
+                <div className="p-3">
                     <div className='flex items-start justify-between '>
                         {_SocialComp()}
                         {

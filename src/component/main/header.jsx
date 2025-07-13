@@ -6,19 +6,18 @@ import { AiOutlineAlignRight } from "react-icons/ai";
 import { IoLanguageOutline } from "react-icons/io5";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { AiOutlineLogout } from "react-icons/ai";
-import { LuUserRoundPlus } from "react-icons/lu";
-import { LuUserRoundCheck } from "react-icons/lu";
-import { HiOutlineUserGroup } from "react-icons/hi2";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { PiBuildingOfficeLight } from "react-icons/pi";
 import { FaRegUser } from "react-icons/fa6";
 import { LuTickets } from "react-icons/lu";
 import { Link } from "react-router-dom";
-import { TbBulb } from "react-icons/tb";
-import { FaRegNewspaper } from "react-icons/fa";
-import { RiContactsLine } from "react-icons/ri";
-import { MdOutlinePolicy } from "react-icons/md";
-import { FaUsers, FaShoppingBag, FaUser } from "react-icons/fa";
+import { TfiReceipt } from "react-icons/tfi";
+import { FaRegEnvelopeOpen } from "react-icons/fa";
+import { GrShieldSecurity } from "react-icons/gr";
+import { TiHomeOutline } from "react-icons/ti";
+import { MdOutlineTravelExplore } from "react-icons/md";
+import { RiGraduationCapLine } from "react-icons/ri";
+import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 
 import {
   clear
@@ -119,25 +118,6 @@ const Header = ({
                       }
                       
                     </div>
-                    {/* <div className='flex items-center justify-start md:px-10 '>
-                      {
-                        auth_states.StateToken
-                        ?
-                          <Link to={'/account'}>
-                            <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
-                              <LuUserRoundCheck size={20}/>
-                              <p className='account_id text-[#001d3d] capitalize ml-2 '>My Office</p>
-                            </a>
-                          </Link>
-                        :
-                          <Link to={'login'}>
-                            <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
-                              <LuUserRoundPlus  size={20}/>
-                              <p className='signin_id text-[#001d3d] capitalize ml-2 '>Sign up</p>
-                            </a>
-                          </Link>
-                      }
-                    </div> */}
                   </div>
                 </nav>
               </div>
@@ -163,55 +143,49 @@ const Header = ({
           <div class="flex h-screen">
             <aside class="w-64 bg-white border-r border-gray-200 p-4">
               <nav class="space-y-2 hidden md:block">
-                {/* <Link to={'/'}> */}
-                  <a href="https://www.clubtenglobal.com/" class={`${("/").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
-                    <TbBulb  size={20}/>
-                    <p className='social_id text-[#001d3d] capitalize ml-2 '>about us</p>
-                  </a>
-                {/* </Link> */}
+                {
+                  auth_states.StateToken &&
+                  <Link to={'/'}>
+                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <TiHomeOutline  size={20}/>
+                      <p className='events_id text-[#001d3d] capitalize ml-2 '>Home</p>
+                    </a>
+                  </Link>
+                }
+                {
+                  auth_states.StateToken &&
+                  <Link to={'/travel'}>
+                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <MdOutlineTravelExplore  size={20}/>
+                      <p className='events_id text-[#001d3d] capitalize ml-2 '>Travel</p>
+                    </a>
+                  </Link>
+                }
+                {
+                  auth_states.StateToken &&
+                  <Link to={'/academy-index'}>
+                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <RiGraduationCapLine  size={20}/>
+                      <p className='events_id text-[#001d3d] capitalize ml-2 '>Learn</p>
+                    </a>
+                  </Link>
+                }
+               
                 {
                   auth_states.StateToken &&
                   <Link to={'/event'}>
                     <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <LuTickets  size={20}/>
-                      <p className='mall_id text-[#001d3d] capitalize ml-2 '>events</p>
+                      <p className='events_id text-[#001d3d] capitalize ml-2 '>events</p>
                     </a>
                   </Link>
                 }
-                {/* {
-                  auth_states.StateToken &&
-                  <Link to={'/mall'}>
-                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
-                      <FaShoppingBag  size={20}/>
-                      <p className='mall_id text-[#001d3d] capitalize ml-2 '>mall</p>
-                    </a>
-                  </Link>
-                } */}
-                
-                {/* <Link to={'/'}> */}
-                  <a href="https://www.clubtenglobal.com/blog" class={`${("event").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
-                    <FaRegNewspaper  size={20}/>
-                    <p className='event_id text-[#001d3d] capitalize ml-2 '>blog</p>
-                  </a>
-                {/* </Link> */}
-                {/* <Link to={'/'}>
-                  <a href="#" class={`${("event").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
-                    <RiContactsLine  size={20}/>
-                    <p className='event_id text-[#001d3d] capitalize ml-2 '>contact us</p>
-                  </a>
-                </Link> */}
-                <Link to={'/policy'}>
-                  <a href="#" class={`${("event").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
-                    <MdOutlinePolicy  size={20}/>
-                    <p className='event_id text-[#001d3d] capitalize ml-2 '>privacy policy</p>
-                  </a>
-                </Link>
                 {
                   auth_states.StateToken &&
                   <Link to={'/account'}>
                     <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
-                      <PiBuildingOfficeLight  size={20}/>
-                      <p className='account_id text-[#001d3d] capitalize ml-2 '>office</p>
+                      <MdOutlineAccountBalanceWallet  size={20}/>
+                      <p className='office_id text-[#001d3d] capitalize ml-2 '>office</p>
                     </a>
                   </Link>
                 }
@@ -224,6 +198,37 @@ const Header = ({
                     </a>
                   </Link>
                 }
+
+                {
+                  auth_states.StateToken &&
+                  <Link to={'/subscriptions'}>
+                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <FaRegEnvelopeOpen  size={20}/>
+                      <p className='events_id text-[#001d3d] capitalize ml-2 '>subscription</p>
+                    </a>
+                  </Link>
+                }
+                
+                {
+                  auth_states.StateToken &&
+                  <Link to={'/orders'}>
+                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <HiOutlineShoppingBag  size={20}/>
+                      <p className='events_id text-[#001d3d] capitalize ml-2 '>orders</p>
+                    </a>
+                  </Link>
+                }
+
+                {
+                  auth_states.StateToken &&
+                  <Link to={'/security'}>
+                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <GrShieldSecurity  size={20}/>
+                      <p className='events_id text-[#001d3d] capitalize ml-2 '>security</p>
+                    </a>
+                  </Link>
+                }
+
               </nav>
 
               <nav class="space-y-2 md:hidden flex flex-col">

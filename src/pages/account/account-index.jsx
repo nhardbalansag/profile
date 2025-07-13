@@ -7,6 +7,7 @@ import {
 } from "react-router";
 import { useLocation } from 'react-router-dom';
 import { LuCircleDollarSign } from "react-icons/lu";
+import { MdOutlineTravelExplore } from "react-icons/md";
 
 import { FiBell } from "react-icons/fi";
 import { FaChevronRight } from "react-icons/fa"; 
@@ -21,6 +22,8 @@ import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { AiOutlineLogout } from "react-icons/ai";
 import { TiHomeOutline } from "react-icons/ti";
 import { GrShieldSecurity } from "react-icons/gr";
+import { RiGraduationCapLine } from "react-icons/ri";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 
 import { FaUsers, FaShoppingBag, FaUser } from "react-icons/fa";
 import { HiMiniBuildingOffice2 } from "react-icons/hi2";
@@ -133,25 +136,38 @@ const AccountPage = () => {
                 {_link("/", "Home")}
               </a>
               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                <MdOutlineTravelExplore size={20}/>
+                {_link("/travel", "Travel")}
+              </a>
+              <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                <RiGraduationCapLine size={20}/>
+                {_link("/academy-index", "Learn")}
+              </a>
+              <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                <LuTickets size={20}/>
+                {_link("/event", "Events")}
+              </a>
+              <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <MdOutlineAccountBalanceWallet size={20}/>
-                {_link("/account", "My Office")}
+                {_link("/account", "Office")}
+              </a>
+              <a href="#" class={`${("details").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                <FaRegUser />
+                {_link("/details", "Profile")}
               </a>
               <a href="#" class={`${("/content/add-content").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <FaRegEnvelopeOpen />
                 {_link("/subscriptions", "Subscription")}
               </a>
               <a href="#" class={`${("orders").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
-                <TfiReceipt />
+                <HiOutlineShoppingBag />
                 {_link("/orders", "Orders")}
               </a>
               {/* <a href="#" class={`${("/content/add-content").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <FaHistory  />
                 {_link("/content/", "Transaction History")}
               </a> */}
-              <a href="#" class={`${("details").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
-                <FaRegUser />
-                {_link("/details", "Profile")}
-              </a>
+              
               <a href="#" class={`${("details").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <GrShieldSecurity />
                 {_link("/security", "Security")}

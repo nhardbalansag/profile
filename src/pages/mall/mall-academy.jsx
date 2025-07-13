@@ -1,36 +1,28 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import {useSelector} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { useParams, Link } from 'react-router-dom';
 import { 
-  Play, 
-  Pause, 
-  Star, 
   Clock, 
-  Users, 
-  BookOpen, 
   CheckCircle, 
   PlayCircle,
-  ArrowLeft,
-  Download,
-  Settings,
-  Volume2,
   ChevronDown,
   ChevronUp,
-  Lock,
-  FileText,
-  Code,
-  HelpCircle
 } from 'lucide-react';
 const env = import.meta.env;
 
 import * as api_subscription from '../../services/account/subscription.api.js'
+import Logo2 from '../../assets/images/ten/logo2.png'
 
 import CourseImage from '../../assets/images/ten/courses/Imagecourse.jpeg'
 
 const MallAcademy = () =>{
 
     const auth_states = useSelector(state => state.AuthReducer);
+    const modalRef = useRef(null);
+    const navigate = useNavigate();
+    
 
     const [loadingRequest, setLoadingRequest] = useState(true);
     const [AccountSubscriptionDetails, SetAccountSubscriptionDetails] = useState([])
@@ -349,6 +341,16 @@ allowfullscreen></iframe>
     }
 
     const handleLessonClick = (lesson) => {
+
+        var is_paid_membership = AccountSubscriptionDetails.details.subscription_category.membership_type.translation.membership.is_paid_account
+        var membership = AccountSubscriptionDetails.details.subscription_category.membership_type.type_title.toString().toLowerCase()
+
+        if(!is_paid_membership && !lesson.membership.includes(membership)){
+            setTimeout(() => {
+                modalRef.current?.showModal();
+            }, 0)
+        }
+
         setCurrentLesson({
             id: lesson.id,
             title: lesson.title,
@@ -391,7 +393,48 @@ allowfullscreen></iframe>
     useEffect(()=>{
         GetUserAccountSubscriptionDetails()
     },[])
-    
+
+    const ModalForUpgradeSubscription = () =>{
+        return(
+            <div>
+                <dialog ref={modalRef} id="my_modal_2" className="modal">
+                    <div className="modal-box">
+                        <div className="flex-1 mt-5 space-y-1 md:space-y-8">
+                            <h2 className="text-2xl font-extrabold leading-tight text-center text-black capitalize md:text-3xl">
+                            available only for active VIP members.
+                            </h2>
+
+                            <div className="flex flex-col items-center space-y-3 ">
+                                <div className="flex items-center justify-center w-10 h-10 bg-yellow-400 rounded-full">
+                                    <img
+                                    className="w-[60px] md:w-[100px]"
+                                    alt="Tailwind CSS chat bubble component"
+                                    src={Logo2} />
+                                </div>
+                                {/* Text Content */}
+                                <div className="flex-1 text-center">
+                                    <p className="text-sm font-semibold earn_more_points_id">Earn more points</p>
+                                    <p className="text-xs text-gray-600 members_could_save_id">
+                                        Paid Memberships could save time and money finding great deals.
+                                    </p>
+                                </div>
+
+                                <div className='flex justify-center'>
+                                    <button onClick={() => navigate('/subscriptions')} className="px-6 py-3 text-white transition-colors bg-[#031956] rounded-lg whitespace-nowrap">
+                                    Upgrade Membership
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form method="dialog" className="modal-backdrop">
+                        <button>close</button>
+                    </form>
+                </dialog>
+            </div>
+        )
+    }
+      
     return (
         <div className='flex justify-center my-5 mb-[50px]'>
             <div className='md:w-[75%] w-[95%]'>
@@ -673,6 +716,8 @@ allowfullscreen></iframe>
                     </div>
                 </div>
             </div>
+
+            <ModalForUpgradeSubscription/>
         </div>  
     ) 
 }
