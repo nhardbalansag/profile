@@ -1044,7 +1044,6 @@ const MallTravel = () =>{
                 ResultGetHomeContentsDetails.content_offers_table.map((item, key) =>(
 
                   item.offers_table.membership_type_table &&
-                  activeTab &&
                   <button 
                   onClick={() => {
 
@@ -1060,8 +1059,8 @@ const MallTravel = () =>{
                     }
                   }} 
                   key={key} 
-                  className={`${activeTab.offers_id == item.offers_id ? 'bg-yellow-400 text-black ' : ''} border h-auto rounded-lg shadow-sm p-5`}>
-                    <p className={`${activeTab.offers_id == item.offers_id ? 'font-extrabold' : 'font-normal'}  text-[18px] uppercase`}>
+                  className={`${ activeTab && activeTab.offers_id == item.offers_id ? 'bg-yellow-400 text-black ' : ''} border h-auto rounded-lg shadow-sm p-5`}>
+                    <p className={`${activeTab && activeTab.offers_id == item.offers_id ? 'font-extrabold' : 'font-normal'}  text-[18px] uppercase`}>
                       <div className='flex items-center justify-between'>
                         <span>
                           {
