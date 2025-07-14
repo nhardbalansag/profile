@@ -47,7 +47,7 @@ const MallTravel = () =>{
   const [ResultGetHomeContents, ResultSetHomeContents] = useState([]);
   const [ResultGetHomeContentsDetails, ResultSetHomeContentsDetails] = useState([]);
   const [getBottomDetailsOpen, setBottomDetailsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState([]);
+  const [activeTab, setActiveTab] = useState(null);
   const [count, setCount] = useState(0);
   const [totalPriceWithPoints, setTotalPriceWithPoints] = useState(0);
   const [TPointsWallet, setTPointsWallet] = useState(walletRef.current);
@@ -442,7 +442,7 @@ const MallTravel = () =>{
     getTBucksAndTPoints()
     setOpenBottomOffer(true)
     ResultSetHomeContentsDetails(item)
-    setActiveTab(item.content_offers_table[0])
+    // setActiveTab(item.content_offers_table[0])
     setTotalPriceWithPoints(
       parseFloat(item.content_offers_table[0].offers_table.offers_amount) 
       * 
@@ -458,7 +458,7 @@ const MallTravel = () =>{
 
   const GetTravelBucketListContent = async() =>{
     setLoadingContent(true)
-    await api_content.GetTravelBucketListContent().then((result) =>{
+    await api_content.GetTravelBucketListContent(auth_states.StateToken).then((result) =>{
       if(result.status){
         setLoadingContent(false)
         ResultSetHomeContents(result.data.data)
@@ -1042,6 +1042,9 @@ const MallTravel = () =>{
             <div className="grid grid-cols-2 gap-5 my-5">
               {
                 ResultGetHomeContentsDetails.content_offers_table.map((item, key) =>(
+
+                  item.offers_table.membership_type_table &&
+                  activeTab &&
                   <button 
                   onClick={() => {
 

@@ -120,23 +120,29 @@ const OffersBottomSheet = ({
                                         </div>
                                     </div>
                                 </div>
-
-                                <div className='mt-3 space-y-2'>
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center space-x-2">
-                                            <LuCalendarClock  className="text-[15px] text-[#FF5722]" />
-                                            <label className="text-gray-500 text-[12px] registration_end_id">Registration End</label>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            <p  className="text-[12px]">
-                                                {format(new Date(tabData.offers_table.offers_end_effectivity_date), 'MMM dd, yyyy')}
-                                            </p>
-                                            <p  className="text-[12px]">
-                                                {tabData.offers_table.offers_end_daily_period}
-                                            </p>
+                                
+                                {
+                                    tabData &&
+                                    <div className='mt-3 space-y-2'>
+                                        <div className="flex items-center justify-between">
+                                            
+                                            <div className="flex items-center space-x-2">
+                                                <LuCalendarClock  className="text-[15px] text-[#FF5722]" />
+                                                <label className="text-gray-500 text-[12px] registration_end_id">Registration End</label>
+                                            </div>
+                                        
+                                            <div className="flex items-center space-x-2">
+                                                <p  className="text-[12px]">
+                                                    {format(new Date(tabData.offers_table.offers_end_effectivity_date), 'MMM dd, yyyy')}
+                                                </p>
+                                                <p  className="text-[12px]">
+                                                    {tabData.offers_table.offers_end_daily_period}
+                                                </p>
+                                            </div>
+                                            
                                         </div>
                                     </div>
-                                </div>
+                                }
 
                                 <div className='space-y-2'>
                                     <div className="flex items-center justify-between">
@@ -162,66 +168,75 @@ const OffersBottomSheet = ({
                                     </div>
                                 </div>
                             </div> 
-
-                            <div className="flex items-center justify-between p-4 border border-blue-500 rounded-lg bg-blue-50">
-                                <div>
-                                    <p className="font-medium capitalize">{
-                                        auth_states.SelectedLanguage == null
-                                        ? tabData.offers_table.supplier_table.room_type.room_type_name
-                                        : (
-                                            tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id)
-                                            ? tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id).room_type_name 
-                                            : tabData.offers_table.supplier_table.room_type.room_type_name
-                                        )
-                                    }</p>
-                                    <p className="text-sm text-gray-500">{tabData.offers_table.supplier_table.room_type.room_type_guest_count} <span className='guest_per_room'>guest per room</span></p>
-                                    {/* <button className="mt-1 text-sm font-medium text-blue-600">Select offer</button> */}
-                                </div>
-                                <div className="text-lg font-bold text-center"> 
-                                    <p>{tabData.offers_table.currency_table.currency_symbol}{tabData.offers_table.offers_amount}</p>
-                                </div>
-                            </div>
-                    
-                            <div className="space-y-4 border-b-[1px] pb-3">
-                                <div className='flex items-center justify-between'>
-                                    <div className='flex items-center'>
-                                        <RiCoinsLine   className="text-[25px] text-[#FF5722]" />
-                                        <p className='text-[12px] ml-2 text-black redeem_t_points_id'>Redeem T-Points</p>
+                            
+                            {
+                                tabData &&
+                                <div className="flex items-center justify-between p-4 border border-blue-500 rounded-lg bg-blue-50">
+                                    <div>
+                                        <p className="font-medium capitalize">{
+                                            auth_states.SelectedLanguage == null
+                                            ? tabData.offers_table.supplier_table.room_type.room_type_name
+                                            : (
+                                                tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id)
+                                                ? tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id).room_type_name 
+                                                : tabData.offers_table.supplier_table.room_type.room_type_name
+                                            )
+                                        }</p>
+                                        <p className="text-sm text-gray-500">{tabData.offers_table.supplier_table.room_type.room_type_guest_count} <span className='guest_per_room'>guest per room</span></p>
+                                        {/* <button className="mt-1 text-sm font-medium text-blue-600">Select offer</button> */}
                                     </div>
-                                    <p className='text-[15px] ml-2 text-black font-semibold'>{tabData.offers_table.offers_points_amount}</p>
-                                </div>
-
-                                <div className='flex items-center justify-between'>
-                                    <div className='flex items-center'>
-                                        <FiHelpCircle className="text-[15px] text-[#FF5722]" />
-                                        <p className='text-[10.5px] ml-2 text-black'>
-                                            <strong className='1_t-point_id'>1 T-Point</strong> 
-                                            <span className='is_equal_to_id'>is equal to</span> 
-                                            <strong className='$1_usd_id'> $1 USD</strong>
-                                        </p>
+                                    <div className="text-lg font-bold text-center"> 
+                                        <p>{tabData.offers_table.currency_table.currency_symbol}{tabData.offers_table.offers_amount}</p>
                                     </div>
-                                    <p className='text-[11px] ml-2 text-black font-semibold'>${tabData.offers_table.offers_points_amount} <span className='usd_id'>USD</span></p>
                                 </div>
-                                <div className='flex items-center'>
-                                    <p className='text-[12px] text-gray-500'>(<span className='tip_redeem_id'>Tip: Redeem your T-Points for instant discounts!</span>)</p>
+                            }
+
+                            {
+                                tabData &&
+                                <div className="space-y-4 border-b-[1px] pb-3">
+                                    <div className='flex items-center justify-between'>
+                                        <div className='flex items-center'>
+                                            <RiCoinsLine   className="text-[25px] text-[#FF5722]" />
+                                            <p className='text-[12px] ml-2 text-black redeem_t_points_id'>Redeemable T-Points</p>
+                                        </div>
+                                        <p className='text-[15px] ml-2 text-black font-semibold'>{tabData.offers_table.offers_points_amount}</p>
+                                    </div>
+
+                                    <div className='flex items-center justify-between'>
+                                        <div className='flex items-center'>
+                                            <FiHelpCircle className="text-[15px] text-[#FF5722]" />
+                                            <p className='text-[10.5px] ml-2 text-black'>
+                                                <strong className='1_t-point_id'>1 T-Point</strong> 
+                                                <span className='is_equal_to_id'> is equivalent to</span> 
+                                                <strong className='$1_usd_id'> $1 USD</strong>
+                                            </p>
+                                        </div>
+                                        <p className='text-[11px] ml-2 text-black font-semibold'>${tabData.offers_table.offers_points_amount} <span className='usd_id'>USD</span></p>
+                                    </div>
+                                    <div className='flex items-center'>
+                                        <p className='text-[12px] text-gray-500'>(<span className='tip_redeem_id'>Tip: Redeem your T-Points for instant discounts!</span>)</p>
+                                    </div>
                                 </div>
-                            </div>
+                            }
                         </div>
                         <div className='space-y-6'>
-                            <div className="pb-3 text-right border-b"> 
-                                <div className='flex items-center justify-between'>
-                                    <p className="text-[11px] price_id">Price</p>
-                                    <p className="text-lg font-semibold">{tabData.offers_table.currency_table.currency_symbol}{(parseFloat(tabData.offers_table.offers_amount) * count)}</p>
+                            {
+                                tabData &&
+                                <div className="pb-3 text-right border-b"> 
+                                    <div className='flex items-center justify-between'>
+                                        <p className="text-[11px] price_id">Price</p>
+                                        <p className="text-lg font-semibold">{tabData.offers_table.currency_table.currency_symbol}{(parseFloat(tabData.offers_table.offers_amount) * count)}</p>
+                                    </div>
+                                    <div className='flex items-center justify-between'>
+                                        <p className="text-[11px] applied_t_point_id">Applied T-Points</p>
+                                        <p className="text-lg font-semibold border-b-2 border-black"> - ${tabData.offers_table.offers_points_amount}</p>
+                                    </div>
+                                    <div className='flex items-center justify-between'>
+                                        <p className="text-[11px] total_price">Total Price</p>
+                                        <p className="text-lg text-[24px] font-bold">${(parseFloat(tabData.offers_table.offers_amount) * count) - parseFloat(tabData.offers_table.offers_points_amount)}</p>
+                                    </div>
                                 </div>
-                                <div className='flex items-center justify-between'>
-                                    <p className="text-[11px] applied_t_point_id">Applied T-Points</p>
-                                    <p className="text-lg font-semibold border-b-2 border-black"> - ${tabData.offers_table.offers_points_amount}</p>
-                                </div>
-                                <div className='flex items-center justify-between'>
-                                    <p className="text-[11px] total_price">Total Price</p>
-                                    <p className="text-lg text-[24px] font-bold">${(parseFloat(tabData.offers_table.offers_amount) * count) - parseFloat(tabData.offers_table.offers_points_amount)}</p>
-                                </div>
-                            </div>
+                            }
 
                             <div className='flex items-center justify-between '>
                                 <div className='flex items-center'>
@@ -286,7 +301,11 @@ const OffersBottomSheet = ({
                                     </div>
                                     <div className="flex gap-3">
                                         <button  onClick={handleClose} className="px-2 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-100 cancel_id">Cancel</button>
-                                        <button onClick={handleCheckout} className="px-2 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 checkout_id">Checkout</button>
+                                        
+                                        {
+                                            tabData &&
+                                            <button onClick={handleCheckout} className="px-2 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 checkout_id">Checkout</button>
+                                        }
                                     </div>
                                 </div>
                             </div>

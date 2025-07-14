@@ -37,13 +37,14 @@ export const GetClientSecret = async (token, reqBody) => {
     });
 }
 
-export const GetTravelBucketListContent = async () => {
+export const GetTravelBucketListContent = async (token) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         method: 'GET', 
-        url: `${PublicAPI}bucket-list`
+        url: `${BaseAPIUrl}account/bucket-list`
     });
 }
 
