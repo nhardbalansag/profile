@@ -121,9 +121,12 @@ const Header = ({
                   </div>
                 </nav>
               </div>
-              <label htmlFor="my-drawer" className="btn btn-square btn-ghost drawer-button">
-                <AiOutlineAlignRight  color='black' size={25}/>
-              </label>
+              {
+                auth_states.StateToken &&
+                <label htmlFor="my-drawer" className="btn btn-square btn-ghost drawer-button">
+                  <AiOutlineAlignRight  color='black' size={25}/>
+                </label>
+              }
             </div>
           </div>
         </div>

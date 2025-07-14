@@ -70,6 +70,7 @@ const LoginContent = () =>{
     last_name   : "",
     email       : "",
     password    : "",
+    confirmPassword    : "",
     country_id  : "",
   })
 
@@ -132,8 +133,12 @@ const LoginContent = () =>{
     dispatch(AuthAction.LoginUser(getTokenRef.current, getUserInformationRef.current))
   }
 
-  const RegisterUser = async (event) =>{
-    event.preventDefault();
+  const RegisterUser = async () =>{
+
+    if(getRegisterForm.password !== getRegisterForm.confirmPassword){
+      toast.warning("Password not match");
+      return;
+    }
 
     if (
       !searchParams.get('sponsor') ||
@@ -142,6 +147,7 @@ const LoginContent = () =>{
       !getRegisterForm.password || 
       !getRegisterForm.first_name || 
       !getRegisterForm.last_name) {
+        toast.warning("Incomplete Details");
       return;
     }
     
@@ -531,7 +537,7 @@ const LoginContent = () =>{
                 }
                 {
                   searchParams.get('sponsor') &&
-                  <form onSubmit={(event) => RegisterUser(event)}>
+                  <div>
                     <div className="p-6 space-y-4 bg-white rounded-lg shadow">
                       <h2 className="text-xl font-bold sign_in_id">Sign Up</h2>
                       <p className="text-sm font-medium text-gray-600 its_quick_and_easy_id">It’s quick and easy.</p>
@@ -595,7 +601,7 @@ const LoginContent = () =>{
 
                       <input
                         type="email"
-                        placeholder="Mobile number or Email"
+                        placeholder="Email"
                         className="w-full input input-bordered input-md"
                         name='email'
                         value={getRegisterForm.email} 
@@ -603,9 +609,6 @@ const LoginContent = () =>{
                       />
 
                       <label className="capitalize text-gray-500 label font-bold text-[15px] set_password_id">Set password</label>
-                      {/* <p className="text-sm text-gray-500 you_need_to_confirm_email_id">
-                        You’ll need to confirm that email or phone belongs to you.
-                      </p> */}
                       <div className="grid grid-cols-1 space-y-3 md:grid-cols-2 md:space-y-0 md:space-x-3">
                         <input
                           type="password"
@@ -616,6 +619,22 @@ const LoginContent = () =>{
                           onChange={handleChangeForRegister}
                         />
                       </div>
+
+                      <label className="capitalize text-gray-500 label font-bold text-[15px] set_password_id">Confirm password</label>
+                      <div className="grid grid-cols-1 space-y-3 md:grid-cols-2 md:space-y-0 md:space-x-3">
+                        <input
+                          type="password"
+                          placeholder="Confirm Password"
+                          className=" input input-bordered input-md"
+                          name='confirmPassword'
+                          value={getRegisterForm.confirmPassword} 
+                          onChange={handleChangeForRegister}
+                        />
+                      </div>
+
+                      <p className="text-sm text-gray-500 use_more_character_id">
+                        Use 8 or more characters with a mix of letters, numbers & symbols
+                      </p>
                       
                       {
                         isLoading
@@ -630,10 +649,6 @@ const LoginContent = () =>{
                         :
                         <_PlanSelect dataList={subscriptionList}/>
                       }
-
-                      <p className="text-sm text-gray-500 use_more_character_id">
-                        Use 8 or more characters with a mix of letters, numbers & symbols
-                      </p>
                       
                       <button 
                       onClick={() => RegisterUser()} 
@@ -643,7 +658,7 @@ const LoginContent = () =>{
                       }
                       </button>
                       </div>
-                  </form> 
+                  </div> 
                 }
 
                 <button onClick={() => setenableResetPassword(true)} className="text-sm font-medium text-white forgot_your_password_id">

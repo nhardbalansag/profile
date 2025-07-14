@@ -48,7 +48,7 @@ const MallTravel = () =>{
   const [ResultGetHomeContentsDetails, ResultSetHomeContentsDetails] = useState([]);
   const [getBottomDetailsOpen, setBottomDetailsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(null);
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
   const [totalPriceWithPoints, setTotalPriceWithPoints] = useState(0);
   const [TPointsWallet, setTPointsWallet] = useState(walletRef.current);
   const [TPointsCustom, setTPointsCustom] = useState(0);
@@ -189,7 +189,7 @@ const MallTravel = () =>{
 
         setTotalPriceWithPoints(totalPrice)
         setTPointsCustom(offers_points_amount)
-      }else if(walletRef.current < offers_points_amount){
+      }else if(walletRef.current <= offers_points_amount){
         const lessToWallet = walletRef.current - walletRef.current
         setTPointsWallet(lessToWallet)
 
@@ -430,6 +430,9 @@ const MallTravel = () =>{
   const HandleOfferTabSelection = (item) =>{
     setActiveTab(item)
     setCount(item.offers_table.supplier_table.room_type.room_type_guest_count)
+    setTotalPriceWithPoints(item.offers_table.offers_amount * item.offers_table.supplier_table.room_type.room_type_guest_count)
+
+    initialFinalPrice.current = item.offers_table.offers_amount
     maxGuestCount.current = item.offers_table.supplier_table.room_type.room_type_guest_count
   }
 
@@ -442,18 +445,11 @@ const MallTravel = () =>{
     getTBucksAndTPoints()
     setOpenBottomOffer(true)
     ResultSetHomeContentsDetails(item)
-    // setActiveTab(item.content_offers_table[0])
-    setTotalPriceWithPoints(
-      parseFloat(item.content_offers_table[0].offers_table.offers_amount) 
-      * 
-      // item.content_guest_count
-      item.content_offers_table[0].offers_table.supplier_table.room_type.room_type_guest_count
-    )
-    initialFinalPrice.current = item.content_offers_table[0].offers_table.offers_amount
-    // setCount(item.content_guest_count)
-    setCount(item.content_offers_table[0].offers_table.supplier_table.room_type.room_type_guest_count)
-    // maxGuestCount.current = item.content_guest_count
-    maxGuestCount.current = item.content_offers_table[0].offers_table.supplier_table.room_type.room_type_guest_count
+    setTotalPriceWithPoints(0)
+
+    // initialFinalPrice.current = item.content_offers_table[0].offers_table.offers_amount
+    // setCount(item.content_offers_table[0].offers_table.supplier_table.room_type.room_type_guest_count)
+    // maxGuestCount.current = item.content_offers_table[0].offers_table.supplier_table.room_type.room_type_guest_count
   }
 
   const GetTravelBucketListContent = async() =>{

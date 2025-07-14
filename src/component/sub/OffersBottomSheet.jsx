@@ -13,6 +13,11 @@ import { IoPartlySunnyOutline } from "react-icons/io5";
 import { IoCloudyNightOutline } from "react-icons/io5";
 import { SlWallet } from "react-icons/sl";
 import { FiHelpCircle } from "react-icons/fi";
+import { FaRegClock } from "react-icons/fa6";
+import { FaRegCalendar } from "react-icons/fa";
+import { LuUsersRound } from "react-icons/lu";
+import { IoMdInformationCircleOutline } from "react-icons/io";
+import { IoWalletSharp } from "react-icons/io5";
 
 const OffersBottomSheet = ({
     handleClose,
@@ -96,78 +101,59 @@ const OffersBottomSheet = ({
                     <div className="grid grid-cols-1 p-5 space-y-6 bg-white border shadow-lg md:p-6 rounded-2xl ">
                         <div className='space-y-6'>
                             <div className='space-y-6'>
-                                <div className='mt-3 space-y-2'>
-                                    <div className="flex items-center justify-start space-x-3">
-                                        <div className="flex items-center space-x-2">
-                                            <IoPartlySunnyOutline  className="text-[15px] text-[#FF5722]" />
-                                            <label className="text-black text-[12px]">{offersData.content_days_count} <span className="days_id">Days</span></label>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            <IoCloudyNightOutline   className="text-[15px] text-[#FF5722]" />
-                                            <label className="text-black text-[12px]">{offersData.content_night_count} <span className="days_id">Nights</span></label>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div className='mt-3 space-y-2'>
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center space-x-2">
-                                            <BsCalendar2Check className="text-[15px] text-[#FF5722]" />
-                                            <label className="text-gray-500 text-[12px] date_id">Date</label>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            <p  className="text-[12px]">{format(new Date(offersData.content_date_from), 'MMM dd, yyyy')} - {format(new Date(offersData.content_date_to), 'MMM dd, yyyy')} </p>
+
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                    <div className="flex items-start gap-3 p-3 border border-blue-100 bg-blue-50 rounded-xl">
+                                        <FaRegClock className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                                        <div className="min-w-0">
+                                            <p className="text-sm font-medium text-gray-900 duration_id">Duration</p>
+                                            <p className="text-xs text-gray-600">{offersData.content_days_count} <span className="days_id">Days</span>, {offersData.content_night_count} <span className="days_id">Nights</span></p>
+                                            <p className="mt-1 text-xs text-gray-500">{format(new Date(offersData.content_date_from), 'MMM dd, yyyy')} - {format(new Date(offersData.content_date_to), 'MMM dd, yyyy')}</p>
                                         </div>
                                     </div>
+                                    {
+                                        tabData &&
+                                        <div className="flex items-start gap-3 p-3 border border-green-100 bg-green-50 rounded-xl">
+                                            <FaRegCalendar  className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                            <div className="min-w-0">
+                                                <p className="text-sm font-medium text-gray-900 registration_end_id">Registration</p>
+                                                <p className="text-xs text-gray-600 end_id">Ends {tabData.offers_table.offers_end_daily_period}</p>
+                                                <p className="mt-1 text-xs text-gray-500">{format(new Date(tabData.offers_table.offers_end_effectivity_date), 'MMM dd, yyyy')}</p>
+                                            </div>
+                                        </div>
+                                    }
                                 </div>
-                                
+
                                 {
-                                    tabData &&
-                                    <div className='mt-3 space-y-2'>
+                                    count ?
+                                    <div className="flex items-center justify-between p-4 border border-gray-100 bg-gray-50 rounded-xl">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2 bg-orange-100 rounded-lg">
+                                                <LuUsersRound className="w-5 h-5 text-orange-600" />
+                                            </div>
+                                            <div>
+                                                <span className="font-semibold text-gray-900 guest_label_id">Guests</span>
+                                                <p className="text-xs text-gray-500"> <span className='max_label_id'>Max</span> {`${offersData.content_guest_count}`} <span className='guest_label_id'>guests</span></p>
+                                            </div>
+                                        </div>
                                         <div className="flex items-center justify-between">
-                                            
                                             <div className="flex items-center space-x-2">
-                                                <LuCalendarClock  className="text-[15px] text-[#FF5722]" />
-                                                <label className="text-gray-500 text-[12px] registration_end_id">Registration End</label>
-                                            </div>
-                                        
-                                            <div className="flex items-center space-x-2">
-                                                <p  className="text-[12px]">
-                                                    {format(new Date(tabData.offers_table.offers_end_effectivity_date), 'MMM dd, yyyy')}
+                                                <button onClick={handleDecrease } className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                                    <CiCircleMinus className="w-8 h-8 text-orange-600" />
+                                                </button>
+                                                <p className="text-xl font-bold text-gray-900">
+                                                {count}
                                                 </p>
-                                                <p  className="text-[12px]">
-                                                    {tabData.offers_table.offers_end_daily_period}
-                                                </p>
+                                                <button onClick={handleIncrease} className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                                    <CiCirclePlus className="w-8 h-8 text-orange-600" />
+                                                </button>
                                             </div>
-                                            
                                         </div>
                                     </div>
+                                    :<></>
                                 }
-
-                                <div className='space-y-2'>
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center space-x-2">
-                                            <HiOutlineUsers    className="text-[18px] text-[#FF5722]" />
-                                            <label className="text-gray-500 text-[12px] guest_id">Guest</label>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            <button onClick={handleDecrease } className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
-                                                <CiCircleMinus   className="text-[18px] text-blue-600" />
-                                            </button>
-                                            <div className="flex items-center justify-center w-10 h-7 text-[13px]  text-black border rounded">
-                                            {count}
-                                            </div>
-                                            <button onClick={handleIncrease} className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
-                                                <CiCirclePlus   className="text-[18px] text-blue-600" />
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div className='flex items-center justify-end'>
-                                        <p className='text-[12px] text-gray-500'><span className='note_maximum_guest_id'>note: maximum guest is </span> ({`${offersData.content_guest_count}`})</p>
-                                    </div>
-                                </div>
                             </div> 
+                            
                             
                             {
                                 tabData &&
@@ -183,128 +169,223 @@ const OffersBottomSheet = ({
                                             )
                                         }</p>
                                         <p className="text-sm text-gray-500">{tabData.offers_table.supplier_table.room_type.room_type_guest_count} <span className='guest_per_room'>guest per room</span></p>
-                                        {/* <button className="mt-1 text-sm font-medium text-blue-600">Select offer</button> */}
                                     </div>
                                     <div className="text-lg font-bold text-center"> 
                                         <p>{tabData.offers_table.currency_table.currency_symbol}{tabData.offers_table.offers_amount}</p>
                                     </div>
                                 </div>
                             }
-
+                            
                             {
                                 tabData &&
-                                <div className="space-y-4 border-b-[1px] pb-3">
-                                    <div className='flex items-center justify-between'>
-                                        <div className='flex items-center'>
-                                            <RiCoinsLine   className="text-[25px] text-[#FF5722]" />
-                                            <p className='text-[12px] ml-2 text-black redeem_t_points_id'>Redeemable T-Points</p>
+                                <div className="p-5 space-y-4 border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl">
+                                    <div className="flex items-center gap-3 mb-3">
+                                        <div className="p-2 bg-orange-100 rounded-lg">
+                                            <SlWallet className="w-5 h-5 text-orange-600" />
                                         </div>
-                                        <p className='text-[15px] ml-2 text-black font-semibold'>{tabData.offers_table.offers_points_amount}</p>
+                                        <div className="flex-1">
+                                            <span className="font-semibold text-orange-900">Redeemable T-Points</span>
+                                            <div className="flex items-center gap-2 mt-1">
+                                                <span className="text-lg font-bold text-orange-600">{tabData.offers_table.offers_points_amount}</span>
+                                                <span className="text-xs text-orange-700">available</span>
+                                            </div>
+                                        </div>
                                     </div>
-
-                                    <div className='flex items-center justify-between'>
-                                        <div className='flex items-center'>
-                                            <FiHelpCircle className="text-[15px] text-[#FF5722]" />
-                                            <p className='text-[10.5px] ml-2 text-black'>
-                                                <strong className='1_t-point_id'>1 T-Point</strong> 
-                                                <span className='is_equal_to_id'> is equivalent to</span> 
-                                                <strong className='$1_usd_id'> $1 USD</strong>
-                                            </p>
+                                    
+                                    <div className="flex items-center gap-2 p-3 border border-orange-200 rounded-lg bg-white/50">
+                                        <IoMdInformationCircleOutline className="flex-shrink-0 w-4 h-4 text-orange-600" />
+                                        <div className="text-sm">
+                                            <span className="font-medium text-orange-800">1 T-Point = $1 USD</span>
+                                            <span className="ml-2 text-orange-600">(${tabData.offers_table.offers_points_amount} <span className='usd_total_label_id'>USD total</span>)</span>
                                         </div>
-                                        <p className='text-[11px] ml-2 text-black font-semibold'>${tabData.offers_table.offers_points_amount} <span className='usd_id'>USD</span></p>
                                     </div>
                                     <div className='flex items-center'>
-                                        <p className='text-[12px] text-gray-500'>(<span className='tip_redeem_id'>Tip: Redeem your T-Points for instant discounts!</span>)</p>
+                                        <span>💡</span>
+                                        <p className="p-2 text-xs italic font-medium text-orange-700 rounded-lg bg-white/30 redeem_notes_label_id">
+                                        Tip: Redeem your T-Points for instant discounts!
+                                        </p>
                                     </div>
                                 </div>
                             }
                         </div>
+
+                        {/* {
+                            tabData &&
+                            <div className="pb-3 text-right border-b"> 
+                                <div className='flex items-center justify-between'>
+                                    <p className="text-[11px] price_id">Price</p>
+                                    <p className="text-lg font-semibold">{tabData.offers_table.currency_table.currency_symbol}{(parseFloat(tabData.offers_table.offers_amount) * count)}</p>
+                                </div>
+                                <div className='flex items-center justify-between'>
+                                    <p className="text-[11px] applied_t_point_id">Applied T-Points</p>
+                                    <p className="text-lg font-semibold border-b-2 border-black"> - ${tabData.offers_table.offers_points_amount}</p>
+                                </div>
+                                <div className='flex items-center justify-between'>
+                                    <p className="text-[11px] total_price">Total Price</p>
+                                    <p className="text-lg text-[24px] font-bold">${(parseFloat(tabData.offers_table.offers_amount) * count) - parseFloat(tabData.offers_table.offers_points_amount)}</p>
+                                </div>
+                            </div>
+                        } */}
+
+                        {
+                            wallet > 0 ?
+                            <div className="p-5 space-y-4 border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <SlWallet className="w-5 h-5 text-gray-600" />
+                                        <span className="font-semibold text-gray-900">My T-Points Wallet</span>
+                                    </div>
+                                    <span className="text-xl font-bold text-gray-900">{wallet}</span>
+                                </div>
+                                <div className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
+                                    <span className="text-sm font-medium text-gray-700">Redeem Full T-Points Amount</span>
+                                    <input 
+                                    type="checkbox" 
+                                    checked={isRedeemFull} 
+                                    onChange={handleRedeemFullTPoints} 
+                                    className="toggle toggle-sm " /> 
+                                </div>
+                                {
+                                    !isRedeemFull && (
+                                        <div className="space-y-4">
+                                            <span className="text-sm font-semibold text-gray-900">T-Points Amount</span>
+                                            <div className="flex items-end justify-center space-x-2">
+                                                <button onClick={handleDecreaseCustomPoints } className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                                    <CiCircleMinus   className="text-[25px] text-[#FF5722]" />
+                                                </button>
+                                                <div className='flex items-center justify-center text-center'>
+                                                    <div>
+                                                        <input 
+                                                        type="number" 
+                                                        placeholder="0" 
+                                                        name='customTPoints' 
+                                                        value={customTPoints} 
+                                                        onChange={handleCustomTPoints} 
+                                                        className="w-[80px] input input-bordered input-md" />
+                                                    </div>
+                                                </div>
+                                                <button onClick={handleIncreaseCustomPoints} className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                                    <CiCirclePlus   className="text-[25px] text-[#FF5722]" />
+                                                </button>
+                                            </div>
+
+                                            <div className="p-3 text-center bg-orange-100 rounded-lg">
+                                                <div className="text-2xl font-bold text-orange-700">${customTPoints}</div>
+                                                <div className="text-xs text-orange-600">USD equivalent</div>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                            : <></>
+                        }
+                        
+                        {
+                            tBucksWallet > 0 ?
+                            <div className="p-5 space-y-4 border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <IoWalletSharp className="w-5 h-5 text-gray-600" />
+                                        <span className="font-semibold text-gray-900">My T-Bucks Wallet</span>
+                                    </div>
+                                    <span className="text-xl font-bold text-gray-900">{tBucksWallet}</span>
+                                </div>
+                                <div className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
+                                    <span className="text-sm font-medium text-gray-700">Redeem Full T-Bucks Amount</span>
+                                    <input 
+                                    type="checkbox" 
+                                    checked={isRedeemFullTBucks} 
+                                    onChange={handleRedeemFullTBucks}
+                                    className="toggle toggle-sm " /> 
+                                </div>
+                                {
+                                    !isRedeemFullTBucks && (
+                                        <div className="space-y-4">
+                                            <span className="text-sm font-semibold text-gray-900">T-Bucks Amount</span>
+                                            <div className="flex items-end justify-center space-x-2">
+                                                <button onClick={handleDecreaseCustomBucks } className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                                    <CiCircleMinus   className="text-[25px] text-[#FF5722]" />
+                                                </button>
+                                                <div className='flex items-center justify-center text-center'>
+                                                    <div>
+                                                        <input 
+                                                        type="number" 
+                                                        placeholder="0" 
+                                                        name='customTPoints' 
+                                                        value={customTBucks} 
+                                                        onChange={handleCustomTBucks} 
+                                                        className="w-[80px] input input-bordered input-md" />
+                                                    </div>
+                                                </div>
+                                                <button onClick={handleIncreaseCustomBucks} className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                                    <CiCirclePlus   className="text-[25px] text-[#FF5722]" />
+                                                </button>
+                                            </div>
+
+                                            <div className="p-3 text-center bg-blue-100 rounded-lg">
+                                                <div className="text-2xl font-bold text-orange-700">${customTBucks}</div>
+                                                <div className="text-xs text-orange-600">USD equivalent</div>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                            :<></>
+                        }
+
+                        {
+                            tabData &&
+                            <div className="p-4 space-y-3 bg-gray-50 rounded-xl">
+                                <div className="flex justify-between text-base">
+                                    <span className="text-gray-700">Base Price</span>
+                                    <span className="font-semibold text-gray-900">${(parseFloat(tabData.offers_table.offers_amount) * count)}</span>
+                                </div>
+
+                                {
+                                    customTPoints > 0 ?
+                                    <div className="flex justify-between text-base text-red-600 border-b">
+                                        <span>Applied T-Points</span>
+                                        <span className="font-semibold">{customTPoints > 0 ? " - " : ""}${customTPoints}</span>
+                                    </div>
+                                    : <></>
+                                }
+                                
+                                {
+                                    customTBucks > 0 ?   
+                                    <div className="flex justify-between text-base text-red-600 border-b">
+                                        <span>Applied T-Bucks</span>
+                                        <span className="font-semibold"> {customTBucks > 0 ? " - " : ""} ${customTBucks}</span>
+                                    </div>
+                                    : <></>
+                                }
+                                
+                                <div className="flex justify-between text-xl font-bold">
+                                    <span className="text-gray-900">Total Price</span>
+                                    <span className="text-green-600">${finalAmount}</span>
+                                </div>
+                            </div>
+                        }
+
                         <div className='space-y-6'>
-                            {
-                                tabData &&
-                                <div className="pb-3 text-right border-b"> 
-                                    <div className='flex items-center justify-between'>
-                                        <p className="text-[11px] price_id">Price</p>
-                                        <p className="text-lg font-semibold">{tabData.offers_table.currency_table.currency_symbol}{(parseFloat(tabData.offers_table.offers_amount) * count)}</p>
-                                    </div>
-                                    <div className='flex items-center justify-between'>
-                                        <p className="text-[11px] applied_t_point_id">Applied T-Points</p>
-                                        <p className="text-lg font-semibold border-b-2 border-black"> - ${tabData.offers_table.offers_points_amount}</p>
-                                    </div>
-                                    <div className='flex items-center justify-between'>
-                                        <p className="text-[11px] total_price">Total Price</p>
-                                        <p className="text-lg text-[24px] font-bold">${(parseFloat(tabData.offers_table.offers_amount) * count) - parseFloat(tabData.offers_table.offers_points_amount)}</p>
-                                    </div>
-                                </div>
-                            }
-
-                            <div className='flex items-center justify-between '>
-                                <div className='flex items-center'>
-                                    <SlWallet   className="text-[15px] text-[#FF5722]" />
-                                    <p className='text-[12px] ml-2 text-black my_t_point_wallet_id'>My T-Points Wallet</p>
-                                </div>
-                                <p className='text-[12px] ml-2 text-black font-semibold'>{wallet}</p>
-                            </div>
-
-                            <div className='flex items-center justify-between '>
-                                <div className='flex items-center'>
-                                    <SlWallet   className="text-[15px] text-[#FF5722]" />
-                                    <p className='text-[12px] ml-2 text-black my_t_point_wallet_id'>My T-Bucks Wallet</p>
-                                </div>
-                                <p className='text-[12px] ml-2 text-black font-semibold'>{tBucksWallet}</p>
-                            </div>
-
-                            <label className="flex items-center gap-2">
-                                <input type="checkbox" checked={isRedeemFull} onChange={handleRedeemFullTPoints} className="toggle toggle-sm" /> 
-                                <p className='text-[14px] redeem_full_t_point_amount_id'>Apply Full T-Points Amount</p>
-                            </label>
-
-                             <label className="flex items-center gap-2">
-                                <input type="checkbox" checked={isRedeemFullTBucks} onChange={handleRedeemFullTBucks} className="toggle toggle-sm" /> 
-                                <p className='text-[14px] redeem_full_t_point_amount_id'>Apply Full T-Bucks Amount</p>
-                            </label>
-                            
-                            <div className="flex items-end justify-center space-x-2">
-                                <button onClick={handleDecreaseCustomPoints } className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
-                                    <CiCircleMinus   className="text-[25px] text-[#FF5722]" />
-                                </button>
-                                <div className='flex items-center justify-center text-center'>
-                                    <div>
-                                        <label className="label text-[12px] t_points_amount">T-Points Amount</label>
-                                        <input type="number" placeholder="0" name='customTPoints' value={customTPoints} onChange={handleCustomTPoints} className="w-[80px] input input-bordered input-md" />
-                                    </div>
-                                </div>
-                                <button onClick={handleIncreaseCustomPoints} className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
-                                    <CiCirclePlus   className="text-[25px] text-[#FF5722]" />
-                                </button>
-                            </div>
-
-                            <div className="flex items-end justify-center space-x-2">
-                                <button onClick={handleDecreaseCustomBucks } className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
-                                    <CiCircleMinus   className="text-[25px] text-[#FF5722]" />
-                                </button>
-                                <div className='flex items-center justify-center text-center'>
-                                    <div>
-                                        <label className="label text-[12px] t_points_amount">T-Bucks Amount</label>
-                                        <input type="number" placeholder="0" name='customTBucks' value={customTBucks} onChange={handleCustomTBucks} className="w-[80px] input input-bordered input-md" />
-                                    </div>
-                                </div>
-                                <button onClick={handleIncreaseCustomBucks} className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
-                                    <CiCirclePlus   className="text-[25px] text-[#FF5722]" />
-                                </button>
-                            </div>
-                    
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between pt-4">
                                     <div>
                                         <p className="text-lg text-[24px] font-bold underline">${finalAmount} <span className='usd_id'>USD</span></p>
                                     </div>
                                     <div className="flex gap-3">
-                                        <button  onClick={handleClose} className="px-2 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-100 cancel_id">Cancel</button>
+                                        <button  
+                                        onClick={handleClose} 
+                                        className="px-2 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-100 cancel_id"
+                                        >Cancel
+                                        </button>
                                         
                                         {
                                             tabData &&
-                                            <button onClick={handleCheckout} className="px-2 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 checkout_id">Checkout</button>
+                                            <button 
+                                            onClick={handleCheckout} 
+                                            className="flex-1 h-12 px-3 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] checkout_id">
+                                                Checkout
+                                            </button>
                                         }
                                     </div>
                                 </div>
