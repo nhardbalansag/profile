@@ -29,9 +29,11 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { EffectCards } from 'swiper/modules';
+import Logo2 from '../../assets/images/ten/logo2.png'
 
 import * as api_orders from '../../services/account/orders.api.js'
 import * as api_account from '../../services/account/account.api.js'
+import * as api_subscription from '../../services/account/subscription.api.js'
 
 const env = import.meta.env;
 
@@ -40,6 +42,7 @@ const AccountContent = () =>{
   const navigate = useNavigate();
 
   const auth_states = useSelector(state => state.AuthReducer);
+  const modalSubscriptionRef = useRef(null);
 
   const [paginate, setPaginate] = useState(null)
 
@@ -55,6 +58,8 @@ const AccountContent = () =>{
     to:0,
     data:[]
   })
+
+  const [AccountSubscriptionDetails, SetAccountSubscriptionDetails] = useState([])
 
   const [loadingContent, setLoadingContent] = useState(true);
   const [requestLoading, setRequestLoading] = useState(false);
@@ -105,8 +110,32 @@ const AccountContent = () =>{
     })
   }
 
+  const GetUserAccountSubscriptionDetails = async () =>{
+    setRequestLoading(true)
+    await api_subscription.GetUserAccountSubscriptionDetails(auth_states.StateToken).then((result) =>{
+      SetAccountSubscriptionDetails(result.data.data)
+      setRequestLoading(false)
+    }).catch((err) =>{
+      setRequestLoading(false)
+    })
+  }
+
+  const validateTPointsTransfer = () =>{
+
+    const account_membership_is_paid = AccountSubscriptionDetails.details.subscription_category.membership_type.translation.membership.is_paid_account
+
+    if(!account_membership_is_paid){
+      setTimeout(() => {
+        modalSubscriptionRef.current?.showModal();
+      }, 0)
+    }else{
+      navigate('/t-points-transfer')
+    }
+  }
+
   useEffect(() => {
     getTBucksAndTPoints()
+    GetUserAccountSubscriptionDetails()
   },[])
 
   useEffect(() =>{
@@ -157,7 +186,7 @@ const AccountContent = () =>{
         balance: walletData.t_points,
         button:[
           {
-            onPressAction: () => navigate('/t-points-transfer'),
+            onPressAction: () => validateTPointsTransfer(),
             title: 'Transfer',
             icon: <TbTransfer className="text-[20px] text-white" />
           }
@@ -408,43 +437,45 @@ const AccountContent = () =>{
     )
   }
 
-  const NavigationMenu = () => {
-    const menuItems = [
-      {
-        title: 'Commissions',
-        subtitle: 'Report ($)',
-        icon: <MdAttachMoney color='black'/>,
-        color: 'bg-green-500',
-        hoverColor: 'hover:bg-green-600'
-      },
-      {
-        title: 'Trainings',
-        subtitle: '',
-        icon:  <LuListVideo color='black'/>,
-        color: 'bg-orange-500',
-        hoverColor: 'hover:bg-orange-600'
-      },
-    ];
+  const ModalForUpgradeSubscriptionWhenVIP = () =>{
+    return(
+      <div>
+        <dialog ref={modalSubscriptionRef} id="my_modal_2" className="modal">
+          <div className="modal-box">
+            <div className="flex-1 mt-5 space-y-1 md:space-y-8">
+                <h2 className="text-2xl font-extrabold leading-tight text-center text-black capitalize md:text-3xl">
+                available only for active VIP members.
+                </h2>
 
-    return (
-      <div className="p-6 w-[95%]  bg-white border rounded-lg shadow-sm">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {menuItems.map((item, index) => (
-            <button
-              key={index}
-              className={` text-white rounded-lg p-6 transition-colors duration-200 shadow-sm hover:shadow-md group`}
-            >
-              <div className="flex flex-col items-center space-y-3 text-center">
-                {item.icon}
-                <div>
-                  <p className="text-sm text-black">{item.title}</p>
+                <div className="flex flex-col items-center space-y-3 ">
+                  <div className="flex items-center justify-center w-10 h-10 bg-yellow-400 rounded-full">
+                    <img
+                    className="w-[60px] md:w-[100px]"
+                    alt="Tailwind CSS chat bubble component"
+                    src={Logo2} />
+                  </div>
+                  {/* Text Content */}
+                  <div className="flex-1 text-center">
+                    <p className="text-sm font-semibold earn_more_points_id">Earn more points</p>
+                    <p className="text-xs text-gray-600 members_could_save_id">
+                      Paid Memberships could save time and money finding great deals.
+                    </p>
+                  </div>
+
+                  <div className='flex justify-center'>
+                    <button onClick={() => navigate('/subscriptions')} className="px-6 py-3 text-white transition-colors bg-[#031956] rounded-lg whitespace-nowrap">
+                    Upgrade Membership
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </button>
-          ))}
-        </div>
+            </div>
+          </div>
+          <form method="dialog" className="modal-backdrop">
+              <button>close</button>
+          </form>
+        </dialog>
       </div>
-    );
+    )
   }
 
   return (
@@ -498,6 +529,7 @@ const AccountContent = () =>{
         </div>
       </div>
       <ModalComp/>
+      <ModalForUpgradeSubscriptionWhenVIP/>
     </div>
   ) 
 }

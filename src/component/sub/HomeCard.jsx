@@ -131,7 +131,7 @@ const HomeCard = ({
             <div className='flex items-center justify-center my-2'>
                 <button 
                 onClick={clickOffers} 
-                className="price_details_label_id flex-1 h-10 px-2 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white text-md shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]">
+                className="price_details_label_id flex-1 h-10 px-2 font-semibold rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white text-md shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]">
                     Price Details
                 </button>
             </div>
@@ -200,19 +200,26 @@ const HomeCard = ({
                             // <div className="absolute inset-0 bg-gradient-to-r from-gray-300/80 to-transparent" />
                         }
                         {/* Content */}
-                        <div className="relative z-10 flex flex-col justify-between h-full p-6 text-white">
+                        <div className="relative z-10 flex flex-col justify-between h-full p-6 text-center text-white">
                             {
                                 categoryConfig.is_details_on_card &&
-                                <div>
-                                    <Link 
+                                <div className=''>
+                                    {/* <Link 
                                         to={{
                                             pathname: "/content-details",
                                             search: "?view=" + contentDetails.id,
                                         }}
                                     >
-                                        <h2 className="mb-2 text-3xl font-bold text-white capitalize drop-shadow-lg">{limitText(title)}</h2>
-                                    </Link>
-                                    <p dangerouslySetInnerHTML={{__html:collapseDetails ? details : limitText(details)}} /> 
+                                        <h2 className="w-[100px] mb-2 text-3xl font-bold text-white capitalize drop-shadow-lg">
+                                            {limitText(title)}
+                                        </h2>
+                                    </Link> */}
+
+                                    <div className="absolute bottom-4 left-4 right-4">
+                                        <h2 className="mb-2 text-3xl font-bold text-white drop-shadow-lg">{limitText(title)}</h2>
+                                        <p className="text-sm text-white/90 drop-shadow-sm">Discover amazing experiences</p>
+                                    </div>
+                                    {/* <p dangerouslySetInnerHTML={{__html:collapseDetails ? details : limitText(details)}} />  */}
                                 </div>
                             }
                             {

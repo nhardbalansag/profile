@@ -157,273 +157,257 @@ const MallTravel = () =>{
     }
   }
 
-  const CheckBookingPaymentIntentStatus = async () =>{
-    const reqBody = {
-      session_id: getPaymentIntentSession,
-    }
-    
-    setLoadingContent(true)
-    await api_content.CheckBookingPaymentIntentStatus(auth_states.StateToken, reqBody).then((result) =>{
-      setclientSecret(null)
-      setPaymentIntentSession(null)
-    }).catch((err) =>{
-      setclientSecret(null)
-      setPaymentIntentSession(null)
-    })
-  }
-
   const handleTpoints = (item) => {
-    setUseTPointsWalletFullAmount(!UseTPointsWalletFullAmount)
+    const toggledUseFullAmount = !UseTPointsWalletFullAmount;
+    setUseTPointsWalletFullAmount(toggledUseFullAmount);
 
-    const offers_amount = parseFloat(item.offers_table.offers_amount) * count
-    const offers_points_amount = parseFloat(item.offers_table.offers_points_amount)
+    const currentWalletAmount = walletRef.current;
+    const maxPointsAllowed = parseFloat(item.offers_table.offers_points_amount);
+    const finalPrice = totalPriceWithPoints + TPointsCustom;
 
-    if(!UseTPointsWalletFullAmount){
-      if(walletRef.current > offers_points_amount){
-        const lessToWallet = walletRef.current - offers_points_amount
-        setTPointsWallet(lessToWallet)
+    if (toggledUseFullAmount) {
+      // Calculate the actual points allowed and usable
+      const pointsAllowed = Math.min(currentWalletAmount, maxPointsAllowed);
+      const pointsToUse = Math.min(pointsAllowed, finalPrice);
 
-        const totalPrice =  totalPriceWithPoints > (offers_points_amount)
-                            ? (totalPriceWithPoints - (offers_points_amount))
-                            : ((offers_points_amount) - totalPriceWithPoints)
+      // Derived values
+      const remainingWalletBalance = currentWalletAmount - pointsToUse;
+      const finalPriceNewValue = finalPrice - pointsToUse;
 
-        setTotalPriceWithPoints(totalPrice)
-        setTPointsCustom(offers_points_amount)
-      }else if(walletRef.current <= offers_points_amount){
-        const lessToWallet = walletRef.current - walletRef.current
-        setTPointsWallet(lessToWallet)
-
-        const totalPrice =  totalPriceWithPoints > (walletRef.current)
-                            ? (totalPriceWithPoints - (walletRef.current))
-                            : ((walletRef.current) - totalPriceWithPoints)
-
-        setTotalPriceWithPoints( totalPrice)
-        setTPointsCustom(walletRef.current)
-      }
-    }else{
-      setTotalPriceWithPoints(totalPriceWithPoints + offers_points_amount)
-      setTPointsWallet(walletRef.current)
-      setTPointsCustom(0)
+      // Set new state values
+      setTotalPriceWithPoints(finalPriceNewValue);
+      setTPointsWallet(remainingWalletBalance);
+      setTPointsCustom(pointsToUse);
+    } else {
+      // Revert values when toggle is off
+      setTotalPriceWithPoints(prev => prev + TPointsCustom);
+      setTPointsWallet(walletRef.current);
+      setTPointsCustom(0);
     }
   }
 
   const handleTbucks = (item) => {
-    setUseTBucksWalletFullAmount(!getUseTBucksWalletFullAmount)
+    const toggledUseFullAmount = !getUseTBucksWalletFullAmount;
+    setUseTBucksWalletFullAmount(toggledUseFullAmount);
 
-    const offers_amount = parseFloat(item.offers_table.offers_amount) * count
+    const currentWalletAmount = walletTBucksRef.current;
+    const finalPrice = totalPriceWithPoints + TBucksCustom;
 
-    if(!getUseTBucksWalletFullAmount){
-      if(walletTBucksRef.current > offers_amount){
+    if (toggledUseFullAmount) {
+      // Calculate the actual points allowed and usable
+      const pointsAllowed = Math.min(currentWalletAmount, finalPrice);
+      const pointsToUse = Math.min(pointsAllowed, finalPrice);
 
-        const lessToWallet = walletData.t_bucks - offers_amount
-        setWalletData({...walletData, t_bucks: lessToWallet})
-        setTotalPriceWithPoints(totalPriceWithPoints - (offers_amount - offers_points_amount))
-        setTBucksCustom(walletData.t_bucks)
-      }else if(walletTBucksRef.current < offers_amount){
+      // Derived values
+      const remainingWalletBalance = currentWalletAmount - pointsToUse;
+      const finalPriceNewValue = finalPrice - pointsToUse;
 
-        const lessToWallet = offers_amount - walletData.t_bucks
-        setWalletData({...walletData, t_bucks: 0})
-
-        const totalPrice =  totalPriceWithPoints !== 0 
-                            ? (totalPriceWithPoints - walletData.t_bucks)
-                            : lessToWallet
-
-        setTotalPriceWithPoints(totalPrice)
-        setTBucksCustom(walletData.t_bucks)
-      }
-    }else{
-      setTotalPriceWithPoints(totalPriceWithPoints + walletTBucksRef.current)
-      setWalletData({...walletData, t_bucks: walletTBucksRef.current})
-      setTBucksCustom(0)
+      // Set new state values
+      setTotalPriceWithPoints(finalPriceNewValue);
+      setWalletData(prev => ({...prev, t_bucks: remainingWalletBalance}))
+      setTBucksCustom(pointsToUse);
+    } else {
+      // Revert values when toggle is off
+      setTotalPriceWithPoints(prev => prev + TBucksCustom);
+      setWalletData(prev => ({...prev, t_bucks: walletTBucksRef.current}))
+      setTBucksCustom(0);
     }
   }
 
   const handleCustomPoints = (event, item) => {
 
-    const offers_amount = parseFloat(item.offers_table.offers_amount)  * count
-    const offers_points_amount = parseFloat(item.offers_table.offers_points_amount)
+    const currentWalletAmount = walletRef.current;
+    const maxPointsAllowed = parseFloat(item.offers_table.offers_points_amount);
+    const finalPrice = totalPriceWithPoints + TPointsCustom;
 
     const { name, type, checked, value } = event.target;
-
     const validatedNaNInput = (Number.isNaN(value) ? parseInt(0) : parseInt(value))
 
+    if(Number.isNaN(validatedNaNInput)){
+      setTotalPriceWithPoints(prev => prev + TPointsCustom);
+      setTPointsWallet(prev => prev + TPointsCustom);
+      setTPointsCustom(value);
+      return;
+    } 
+    
     if(!UseTPointsWalletFullAmount){
-      if(validatedNaNInput > walletRef.current ){
-        setTPointsCustom(walletRef.current)
-        const lessToWallet = walletRef.current - walletRef.current
-        setTPointsWallet(lessToWallet)
-        setTotalPriceWithPoints(offers_amount - walletRef.current)
-      }else if(validatedNaNInput < walletRef.current ){
-        if(validatedNaNInput > offers_points_amount){
-          setTPointsCustom(offers_points_amount)
+      
+      // Calculate the actual points allowed and usable
+      const pointsAllowed = Math.min(validatedNaNInput, maxPointsAllowed);
+      const pointsToUse = Math.min(pointsAllowed, finalPrice);
 
-          const lessToWallet = walletRef.current - (parseInt(offers_points_amount))
-          setTPointsWallet(lessToWallet)
-          setTotalPriceWithPoints(offers_amount - offers_points_amount)
+      // Derived values
+      const remainingWalletBalance = currentWalletAmount - pointsToUse;
+      const finalPriceNewValue = finalPrice - pointsToUse;
 
-        }else{
-          const lessToWallet = walletRef.current - (parseInt(validatedNaNInput < 0 ? 0 : validatedNaNInput))
-          setTPointsWallet(lessToWallet)
-          setTPointsCustom(validatedNaNInput < 0 ? 0 : validatedNaNInput)
-          setTotalPriceWithPoints(offers_amount - validatedNaNInput)
-        }
-      }else if(Number.isNaN(validatedNaNInput)){
-        const lessToWallet = walletRef.current - 0
-        setTPointsWallet(lessToWallet)
-        setTPointsCustom(value)
-        setTotalPriceWithPoints(offers_amount - 0)
-      }
+      // Set new state values
+      setTotalPriceWithPoints(finalPriceNewValue);
+      setTPointsWallet(remainingWalletBalance);
+      setTPointsCustom(pointsToUse);
     }
   };
 
   const handleCustomBucks = (event, item) => {
 
-    const offers_amount = parseFloat(item.offers_table.offers_amount)  * count
+    const currentWalletAmount = walletTBucksRef.current;
+    const finalPrice = totalPriceWithPoints + TBucksCustom;
 
     const { name, type, checked, value } = event.target;
-
     const validatedNaNInput = (Number.isNaN(value) ? parseInt(0) : parseInt(value))
 
+    if(Number.isNaN(validatedNaNInput)){
+      setTotalPriceWithPoints(prev => prev + TBucksCustom);
+      setWalletData(prev => ({...prev, t_bucks: prev.t_bucks + TBucksCustom}))
+      setTBucksCustom(value);
+      return;
+    } 
+
     if(!getUseTBucksWalletFullAmount){
-      if(validatedNaNInput > walletTBucksRef.current ){
+      // Calculate the actual points allowed and usable
+      const pointsAllowed = Math.min(validatedNaNInput, finalPrice);
+      const pointsToUse = Math.min(pointsAllowed, finalPrice);
 
-        setTBucksCustom(walletTBucksRef.current)
-        const lessToWallet = walletTBucksRef.current - walletTBucksRef.current
-        setWalletData({...walletData, t_bucks: lessToWallet})
-        setTotalPriceWithPoints(offers_amount - walletTBucksRef.current)
+      // Derived values
+      const remainingWalletBalance = currentWalletAmount - pointsToUse;
+      const finalPriceNewValue = finalPrice - pointsToUse;
 
-      }else if(validatedNaNInput < walletTBucksRef.current ){
-
-        setTBucksCustom(validatedNaNInput < 0 ? 0 : validatedNaNInput)
-        const lessToWallet = walletTBucksRef.current - (parseInt(validatedNaNInput < 0 ? 0 : validatedNaNInput))
-        setWalletData({...walletData, t_bucks: lessToWallet})
-        setTotalPriceWithPoints(totalPriceWithPoints - validatedNaNInput)
-
-      }else if(Number.isNaN(validatedNaNInput)){
-
-        const lessToWallet = walletTBucksRef.current - 0
-        setWalletData({...walletData, t_bucks: lessToWallet})
-        setTBucksCustom(value)
-        setTotalPriceWithPoints(totalPriceWithPoints - 0)
-
-      }
+      // Set new state values
+      setTotalPriceWithPoints(finalPriceNewValue);
+      setWalletData(prev => ({...prev, t_bucks: remainingWalletBalance}))
+      setTBucksCustom(pointsToUse);
     }
+    
   }
 
   const handleDecreaseCustomBucks = (item) => {
-    if(!getUseTBucksWalletFullAmount){
-      setTBucksCustom(prev => {
-        if(parseInt(prev) <= 0){
-          return 0
-        }else{
-          const lessToWallet =(walletTBucksRef.current - (parseInt(prev) - 1))
-          setWalletData({...walletData, t_bucks: lessToWallet})
-          setTotalPriceWithPoints(totalPriceWithPoints + 1)
-          return (parseInt(prev) - 1)
-        }
-      })
+    // check if full points toggle is enabled
+    if (!getUseTBucksWalletFullAmount) {
+      const nextCustomValue = TBucksCustom - 1;
+
+      // Prevent going below 0
+      if (nextCustomValue < 0) {
+        return;
+      }
+
+      // Apply decrement
+      setTBucksCustom(nextCustomValue);
+      setWalletData(prev => ({...prev, t_bucks: prev.t_bucks + 1}))
+      setTotalPriceWithPoints(prev => prev + 1);
     }
   };
 
   const handleIncreaseCustomBucks = (item) => {
 
-    const offers_amount = parseFloat(item.offers_table.offers_amount) * count
-    
+    const currentWalletAmount = walletTBucksRef.current;
+    const finalPrice = totalPriceWithPoints;
+
+    // check if full points toggle is enabled
     if(!getUseTBucksWalletFullAmount){
-      setTBucksCustom(prev => {
-        if(parseInt(prev + 1) >= walletTBucksRef.current){
 
-          if(offers_amount <= walletTBucksRef.current){
-            return offers_amount
-          }else{
-            return walletTBucksRef.current
-          }
+      const nextCustomValue = TBucksCustom + 1;
 
-        }else{
-          const lessToWallet = (walletTBucksRef.current - parseInt(prev + 1))
-          setWalletData({...walletData, t_bucks: lessToWallet})
-          setTotalPriceWithPoints(totalPriceWithPoints - 1)
-          return parseInt(prev + 1)
-        }
-      })
+      // Prevent exceeding limits
+      if (
+        nextCustomValue > currentWalletAmount || // exceeds wallet balance
+        nextCustomValue > finalPrice // exceeds price
+      ) {
+        return; // Don't apply if limit reached
+      }
+
+      // Apply increment
+      setTBucksCustom(nextCustomValue);
+      setWalletData(prev => ({...prev, t_bucks: prev.t_bucks - 1}))
+      setTotalPriceWithPoints(prev => prev - 1);
     }
   };
 
   const handleDecreaseCustomPoints = (item) => {
 
-    const offers_amount = totalPriceWithPoints !== 0 ? totalPriceWithPoints : parseFloat(item.offers_table.offers_amount)  * count
+    // check if full points toggle is enabled
+    if (!UseTPointsWalletFullAmount) {
+      const nextCustomValue = TPointsCustom - 1;
 
-    if(!UseTPointsWalletFullAmount){
-      setTPointsCustom(prev => {
-        if(parseInt(prev) <= 0){
-          return 0
-        }else{
-          const lessToWallet =(walletRef.current - (parseInt(prev) - 1))
-          setTPointsWallet(lessToWallet)
-          setTotalPriceWithPoints(offers_amount + 1)
-          return (parseInt(prev) - 1)
-        }
-      })
+      // Prevent going below 0
+      if (nextCustomValue < 0) {
+        return;
+      }
+
+      // Apply decrement
+      setTPointsCustom(nextCustomValue);
+      setTPointsWallet(prev => prev + 1);
+      setTotalPriceWithPoints(prev => prev + 1);
     }
+
   };
 
-  const handleIncreaseCustomPoints = (item) => {
+  const handleIncreaseCustomPoints = (item) =>{
+    const currentWalletAmount = walletRef.current;
+    const finalPrice = totalPriceWithPoints;
+    const maxPointsAllowed = parseFloat(item.offers_table.offers_points_amount);
 
-    const offers_amount = totalPriceWithPoints !== 0 ? totalPriceWithPoints : parseFloat(item.offers_table.offers_amount) * count
-    const offers_points_amount = parseFloat(item.offers_table.offers_points_amount)
-    
+    // check if full points toggle is enabled
     if(!UseTPointsWalletFullAmount){
-      setTPointsCustom(prev => {
-        if(parseInt(prev + 1) >= walletRef.current){
 
-          if(offers_points_amount > walletRef.current){
-            const lessToWallet = (walletRef.current - walletRef.current)
-            setTPointsWallet(lessToWallet)
-            setTotalPriceWithPoints(offers_amount - walletRef.current)
+      const nextCustomValue = TPointsCustom + 1;
 
-            return walletRef.current
-          }else{
-            const lessToWallet = (walletRef.current - offers_points_amount)
-            setTPointsWallet(lessToWallet)
-            setTotalPriceWithPoints(offers_amount - offers_points_amount)
+      // Prevent exceeding limits
+      if (
+        nextCustomValue > maxPointsAllowed || // exceeds what offer allows
+        nextCustomValue > currentWalletAmount || // exceeds wallet balance
+        nextCustomValue > finalPrice // exceeds price
+      ) {
+        return; // Don't apply if limit reached
+      }
 
-            return offers_points_amount
-          }
-
-        }else{
-          if(parseInt(prev + 1) > offers_points_amount){
-            const lessToWallet = (walletRef.current - offers_points_amount)
-            setTPointsWallet(lessToWallet)
-            setTotalPriceWithPoints(offers_amount - offers_points_amount)
-            return offers_points_amount
-          }else if(parseInt(prev) < offers_points_amount){
-            const lessToWallet = (walletRef.current - parseInt(prev + 1))
-            setTPointsWallet(lessToWallet)
-            setTotalPriceWithPoints(offers_amount - 1)
-            return parseInt(prev + 1)
-          }
-        }
-      })
+      // Apply increment
+      setTPointsCustom(nextCustomValue);
+      setTPointsWallet(prev => prev - 1);
+      setTotalPriceWithPoints(prev => prev - 1);
     }
-  };
+  }
   
   const handleDecreaseFunc = () => {
 
-    if (count > 1) setCount( prev => prev - 1);
+    resetOnGuestCountChange()
 
-    if(count > 1){
-      const offers_amount = parseFloat(initialFinalPrice.current )
-      setTotalPriceWithPoints(((totalPriceWithPoints !== 0 ? totalPriceWithPoints : initialFinalPrice.current)) - offers_amount)
-    }
+    if (count > 1){
+      setCount(prev => {
+        const newCount = prev - 1;
+
+        const offers_amount = parseFloat(initialFinalPrice.current);
+        setTotalPriceWithPoints(offers_amount * newCount);
+
+        return newCount;
+      })
+    } 
+
+    // if(count > 1){
+    //   const offers_amount = parseFloat(initialFinalPrice.current )
+    //   // setTotalPriceWithPoints(((totalPriceWithPoints !== 0 ? totalPriceWithPoints : initialFinalPrice.current)) - offers_amount)
+    //   setTotalPriceWithPoints(offers_amount * count)
+    // }
   }
 
   const handleIncreaseFunc = () => {
-    if (count < maxGuestCount.current) setCount(count + 1);
+    
+    resetOnGuestCountChange()
 
-    if(count < maxGuestCount.current){
-      const offers_amount = parseFloat(initialFinalPrice.current )
-      setTotalPriceWithPoints(((totalPriceWithPoints !== 0 ? totalPriceWithPoints : initialFinalPrice.current)) + offers_amount)
-    }
+    if (count < maxGuestCount.current){
+      setCount(prev => {
+        const newCount = prev + 1;
+
+        const offers_amount = parseFloat(initialFinalPrice.current);
+        setTotalPriceWithPoints(offers_amount * newCount);
+
+        return newCount;
+      })
+    } 
+
+    // if(count < maxGuestCount.current){
+    //   const offers_amount = parseFloat(initialFinalPrice.current )
+    //   // setTotalPriceWithPoints(((totalPriceWithPoints !== 0 ? totalPriceWithPoints : initialFinalPrice.current)) + offers_amount)
+    //   setTotalPriceWithPoints(offers_amount * count)
+    // }
    
   }
 
@@ -472,6 +456,35 @@ const MallTravel = () =>{
     }).catch((err) =>{
       setLoadingContent(false)
     })
+  }
+
+  const resetOnClose = () =>{
+    setActiveTab(null)
+
+    getTBucksAndTPoints()
+    setTotalPriceWithPoints(0)
+
+    setTPointsCustom(0)
+    setTBucksCustom(0)
+
+    setTPointsWallet(walletRef.current)
+    setWalletData(prev => ({...prev, t_bucks: walletTBucksRef.current}))
+
+    setUseTBucksWalletFullAmount(false)
+    setUseTPointsWalletFullAmount(false)
+  }
+
+  const resetOnGuestCountChange = () =>{
+    getTBucksAndTPoints()
+
+    setTPointsCustom(0)
+    setTBucksCustom(0)
+
+    setTPointsWallet(walletRef.current)
+    setWalletData(prev => ({...prev, t_bucks: walletTBucksRef.current}))
+
+    setUseTBucksWalletFullAmount(false)
+    setUseTPointsWalletFullAmount(false)
   }
 
   useEffect(()=>{
@@ -541,8 +554,8 @@ const MallTravel = () =>{
       "first_name": auth_states.StateUserInformation.first_name,
       "last_name": auth_states.StateUserInformation.last_name,
       "email": auth_states.StateUserInformation.email,
-      "agencyCustomDNS": "https://clubten.booking.xeni.com",
-      "agencyName": "Planet Empire FZCO"
+      "agencyCustomDNS": "https://ota.clubten.app",
+      "agencyName": "Club TEN Global by Planet Empire FZCO"
     }
 
     await api_account.xeniRegisterApi(requestBody).then((result) =>{
@@ -883,7 +896,7 @@ const MallTravel = () =>{
           <div className="modal-box">
             <div className="flex-1 mt-5 space-y-1 md:space-y-8">
                 <h2 className="text-2xl font-extrabold leading-tight text-center text-black capitalize md:text-3xl">
-                available only for active VIP members.
+                available only for VIP members.
                 </h2>
 
                 <div className="flex flex-col items-center space-y-3 ">
@@ -1004,6 +1017,7 @@ const MallTravel = () =>{
           handleCheckout={() => handleCheckout(activeTab, ResultGetHomeContentsDetails)}
           handleClose={() => {
               setOpenBottomOffer(!openBottomOffer)
+              resetOnClose()
             }
           }
           handleIncrease={() => handleIncreaseFunc()}
