@@ -131,12 +131,12 @@ const MallTravel = () =>{
         content_date_from: AllContentData.content_date_from,
         content_date_to: AllContentData.content_date_to,
 
-        points_applied: TPointsCustom,
+        points_applied: Number.isNaN(Number(TPointsCustom)) ? TPointsCustom : 0,
         points_allowed: selectedTab.offers_table.offers_points_amount,
         points_wallet_before: walletRef.current,
         points_wallet_after: TPointsWallet,
 
-        bucks_applied: TBucksCustom,
+        bucks_applied: Number.isNaN(Number(TBucksCustom)) ? TBucksCustom : 0,
         bucks_wallet_before: walletTBucksRef.current,
         bucks_wallet_after: walletData.t_bucks,
       }
@@ -226,14 +226,15 @@ const MallTravel = () =>{
     if(Number.isNaN(validatedNaNInput)){
       setTotalPriceWithPoints(prev => prev + TPointsCustom);
       setTPointsWallet(prev => prev + TPointsCustom);
-      setTPointsCustom(value);
+      setTPointsCustom(value !== "" ? 0 : value);
       return;
     } 
     
     if(!UseTPointsWalletFullAmount){
       
       // Calculate the actual points allowed and usable
-      const pointsAllowed = Math.min(validatedNaNInput, maxPointsAllowed);
+      const safeInput = Math.max(0, validatedNaNInput); // prevents negative values
+      const pointsAllowed = Math.min(safeInput, maxPointsAllowed);
       const pointsToUse = Math.min(pointsAllowed, finalPrice);
 
       // Derived values
@@ -258,13 +259,15 @@ const MallTravel = () =>{
     if(Number.isNaN(validatedNaNInput)){
       setTotalPriceWithPoints(prev => prev + TBucksCustom);
       setWalletData(prev => ({...prev, t_bucks: prev.t_bucks + TBucksCustom}))
-      setTBucksCustom(value);
+      setTBucksCustom(value !== "" ? 0 : value);
       return;
     } 
 
     if(!getUseTBucksWalletFullAmount){
       // Calculate the actual points allowed and usable
-      const pointsAllowed = Math.min(validatedNaNInput, finalPrice);
+      const safeInput = Math.max(0, validatedNaNInput); // prevents negative values
+      const tBucksLimit = Math.min(safeInput, currentWalletAmount);
+      const pointsAllowed = Math.min(tBucksLimit, finalPrice);
       const pointsToUse = Math.min(pointsAllowed, finalPrice);
 
       // Derived values

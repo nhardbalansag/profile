@@ -86,10 +86,17 @@ const OffersBottomSheet = ({
             zIndex: 4000
         }}
         className="fixed inset-0 z-50 flex items-end justify-center bg-black bg-opacity-40">
-            <div className="w-full md:p-4 p-2 transition-transform bg-white shadow-lg rounded-t-2xl max-h-[90%] overflow-y-auto">
-                <div className='flex justify-end'>
-                    <button onClick={handleClose} className='flex items-center justify-center p-1 mr-2'>
-                        <IoIosCloseCircleOutline  className="text-[23px] text-[#ff4949]" />
+            <div className="w-full md:p-4 p-2 transition-transform bg-white shadow-lg rounded-t-2xl md:h-[98%] h-[90%] overflow-y-auto">
+                <div className='flex justify-end my-5'>
+                    <button 
+                    onClick={handleClose} 
+                    className='h-12 px-3 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]'
+                    >
+                        <div className='flex items-center justify-center space-x-2'>
+                            <IoIosCloseCircleOutline  className="text-[23px] text-white" />
+                            <p className='font-bold text-white'>CLOSE</p>
+
+                        </div>
                     </button>
                 </div>
                 <div className='grid grid-cols-1 md:space-x-5 md:grid-cols-2'>
@@ -208,105 +215,110 @@ const OffersBottomSheet = ({
                                 </div>
                             }
                         </div>
-                       
-                        <div className="p-5 space-y-4 border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <SlWallet className="w-5 h-5 text-gray-600" />
-                                    <span className="font-semibold text-gray-900">My T-Points Wallet</span>
-                                </div>
-                                <span className="text-xl font-bold text-gray-900">{wallet}</span>
-                            </div>
-                            <div className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
-                                <span className="text-sm font-medium text-gray-700">Redeem Full T-Points Amount</span>
-                                <input 
-                                type="checkbox" 
-                                checked={isRedeemFull} 
-                                onChange={handleRedeemFullTPoints} 
-                                className="toggle toggle-sm " /> 
-                            </div>
-                            {
-                                !isRedeemFull && (
-                                    <div className="space-y-4">
-                                        <span className="text-sm font-semibold text-gray-900">T-Points Amount</span>
-                                        <div className="flex items-end justify-center space-x-2">
-                                            <button onClick={handleDecreaseCustomPoints } className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
-                                                <CiCircleMinus   className="text-[25px] text-[#FF5722]" />
-                                            </button>
-                                            <div className='flex items-center justify-center text-center'>
-                                                <div>
-                                                    <input 
-                                                    type="number" 
-                                                    placeholder="0" 
-                                                    name='customTPoints' 
-                                                    value={customTPoints} 
-                                                    onChange={handleCustomTPoints} 
-                                                    className="w-[80px] input input-bordered input-md" />
-                                                </div>
-                                            </div>
-                                            <button onClick={handleIncreaseCustomPoints} className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
-                                                <CiCirclePlus   className="text-[25px] text-[#FF5722]" />
-                                            </button>
-                                        </div>
 
-                                        <div className="p-3 text-center bg-orange-100 rounded-lg">
-                                            <div className="text-2xl font-bold text-orange-700">${customTPoints}</div>
-                                            <div className="text-xs text-orange-600">USD equivalent</div>
-                                        </div>
+                        {
+                            tabData &&
+                            <div className="p-5 space-y-4 border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <SlWallet className="w-5 h-5 text-gray-600" />
+                                        <span className="font-semibold text-gray-900">My T-Points Wallet</span>
                                     </div>
-                                )
-                            }
-                        </div>
-                    
-                        <div className="p-5 space-y-4 border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <IoWalletSharp className="w-5 h-5 text-gray-600" />
-                                    <span className="font-semibold text-gray-900">My T-Bucks Wallet</span>
+                                    <span className="text-xl font-bold text-gray-900">{wallet}</span>
                                 </div>
-                                <span className="text-xl font-bold text-gray-900">{tBucksWallet}</span>
-                            </div>
-                            <div className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
-                                <span className="text-sm font-medium text-gray-700">Redeem Full T-Bucks Amount</span>
-                                <input 
-                                type="checkbox" 
-                                checked={isRedeemFullTBucks} 
-                                onChange={handleRedeemFullTBucks}
-                                className="toggle toggle-sm " /> 
-                            </div>
-                            {
-                                !isRedeemFullTBucks && (
-                                    <div className="space-y-4">
-                                        <span className="text-sm font-semibold text-gray-900">T-Bucks Amount</span>
-                                        <div className="flex items-end justify-center space-x-2">
-                                            <button onClick={handleDecreaseCustomBucks } className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
-                                                <CiCircleMinus   className="text-[25px] text-[#FF5722]" />
-                                            </button>
-                                            <div className='flex items-center justify-center text-center'>
-                                                <div>
-                                                    <input 
-                                                    type="number" 
-                                                    placeholder="0" 
-                                                    name='customTPoints' 
-                                                    value={customTBucks} 
-                                                    onChange={handleCustomTBucks} 
-                                                    className="w-[80px] input input-bordered input-md" />
+                                <div className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
+                                    <span className="text-sm font-medium text-gray-700">Redeem Full T-Points Amount</span>
+                                    <input 
+                                    type="checkbox" 
+                                    checked={isRedeemFull} 
+                                    onChange={handleRedeemFullTPoints} 
+                                    className="toggle toggle-sm " /> 
+                                </div>
+                                {
+                                    !isRedeemFull && (
+                                        <div className="space-y-4">
+                                            <span className="text-sm font-semibold text-gray-900">T-Points Amount</span>
+                                            <div className="flex items-end justify-center space-x-2">
+                                                <button onClick={handleDecreaseCustomPoints } className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                                    <CiCircleMinus   className="text-[25px] text-[#FF5722]" />
+                                                </button>
+                                                <div className='flex items-center justify-center text-center'>
+                                                    <div>
+                                                        <input 
+                                                        type="number" 
+                                                        placeholder="0" 
+                                                        name='customTPoints' 
+                                                        value={customTPoints} 
+                                                        onChange={handleCustomTPoints} 
+                                                        className="w-[80px] input input-bordered input-md" />
+                                                    </div>
                                                 </div>
+                                                <button onClick={handleIncreaseCustomPoints} className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                                    <CiCirclePlus   className="text-[25px] text-[#FF5722]" />
+                                                </button>
                                             </div>
-                                            <button onClick={handleIncreaseCustomBucks} className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
-                                                <CiCirclePlus   className="text-[25px] text-[#FF5722]" />
-                                            </button>
-                                        </div>
 
-                                        <div className="p-3 text-center bg-blue-100 rounded-lg">
-                                            <div className="text-2xl font-bold text-orange-700">${customTBucks}</div>
-                                            <div className="text-xs text-orange-600">USD equivalent</div>
+                                            <div className="p-3 text-center bg-orange-100 rounded-lg">
+                                                <div className="text-2xl font-bold text-orange-700">${customTPoints}</div>
+                                                <div className="text-xs text-orange-600">USD equivalent</div>
+                                            </div>
                                         </div>
+                                    )
+                                }
+                            </div>
+                        }
+                        {
+                            tabData &&
+                            <div className="p-5 space-y-4 border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <IoWalletSharp className="w-5 h-5 text-gray-600" />
+                                        <span className="font-semibold text-gray-900">My T-Bucks Wallet</span>
                                     </div>
-                                )
-                            }
-                        </div>
+                                    <span className="text-xl font-bold text-gray-900">{tBucksWallet}</span>
+                                </div>
+                                <div className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
+                                    <span className="text-sm font-medium text-gray-700">Redeem Full T-Bucks Amount</span>
+                                    <input 
+                                    type="checkbox" 
+                                    checked={isRedeemFullTBucks} 
+                                    onChange={handleRedeemFullTBucks}
+                                    className="toggle toggle-sm " /> 
+                                </div>
+                                {
+                                    !isRedeemFullTBucks && (
+                                        <div className="space-y-4">
+                                            <span className="text-sm font-semibold text-gray-900">T-Bucks Amount</span>
+                                            <div className="flex items-end justify-center space-x-2">
+                                                <button onClick={handleDecreaseCustomBucks } className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                                    <CiCircleMinus   className="text-[25px] text-[#FF5722]" />
+                                                </button>
+                                                <div className='flex items-center justify-center text-center'>
+                                                    <div>
+                                                        <input 
+                                                        type="number" 
+                                                        placeholder="0" 
+                                                        name='customTPoints' 
+                                                        value={customTBucks} 
+                                                        onChange={handleCustomTBucks} 
+                                                        className="w-[80px] input input-bordered input-md" />
+                                                    </div>
+                                                </div>
+                                                <button onClick={handleIncreaseCustomBucks} className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                                    <CiCirclePlus   className="text-[25px] text-[#FF5722]" />
+                                                </button>
+                                            </div>
 
+                                            <div className="p-3 text-center bg-blue-100 rounded-lg">
+                                                <div className="text-2xl font-bold text-orange-700">${customTBucks}</div>
+                                                <div className="text-xs text-orange-600">USD equivalent</div>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                        }
+                        
                         {
                             tabData &&
                             <div className="p-4 space-y-3 bg-gray-50 rounded-xl">
