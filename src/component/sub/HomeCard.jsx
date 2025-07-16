@@ -7,6 +7,7 @@ import {
 
 import { Link } from "react-router-dom";
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 import { IoPartlySunnyOutline } from "react-icons/io5";
 import { IoCloudyNightOutline } from "react-icons/io5";
@@ -43,6 +44,8 @@ const HomeCard = ({
     loading = true,
     contentDetails
 }) => {
+
+    const navigate = useNavigate();
 
     const limitText = (text, limit = 30) =>{
         if(text){
@@ -130,9 +133,9 @@ const HomeCard = ({
         return(
             <div className='flex items-center justify-center my-2'>
                 <button 
-                onClick={clickOffers} 
-                className="price_details_label_id flex-1 h-10 px-2 font-semibold rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white text-md shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]">
-                    Price Details
+                onClick={() => navigate('/product-details?view=' + contentDetails.id)} 
+                className="price_details_label_id flex-1 h-10 px-2 font-semibold rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]">
+                    View Details
                 </button>
             </div>
         )
@@ -178,7 +181,7 @@ const HomeCard = ({
             
             <div className={`flex ${inlineRendering ? 'flex-row space-x-5' : 'flex-col'} rounded-xl  w-full bg-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2`}>
                 <Link to={{
-                    pathname: "/content-details",
+                    pathname: "/product-details",
                     search: "?view=" + contentDetails.id,
                 }}>
                     <div 
@@ -271,10 +274,11 @@ const HomeCard = ({
                             <p className="mt-1 text-xs text-gray-500">{format(new Date(contentDetails.content_date_from), 'MMM dd, yyyy')} - {format(new Date(contentDetails.content_date_to), 'MMM dd, yyyy')}</p>
                         </div>
                     </div>
-                    {
+                    {/* {
                         contentDetails.content_offers_table.length > 0 && categoryConfig.show_offers && contentDetails.content_has_payment && 
                         _OfferTag()
-                    }
+                    } */}
+                    {_OfferTag()}
                 </div> 
             </div>
         )

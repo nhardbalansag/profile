@@ -25,6 +25,17 @@ export const ShowContent = async (id) => {
     });
 }
 
+export const GetTravelProductContent = async (id, token) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET', 
+        url: `${BaseAPIUrl}account/show-product-content/${id}`
+    });
+}
+
 export const GetClientSecret = async (token, reqBody) => {
     return await axios({ 
         headers: {

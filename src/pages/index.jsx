@@ -46,6 +46,8 @@ import PrivacyPolicy from "./policy/privacy-policy";
 import MallLifeStyle from "./mall/mall-lifestyle";
 import MallEarn from "./mall/mall-earn";
 
+import ProductDetails from "./details/products-details";
+
 export{
     HomePage,
     HomeContent,
@@ -90,5 +92,7 @@ export{
 
     PrivacyPolicy,
     MallLifeStyle,
-    MallEarn
+    MallEarn,
+
+    ProductDetails
 }

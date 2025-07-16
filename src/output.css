@@ -3976,6 +3976,10 @@ html:has(.drawer-toggle:checked) {
   height: 100vh;
 }
 
+.h-\[20px\] {
+  height: 20px;
+}
+
 .max-h-60 {
   max-height: 15rem;
 }
@@ -5281,6 +5285,11 @@ html:has(.drawer-toggle:checked) {
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.px-9 {
+  padding-left: 2.25rem;
+  padding-right: 2.25rem;
 }
 
 .pb-1 {

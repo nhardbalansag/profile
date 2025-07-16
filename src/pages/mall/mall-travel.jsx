@@ -70,7 +70,6 @@ const MallTravel = () =>{
   const [loadingContent, setLoadingContent] = useState(true);
   const [getclientSecret, setclientSecret] = useState(null)
   const [getLoading, setLoading] = useState(false)
-  const [getPaymentIntentSession, setPaymentIntentSession] = useState(null)
 
   const [getPlatformLoading, setPlatformLoading] = useState({
     launchButton: false
@@ -183,7 +182,6 @@ const MallTravel = () =>{
           }
 
           setclientSecret(result.data.clientSecret)
-          setPaymentIntentSession(result.data.sessionId)
           setLoading(false)
         }
       }).catch((err) =>{
@@ -574,10 +572,6 @@ const MallTravel = () =>{
     setOpenBottomOffer(true)
     ResultSetHomeContentsDetails(item)
     setTotalPriceWithPoints(0)
-
-    // initialFinalPrice.current = item.content_offers_table[0].offers_table.offers_amount
-    // setCount(item.content_offers_table[0].offers_table.supplier_table.room_type.room_type_guest_count)
-    // maxGuestCount.current = item.content_offers_table[0].offers_table.supplier_table.room_type.room_type_guest_count
   }
 
   const GetTravelBucketListContent = async() =>{
