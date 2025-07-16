@@ -2,22 +2,19 @@ import React, {useEffect} from 'react'
 import {useSelector} from 'react-redux';
 import { format } from 'date-fns';
 
-import { RiCoinsLine } from "react-icons/ri";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { CiCirclePlus } from "react-icons/ci";
 import { CiCircleMinus } from "react-icons/ci";
-import { HiOutlineUsers } from "react-icons/hi2";
-import { BsCalendar2Check } from "react-icons/bs";
-import { LuCalendarClock } from "react-icons/lu";
-import { IoPartlySunnyOutline } from "react-icons/io5";
-import { IoCloudyNightOutline } from "react-icons/io5";
 import { SlWallet } from "react-icons/sl";
-import { FiHelpCircle } from "react-icons/fi";
 import { FaRegClock } from "react-icons/fa6";
 import { FaRegCalendar } from "react-icons/fa";
 import { LuUsersRound } from "react-icons/lu";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { IoWalletSharp } from "react-icons/io5";
+import { MdOutlineModeOfTravel } from "react-icons/md";
+import { LuCircleDollarSign } from "react-icons/lu";
+import { RiCoinsLine } from "react-icons/ri";
+import { LuDollarSign } from "react-icons/lu";
 
 const OffersBottomSheet = ({
     handleClose,
@@ -30,26 +27,37 @@ const OffersBottomSheet = ({
     tabData,
     offersData,
     finalAmount,
+
     wallet,
+
     tBucksWallet,
+
+    tDollarsWallet,
 
     handleRedeemFullTPoints,
     handleRedeemFullTBucks,
+    handleRedeemFullTDollars,
 
     isRedeemFull,
     isRedeemFullTBucks,
+    isRedeemFullTDollars,
 
     customTPoints,
     customTBucks,
+    customTDollars,
 
     handleCustomTPoints,
     handleCustomTBucks,
+    handleCustomTravelDollars,
 
     handleDecreaseCustomPoints,
     handleIncreaseCustomPoints,
 
     handleDecreaseCustomBucks,
     handleIncreaseCustomBucks,
+
+    handleDecreaseCustomTravelDollars,
+    handleIncreaseCustomTravelDollars,
 
     children,
 }) => {
@@ -188,7 +196,7 @@ const OffersBottomSheet = ({
                                 <div className="p-5 space-y-4 border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl">
                                     <div className="flex items-center gap-3 mb-3">
                                         <div className="p-2 bg-orange-100 rounded-lg">
-                                            <SlWallet className="w-5 h-5 text-orange-600" />
+                                            <RiCoinsLine className="w-5 h-5 text-orange-600" />
                                         </div>
                                         <div className="flex-1">
                                             <span className="font-semibold text-orange-900">Redeemable T-Points</span>
@@ -221,7 +229,7 @@ const OffersBottomSheet = ({
                             <div className="p-5 space-y-4 border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
-                                        <SlWallet className="w-5 h-5 text-gray-600" />
+                                        <RiCoinsLine className="w-5 h-5 text-gray-600" />
                                         <span className="font-semibold text-gray-900">My T-Points Wallet</span>
                                     </div>
                                     <span className="text-xl font-bold text-gray-900">{wallet}</span>
@@ -272,7 +280,7 @@ const OffersBottomSheet = ({
                             <div className="p-5 space-y-4 border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
-                                        <IoWalletSharp className="w-5 h-5 text-gray-600" />
+                                        <LuDollarSign className="w-5 h-5 text-gray-600" />
                                         <span className="font-semibold text-gray-900">My T-Bucks Wallet</span>
                                     </div>
                                     <span className="text-xl font-bold text-gray-900">{tBucksWallet}</span>
@@ -318,6 +326,57 @@ const OffersBottomSheet = ({
                                 }
                             </div>
                         }
+                        {
+                            tabData &&
+                            <div className="p-5 space-y-4 border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <MdOutlineModeOfTravel className="w-5 h-5 text-gray-600" />
+                                        <span className="font-semibold text-gray-900">My Travel Dollars Wallet</span>
+                                    </div>
+                                    <span className="text-xl font-bold text-gray-900">{tDollarsWallet}</span>
+                                </div>
+                                <div className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
+                                    <span className="text-sm font-medium text-gray-700">Redeem Full Travel Dollars Amount</span>
+                                    <input 
+                                    type="checkbox" 
+                                    checked={isRedeemFullTDollars} 
+                                    onChange={handleRedeemFullTDollars}
+                                    className="toggle toggle-sm " /> 
+                                </div>
+                                {
+                                    !isRedeemFullTDollars && (
+                                        <div className="space-y-4">
+                                            <span className="text-sm font-semibold text-gray-900">Travel Dollars Amount</span>
+                                            <div className="flex items-end justify-center space-x-2">
+                                                <button onClick={handleDecreaseCustomTravelDollars } className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                                    <CiCircleMinus   className="text-[25px] text-[#FF5722]" />
+                                                </button>
+                                                <div className='flex items-center justify-center text-center'>
+                                                    <div>
+                                                        <input 
+                                                        type="number" 
+                                                        placeholder="0" 
+                                                        name='customTDollars' 
+                                                        value={customTDollars} 
+                                                        onChange={handleCustomTravelDollars} 
+                                                        className="w-[80px] input input-bordered input-md" />
+                                                    </div>
+                                                </div>
+                                                <button onClick={handleIncreaseCustomTravelDollars} className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                                    <CiCirclePlus   className="text-[25px] text-[#FF5722]" />
+                                                </button>
+                                            </div>
+
+                                            <div className="p-3 text-center bg-green-100 rounded-lg">
+                                                <div className="text-2xl font-bold text-orange-700">${customTDollars}</div>
+                                                <div className="text-xs text-orange-600">USD equivalent</div>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                        }
                         
                         {
                             tabData &&
@@ -341,6 +400,15 @@ const OffersBottomSheet = ({
                                     <div className="flex justify-between text-base text-red-600 border-b">
                                         <span>Applied T-Bucks</span>
                                         <span className="font-semibold"> {customTBucks > 0 ? " - " : ""} ${customTBucks}</span>
+                                    </div>
+                                    : <></>
+                                }
+
+                                {
+                                    customTDollars > 0 ?   
+                                    <div className="flex justify-between text-base text-red-600 border-b">
+                                        <span>Applied Travel Dollars</span>
+                                        <span className="font-semibold"> {customTDollars > 0 ? " - " : ""} ${customTDollars}</span>
                                     </div>
                                     : <></>
                                 }

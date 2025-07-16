@@ -145,7 +145,7 @@ const Header = ({
           <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
           <div class="flex h-screen">
             <aside class="w-64 bg-white border-r border-gray-200 p-4">
-              <nav class="space-y-2 hidden md:block">
+              <nav class="space-y-2 flex flex-col">
                 {
                   auth_states.StateToken &&
                   <Link to={'/'}>
@@ -232,9 +232,36 @@ const Header = ({
                   </Link>
                 }
 
+                <Link>
+                <button onClick={handleLanguageVisibility}>
+                  <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                    <IoLanguageOutline  size={20}/>
+                    <p className='language_id text-[#001d3d] capitalize ml-2 '>Language</p>
+                  </a>
+                </button>
+                </Link>
+
+                {
+                  auth_states.StateToken
+                  ?
+                    <button onClick={() => LogoutUser()}>
+                      <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                        <AiOutlineLogout  size={20}/>
+                        <p className='logout_id text-[#001d3d] capitalize ml-2 '>Logout</p>
+                      </a>
+                    </button>
+                  :
+                    <Link to={'/login'}>
+                      <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                        <FaRegCircleUser  size={20}/>
+                        <p className='login_id text-[#001d3d] capitalize ml-2 '>Login</p>
+                      </a>
+                    </Link>
+                }
+
               </nav>
 
-              <nav class="space-y-2 md:hidden flex flex-col">
+              {/* <nav class="space-y-2 md:hidden flex flex-col">
                 <button onClick={handleLanguageVisibility}>
                   <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                     <IoLanguageOutline  size={20}/>
@@ -259,7 +286,7 @@ const Header = ({
                       </a>
                     </Link>
                 }
-              </nav>
+              </nav> */}
             </aside>
           </div>
         </div>
