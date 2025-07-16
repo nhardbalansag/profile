@@ -148,11 +148,8 @@ const AccountOrders = () =>{
         {/* Orders List */}
         <div className="px-4 py-8 mx-auto space-y-5 max-w-7xl sm:px-6 lg:px-8">
           {
-            // loadingContent
-            // ? <_LoadingComp/>
-            // :
               (
-                getPaginatedOrdersData.total <= 0
+                getPaginationButtonNextPrev.total <= 0
                 ? 
                   <div className="py-12 text-center">
                     <div className="flex items-center justify-center w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full">
