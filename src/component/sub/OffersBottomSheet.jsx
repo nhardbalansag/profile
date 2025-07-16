@@ -257,7 +257,21 @@ const OffersBottomSheet = ({
                                             <div className="flex items-start gap-3 p-3 border border-green-100 bg-green-50 rounded-xl">
                                                 <FaRegCalendar  className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                                                 <div className="min-w-0">
-                                                    <p className="text-sm font-medium text-gray-900 registration_end_id">Registration</p>
+                                                    <p className="space-x-1 text-sm font-medium text-gray-900 capitalize">
+                                                        <span>
+                                                        {
+                                                            auth_states.SelectedLanguage == null 
+                                                            ? tabData.offers_table.tier_category_table.tier_category_name
+                                                            : 
+                                                                (
+                                                                    tabData.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                                                    ? tabData.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
+                                                                    : tabData.offers_table.tier_category_table.tier_category_name
+                                                                )
+                                                        }
+                                                        </span>
+                                                        <span className='registration_end_id'>Registration</span>
+                                                    </p>
                                                     <p className="text-xs text-gray-600 end_id">Ends {tabData.offers_table.offers_end_daily_period}</p>
                                                     <p className="mt-1 text-xs text-gray-500">{format(new Date(tabData.offers_table.offers_end_effectivity_date), 'MMM dd, yyyy')}</p>
                                                 </div>
@@ -274,7 +288,7 @@ const OffersBottomSheet = ({
                                                 </div>
                                                 <div>
                                                     <span className="font-semibold text-gray-900 guest_label_id">Guests</span>
-                                                    <p className="text-xs text-gray-500"> <span className='max_label_id'>Max</span> {`${offersData.content_guest_count}`} <span className='guest_label_id'>guests</span></p>
+                                                    <p className="text-xs text-gray-500"> <span className='max_label_id'>Max</span> {`${tabData.offers_table.supplier_table.room_type.room_type_guest_count}`} <span className='guest_label_id'>guests</span></p>
                                                 </div>
                                             </div>
                                             <div className="flex items-center justify-between">
@@ -314,6 +328,33 @@ const OffersBottomSheet = ({
                                         <div className="text-lg font-bold text-center"> 
                                             <p>{tabData.offers_table.currency_table.currency_symbol}{tabData.offers_table.offers_amount}</p>
                                         </div>
+                                    </div>
+                                }
+
+                                {
+                                    tabData &&
+                                    count < tabData.offers_table.supplier_table.room_type.room_type_guest_count &&
+                                    <div>
+                                        <p className="p-2 space-x-2 text-sm italic font-medium text-red-700 rounded-lg bg-white/30 redeem_notes_label_id">
+                                            <span>
+                                                Note: 
+                                                If you select 1 guest for a 
+                                            </span>
+                                            <span>
+                                                {
+                                                    auth_states.SelectedLanguage == null
+                                                    ? tabData.offers_table.supplier_table.room_type.room_type_name
+                                                    : (
+                                                        tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id)
+                                                        ? tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id).room_type_name 
+                                                        : tabData.offers_table.supplier_table.room_type.room_type_name
+                                                    )
+                                                }
+                                            </span>, 
+                                            <span>
+                                                you are responsible for securing a second paying guest to share the room with you. If a roommate is not provided or found, a single room supplement will be applied, and you will be charged the difference for a single occupancy room.
+                                        </span>
+                                        </p>
                                     </div>
                                 }
                                 

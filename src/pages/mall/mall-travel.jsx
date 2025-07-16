@@ -1221,6 +1221,7 @@ const MallTravel = () =>{
               {
                 ResultGetHomeContentsDetails.content_offers_table.map((item, key) =>(
 
+                  item.offers_table &&
                   item.offers_table.membership_type_table &&
                   <button 
                   onClick={() => {
