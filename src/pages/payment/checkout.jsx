@@ -26,11 +26,6 @@ function Checkout({
     stripePublicKey = env.VITE_APP_STRIPE_PUBLIC_KEY
 }) {
 
-    const dispatch = useDispatch()
-
-    // const [getclientSecret, setclientSecret] = useState(null)
-    // const [getLoading, setLoading] = useState(false)
-    
     const stripePromise = loadStripe(stripePublicKey);
 
     //#region translation convertion
@@ -59,24 +54,6 @@ function Checkout({
 
     },[auth_states, getLoading])
     //#endregion
-
-    // const fetchClientSecret = async() => {
-    //     setLoading(true)
-    //     await api_content.GetClientSecret(auth_states.StateToken, dataContent).then((result) =>{
-    //         if(result.status){
-    //             setclientSecret(result.data.clientSecret)
-    //         }
-    //         setLoading(false)
-    //     }).catch((err) =>{
-    //         console.log("fetchClientSecret", err)
-    //     })
-    // };
-
-    // useEffect(() => {
-    //     if (auth_states.StateToken) {
-    //         fetchClientSecret()
-    //     }
-    // }, []);
 
     return (
         <div 

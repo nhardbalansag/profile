@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {useSelector} from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
 
 import {
   HomeCard,
@@ -64,6 +65,8 @@ const MallTravel = () =>{
   const [getUseTBucksWalletFullAmount, setUseTBucksWalletFullAmount] = useState(false);
   const [getUseTDollarsWalletFullAmount, setUseTDollarsWalletFullAmount] = useState(false);
 
+  const [getConfirmCheckoutStatus, setConfirmCheckoutStatus] = useState(false);
+
   const [loadingContent, setLoadingContent] = useState(true);
   const [getclientSecret, setclientSecret] = useState(null)
   const [getLoading, setLoading] = useState(false)
@@ -88,6 +91,19 @@ const MallTravel = () =>{
       setShowBottomRegistration(true)
       navigate('login');
     }else{
+
+      const points = parseFloat(TPointsCustom) || 0
+      const bucks = parseFloat(TBucksCustom) || 0
+      const travel = parseFloat(TDollarsCustom) || 0
+
+      if(
+        !getConfirmCheckoutStatus &&
+        totalPriceWithPoints === 0 &&
+        (points > 0 || bucks > 0 || travel > 0)
+      ){
+        setConfirmCheckoutStatus(true)
+        return;
+      }
 
       const content_title = selectedLanguage.current == null 
       ? AllContentData.content_title
@@ -155,12 +171,23 @@ const MallTravel = () =>{
       setLoading(true)
       await api_content.GetClientSecret(auth_states.StateToken, paymentBContent.current).then((result) =>{
         if(result.status){
+
+          if(result.data.isWalletPayment){
+            setLoading(false)
+            setOpenBottomPayment(false)
+            setOpenBottomOffer(!openBottomOffer)
+            resetOnClose()
+            toast.success("Payment succeed");
+            navigate('/orders');
+            return;
+          }
+
           setclientSecret(result.data.clientSecret)
           setPaymentIntentSession(result.data.sessionId)
           setLoading(false)
         }
       }).catch((err) =>{
-          console.log("fetchClientSecret", err)
+          toast.warning("There was a problem processing your payment");
       })
     }
   }
@@ -527,6 +554,8 @@ const MallTravel = () =>{
   }
 
   const HandleOfferTabSelection = (item) =>{
+    resetOnGuestCountChange()
+    setConfirmCheckoutStatus(false)
     setActiveTab(item)
     setCount(item.offers_table.supplier_table.room_type.room_type_guest_count)
     setTotalPriceWithPoints(item.offers_table.offers_amount * item.offers_table.supplier_table.room_type.room_type_guest_count)
@@ -576,6 +605,8 @@ const MallTravel = () =>{
   const resetOnClose = () =>{
     setActiveTab(null)
 
+    setConfirmCheckoutStatus(false)
+
     getTBucksAndTPoints()
     setTotalPriceWithPoints(0)
 
@@ -594,6 +625,8 @@ const MallTravel = () =>{
 
   const resetOnGuestCountChange = () =>{
     getTBucksAndTPoints()
+
+    setConfirmCheckoutStatus(false)
 
     setTPointsCustom(0)
     setTBucksCustom(0)
@@ -1163,6 +1196,8 @@ const MallTravel = () =>{
           isRedeemFullTBucks={getUseTBucksWalletFullAmount}
           isRedeemFullTDollars={getUseTDollarsWalletFullAmount}
 
+          confirmCheckoutStatus={getConfirmCheckoutStatus}
+
           count={count}
 
           customTPoints={TPointsCustom}
@@ -1267,6 +1302,7 @@ const MallTravel = () =>{
       
       <ModalForUpgradeSubscription/>
       <ModalForUpgradeSubscriptionWhenVIP/>
+      <ToastContainer />
     </div>  
   ) 
 }
