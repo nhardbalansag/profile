@@ -139,26 +139,34 @@ const HomeContent = () =>{
     )
   }
 
-  const EmbededVideoUrl = ({type, videoId, categoryConfig, title, details, clickSeeDetails, contentDetails }) => {
+  const EmbeddedVideoUrl = ({type, videoId, categoryConfig, title, details, clickSeeDetails, contentDetails }) => {
     return (
       <div  className=' w-[100%] h-[100%] '>
-        <div className='flex justify-center'>
-          <iframe
-          className='rounded-lg'
-            src={ type == "video" ? env.VITE_APP_BACKEND_STORAGE_URL +  videoId : (videoId + "&autoplay=0")}
-            // src={videoId}
-            frameBorder="0"
-            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-
-            // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            title="YouTube Video"
-            style={{
-              width: '100%',
-              height: '200px',
-            }}
-          />
+        <div className="w-full overflow-hidden rounded-lg aspect-video">
+          {
+            type == "embed" 
+            ? 
+              (
+                <iframe
+                  src={videoId + "&autoplay=0"}
+                  title="Embedded video"
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  frameBorder="0"
+                />
+              ) 
+            : 
+              (
+                <video
+                  src={env.VITE_APP_BACKEND_STORAGE_URL +  videoId }
+                  controls
+                  className="object-cover w-full h-full rounded-lg"
+                />
+              )
+          }
         </div>
+        
         <div>
           {
               categoryConfig.show_bottom_title &&
@@ -297,7 +305,7 @@ const HomeContent = () =>{
 
   const VideoEmbedURLContent = ({item_content, item}) =>{
     return(
-      <EmbededVideoUrl 
+      <EmbeddedVideoUrl 
         type={item_content.uploads_table_main_view.upload_type}
         // clickSeeDetails={() => HandleSeeDetails(item_content)}
         contentDetails={item_content}
@@ -419,28 +427,22 @@ const HomeContent = () =>{
                                       item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current) &&
                                       <SwiperSlide key={index_content} className='flex justify-center'>
                                       {
-                                        item_content.uploads_table_main_view.upload_type == "video"
+                                        ["video", "embed"].includes(item_content.uploads_table_main_view.upload_type)
                                         ? <VideoEmbedURLContent item_content={item_content} item={item} />
-                                        : 
-                                          <CardTypeHomeContent item={item} item_content={item_content} />
+                                        : <CardTypeHomeContent item={item} item_content={item_content} />
                                       }
                                       </SwiperSlide>
                                     )
                                   : 
                                     (
-                                      selectedLanguage.current == null
-                                      ?
-                                        <SwiperSlide key={index_content} className='flex justify-center'>
-                                        {
-                                          item_content.uploads_table_main_view.upload_type == "video"
-                                          ? <VideoEmbedURLContent item_content={item_content} item={item} />
-                                          : <CardTypeHomeContent item={item} item_content={item_content} />
-                                        }
-                                        </SwiperSlide>
-                                      :
-                                        <SwiperSlide key={index_content} className='flex justify-center'>
-                                          <CardTypeHomeContent item={item} item_content={item_content} />
-                                        </SwiperSlide>
+                                      selectedLanguage.current == null &&
+                                      <SwiperSlide key={index_content} className='flex justify-center'>
+                                      {
+                                        ["video", "embed"].includes(item_content.uploads_table_main_view.upload_type)
+                                        ? <VideoEmbedURLContent item_content={item_content} item={item} />
+                                        : <CardTypeHomeContent item={item} item_content={item_content} />
+                                      }
+                                      </SwiperSlide>
                                     )
                                 ))
                               :
