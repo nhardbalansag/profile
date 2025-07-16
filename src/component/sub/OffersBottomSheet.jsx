@@ -280,6 +280,7 @@ const OffersBottomSheet = ({
                                     </div>
 
                                     {
+                                        tabData &&
                                         count ?
                                         <div className="flex items-center justify-between p-4 border border-gray-100 bg-gray-50 rounded-xl">
                                             <div className="flex items-center gap-3">
