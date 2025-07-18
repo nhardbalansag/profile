@@ -395,67 +395,67 @@ const HomeContent = () =>{
                               </div>
                             )
                           :
-                          <Swiper
-                          //#region swiper parameter
-                            key={index}
-                            pagination={{
-                              dynamicBullets: true,
-                            }}
-                            modules={[Navigation, Pagination, Scrollbar, A11y]}
-                            spaceBetween={10}
-                            slidesPerView={item.category_display_content.display.content_home_style.mobile_view_render_count}
-                            onSlideChange={() => setCollapseDetails(false)}
-                            breakpoints={{
-                              300: { slidesPerView: item.category_display_content.display.content_home_style.mobile_view_render_count, spaceBetween: 10 }, // 2 slides on tablets
-                              400: { slidesPerView: item.category_display_content.display.content_home_style.mobile_view_render_count, spaceBetween: 10 }, // 2 slides on tablets
-                              500: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
-                              600: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
-                              700: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
-                              800: { slidesPerView: 3, spaceBetween: 5 }, // 2 slides on tablets
-                              1024: { slidesPerView: 3,  spaceBetween: 10}, // 3 slides on desktops
-                              1353: { slidesPerView: 4,  spaceBetween: 10} // 3 slides on desktops
-                            }}
-                          //#endregion
-                          >
-                            {
-                              item.contents_table.length > 0
-                              ?
-                                item.contents_table.map((item_content, index_content) =>(
-                                  item_content.translation_dependent
-                                  ?
-                                    (
-                                      item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current) &&
-                                      <SwiperSlide key={index_content} className='flex justify-center'>
-                                      {
-                                        ["video", "embed"].includes(item_content.uploads_table_main_view.upload_type)
-                                        ? <VideoEmbedURLContent item_content={item_content} item={item} />
-                                        : <CardTypeHomeContent item={item} item_content={item_content} />
-                                      }
-                                      </SwiperSlide>
-                                    )
-                                  : 
-                                    (
-                                      selectedLanguage.current == null &&
-                                      <SwiperSlide key={index_content} className='flex justify-center'>
-                                      {
-                                        ["video", "embed"].includes(item_content.uploads_table_main_view.upload_type)
-                                        ? <VideoEmbedURLContent item_content={item_content} item={item} />
-                                        : <CardTypeHomeContent item={item} item_content={item_content} />
-                                      }
-                                      </SwiperSlide>
-                                    )
-                                ))
-                              :
-                                (
-                                  ResultGetHomeContents.length <= 0 &&
-                                  [1, 2, 3].map((item, index) =>(
-                                    <SwiperSlide key={index} className='flex justify-center mb-10'>
-                                      <HomeCard loading={true}/>
-                                    </SwiperSlide>  
+                            <Swiper
+                            //#region swiper parameter
+                              key={index}
+                              pagination={{
+                                dynamicBullets: true,
+                              }}
+                              modules={[Navigation, Pagination, Scrollbar, A11y]}
+                              spaceBetween={10}
+                              slidesPerView={item.category_display_content.display.content_home_style.mobile_view_render_count}
+                              onSlideChange={() => setCollapseDetails(false)}
+                              breakpoints={{
+                                300: { slidesPerView: item.category_display_content.display.content_home_style.mobile_view_render_count, spaceBetween: 10 }, // 2 slides on tablets
+                                400: { slidesPerView: item.category_display_content.display.content_home_style.mobile_view_render_count, spaceBetween: 10 }, // 2 slides on tablets
+                                500: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
+                                600: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
+                                700: { slidesPerView: 2, spaceBetween: 5 }, // 2 slides on tablets
+                                800: { slidesPerView: 3, spaceBetween: 5 }, // 2 slides on tablets
+                                1024: { slidesPerView: 3,  spaceBetween: 10}, // 3 slides on desktops
+                                1353: { slidesPerView: 4,  spaceBetween: 10} // 3 slides on desktops
+                              }}
+                            //#endregion
+                            >
+                              {
+                                item.contents_table.length > 0
+                                ?
+                                  item.contents_table.map((item_content, index_content) =>(
+                                    item_content.translation_dependent
+                                    ?
+                                      (
+                                        item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current) &&
+                                        <SwiperSlide key={index_content} className='flex justify-center m-5'>
+                                        {
+                                          ["video", "embed"].includes(item_content.uploads_table_main_view.upload_type)
+                                          ? <VideoEmbedURLContent item_content={item_content} item={item} />
+                                          : <CardTypeHomeContent item={item} item_content={item_content} />
+                                        }
+                                        </SwiperSlide>
+                                      )
+                                    : 
+                                      (
+                                        selectedLanguage.current == null &&
+                                        <SwiperSlide key={index_content} className='flex justify-center m-5'>
+                                        {
+                                          ["video", "embed"].includes(item_content.uploads_table_main_view.upload_type)
+                                          ? <VideoEmbedURLContent item_content={item_content} item={item} />
+                                          : <CardTypeHomeContent item={item} item_content={item_content} />
+                                        }
+                                        </SwiperSlide>
+                                      )
                                   ))
-                                )
-                            }
-                          </Swiper>
+                                :
+                                  (
+                                    ResultGetHomeContents.length <= 0 &&
+                                    [1, 2, 3].map((item, index) =>(
+                                      <SwiperSlide key={index} className='flex justify-center mb-10'>
+                                        <HomeCard loading={true}/>
+                                      </SwiperSlide>  
+                                    ))
+                                  )
+                              }
+                            </Swiper>
                         }
                       </div>  
                     ))

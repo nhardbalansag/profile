@@ -28,7 +28,8 @@ import * as AuthAction from '../../store/auth/authAction'
 const Header = ({
   handleLanguageVisibility,
   onPressAction, 
-  ActionState
+  ActionState,
+  logoutNavigate
 }) => {
 
   const dispatch = useDispatch()
@@ -62,6 +63,7 @@ const Header = ({
   const LogoutUser = async () =>{
     await clear().then((result) =>{
       dispatch(AuthAction.LogoutUser())
+      logoutNavigate()
     }).catch((err) =>{
       console.log(err.message)
     })
@@ -102,7 +104,9 @@ const Header = ({
                       {
                         auth_states.StateToken
                         ?
-                          <button onClick={() => LogoutUser()}>
+                          <button onClick={() => {
+                            LogoutUser()
+                          }}>
                             <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                               <AiOutlineLogout  size={20}/>
                               <p className='logout_id text-[#001d3d] capitalize ml-2 '>Logout</p>

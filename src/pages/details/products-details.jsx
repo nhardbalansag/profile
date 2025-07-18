@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { format } from 'date-fns';
 
 import {
     OffersBottomSheet,
@@ -19,11 +20,17 @@ import {
 
 import Quill from 'quill';
 
-import { FaUsers, FaShoppingBag, FaUser } from "react-icons/fa";
 import { HiMiniBuildingOffice2 } from "react-icons/hi2";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { LuTickets } from "react-icons/lu";
 import { TiHomeOutline } from "react-icons/ti";
+import { FaRegCalendar } from "react-icons/fa";
+import { FaBed } from "react-icons/fa";
+import { FaClock } from "react-icons/fa";
+import { LuCalendarClock } from "react-icons/lu";
+import { MdOutlineVerified } from "react-icons/md";
+import { MdOutlineLocalHotel } from "react-icons/md";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
 import * as api_content from '../../services/content/content.api'
 import * as api_subscription from '../../services/account/subscription.api.js'
@@ -88,6 +95,16 @@ const ProductDetails = () =>{
         AccountTransaction:[]
     });
 
+    const [getGuestInformation, setGuestInformation] = useState([]);
+    const [currentStep, setCurrentStep] = useState(0);
+
+    const steps = [
+        'Choose Booking Offers',
+        'Adjust',
+        'Info',
+        'Pay',
+    ];
+
     const editorRef = useRef(ResultGetHomeContents && ResultGetHomeContents.content_description);
     const quillRef = useRef(null);
 
@@ -96,18 +113,18 @@ const ProductDetails = () =>{
             navigate('login');
         }else{
     
-            const points = parseFloat(TPointsCustom) || 0
-            const bucks = parseFloat(TBucksCustom) || 0
-            const travel = parseFloat(TDollarsCustom) || 0
+            // const points = parseFloat(TPointsCustom) || 0
+            // const bucks = parseFloat(TBucksCustom) || 0
+            // const travel = parseFloat(TDollarsCustom) || 0
     
-            if(
-                !getConfirmCheckoutStatus &&
-                totalPriceWithPoints === 0 &&
-                (points > 0 || bucks > 0 || travel > 0)
-            ){
-                setConfirmCheckoutStatus(true)
-                return;
-            }
+            // if(
+            //     // !getConfirmCheckoutStatus &&
+            //     totalPriceWithPoints === 0 &&
+            //     (points > 0 || bucks > 0 || travel > 0)
+            // ){
+            //     setConfirmCheckoutStatus(true)
+            //     return;
+            // }
     
             const content_title = selectedLanguage.current == null 
             ? AllContentData.content_title
@@ -167,6 +184,8 @@ const ProductDetails = () =>{
                 travel_dollars_applied: parseFloat(TDollarsCustom) || 0,
                 travel_dollars_wallet_before: walletTDollarsRef.current,
                 travel_dollars_wallet_after: walletData.t_dollars,
+
+                guestDetails: getGuestInformation,
             }
         
             paymentBContent.current = reqBody
@@ -411,8 +430,11 @@ const ProductDetails = () =>{
 
             // Prevent exceeding limits
             if (
-                nextCustomValue > currentWalletAmount || // exceeds wallet balance
-                nextCustomValue > finalPrice // exceeds price
+                finalPrice == 0 &&
+                (
+                    nextCustomValue > currentWalletAmount || // exceeds wallet balance
+                    nextCustomValue > finalPrice // exceeds price
+                )
             ) {
                 return; // Don't apply if limit reached
             }
@@ -453,8 +475,11 @@ const ProductDetails = () =>{
 
             // Prevent exceeding limits
             if (
-                nextCustomValue > currentWalletAmount || // exceeds wallet balance
-                nextCustomValue > finalPrice // exceeds price
+                finalPrice == 0 &&
+                (
+                    nextCustomValue > currentWalletAmount || // exceeds wallet balance
+                    nextCustomValue > finalPrice // exceeds price
+                )
             ) {
                 return; // Don't apply if limit reached
             }
@@ -497,9 +522,12 @@ const ProductDetails = () =>{
         
             // Prevent exceeding limits
             if (
-                nextCustomValue > maxPointsAllowed || // exceeds what offer allows
-                nextCustomValue > currentWalletAmount || // exceeds wallet balance
-                nextCustomValue > finalPrice // exceeds price
+                finalPrice == 0 &&
+                (
+                    nextCustomValue > maxPointsAllowed || // exceeds what offer allows
+                    nextCustomValue > currentWalletAmount || // exceeds wallet balance
+                    nextCustomValue > finalPrice // exceeds price
+                )
             ) {
                 return; // Don't apply if limit reached
             }
@@ -540,6 +568,9 @@ const ProductDetails = () =>{
     }
     
     const HandleOfferTabSelection = (item) =>{
+
+        setCurrentStep(prev => Math.min(prev + 1, steps.length - 1));
+
         resetOnGuestCountChange()
         setConfirmCheckoutStatus(false)
         setActiveTab(item)
@@ -558,6 +589,9 @@ const ProductDetails = () =>{
     }
  
     const resetOnClose = () =>{
+
+        setCurrentStep(0);
+
         setActiveTab(null)
 
         setConfirmCheckoutStatus(false)
@@ -784,7 +818,6 @@ const ProductDetails = () =>{
             className="md:hidden bottom-4 left-1/2 transform -translate-x-1/2 bg-[#031956] text-white rounded-xl px-4 py-1 flex justify-between items-center w-[90%] space-x-6 shadow-lg">
                 <TabItem icon={<TiHomeOutline size={20}/>} path={'/'} label="Home" active />
                 <TabItem icon={<LuTickets size={20}/>} path={'/event'} label="Events" />
-                <TabItem icon={<FaShoppingBag size={20}/>} path={'/mall'} label="Mall" />
                 <TabItem icon={<HiMiniBuildingOffice2 size={20}/>} path={'/account'} label="Office" />
                 <TabItem icon={<FaRegCircleUser size={20}/>} path={'/details'} label="Profile" />
             </div>
@@ -838,6 +871,367 @@ const ProductDetails = () =>{
         )
     }
 
+    const GuestDetailsForm = () =>{
+
+        const [formData, setFormData] = useState({
+            passportName: '',
+            passportNumber: '',
+            birthdate: '',
+            contactNumber: '',
+            contactEmail: '',
+            gender: ''
+        });
+
+        const [errors, setErrors] = useState({});
+
+        const handleInputChange = (e) => {
+            const { name, value } = e.target;
+                setFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+            
+            // Clear error when user starts typing
+            if (errors[name]) {
+                setErrors(prev => ({
+                    ...prev,
+                    [name]: ''
+                }));
+            }
+        };
+
+        const validateForm = () => {
+            const newErrors = {};
+
+            if (!formData.passportName.trim()) {
+                newErrors.passportName = 'Passport name is required';
+            }
+
+            if (!formData.passportNumber.trim()) {
+                newErrors.passportNumber = 'Passport number is required';
+            }
+
+            if (!formData.birthdate) {
+                newErrors.birthdate = 'Birthdate is required';
+            }
+
+            if (!formData.contactNumber.trim()) {
+                newErrors.contactNumber = 'Contact number is required';
+            }
+
+            if (!formData.contactEmail.trim()) {
+                newErrors.contactEmail = 'Email is required';
+            } else if (!/\S+@\S+\.\S+/.test(formData.contactEmail)) {
+                newErrors.contactEmail = 'Email format is invalid';
+            }
+
+            if (!formData.gender) {
+                newErrors.gender = 'Gender is required';
+            }
+
+            setErrors(newErrors);
+            return Object.keys(newErrors).length === 0;
+        };
+
+        const AddToList = () =>{
+            if (validateForm()){
+                setGuestInformation(prev => [...prev, {
+                    passportName: formData.passportName,
+                    passportNumber: formData.passportNumber,
+                    birthdate: formData.birthdate,
+                    contactNumber: formData.contactNumber,
+                    contactEmail: formData.contactEmail,
+                    gender: formData.gender
+                }])
+
+                setFormData({
+                    passportName: '',
+                    passportNumber: '',
+                    birthdate: '',
+                    contactNumber: '',
+                    contactEmail: '',
+                    gender: ''
+                })
+            }
+        }
+
+        const removeGuest = (indexToRemove) => {
+            setGuestInformation(prev =>
+                prev.filter((_, index) => index !== indexToRemove)
+            )
+        }
+
+        return(
+            <div className="flex items-center justify-center p-4 bg-gradient-to-br from-background to-muted">
+                <div className="w-full max-w-2xl">
+                    {/* Header */}
+                    <div className="mb-8 text-center">
+                        <h1 className="mb-2 text-4xl font-bold text-foreground">Complete Your Booking</h1>
+                        <p className="text-lg text-muted-foreground">Please provide your details to proceed with checkout</p>
+                    </div>
+
+                    {/* Form Card */}
+                    <div className="p-8 space-y-6 border shadow-2xl bg-card rounded-2xl border-border">
+                        {
+                            getGuestInformation.length <  count &&
+                            <div className="space-y-6">
+                                {/* Passport Name */}
+                                <div className="space-y-2">
+                                    <label htmlFor="passportName" className="block text-sm font-semibold text-foreground">
+                                    Passport Name *
+                                    </label>
+                                    <input
+                                    type="text"
+                                    id="passportName"
+                                    name="passportName"
+                                    value={formData.passportName}
+                                    onChange={handleInputChange}
+                                    className={`w-full px-4 py-3 rounded-lg border transition-all duration-300 bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
+                                        errors.passportName ? 'border-destructive' : 'border-border'
+                                    }`}
+                                    placeholder="Enter your full name as on passport"
+                                    />
+                                    {errors.passportName && (
+                                    <p className="mt-1 text-sm text-destructive">{errors.passportName}</p>
+                                    )}
+                                </div>
+
+                                {/* Passport Number */}
+                                <div className="space-y-2">
+                                    <label htmlFor="passportNumber" className="block text-sm font-semibold text-foreground">
+                                    Passport Number *
+                                    </label>
+                                    <input
+                                    type="text"
+                                    id="passportNumber"
+                                    name="passportNumber"
+                                    value={formData.passportNumber}
+                                    onChange={handleInputChange}
+                                    className={`w-full px-4 py-3 rounded-lg border transition-all duration-300 bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
+                                        errors.passportNumber ? 'border-destructive' : 'border-border'
+                                    }`}
+                                    placeholder="Enter passport number"
+                                    />
+                                    {errors.passportNumber && (
+                                    <p className="mt-1 text-sm text-destructive">{errors.passportNumber}</p>
+                                    )}
+                                </div>
+
+                                {/* Birthdate and Gender Row */}
+                                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                    {/* Birthdate */}
+                                    <div className="space-y-2">
+                                    <label htmlFor="birthdate" className="block text-sm font-semibold text-foreground">
+                                        Date of Birth *
+                                    </label>
+                                    <input
+                                        type="date"
+                                        id="birthdate"
+                                        name="birthdate"
+                                        value={formData.birthdate}
+                                        onChange={handleInputChange}
+                                        className={`w-full px-4 py-3 rounded-lg border transition-all duration-300 bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
+                                        errors.birthdate ? 'border-destructive' : 'border-border'
+                                        }`}
+                                    />
+                                    {errors.birthdate && (
+                                        <p className="mt-1 text-sm text-destructive">{errors.birthdate}</p>
+                                    )}
+                                    </div>
+
+                                    {/* Gender */}
+                                    <div className="space-y-2">
+                                    <label htmlFor="gender" className="block text-sm font-semibold text-foreground">
+                                        Gender *
+                                    </label>
+                                    <select
+                                        id="gender"
+                                        name="gender"
+                                        value={formData.gender}
+                                        onChange={handleInputChange}
+                                        className={`w-full px-4 py-3 rounded-lg border transition-all duration-300 bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
+                                        errors.gender ? 'border-destructive' : 'border-border'
+                                        }`}
+                                    >
+                                        <option value="">Select gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                        <option value="prefer-not-to-say">Prefer not to say</option>
+                                    </select>
+                                    {errors.gender && (
+                                        <p className="mt-1 text-sm text-destructive">{errors.gender}</p>
+                                    )}
+                                    </div>
+                                </div>
+
+                                <div className='flex flex-wrap justify-start gap-5'>
+                                    {/* Contact Number */}
+                                    <div className="space-y-2">
+                                        <label htmlFor="contactNumber" className="block text-sm font-semibold text-foreground">
+                                        Contact Number *
+                                        </label>
+                                        <input
+                                        type="tel"
+                                        id="contactNumber"
+                                        name="contactNumber"
+                                        value={formData.contactNumber}
+                                        onChange={handleInputChange}
+                                        className={`w-full px-4 py-3 rounded-lg border transition-all duration-300 bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
+                                            errors.contactNumber ? 'border-destructive' : 'border-border'
+                                        }`}
+                                        placeholder="Enter your phone number"
+                                        />
+                                        {errors.contactNumber && (
+                                        <p className="mt-1 text-sm text-destructive">{errors.contactNumber}</p>
+                                        )}
+                                    </div>
+
+                                    {/* Contact Email */}
+                                    <div className="space-y-2">
+                                        <label htmlFor="contactEmail" className="block text-sm font-semibold text-foreground">
+                                        Email Address *
+                                        </label>
+                                        <input
+                                        type="email"
+                                        id="contactEmail"
+                                        name="contactEmail"
+                                        value={formData.contactEmail}
+                                        onChange={handleInputChange}
+                                        className={`w-full px-4 py-3 rounded-lg border transition-all duration-300 bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
+                                            errors.contactEmail ? 'border-destructive' : 'border-border'
+                                        }`}
+                                        placeholder="Enter your email address"
+                                        />
+                                        {errors.contactEmail && (
+                                        <p className="mt-1 text-sm text-destructive">{errors.contactEmail}</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <button 
+                                onClick={() => AddToList()} 
+                                className="flex-1 h-12 px-3 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] checkout_id">
+                                    Save
+                                </button>
+                            </div>
+                        }
+
+                        <div className='flex flex-wrap gap-5'>
+                            {getGuestInformation.length > 0 && getGuestInformation.map((guest, index) => (
+                                <div
+                                    key={index}
+                                    className="flex items-start gap-3 p-3 mb-4 border border-blue-100 bg-blue-50 rounded-xl"
+                                >
+                                    <div  className='space-y-5'>
+                                        <div>
+                                            <div className="flex items-center space-x-3">
+                                                <label className="block text-sm font-semibold text-foreground">
+                                                Passport Name
+                                                </label>
+                                                <span>:</span>
+                                                <p>{guest.passportName}</p>
+                                            </div>
+                                            <div className="flex items-center space-x-3">
+                                                <label className="block text-sm font-semibold text-foreground">
+                                                Passport Number
+                                                </label>
+                                                <span>:</span>
+                                                <p>{guest.passportNumber}</p>
+                                            </div>
+                                            <div className="flex items-center space-x-3">
+                                                <label className="block text-sm font-semibold text-foreground">
+                                                Date of Birth
+                                                </label>
+                                                <span>:</span>
+                                                <p>{guest.birthdate}</p>
+                                            </div>
+                                            <div className="flex items-center space-x-3">
+                                                <label className="block text-sm font-semibold text-foreground">
+                                                Gender
+                                                </label>
+                                                <span>:</span>
+                                                <p>{guest.gender}</p>
+                                            </div>
+                                            <div className="flex items-center space-x-3">
+                                                <label className="block text-sm font-semibold text-foreground">
+                                                Contact Number
+                                                </label>
+                                                <span>:</span>
+                                                <p>{guest.contactNumber}</p>
+                                            </div>
+                                            <div className="flex items-center space-x-3">
+                                                <label className="block text-sm font-semibold text-foreground">
+                                                Email Address
+                                                </label>
+                                                <span>:</span>
+                                                <p>{guest.contactEmail}</p>
+                                            </div>
+                                        </div>
+                                        <button onClick={() => removeGuest(index)}>
+                                            <div className='flex items-center justify-center space-x-2'>
+                                                <IoIosCloseCircleOutline  className="text-[23px] text-red-700" />
+                                                <p className='font-bold text-red-700'>Remove</p>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        
+                        {/* Submit Button */}
+                        <div className="flex gap-3 pt-4">
+                            <button  
+                            onClick={() => setCurrentStep(prev => Math.max(prev - 1, 0))} 
+                            className="px-2 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-100 cancel_id"
+                            >Back To Previous
+                            </button>
+                            {
+                                getGuestInformation.length === count &&
+                                <button
+                                onClick={() => setCurrentStep(prev => Math.min(prev + 1, steps.length - 1))}
+                                type="submit"
+                                className="w-[80%] bg-gradient-to-r from-orange-500 via-orange-600 hover:shadow-lg text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                                >
+                                Complete Booking & Checkout
+                                </button>
+                            }
+                        </div>
+
+                        {/* Additional Info */}
+                        <div className="pt-4 text-center">
+                            <p className="text-sm text-muted-foreground">
+                            Your information is secure and encrypted. We respect your privacy.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="mt-8 text-center">
+                        <p className="text-sm text-muted-foreground">
+                        Need help? Contact our support team for assistance.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    const Stepper = () => {
+        return (
+            <div className="flex justify-center">
+                <ul className="steps">
+                    {steps.map((label, index) => (
+                        <li key={index} className={`step ${index <= currentStep ? 'step-primary' : ''}`}>
+                        <span>{label}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        )
+    }
+
     return (
         <div>
             <div>
@@ -845,6 +1239,7 @@ const ProductDetails = () =>{
                 handleLanguageVisibility={() => setOpenLanguageSelection(true)}
                 onPressAction={() => setOpen(!open)} 
                 ActionState={open}
+                logoutNavigate={() => navigate('/login')}
                 />
             </div>
             <main >
@@ -978,13 +1373,17 @@ const ProductDetails = () =>{
                     <OffersBottomSheet
                     handleCheckout={() => handleCheckout(activeTab, ResultGetHomeContentsDetails)}
                     handleClose={() => {
-                        setOpenBottomOffer(!openBottomOffer)
-                        resetOnClose()
+                            setOpenBottomOffer(!openBottomOffer)
+                            resetOnClose()
                         }
                     }
                     handleIncrease={() => handleIncreaseFunc()}
                     handleDecrease={() => handleDecreaseFunc()}
                     handleCustomTPoints={(text) => handleCustomPoints(text, activeTab)}
+
+                    defaultTBucks={walletTBucksRef.current}
+                    defaultTPoints={walletRef.current}
+                    defaultTDollars={walletTDollarsRef.current}
             
                     handleRedeemFullTPoints={() => handleTpoints(activeTab)}
                     handleRedeemFullTBucks={() => handleTbucks(activeTab)}
@@ -1006,6 +1405,14 @@ const ProductDetails = () =>{
                     confirmCheckoutStatus={getConfirmCheckoutStatus}
             
                     count={count}
+
+                    backOnPricingOption={() => {
+                        setConfirmCheckoutStatus(false)
+                    }}
+                    backOnPricingTabOption={() => {
+                        setActiveTab(null)
+                        setCurrentStep(0)
+                    }}
             
                     customTPoints={TPointsCustom}
                     customTBucks={TBucksCustom}
@@ -1016,6 +1423,12 @@ const ProductDetails = () =>{
                     handleCustomTravelDollars={(text) => handleCustomTravelDollars(text, activeTab)}
             
                     tabData={activeTab}
+
+                    guestDetails={<GuestDetailsForm/>}
+                    stepperDetails={<Stepper/>}
+                    handleNextStep={() => setCurrentStep(prev => Math.min(prev + 1, steps.length - 1))}
+                    handlePrevStep={() => setCurrentStep(prev => Math.max(prev - 1, 0))}
+                    currentStep={currentStep}
             
                     wallet={parseFloat(TPointsWallet).toFixed(2)}
                     tBucksWallet={parseFloat(walletData.t_bucks).toFixed(2)}
@@ -1024,60 +1437,83 @@ const ProductDetails = () =>{
                     finalAmount={parseFloat(totalPriceWithPoints).toFixed(2)}
                     offersData={ResultGetHomeContentsDetails}
                     >
-                        <div className="grid grid-cols-2 gap-5 my-5">
+                        <div className="flex flex-wrap justify-center gap-5">
                         {
                             ResultGetHomeContentsDetails.content_offers_table.map((item, key) =>(
             
-                            item.offers_table &&
-                            item.offers_table.membership_type_table &&
-                            <button 
-                            onClick={() => {
-                                HandleOfferTabSelection(item)
-                            }} 
-                            key={key} 
-                            className={`${ activeTab && activeTab.offers_id == item.offers_id ? 'bg-yellow-400 text-black ' : ''} border h-auto rounded-lg shadow-sm p-5`}>
-                                <p className={`${activeTab && activeTab.offers_id == item.offers_id ? 'font-extrabold' : 'font-normal'}  text-[18px] uppercase`}>
-                                <div className='flex items-center justify-between'>
-                                    <span>
-                                    {
-                                        selectedLanguage.current == null 
-                                        ? item.offers_table.membership_type_table.type_title
-                                        : (
-                                            item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                            ? item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
-                                            : item.offers_table.membership_type_table.type_title
-                                        )
-                                    }
-                                    </span>
-                                    <div className='flex flex-col'>
-                                    <span className='font-semibold'>
-                                        {     
-                                        selectedLanguage.current == null 
-                                        ? item.offers_table.tier_category_table.tier_category_name
-                                        : (
-                                                item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                            ? item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
-                                            : item.offers_table.tier_category_table.tier_category_name
-                                            )
-                                        }
-                                    </span>
-                                    <span className='text-[15px] font-normal capitalize'>
-                                        (
-                                        {
-                                            selectedLanguage.current == null 
-                                            ? item.offers_table.supplier_table.room_type.room_type_name
-                                            : (
-                                                item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                                ? item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).room_type_name
-                                                : item.offers_table.supplier_table.room_type.room_type_name
-                                            )
-                                        }
-                                        )
-                                    </span>
+                                item.offers_table &&
+                                item.offers_table.membership_type_table &&
+                                <button 
+                                onClick={() => {
+                                    HandleOfferTabSelection(item)
+                                }} 
+                                key={key} 
+                                className={`${ activeTab && activeTab.offers_id == item.offers_id ? 'bg-yellow-400 text-black ' : ''} border h-auto rounded-lg shadow-sm p-5 w-[300px]`}>
+                                    <div className={`${activeTab && activeTab.offers_id == item.offers_id ? 'font-extrabold' : 'font-normal'}  text-[18px] uppercase space-y-2`}>
+                                        <div className=''>
+                                            <div className='flex-col space-y-2'>
+
+                                                <div className='flex items-center pb-2 space-x-2 border-b'>
+                                                    <LuCalendarClock className="flex-shrink-0 w-5 h-5" />
+                                                    <p className='flex justify-center space-x-1'>
+                                                        <span className='font-semibold'>
+                                                            {     
+                                                            selectedLanguage.current == null 
+                                                            ? item.offers_table.tier_category_table.tier_category_name
+                                                            : (
+                                                                    item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                                                ? item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
+                                                                : item.offers_table.tier_category_table.tier_category_name
+                                                                )
+                                                            }
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                <div className='flex items-center pb-2 space-x-2 border-b'>
+                                                    <MdOutlineVerified className="flex-shrink-0 w-5 h-5" />
+                                                    <p className='flex justify-center space-x-1'>
+                                                        <span className='font-semibold'>
+                                                        {
+                                                            selectedLanguage.current == null 
+                                                            ? item.offers_table.membership_type_table.type_title
+                                                            : (
+                                                                item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                                                ? item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
+                                                                : item.offers_table.membership_type_table.type_title
+                                                            )
+                                                        }
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                
+                                                <div className='flex items-center pb-2 space-x-2 '>
+                                                    <MdOutlineLocalHotel className="flex-shrink-0 w-5 h-5" />
+                                                    <p className='text-[15px] font-normal capitalize'>
+                                                        {
+                                                            selectedLanguage.current == null 
+                                                            ? item.offers_table.supplier_table.room_type.room_type_name
+                                                            : (
+                                                                item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                                                ? item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).room_type_name
+                                                                : item.offers_table.supplier_table.room_type.room_type_name
+                                                            )
+                                                        }
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center justify-center gap-3 p-3 border border-green-100 bg-green-50 rounded-xl">
+                                            <FaRegCalendar  className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                            <div className="min-w-0">
+                                                <p className="space-x-1 text-sm font-medium text-gray-900 capitalize">
+                                                    <span className='registration_end_id'>Registration</span>
+                                                </p>
+                                                <p className="text-xs text-gray-600 end_id">Ends {item.offers_table.offers_end_daily_period}</p>
+                                                <p className="mt-1 text-xs text-gray-500">{format(new Date(item.offers_table.offers_end_effectivity_date), 'MMM dd, yyyy')}</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                </p>
-                            </button>
+                                </button>
                             ))
                         }
                         </div>

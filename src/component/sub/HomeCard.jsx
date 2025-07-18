@@ -180,49 +180,24 @@ const HomeCard = ({
         return (
             
             <div className={`flex ${inlineRendering ? 'flex-row space-x-5' : 'flex-col'} rounded-xl  w-full bg-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2`}>
-                <Link to={{
-                    pathname: "/product-details",
-                    search: "?view=" + contentDetails.id,
-                }}>
                     <div 
                     style={{
                         backgroundImage: `url(${image})`,
-                        // opacity: 0.3,  // Only affects the background
-                        // zIndex: -1
                     }}
                     className="relative w-full h-64 overflow-hidden rounded-b-none shadow-lg rounded-xl">
-                    {/* // className="relative w-[60%] h-64 overflow-hidden shadow-lg rounded-xl "> */}
                         <img
-                        src={image}
-                        alt=""  
-                        className="absolute inset-0 object-contain w-full h-full"
+                            src={image}
+                            alt=""  
+                            className="absolute inset-0 object-contain w-full h-full"
                         />
-                        {/* Overlay */}
-                        {
-                            // categoryConfig.has_gradient &&
-                            // <div className="absolute inset-0 bg-gradient-to-r from-gray-300/80 to-transparent" />
-                        }
-                        {/* Content */}
                         <div className="relative z-10 flex flex-col justify-between h-full p-6 text-center text-white">
                             {
                                 categoryConfig.is_details_on_card &&
                                 <div className=''>
-                                    {/* <Link 
-                                        to={{
-                                            pathname: "/content-details",
-                                            search: "?view=" + contentDetails.id,
-                                        }}
-                                    >
-                                        <h2 className="w-[100px] mb-2 text-3xl font-bold text-white capitalize drop-shadow-lg">
-                                            {limitText(title)}
-                                        </h2>
-                                    </Link> */}
-
                                     <div className="absolute bottom-4 left-4 right-4">
                                         <h2 className="mb-2 text-3xl font-bold text-white drop-shadow-lg">{limitText(title)}</h2>
                                         <p className="text-sm text-white/90 drop-shadow-sm">Discover amazing experiences</p>
                                     </div>
-                                    {/* <p dangerouslySetInnerHTML={{__html:collapseDetails ? details : limitText(details)}} />  */}
                                 </div>
                             }
                             {
@@ -235,7 +210,6 @@ const HomeCard = ({
                             }
                         </div>
                     </div>
-                </Link>
                 <div className="p-3">
                     
                     <div className='flex items-start justify-between '>
@@ -247,18 +221,25 @@ const HomeCard = ({
                     } */}
 
                     {
-                       categoryConfig.show_bottom_title &&
-                       <Link 
-                        to={{
-                            pathname: "/content-details",
-                            search: "?view=" + contentDetails.id,
-                        }}
-                       >
+                        categoryConfig.show_bottom_title &&
+                        contentDetails.content_has_payment
+                        ?
+                            <Link 
+                                to={{
+                                    pathname: "/content-details",
+                                    search: "?view=" + contentDetails.id,
+                                }}
+                            >
+                                    <p className="mt-1 font-semibold text-black text-md line-clamp-2">
+                                    {title }
+                                    </p>
+                            </Link>
+                        :
                             <p className="mt-1 font-semibold text-black text-md line-clamp-2">
                             {title }
                             </p>
-                       </Link>
                     }
+
                     {
                         categoryConfig.show_bottom_description &&
                         <div onClick={clickSeeDetails}  className="mt-1 text-sm text-gray-700">
@@ -266,19 +247,29 @@ const HomeCard = ({
                             {/* {!collapseDetails && details.length > 30 && <p className='text-lg see_more'>... see more</p>}  */}
                         </div>
                     }
-                    <div className="flex items-start gap-3 p-3 my-2 border border-blue-100 bg-blue-50 rounded-xl">
-                        <FaRegClock className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                        <div className="min-w-0">
-                            <p className="text-sm font-medium text-gray-900 duration_id">Duration</p>
-                            <p className="text-xs text-gray-600">{contentDetails.content_days_count} <span className="days_id">Days</span>, {contentDetails.content_night_count} <span className="days_id">Nights</span></p>
-                            <p className="mt-1 text-xs text-gray-500">{format(new Date(contentDetails.content_date_from), 'MMM dd, yyyy')} - {format(new Date(contentDetails.content_date_to), 'MMM dd, yyyy')}</p>
+
+                    {
+                        categoryConfig.show_date_range &&
+                        <div className="flex items-start gap-3 p-3 my-2 border border-blue-100 bg-blue-50 rounded-xl">
+                            <FaRegClock className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                            <div className="min-w-0">
+                                <p className="text-sm font-medium text-gray-900 duration_id">Duration</p>
+                                <p className="text-xs text-gray-600">{contentDetails.content_days_count} <span className="days_id">Days</span>, {contentDetails.content_night_count} <span className="days_id">Nights</span></p>
+                                <p className="mt-1 text-xs text-gray-500">{format(new Date(contentDetails.content_date_from), 'MMM dd, yyyy')} - {format(new Date(contentDetails.content_date_to), 'MMM dd, yyyy')}</p>
+                            </div>
                         </div>
-                    </div>
+                    }
                     {/* {
                         contentDetails.content_offers_table.length > 0 && categoryConfig.show_offers && contentDetails.content_has_payment && 
                         _OfferTag()
                     } */}
-                    {_OfferTag()}
+
+                    {
+                        // contentDetails.content_date_from && 
+                        // contentDetails.content_date_to && 
+                        categoryConfig.show_offers &&
+                        _OfferTag()
+                    }
                 </div> 
             </div>
         )
