@@ -113,19 +113,6 @@ const ProductDetails = () =>{
             navigate('login');
         }else{
     
-            // const points = parseFloat(TPointsCustom) || 0
-            // const bucks = parseFloat(TBucksCustom) || 0
-            // const travel = parseFloat(TDollarsCustom) || 0
-    
-            // if(
-            //     // !getConfirmCheckoutStatus &&
-            //     totalPriceWithPoints === 0 &&
-            //     (points > 0 || bucks > 0 || travel > 0)
-            // ){
-            //     setConfirmCheckoutStatus(true)
-            //     return;
-            // }
-    
             const content_title = selectedLanguage.current == null 
             ? AllContentData.content_title
             : (
@@ -1460,11 +1447,15 @@ const ProductDetails = () =>{
                                                             {     
                                                             selectedLanguage.current == null 
                                                             ? item.offers_table.tier_category_table.tier_category_name
-                                                            : (
-                                                                    item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                                                ? item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
+                                                            : 
+                                                                item.offers_table.tier_category_table.translation
+                                                                ?
+                                                                    (
+                                                                        item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                                                        ? item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
+                                                                        : item.offers_table.tier_category_table.tier_category_name
+                                                                    )
                                                                 : item.offers_table.tier_category_table.tier_category_name
-                                                                )
                                                             }
                                                         </span>
                                                     </p>
@@ -1476,11 +1467,15 @@ const ProductDetails = () =>{
                                                         {
                                                             selectedLanguage.current == null 
                                                             ? item.offers_table.membership_type_table.type_title
-                                                            : (
-                                                                item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                                                ? item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
-                                                                : item.offers_table.membership_type_table.type_title
-                                                            )
+                                                            : 
+                                                            item.offers_table.membership_type_table.translation
+                                                            ?
+                                                                (
+                                                                    item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                                                    ? item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
+                                                                    : item.offers_table.membership_type_table.type_title
+                                                                )
+                                                            :   item.offers_table.membership_type_table.type_title
                                                         }
                                                         </span>
                                                     </p>
@@ -1492,11 +1487,15 @@ const ProductDetails = () =>{
                                                         {
                                                             selectedLanguage.current == null 
                                                             ? item.offers_table.supplier_table.room_type.room_type_name
-                                                            : (
-                                                                item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                                                ? item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).room_type_name
-                                                                : item.offers_table.supplier_table.room_type.room_type_name
-                                                            )
+                                                            : 
+                                                                item.offers_table.supplier_table.room_type.translation
+                                                                ?
+                                                                    (
+                                                                        item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                                                        ? item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).room_type_name
+                                                                        : item.offers_table.supplier_table.room_type.room_type_name
+                                                                    )
+                                                                :   item.offers_table.supplier_table.room_type.room_type_name 
                                                         }
                                                     </p>
                                                 </div>

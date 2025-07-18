@@ -317,11 +317,14 @@ const OffersBottomSheet = ({
                                                                         auth_states.SelectedLanguage == null 
                                                                         ? tabData.offers_table.tier_category_table.tier_category_name
                                                                         : 
-                                                                            (
-                                                                                tabData.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                                                                ? tabData.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
-                                                                                : tabData.offers_table.tier_category_table.tier_category_name
-                                                                            )
+                                                                            tabData.offers_table.tier_category_table.translation
+                                                                            ?
+                                                                                (
+                                                                                    tabData.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                                                                    ? tabData.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
+                                                                                    : tabData.offers_table.tier_category_table.tier_category_name
+                                                                                )
+                                                                            :   tabData.offers_table.tier_category_table.tier_category_name
                                                                     }
                                                                     </span>
                                                                     <span className='registration_end_id'>Registration</span>
@@ -341,11 +344,15 @@ const OffersBottomSheet = ({
                                                         <p className="font-medium capitalize">{
                                                             auth_states.SelectedLanguage == null
                                                             ? tabData.offers_table.supplier_table.room_type.room_type_name
-                                                            : (
-                                                                tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id)
-                                                                ? tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id).room_type_name 
-                                                                : tabData.offers_table.supplier_table.room_type.room_type_name
-                                                            )
+                                                            : 
+                                                                tabData.offers_table.supplier_table.room_type.translation
+                                                                ?
+                                                                    (
+                                                                        tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id)
+                                                                        ? tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id).room_type_name 
+                                                                        : tabData.offers_table.supplier_table.room_type.room_type_name
+                                                                    )
+                                                                :   tabData.offers_table.supplier_table.room_type.room_type_name
                                                         }</p>
                                                         <p className="text-sm text-gray-500">{tabData.offers_table.supplier_table.room_type.room_type_guest_count} <span className='guest_per_room'>guest per room</span></p>
                                                     </div>
@@ -432,11 +439,15 @@ const OffersBottomSheet = ({
                                                                 {
                                                                     auth_states.SelectedLanguage == null
                                                                     ? tabData.offers_table.supplier_table.room_type.room_type_name
-                                                                    : (
-                                                                        tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id)
-                                                                        ? tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id).room_type_name 
+                                                                    : 
+                                                                        tabData.offers_table.supplier_table.room_type.translation
+                                                                        ?
+                                                                            (
+                                                                                tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id)
+                                                                                ? tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id).room_type_name 
+                                                                                : tabData.offers_table.supplier_table.room_type.room_type_name
+                                                                            )
                                                                         : tabData.offers_table.supplier_table.room_type.room_type_name
-                                                                    )
                                                                 }
                                                             </span>, 
                                                             <span>
