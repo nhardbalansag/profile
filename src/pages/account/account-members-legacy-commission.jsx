@@ -1,20 +1,47 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {useSelector} from 'react-redux';
-import { useSearchParams, useNavigate } from 'react-router-dom';
 
 import { ToastContainer, toast } from 'react-toastify';
-import { Check, X } from 'lucide-react';
-import { MoreHorizontal } from 'lucide-react';
+
+import { parseISO, format } from 'date-fns';
 
 import * as api_account from '../../services/account/account.api.js'
 
 const env = import.meta.env;
 
-const DistributionList = () =>{
+const LegacyCommissionList = () =>{
 
   const auth_states = useSelector(state => state.AuthReducer);
   const [requestLoading, setRequestLoading] = useState(false);
-  
+
+  const [userData, setUserData] = useState({
+    id: null,
+    first_name: "",
+    last_name: "",
+    middle_name: "",
+    nick_names: "",
+    mobile_number: "",
+    date_of_birth: "",
+    gender: "",
+    civil_status: "",
+    nationality: "",
+    current_address: "",
+    city: "",
+    postal_code: "",
+    country_id: null,
+    email: "",
+    email_verified_at: null,
+    users_is_deleted: false,
+    users_is_active: true,
+    pin: "",
+    password: "",
+    created_at: null,
+    updated_at: null,
+    user_profile:{
+      upload_url:null
+    }
+  })
+
   const [paginate, setPaginate] = useState(null)
 
   const [getPaginationButtonNextPrev, setPaginationButtonNextPrev] = useState({
@@ -31,39 +58,39 @@ const DistributionList = () =>{
     data:[]
   })
 
-  const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
-  
-  useEffect(() =>{
-      if(auth_states.SelectedLanguage){
-      selectedLanguage.current = parseInt(auth_states.SelectedLanguage.id)
-      }
-  },[auth_states])
+    const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
 
-  useEffect(() =>{
-      auth_states.PageLanguages.map((item, key) =>{
-          const translation = item.translation
-          
-          if(translation.length > 0 && auth_states.SelectedLanguage){
-              const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
-              const targetElement = document.getElementsByClassName(item.page_config_id)
-              if (targetElement) {
-                  if (targetElement.length > 0 && filteredTranslation) {
-                      Array.from(targetElement).forEach((el) => {
-                          el.textContent = filteredTranslation.page_config_title;
-                      });
-                  } else if (targetElement.length > 0) {
-                      Array.from(targetElement).forEach((el) => {
-                          el.textContent = item.page_config_title;
-                      });
-                  }
-              }
-          }
-      })
-  },[auth_states, getPaginationButtonNextPrev, paginate, requestLoading])
+    useEffect(() =>{
+        if(auth_states.SelectedLanguage){
+        selectedLanguage.current = parseInt(auth_states.SelectedLanguage.id)
+        }
+    },[auth_states])
 
-  const getNetworkDetails = async() =>{
+    useEffect(() =>{
+        auth_states.PageLanguages.map((item, key) =>{
+            const translation = item.translation
+            
+            if(translation.length > 0 && auth_states.SelectedLanguage){
+                const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
+                const targetElement = document.getElementsByClassName(item.page_config_id)
+                if (targetElement) {
+                    if (targetElement.length > 0 && filteredTranslation) {
+                        Array.from(targetElement).forEach((el) => {
+                            el.textContent = filteredTranslation.page_config_title;
+                        });
+                    } else if (targetElement.length > 0) {
+                        Array.from(targetElement).forEach((el) => {
+                            el.textContent = item.page_config_title;
+                        });
+                    }
+                }
+            }
+        })
+    },[auth_states, getPaginationButtonNextPrev, paginate, requestLoading])
+
+  const getLegacyCommissionsHistoryPaginated = async() =>{
     setRequestLoading(true)
-    await api_account.getNetworkDetails(auth_states.StateToken, paginate).then((result) =>{
+    await api_account.getLegacyCommissionsHistoryPaginated(auth_states.StateToken, paginate).then((result) =>{
       if(result.status){
         // setData(result.data.data)
         Object.keys(result.data.data).map((item, key) =>{
@@ -80,7 +107,7 @@ const DistributionList = () =>{
   }
 
   useEffect(() => {
-    getNetworkDetails()
+    getLegacyCommissionsHistoryPaginated()
   },[paginate])
 
   const ProfileCard = () =>{
@@ -90,19 +117,17 @@ const DistributionList = () =>{
           {/* head */}
           <thead>
             <tr>
-              <th className='name_label_id'>Name</th>
-              <th className='account_number_label_id'>Account Number</th>
-              <th className='membership_label_id'>Membership</th>
+              <th className='amount_label_id'>Amount</th>
+              <th className='date_label_id'>Date</th>
             </tr>
           </thead>
           <tbody>
             {
-              getPaginationButtonNextPrev.data.map((member, key) => (
-              <tr>
-                <th>{member.account.users_table.first_name}</th>
-                <td>{member.account.account_number}</td>
-                <td>{member.account.subscription__sales__transactions_one.subscription_category.membership_type.type_title}</td>
-              </tr>
+              getPaginationButtonNextPrev.data.map((item, key) => (
+                <tr>
+                    <td>{item.Amount}</td>
+                    <td>{format(parseISO(item.Created), 'MMMM d, yyyy')}</td>
+                </tr>
               ))
             }
           </tbody>
@@ -172,8 +197,8 @@ const DistributionList = () =>{
           <div className="flex-1">
             {/* Header */}
             <div className="mb-2">
-              <h1 className="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl connections_label_id">Connections</h1>
-              <p className="text-sm text-gray-600 sm:text-base my_sponsored_members_label_id">my sponsored members</p>
+              <h1 className="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl commission_label_id">Commissions</h1>
+              <p className="text-sm text-gray-600 sm:text-base star_bonus_label_id">Star Bonus</p>
             </div>
             {
               requestLoading
@@ -198,4 +223,4 @@ const DistributionList = () =>{
   ) 
 }
 
-export default DistributionList
+export default LegacyCommissionList

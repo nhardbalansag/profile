@@ -48,6 +48,8 @@ import MallEarn from "./mall/mall-earn";
 
 import ProductDetails from "./details/products-details";
 
+import LegacyCommissionList from "./account/account-members-legacy-commission";
+
 export{
     HomePage,
     HomeContent,
@@ -94,5 +96,7 @@ export{
     MallLifeStyle,
     MallEarn,
 
-    ProductDetails
+    ProductDetails,
+
+    LegacyCommissionList
 }

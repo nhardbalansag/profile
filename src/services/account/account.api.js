@@ -16,6 +16,17 @@ export const getTBucksAndTPoints = async (token) => {
     });
 }
 
+export const getLegacyCommissionsTotalCommission = async (token) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET', 
+        url: `${BaseAPIUrl}account/commission/legacy/sum`
+    });
+}
+
 export const requestToken = async (token) => {
     return await axios({ 
         headers: {
@@ -206,5 +217,16 @@ export const getNetworkDetails = async (token, url) => {
         },
         method: 'GET', 
         url: url ? url : `${BaseAPIUrl}account/connections`,
+    });
+}
+
+export const getLegacyCommissionsHistoryPaginated = async (token, url) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET', 
+        url: url ? url : `${BaseAPIUrl}account/commission/legacy/paginated`,
     });
 }

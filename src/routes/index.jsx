@@ -59,7 +59,9 @@ import {
     MallLifeStyle,
     MallEarn,
 
-    ProductDetails
+    ProductDetails,
+
+    LegacyCommissionList
 } from '../pages/index'
 
 import {
@@ -75,8 +77,8 @@ const ErrorPage = () =>{
   const error = useRouteError();
   return (
     <div>
-      <h1>Oops!</h1>
-      <p>{error.statusText || error.message}</p>
+      {/* <h1>Oops!</h1>
+      <p>{error.statusText || error.message}</p> */}
       {/* <p>{error}</p> */}
 
         <div className="flex items-center justify-center p-4">
@@ -302,6 +304,15 @@ const router = createBrowserRouter([
                 element: ( 
                     <AuthenticatedUsers route={'/login'}>
                         <DistributionList />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "commissions",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <LegacyCommissionList />
                     </AuthenticatedUsers> 
                 ),
                 errorElement: <ErrorPage />

@@ -71,6 +71,8 @@ const AccountContent = () =>{
     AccountTransaction:[]
   });
 
+  const [getLegacyCommissionTotal, setLegacyCommissionTotal] = useState(0)
+
   const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
 
   useEffect(() =>{
@@ -123,6 +125,23 @@ const AccountContent = () =>{
     })
   }
 
+  const getLegacyCommissionsTotalCommission = async() =>{
+    setLoadingContent(true)
+    await api_account.getLegacyCommissionsTotalCommission(auth_states.StateToken).then((result) =>{
+      if(result.status){
+        setLoadingContent(false)
+        // setWalletData(result.data.data)
+        setLegacyCommissionTotal(result.data.data)
+      }
+      
+      setLoadingContent(false)
+
+    }).catch((err) =>{
+      setLoadingContent(false)
+    })
+  }
+
+
   const getPaginatedContent = async() =>{
     setRequestLoading(true)
     await api_account.getAccountTransaction(auth_states.StateToken, paginate).then((result) =>{
@@ -167,6 +186,7 @@ const AccountContent = () =>{
   useEffect(() => {
     getTBucksAndTPoints()
     GetUserAccountSubscriptionDetails()
+    getLegacyCommissionsTotalCommission()
   },[])
 
   useEffect(() =>{
@@ -444,14 +464,14 @@ const AccountContent = () =>{
           </div>
         </button>
 
-        <button className="flex flex-col w-[100%] gap-2 p-4 bg-white shadow-md rounded-xl border">
+        <button  onClick={() => navigate('/commissions')}  className="flex flex-col w-[100%] gap-2 p-4 bg-white shadow-md rounded-xl border">
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <div>
               <FaRegStar size={18} className="text-gray-600" />
             </div>
             <p><span className='star_bonus_label_id'>Stars Bonus</span></p>
           </div>
-          <div className="text-[18px] md:text-2xl font-semibold text-black">0.00</div>
+          <div className="text-[18px] md:text-2xl font-semibold text-black">{parseFloat(getLegacyCommissionTotal).toFixed(2)}</div>
           <div className="px-2 py-1 text-sm font-medium text-green-600 bg-green-100 rounded w-fit">
             -0.0%
           </div>
