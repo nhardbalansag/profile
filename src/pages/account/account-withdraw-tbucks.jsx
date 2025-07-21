@@ -366,7 +366,7 @@ const AccountWithdrawTBucks = () =>{
       <div className="w-[95%] border rounded-2xl p-5 bg-white shadow-lg space-y-3 relative z-0">
         <p className="text-[18px] md:text-[25px] uppercase font-semibold">{title}</p>
         <div>
-          <p className="text-[15px] md:text-[18px] capitalize">balance</p>
+          <p className="text-[15px] md:text-[18px] capitalize balance_label_id">balance</p>
           <p className="text-[20px] md:text-[40px] font-bold">{parseFloat(amount)}</p>
         </div>
         <div className="my-5">  
@@ -399,7 +399,7 @@ const AccountWithdrawTBucks = () =>{
 
     return (
       <div className="">
-        <label className="block mb-2 text-sm font-medium text-gray-700">
+        <label className="block mb-2 text-sm font-medium text-gray-700 search_for_your_bank_label_id">
           Search for your bank
         </label>
 
@@ -417,7 +417,7 @@ const AccountWithdrawTBucks = () =>{
         {searchTerm && (
           <ul className="mt-2 overflow-y-auto bg-white border rounded-lg shadow max-h-60">
             {filteredBanks.length === 0 ? (
-              <li className="p-2 text-sm text-gray-500">No results found.</li>
+              <li className="p-2 text-sm text-gray-500 no_results_found_label_id">No results found.</li>
             ) : (
               filteredBanks.map(({ country, bank }) => (
                 <li
@@ -437,8 +437,10 @@ const AccountWithdrawTBucks = () =>{
         )}
 
         {selectedBank && (
-          <p className="mt-4 font-semibold text-green-600">
-            Selected Bank: {selectedBank}
+          <p className="mt-4 space-x-1 font-semibold text-green-600">
+            <span className='selected_bank_label_id'>Selected Bank</span>
+            <span>:</span>
+            <span>{selectedBank}</span>
           </p>
         )}
       </div>
@@ -449,7 +451,7 @@ const AccountWithdrawTBucks = () =>{
     return (
       <div className="w-full font-sans">
         <div className="flex items-center mb-4 space-x-3">
-          <p className="text-gray-500">Balance:</p>
+          <p className="text-gray-500 balance_label_id">Balance:</p>
           <p className="text-xl font-bold">
             {
               (walletData.t_bucks - getFormData.amount)
@@ -463,7 +465,7 @@ const AccountWithdrawTBucks = () =>{
           {
             getProcess.pin &&
             <div className='space-y-5'>
-              <p className="font-semibold">PIN</p>
+              <p className="font-semibold pin_label_id">PIN</p>
               {PinInput()}
             </div>
           }
@@ -471,7 +473,7 @@ const AccountWithdrawTBucks = () =>{
           {
             getProcess.amount &&
             <div className='space-y-5'>
-              <p className="font-semibold">Amount</p>
+              <p className="font-semibold amount_label_id">Amount</p>
               <input
                 type="number"
                 placeholder="0"
@@ -486,7 +488,7 @@ const AccountWithdrawTBucks = () =>{
           {
             getProcess.withdrawal_option &&
             <div className='space-y-5'>
-              <p className="font-semibold">Withdrawal Option</p>
+              <p className="font-semibold withdrawal_option_label_id">Withdrawal Option</p>
               <div>
                 <div className="grid grid-cols-2 gap-4">
                   {options.map((option) => (
@@ -510,7 +512,7 @@ const AccountWithdrawTBucks = () =>{
             <div className='space-y-5'>
               <p className="font-semibold">
                 {
-                  options.find(item => selected ===item.id)?.primary_label || "Account Details"
+                  options.find(item => selected ===item.id)?.primary_label || <span className='account_details_label_id'>Account Details</span>
                 }
               </p>
 
@@ -519,7 +521,7 @@ const AccountWithdrawTBucks = () =>{
                 <div className='space-y-3'>
                   {BankSearchDropdown()}
                   
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 branch_label_id">
                     Branch
                   </label>
                   <input
@@ -530,7 +532,7 @@ const AccountWithdrawTBucks = () =>{
                     onChange={handleChange}
                   />
 
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 bank_address_label_id">
                     Bank Address
                   </label>
                   <input
@@ -541,7 +543,7 @@ const AccountWithdrawTBucks = () =>{
                     onChange={handleChange}
                   />
                   
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 account_number_label_id">
                     Account Number
                   </label>
                   <input
@@ -552,7 +554,7 @@ const AccountWithdrawTBucks = () =>{
                     onChange={handleChange}
                   />
 
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 swift_code_label_id">
                     SWIFT Code
                   </label>
                   <input
@@ -577,7 +579,7 @@ const AccountWithdrawTBucks = () =>{
                 />
               }
 
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700 account_name_label_id">
                 Account Name
               </label>
               <input
@@ -594,22 +596,22 @@ const AccountWithdrawTBucks = () =>{
           {
             getProcess.review &&
             <div className='space-y-5'>
-              <p className="font-semibold">Transaction Details</p>
+              <p className="font-semibold transaction_details_label_id">Transaction Details</p>
                 <div className='grid grid-cols-2 gap-2'>
 
-                  <p className='text-gray-500 capitalize'>transaction type</p>
-                  <p className='capitalize'>withdraw</p>
+                  <p className='text-gray-500 capitalize transaction_type_label_id'>transaction type</p>
+                  <p className='capitalize withdraw_label_id'>withdraw</p>
 
-                  <p className='text-gray-500 capitalize'>wallet type</p>
-                  <p className='uppercase'>t-bucks</p>
+                  <p className='text-gray-500 capitalize wallet_type_label_id'>wallet type</p>
+                  <p className='uppercase t_bucks_label_id'>t-bucks</p>
 
-                  <p className='text-gray-500 capitalize'>amount</p>
+                  <p className='text-gray-500 capitalize amount_label_id'>amount</p>
                   <p className='capitalize'>{getFormData.amount}</p>
 
-                  <p className='text-gray-500 capitalize'>account number</p>
+                  <p className='text-gray-500 capitalize account_number_label_id'>account number</p>
                   <p className='uppercase'>{`${getFormData.account_number}`}</p>
 
-                  <p className='text-gray-500 capitalize'>account name</p>
+                  <p className='text-gray-500 capitalize account_name_label_id'>account name</p>
                   <p className='uppercase'>
                   <p className='uppercase'>{`${getFormData.account_name}`}</p>
                   </p>
@@ -618,7 +620,7 @@ const AccountWithdrawTBucks = () =>{
                 {
                   selected == "bank" &&
                   <div className='grid grid-cols-2 gap-2'>
-                    <p className='text-gray-500 capitalize'>bank</p>
+                    <p className='text-gray-500 capitalize bank_label_id'>bank</p>
                     <p className='uppercase'>{`${selectedBank}`}</p>
                   </div>
                 }
@@ -626,7 +628,7 @@ const AccountWithdrawTBucks = () =>{
                 {
                   selected == "bank" &&
                   <div className='grid grid-cols-2 gap-2'>
-                    <p className='text-gray-500 capitalize'>branch</p>
+                    <p className='text-gray-500 capitalize branch_label_id'>branch</p>
                     <p className='uppercase'>{`${getFormData.branch}`}</p>
                   </div>
                 }
@@ -634,7 +636,7 @@ const AccountWithdrawTBucks = () =>{
                 {
                   selected == "bank" &&
                   <div className='grid grid-cols-2 gap-2'>
-                    <p className='text-gray-500 capitalize'>address</p>
+                    <p className='text-gray-500 capitalize address_label_id'>address</p>
                     <p className='uppercase'>{`${getFormData.address}`}</p>
                   </div>
                 }
@@ -642,7 +644,7 @@ const AccountWithdrawTBucks = () =>{
                 {
                   selected == "bank" &&
                   <div className='grid grid-cols-2 gap-2'>
-                    <p className='text-gray-500 capitalize'>SWIFT Code</p>
+                    <p className='text-gray-500 capitalize swift_code_label_id'>SWIFT Code</p>
                     <p className='uppercase'>{`${getFormData.swift_code}`}</p>
                   </div>
                 }
@@ -654,7 +656,7 @@ const AccountWithdrawTBucks = () =>{
             currentActiveProcess > 0 &&
             <button 
               onClick={() => handlePrevious()}
-              className="w-full py-3 text-white bg-blue-600 rounded-xl">
+              className="w-full py-3 text-white bg-blue-600 rounded-xl previous_label_id">
               Previous
             </button>
           }
@@ -667,8 +669,8 @@ const AccountWithdrawTBucks = () =>{
                 className="w-full py-3 text-white bg-blue-600 rounded-xl">
                 {
                   loadingContent
-                  ? "Processing"
-                  : "Submit Request"
+                  ? <span className='processing_label_id'>Processing</span>
+                  : <span className='submit_request_label_id'>Submit Request</span>
                 }
               </button>
             :
@@ -676,7 +678,7 @@ const AccountWithdrawTBucks = () =>{
                 onClick={() => {
                   handleNext();
                 }}
-                className="w-full py-3 text-white bg-blue-600 rounded-xl">
+                className="w-full py-3 text-white bg-blue-600 rounded-xl next_label_id">
                 Next
               </button>
           }
@@ -773,12 +775,12 @@ const AccountWithdrawTBucks = () =>{
               </div>
             :
               _WalletCard(
-                "t-bucks",
+                <span className='t_bucks_label_id'>t-bucks</span>,
                 walletData.t_bucks,
                 [
                   {
                     onPressAction: () => navigate('/t-bucks-transfer'),
-                    title: 'Transfer',
+                    title: <span className='transfer_label_id'>Transfer</span>,
                     icon: <TbTransfer className="text-[20px] text-white" />
                   }
                 ]

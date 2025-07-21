@@ -340,12 +340,15 @@ const HomeContent = () =>{
       <main >
         <div className='flex justify-center my-5'>
           <div className='md:w-[75%] w-[95%]'>
-            <p className='text-gray-500 text-[20px] font-semibold'>Hello {`${auth_states.StateToken ? auth_states.StateUserInformation.first_name : ","}`}</p>
+            <p className='text-gray-500 text-[20px] font-semibold'>
+              <span className='mr-1 hello_label_id'>Hello</span>
+              <span>{`${auth_states.StateToken ? auth_states.StateUserInformation.first_name : ","}`}</span>
+            </p>
             <p className='font-extrabold text-[#001d3d] text-[30px]'>
               {
                 auth_states.StateToken 
-                ? 'Welcome Home!'
-                : "Welcome to Club TEN"
+                ? <span className='welcome_home_label_id'>Welcome Home!</span>
+                : <span className='welcome_to_clubten_label_id'>Welcome to Club TEN</span>
               }
             </p>
           </div>

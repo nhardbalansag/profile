@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useRef, useEffect } from 'react'
 import {useSelector} from 'react-redux';
 import { useDispatch } from "react-redux";
 
@@ -24,6 +24,7 @@ import { TiHomeOutline } from "react-icons/ti";
 import { GrShieldSecurity } from "react-icons/gr";
 import { RiGraduationCapLine } from "react-icons/ri";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
+import { IoLanguageOutline } from "react-icons/io5";
 
 import { FaUsers, FaShoppingBag, FaUser } from "react-icons/fa";
 import { HiMiniBuildingOffice2 } from "react-icons/hi2";
@@ -33,6 +34,10 @@ import { AiFillNotification } from "react-icons/ai";
 import { FiAlignLeft } from "react-icons/fi";
 
 import Logo2 from '../../assets/images/ten/logo2.png'
+
+import {
+  LanguageBottomSheet
+} from "../../component/index"
 
 import { Link } from "react-router-dom";
 
@@ -51,6 +56,12 @@ const AccountPage = () => {
   const [getBottomDetailsOpen, setBottomDetailsOpen] = useState(false);
 
   const location = useLocation();
+  
+  const [open, setOpen] = useState(false)
+  const [getOpenLanguageSelection, setOpenLanguageSelection] = useState(false)
+  const [getSelectedLanguage, setSelectedLanguage] = useState("")
+
+  const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
 
   const LogoutUser = async () =>{
     await clear().then((result) =>{
@@ -69,7 +80,7 @@ const AccountPage = () => {
             <FiAlignLeft size={25} color='black'/>
           </label>
           <div className="text-sm ">
-            <p className="text-xs text-gray-400">Welcome back!</p>
+            <p className="text-xs text-gray-400 welcome_back_label_id">Welcome back!</p>
             <p className="font-medium text-black">
               {`${auth_states.StateToken ? auth_states.StateUserInformation.first_name : ","}`}
             </p>
@@ -133,51 +144,61 @@ const AccountPage = () => {
             <nav class="space-y-2">
               <a href="#" class={`${("h-1/3").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <TiHomeOutline size={20}/>
-                {_link("/", "Home")}
+                {_link("/", <span className='home_label_id' >Home</span>)}
               </a>
               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <MdOutlineTravelExplore size={20}/>
-                {_link("/travel", "Travel")}
+                {_link("/travel", <span className='travel_label_id' >Travel</span>)}
               </a>
               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <RiGraduationCapLine size={20}/>
-                {_link("/academy-index", "Learn")}
+                {_link("/academy-index", <span className='learn_label_id' >Learn</span>)}
               </a>
               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <LuTickets size={20}/>
-                {_link("/event", "Events")}
+                {_link("/event", <span className='events_label_id' >Events</span>)}
               </a>
               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <MdOutlineAccountBalanceWallet size={20}/>
-                {_link("/account", "Office")}
+                {_link("/account", <span className='office_id' >Office</span>)}
               </a>
               <a href="#" class={`${("details").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <FaRegUser />
-                {_link("/details", "Profile")}
+                {_link("/details", <span className='profile_id' >Profile</span>)}
               </a>
               <a href="#" class={`${("/content/add-content").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <FaRegEnvelopeOpen />
-                {_link("/subscriptions", "Subscription")}
+                {_link("/subscriptions", <span className='subscription_id' >Subscription</span>)}
               </a>
               <a href="#" class={`${("orders").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <HiOutlineShoppingBag />
-                {_link("/orders", "Orders")}
+                {_link("/orders", <span className='orders_id' >Orders</span>)}
               </a>
               {/* <a href="#" class={`${("/content/add-content").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <FaHistory  />
                 {_link("/content/", "Transaction History")}
               </a> */}
-              
+
               <a href="#" class={`${("details").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <GrShieldSecurity />
-                {_link("/security", "Security")}
+                {_link("/security", <span className='security_id' >Security</span>)}
               </a>
-              <button onClick={() => LogoutUser()}>
-                <a href="#" class={`text-gray-600 flex items-center p-2 rounded-lg`}>
-                  <AiOutlineLogout  size={20}/>
-                  <p className='logout_id text-[#001d3d] capitalize ml-2 '>Logout</p>
-                </a>
-              </button>
+
+              <div className='flex flex-col '>
+                <button onClick={() => setOpenLanguageSelection(true)}>
+                  <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                    <IoLanguageOutline  size={20}/>
+                    <p className='language_id text-[#001d3d] capitalize ml-2 '>Language</p>
+                  </a>
+                </button>
+              
+                <button onClick={() => LogoutUser()}>
+                  <a href="#" class={`text-gray-600 flex items-center p-2 rounded-lg`}>
+                    <AiOutlineLogout  size={20}/>
+                    <p className='logout_id text-[#001d3d] capitalize ml-2 logout_id'>Logout</p>
+                  </a>
+                </button>
+              </div>
             </nav>
           </aside>
         </div>
@@ -207,14 +228,43 @@ const AccountPage = () => {
       }}
       className="md:hidden bottom-4 left-1/2 transform -translate-x-1/2 bg-[#031956] text-white rounded-xl px-4 py-1 flex justify-between items-center w-[90%] space-x-6 shadow-lg">
         {/* <TabItem icon={<AiFillNotification size={20}/>} path={'/'} label="Social" active /> */}
-        <TabItem icon={<TiHomeOutline size={20}/>} path={'/'} label="Home" active />
-        <TabItem icon={<LuTickets size={20}/>} path={'/event'} label="Events" />
+        <TabItem icon={<TiHomeOutline size={20}/>} path={'/'} label={<span className='home_label_id'>Home</span>} active />
+        <TabItem icon={<LuTickets size={20}/>} path={'/event'} label={<span className='Events_label_id'>Events</span>} />
         {/* <TabItem icon={<FaShoppingBag size={20}/>} path={'/mall'} label="Mall" /> */}
-        <TabItem icon={<HiMiniBuildingOffice2 size={20}/>} path={'account'} label="Office" />
-        <TabItem icon={<FaRegCircleUser size={20}/>} path={'details'} label="Profile" />
+        <TabItem icon={<HiMiniBuildingOffice2 size={20}/>} path={'account'} label={<span className='Office_label_id'>Office</span>} />
+        <TabItem icon={<FaRegCircleUser size={20}/>} path={'details'} label={<span className='Profile_label_id'>Profile</span>} />
       </div>
     )
   }
+
+  useEffect(() =>{
+    if(auth_states.SelectedLanguage){
+      selectedLanguage.current = parseInt(auth_states.SelectedLanguage.id)
+    }
+  },[auth_states])
+
+  useEffect(() =>{
+      auth_states.PageLanguages.map((item, key) =>{
+          const translation = item.translation
+          
+          if(translation.length > 0 && auth_states.SelectedLanguage){
+              const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
+              const targetElement = document.getElementsByClassName(item.page_config_id)
+              if (targetElement) {
+                  if (targetElement.length > 0 && filteredTranslation) {
+                      Array.from(targetElement).forEach((el) => {
+                          el.textContent = filteredTranslation.page_config_title;
+                      });
+                  } else if (targetElement.length > 0) {
+                      Array.from(targetElement).forEach((el) => {
+                          el.textContent = item.page_config_title;
+                      });
+                  }
+              }
+          }
+      })
+  },[auth_states])
+  //#endregion
 
   return (
     <div className="h-[90%] bg-[#001d3d] flex flex-col items-center justify-end">
@@ -235,11 +285,22 @@ const AccountPage = () => {
       {/* <div className="h-[100%] w-full bg-white rounded-t-[50px] py-14"> */}
       <div className="h-[100%] w-full bg-white pb-16 pt-5">
         {/* <Outlet /> */}
-        <DrawerComp/>
+        {DrawerComp()}
       </div>
       {/* pages */}
 
-      <BottomTabNavigator/>
+      {BottomTabNavigator()}
+
+      {
+        getOpenLanguageSelection
+        && 
+        <LanguageBottomSheet 
+        selected={getSelectedLanguage}
+        handleSelectContent={(event) => setSelectedLanguage(event)}
+        handleClose={() => setOpenLanguageSelection(false)} 
+        DataContent={auth_states.Languages}/>
+      }
+
     </div>
   )
 }

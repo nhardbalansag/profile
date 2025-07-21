@@ -176,7 +176,7 @@ const AccountTransferTBucks = () =>{
       <div className="w-[95%] border rounded-2xl p-5 bg-white shadow-lg space-y-3 relative z-0">
         <p className="text-[18px] md:text-[25px] uppercase font-semibold">{title}</p>
         <div>
-          <p className="text-[15px] md:text-[18px] capitalize">balance</p>
+          <p className="text-[15px] md:text-[18px] capitalize balance_label_id">balance</p>
           <p className="text-[20px] md:text-[40px] font-bold">{parseFloat(amount)}</p>
         </div>
         <div className="my-5">  
@@ -199,7 +199,7 @@ const AccountTransferTBucks = () =>{
     return (
       <div className="w-full font-sans">
         <div className="flex items-center mb-4 space-x-3">
-          <p className="text-gray-500">Balance:</p>
+          <p className="text-gray-500 balance_label_id">Balance:</p>
           <p className="text-xl font-bold">
             {
               (walletData.t_bucks - getFormData.amount)
@@ -213,7 +213,7 @@ const AccountTransferTBucks = () =>{
           {
             getProcess.pin &&
             <div className='space-y-5'>
-              <p className="font-semibold">PIN</p>
+              <p className="font-semibold pin_label_id">PIN</p>
               {PinInput()}
             </div>
           }
@@ -221,7 +221,7 @@ const AccountTransferTBucks = () =>{
           {
             getProcess.amount &&
             <div className='space-y-5'>
-              <p className="font-semibold">Amount</p>
+              <p className="font-semibold amount_label_id">Amount</p>
               <input
                 type="number"
                 placeholder="0"
@@ -236,7 +236,7 @@ const AccountTransferTBucks = () =>{
           {
             getProcess.account_number &&
             <div className='space-y-5'>
-              <p className="font-semibold">Account Number</p>
+              <p className="font-semibold account_number_label_id">Account Number</p>
               <input
                 type="text"
                 placeholder="CTAxxxx"
@@ -251,7 +251,7 @@ const AccountTransferTBucks = () =>{
           {
             getProcess.review &&
             <div className='space-y-5'>
-              <p className="font-semibold">Transaction Details</p>
+              <p className="font-semibold transaction_details_label_id">Transaction Details</p>
               {
                 loadingContent
                 ?
@@ -275,27 +275,29 @@ const AccountTransferTBucks = () =>{
                 :
               
                 <div className='grid grid-cols-2 gap-2'>
-                  <p className='text-gray-500 capitalize'>to account number</p>
-                  <p className='uppercase'>{`${getAccountDetailsToTransfer ? getAccountDetailsToTransfer.account_number : "invalid account"}`}</p>
+                  <p className='text-gray-500 capitalize to_account_number_label_id'>to account number</p>
+                  <p className='uppercase'>{`${getAccountDetailsToTransfer ? getAccountDetailsToTransfer.account_number : <span className='invalid_account_label_id'>invalid account</span>}`}</p>
 
-                  <p className='text-gray-500 capitalize'>to account name</p>
+                  <p className='text-gray-500 capitalize to_account_name_label_id'>to account name</p>
                   <p className='uppercase'>
                     {
-                      `${getAccountDetailsToTransfer 
+                      `
+                      ${getAccountDetailsToTransfer 
                       ? (getAccountDetailsToTransfer.users_table.first_name + " " + getAccountDetailsToTransfer.users_table.last_name) 
-                      : "invalid account"}
+                      : <span className='invalid_account_label_id'>invalid account</span>
+                      }
                       `
                     }
                   </p>
 
-                  <p className='text-gray-500 capitalize'>amount</p>
+                  <p className='text-gray-500 capitalize amount_label_id'>amount</p>
                   <p className='capitalize'>{getFormData.amount}</p>
 
-                  <p className='text-gray-500 capitalize'>transaction type</p>
+                  <p className='text-gray-500 capitalize transaction_type_label_id'>transaction type</p>
                   <p className='capitalize'>transfer</p>
 
-                  <p className='text-gray-500 capitalize'>wallet type</p>
-                  <p className='uppercase'>t-bucks</p>
+                  <p className='text-gray-500 capitalize wallet_type_label_id'>wallet type</p>
+                  <p className='uppercase tbucks_label_id'>t-bucks</p>
                 </div>
               }
             </div>
@@ -307,7 +309,7 @@ const AccountTransferTBucks = () =>{
             currentActiveProcess > 0 &&
             <button 
               onClick={() => handlePrevious()}
-              className="w-full py-3 text-white bg-blue-600 rounded-xl">
+              className="w-full py-3 text-white bg-blue-600 rounded-xl previous_label_id">
               Previous
             </button>
           }
@@ -321,8 +323,8 @@ const AccountTransferTBucks = () =>{
                 className="w-full py-3 text-white bg-blue-600 rounded-xl">
                 {
                   loadingContent
-                  ? "Processing"
-                  : "Transfer"
+                  ? <span className='Processing_label_id'>Processing</span>
+                  : <span className='transfer_label_id'>Transfer</span>
                 }
                 
               </button>
@@ -334,7 +336,7 @@ const AccountTransferTBucks = () =>{
                     handleNext();
                     currentActiveProcess == 1 && getAccountInformation(getFormData.account_number)
                   }}
-                  className="w-full py-3 text-white bg-blue-600 rounded-xl">
+                  className="w-full py-3 text-white bg-blue-600 rounded-xl next_label_id">
                   Next
                 </button>
               : <></>
@@ -430,12 +432,12 @@ const AccountTransferTBucks = () =>{
               </div>
             :
               _WalletCard(
-                "t-bucks",
+                <span className='tbucks_label_id'>t-bucks</span>,
                 walletData.t_bucks,
                 [
                   {
                     onPressAction: () => navigate('/t-bucks-withdraw'),
-                    title: 'Withdraw',
+                    title: <span className='Withdraw_label_id'>Withdraw</span>,
                     icon: <PiBankBold className="text-[20px] text-white" />
                   }
                 ]

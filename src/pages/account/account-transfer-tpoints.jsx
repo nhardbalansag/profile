@@ -175,7 +175,7 @@ const AccountTransferTPoints = () =>{
       <div className="w-[95%] border rounded-2xl p-5 bg-white shadow-lg space-y-3 relative z-0">
         <p className="text-[18px] md:text-[25px] uppercase font-semibold">{title}</p>
         <div>
-          <p className="text-[15px] md:text-[18px] capitalize">balance</p>
+          <p className="text-[15px] md:text-[18px] capitalize balance_label_id">balance</p>
           <p className="text-[20px] md:text-[40px] font-bold">{parseFloat(amount)}</p>
         </div>
         <div className="my-5">  
@@ -198,7 +198,7 @@ const AccountTransferTPoints = () =>{
     return (
       <div className="w-full font-sans">
         <div className="flex items-center mb-4 space-x-3">
-          <p className="text-gray-500">Balance:</p>
+          <p className="text-gray-500 balance_label_id">Balance:</p>
           <p className="text-xl font-bold">
             {
               (walletData.t_points - getFormData.amount)
@@ -212,7 +212,7 @@ const AccountTransferTPoints = () =>{
           {
             getProcess.pin &&
             <div className='space-y-5'>
-              <p className="font-semibold">PIN</p>
+              <p className="font-semibold pin_label_id">PIN</p>
               {PinInput()}
             </div>
           }
@@ -220,7 +220,7 @@ const AccountTransferTPoints = () =>{
           {
             getProcess.amount &&
             <div className='space-y-5'>
-              <p className="font-semibold">Amount</p>
+              <p className="font-semibold amount_label_id">Amount</p>
               <input
                 type="number"
                 placeholder="0"
@@ -235,7 +235,7 @@ const AccountTransferTPoints = () =>{
           {
             getProcess.account_number &&
             <div className='space-y-5'>
-              <p className="font-semibold">Account Number</p>
+              <p className="font-semibold account_number_label_id">Account Number</p>
               <input
                 type="text"
                 placeholder="CTAxxxx"
@@ -250,7 +250,7 @@ const AccountTransferTPoints = () =>{
           {
             getProcess.review &&
             <div className='space-y-5'>
-              <p className="font-semibold">Transaction Details</p>
+              <p className="font-semibold transaction_details_label_id">Transaction Details</p>
               {
                 loadingContent
                 ?
@@ -274,27 +274,27 @@ const AccountTransferTPoints = () =>{
                 :
               
                 <div className='grid grid-cols-2 gap-2'>
-                  <p className='text-gray-500 capitalize'>to account number</p>
+                  <p className='text-gray-500 capitalize to_account_number_label_id'>to account number</p>
                   <p className='uppercase'>{`${getAccountDetailsToTransfer ? getAccountDetailsToTransfer.account_number : "invalid account"}`}</p>
 
-                  <p className='text-gray-500 capitalize'>to account name</p>
+                  <p className='text-gray-500 capitalize to_account_name_label_id'>to account name</p>
                   <p className='uppercase'>
                     {
                       `${getAccountDetailsToTransfer 
                       ? (getAccountDetailsToTransfer.users_table.first_name + " " + getAccountDetailsToTransfer.users_table.last_name) 
-                      : "invalid account"}
+                      : <span className='invalid_account_label_id'>invalid account</span>}
                       `
                     }
                   </p>
 
-                  <p className='text-gray-500 capitalize'>amount</p>
+                  <p className='text-gray-500 capitalize amount_label_id'>amount</p>
                   <p className='capitalize'>{getFormData.amount}</p>
 
-                  <p className='text-gray-500 capitalize'>transaction type</p>
-                  <p className='capitalize'>transfer</p>
+                  <p className='text-gray-500 capitalize transaction_type_label_id'>transaction type</p>
+                  <p className='capitalize transfer_label_id'>transfer</p>
 
-                  <p className='text-gray-500 capitalize'>wallet type</p>
-                  <p className='uppercase'>t-points</p>
+                  <p className='text-gray-500 capitalize wallet_type_label_id'>wallet type</p>
+                  <p className='uppercase tpoints_label_id'>t-points</p>
                 </div>
               }
             </div>
@@ -320,8 +320,8 @@ const AccountTransferTPoints = () =>{
                 className="w-full py-3 text-white bg-blue-600 rounded-xl">
                 {
                   loadingContent
-                  ? "Processing"
-                  : "Transfer"
+                  ? <span className="Processing_label_id">Processing</span>
+                  : <span className='transfer_label_id'>Transfer</span>
                 }
                 
               </button>
@@ -333,7 +333,7 @@ const AccountTransferTPoints = () =>{
                     handleNext();
                     currentActiveProcess == 1 && getAccountInformation(getFormData.account_number)
                   }}
-                  className="w-full py-3 text-white bg-blue-600 rounded-xl">
+                  className="w-full py-3 text-white bg-blue-600 rounded-xl next_label_id">
                   Next
                 </button>
               : <></>
@@ -428,12 +428,12 @@ const AccountTransferTPoints = () =>{
               </div>
             :
               _WalletCard(
-                "t-points",
+                <span className='tpoints_label_id'>t-points</span>,
                 walletData.t_points,
                 [
                   {
                     onPressAction: () => navigate('/t-points-transfer'),
-                    title: 'Redeem',
+                    title: <span className='redeem_label_id'>Redeem</span>,
                     icon: <MdOutlineCardGiftcard className="text-[20px] text-white" />
                   }
                 ]

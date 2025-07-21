@@ -25,7 +25,8 @@ export const LogoutUser = () =>{
         dispatch({
             type        : REDUX_LOGOUT_USER,
             StateToken  : null,
-            StateUserInformation : []
+            StateUserInformation : [],
+            SelectedLanguage : null
         }) 
     }
 }

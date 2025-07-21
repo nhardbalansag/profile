@@ -94,7 +94,7 @@ const LoginContent = () =>{
         }
       }
     })
-  },[auth_states, isLoading])
+  },[auth_states, isLoading, enableResetPassword])
   //#endregion
 
   useEffect(() =>{
@@ -346,10 +346,10 @@ const LoginContent = () =>{
    getSponsorDetails()
   }, [])
 
-  const _PlanSelect = ({dataList}) => {
+  const _PlanSelect = (dataList) => {
     return(
       <div className="w-full p-6 ">
-        <h2 className="mb-2 text-2xl font-bold text-center select_membership">Select Membership</h2>
+        <h2 className="mb-2 text-2xl font-bold text-center select_membership_label_id">Select Membership</h2>
         <p className="mb-6 text-sm text-center text-gray-600 select_membership_matches_your_goal">
           Select the membership that matches your goals
         </p>
@@ -429,7 +429,11 @@ const LoginContent = () =>{
                     }
                   </span>
                 </p>
-                <p className="text-xs text-gray-400">Billed after {item.subscription_range.subscription_range_days_count} days</p>
+                <p className="space-x-1 text-xs text-gray-400">
+                  <span className="billed_after_label_id">Billed after </span>
+                  {item.subscription_range.subscription_range_days_count} 
+                  <span className="days_label_id">days</span>
+                </p>
               </div>
             </div>
           ))}
@@ -443,7 +447,7 @@ const LoginContent = () =>{
       <div className="p-4 space-y-6 bg-blue-600 md:p-10">
         <form onSubmit={(event) => ForgotPassword(event)}>
           <div className="p-6 space-y-4 bg-white rounded-lg shadow">
-            <h2 className="text-xl font-bold password_reset">Password Reset</h2>
+            <h2 className="text-xl font-bold password_reset_label_id">Password Reset</h2>
             <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:space-x-3 md:grid-cols-2">
               <input
                 type="text"
@@ -459,9 +463,11 @@ const LoginContent = () =>{
                 {
                   isLoading && <span className="loading loading-spinner loading-sm"></span> 
                 }
-                Send Email
+                <span className='send_email_label_id'>Send Email</span>
               </button>
-               <button onClick={() => setenableResetPassword(false)} className="flex items-center justify-center text-black back_button_id">
+               <button 
+               onClick={() => setenableResetPassword(false)} 
+               className="flex items-center justify-center text-black back_label_id">
                 Back
               </button>
             </div>
@@ -485,7 +491,7 @@ const LoginContent = () =>{
                 alt="Tailwind CSS chat bubble component"
                 src={Logo1} />
               </div>
-              <p className="mb-6 md:text-2xl md:w-[300px] connect_with_friends_caption_id">
+              <p className="mb-6 md:text-2xl md:w-[300px] connect_with_friends_and_create_community_in_club_ten_label_id">
                 Connect with friends and create community in CLUB TEN
               </p>
               {/* <div>
@@ -539,8 +545,8 @@ const LoginContent = () =>{
                   searchParams.get('sponsor') &&
                   <div>
                     <div className="p-6 space-y-4 bg-white rounded-lg shadow">
-                      <h2 className="text-xl font-bold sign_in_id">Sign Up</h2>
-                      <p className="text-sm font-medium text-gray-600 its_quick_and_easy_id">It’s quick and easy.</p>
+                      <h2 className="text-xl font-bold sign_up_label_id">Sign Up</h2>
+                      <p className="text-sm font-medium text-gray-600 its_quick_and_easy_label_id">It’s quick and easy.</p>
                       
                       {
                         isLoading
@@ -552,7 +558,7 @@ const LoginContent = () =>{
                           </div>
                         :
                           <div className='flex items-center space-x-2'>
-                            <p className="capitalize text-gray-500 font-bold text-[15px] sponsor_id">sponsor :</p>
+                            <p className="capitalize text-gray-500 font-bold text-[15px] sponsor_label_id">sponsor :</p>
                             <p className="capitalize label text-[18px]">
                               {
                                 GetSponsorDetails.success
@@ -564,7 +570,7 @@ const LoginContent = () =>{
                       }
 
                       <label className="w-full max-w-xs form-control">
-                        <label className="capitalize label font-bold text-gray-500 text-[15px]">Country</label>
+                        <label className="capitalize label font-bold text-gray-500 text-[15px] country_label_id">Country</label>
                         <select name='country_id' value={getRegisterForm.country_id} onChange={handleChangeForRegister} className="select select-bordered">
                           <option value={null} className='select_country'>Select Your Country</option>
                             {
@@ -578,7 +584,7 @@ const LoginContent = () =>{
                       </label>
 
                       <div>
-                        <label className="capitalize label text-gray-500 font-bold text-[15px] personal_details_id">Personal Details</label>
+                        <label className="capitalize label text-gray-500 font-bold text-[15px] personal_details_label_id">Personal Details</label>
                         <div className="grid grid-cols-1 space-y-3 md:space-y-0 md:grid-cols-2 md:space-x-3">
                           <input
                             type="text"
@@ -608,7 +614,7 @@ const LoginContent = () =>{
                         onChange={handleChangeForRegister}
                       />
 
-                      <label className="capitalize text-gray-500 label font-bold text-[15px] set_password_id">Set password</label>
+                      <label className="capitalize text-gray-500 label font-bold text-[15px] set_password_label_id">Set password</label>
                       <div className="grid grid-cols-1 space-y-3 md:grid-cols-2 md:space-y-0 md:space-x-3">
                         <input
                           type="password"
@@ -620,7 +626,7 @@ const LoginContent = () =>{
                         />
                       </div>
 
-                      <label className="capitalize text-gray-500 label font-bold text-[15px] set_password_id">Confirm password</label>
+                      <label className="capitalize text-gray-500 label font-bold text-[15px] confirm_password_label_id">Confirm password</label>
                       <div className="grid grid-cols-1 space-y-3 md:grid-cols-2 md:space-y-0 md:space-x-3">
                         <input
                           type="password"
@@ -632,7 +638,7 @@ const LoginContent = () =>{
                         />
                       </div>
 
-                      <p className="text-sm text-gray-500 use_more_character_id">
+                      <p className="text-sm text-gray-500 use_8_or_more_characters_with_a_mix_of_letters_numbers_symbols_label_id">
                         Use 8 or more characters with a mix of letters, numbers & symbols
                       </p>
                       
@@ -647,21 +653,26 @@ const LoginContent = () =>{
                             </div>
                           </div>
                         :
-                        <_PlanSelect dataList={subscriptionList}/>
+                        // <_PlanSelect dataList={subscriptionList}/>
+                        _PlanSelect(subscriptionList)
                       }
                       
                       <button 
                       onClick={() => RegisterUser()} 
                       className="text-white bg-blue-600 btn sign_in_id">
                       {
-                        isLoadingRegister ? <span className="loading loading-spinner loading-sm"></span> : "Sign In"
+                        isLoadingRegister 
+                        ? <span className="loading loading-spinner loading-sm"></span> 
+                        : <span className="sign_in_label_id">Sign In</span>
                       }
                       </button>
                       </div>
                   </div> 
                 }
 
-                <button onClick={() => setenableResetPassword(true)} className="text-sm font-medium text-white forgot_your_password_id">
+                <button 
+                onClick={() => setenableResetPassword(true)} 
+                className="text-sm font-medium text-white forgot_your_password_label_id">
                   Forgot your password?
                 </button>
               </div>

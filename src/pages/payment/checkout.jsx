@@ -90,7 +90,7 @@ function Checkout({
                             <div className="text-center">
                                 <span className="loading loading-ring loading-xl"></span>
                                 <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl initializing_secure_payment_id">Initializing secure payment</h1>
-                                <p className="mt-6 text-base leading-7 text-gray-600 payment_form_loading_id">Loading payment form, please wait...</p>
+                                <p className="mt-6 text-base leading-7 text-gray-600 loading_payment_form_please_wait_label_id">Loading payment form, please wait...</p>
                             </div>
                         </main>
                 }   

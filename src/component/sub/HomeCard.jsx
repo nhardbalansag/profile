@@ -134,7 +134,7 @@ const HomeCard = ({
             <div className='flex items-center justify-center my-2'>
                 <button 
                 onClick={() => navigate('/product-details?view=' + contentDetails.id)} 
-                className="price_details_label_id flex-1 h-10 px-2 font-semibold rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]">
+                className="view_details_label_id flex-1 h-10 px-2 font-semibold rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]">
                     View Details
                 </button>
             </div>
@@ -358,7 +358,7 @@ const HomeCard = ({
                 ? LoadComp()
                 : 
                     <div className='flex justify-center '>
-                        <_Card2/>
+                        {_Card2()}
                         {/* <EventsCard/> */}
                     </div>
             }

@@ -31,7 +31,37 @@ const AccountSubscription = () =>{
 
   // behaviour
   const [openBottomPayment, setOpenBottomPayment] = useState(false);
+
+  const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
   
+  useEffect(() =>{
+    if(auth_states.SelectedLanguage){
+      selectedLanguage.current = parseInt(auth_states.SelectedLanguage.id)
+    }
+  },[auth_states])
+
+  useEffect(() =>{
+      auth_states.PageLanguages.map((item, key) =>{
+          const translation = item.translation
+          
+          if(translation.length > 0 && auth_states.SelectedLanguage){
+              const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
+              const targetElement = document.getElementsByClassName(item.page_config_id)
+              if (targetElement) {
+                  if (targetElement.length > 0 && filteredTranslation) {
+                      Array.from(targetElement).forEach((el) => {
+                          el.textContent = filteredTranslation.page_config_title;
+                      });
+                  } else if (targetElement.length > 0) {
+                      Array.from(targetElement).forEach((el) => {
+                          el.textContent = item.page_config_title;
+                      });
+                  }
+              }
+          }
+      })
+  },[auth_states, loadingRequest, selectedPlan])
+
   const userSubscriptionCategories = async () =>{
     setLoadingContent(true)
     await api_subscription.AllUserSubscriptionCategories(auth_states.StateToken).then((result) =>{
@@ -72,23 +102,6 @@ const AccountSubscription = () =>{
       }
     }).catch((err) =>{
       setLoadingRequest(false)
-    })
-  }
-
-  const CheckSubscriptionPaymentIntentStatus = async () =>{
-    const reqBody = {
-      session_id: getPaymentIntentSession,
-      subscription_categories_id: SelectedSubscriptionCategoryId
-    }
-    
-    setLoadingContent(true)
-    await api_subscription.CheckSubscriptionPaymentIntentStatus(auth_states.StateToken, reqBody).then((result) =>{
-      setPaymentIntentSession(null)
-      setLoadingContent(false)
-      SetSelectedSubscriptionCategoryId(null)
-    }).catch((err) =>{
-      setPaymentIntentSession(null)
-      setLoadingContent(false)
     })
   }
 
@@ -145,7 +158,7 @@ const AccountSubscription = () =>{
     )
   }
 
-  const _PlanSelect = ({dataList}) => {
+  const _PlanSelect = (dataList) => {
 
     return(
       <div className="">
@@ -165,14 +178,36 @@ const AccountSubscription = () =>{
                 <div>
                   <h3 className="text-3xl font-extrabold">
                     {
-                      item.membership_type.type_title
+                      selectedLanguage.current == null 
+                      ? item.membership_type.type_title
+                      : (
+                          item.membership_type.translation.translation
+                          ?
+                            (
+                                item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                              ? item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title 
+                              : item.membership_type.type_title
+                            )
+                          : item.membership_type.type_title
+                        )
                     }
                   </h3>
-                  {/* <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500">
                     {
-                      item.membership_type.type_description
+                      selectedLanguage.current == null 
+                      ? item.membership_type.type_description
+                      : (
+                          item.membership_type.translation.translation
+                          ?
+                            (
+                                item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                              ? item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_description 
+                              : item.membership_type.type_description
+                            )
+                          : item.membership_type.type_description
+                        )
                     }
-                  </p> */}
+                  </p>
                 </div>
                 <div className="text-right">
                   <p className="flex items-center justify-end text-lg font-semibold">
@@ -180,18 +215,38 @@ const AccountSubscription = () =>{
                     <span>/</span>
                     <span className="text-sm font-normal">
                       {
-                        item.subscription_range.subscription_range_name
+                        selectedLanguage.current == null 
+                        ? item.subscription_range.subscription_range_name
+                        : (
+                            item.subscription_range.params 
+                            ?
+                              (
+                                item.subscription_range.params.translation
+                                ?
+                                  (
+                                      item.subscription_range.params.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                    ? item.subscription_range.params.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).subscription_range_name 
+                                    : item.subscription_range.subscription_range_name
+                                  )
+                                : item.subscription_range.subscription_range_name
+                              )
+                            : item.subscription_range.subscription_range_name
+                          )
                       }
                     </span>
                   </p>
-                  <p className="text-xs text-gray-400">Billed after {item.subscription_range.subscription_range_days_count} days</p>
+                  <p className="text-xs text-gray-400">
+                    <span className='billed_after_label_id'>Billed after </span>
+                    {item.subscription_range.subscription_range_days_count} 
+                    <span className='days_label_id'>days</span>
+                  </p>
                   {
                     item.params ?
                       item.params.renewal &&
                       <p className="flex items-center justify-end text-sm font-extralight">
                         <span>${item.params.renewal.subscription_renewal_price} </span>
                         <span>/</span>
-                        <span className="text-sm font-normal">Renewal</span>
+                        <span className="text-sm font-normal renewal_label_id">Renewal</span>
                       </p>
                     : <span className="text-sm font-normal">--</span>
                   }
@@ -204,7 +259,10 @@ const AccountSubscription = () =>{
                   ? <span className="loading loading-ring loading-xl"></span>
                   :
                     <div>
-                      <ButtonComp onPress={() => handleCheckout(item)} title='Subscribe to plan'/>
+                      <button onClick={() => handleCheckout(item)} className={`btn btn-active btn-primary selection:capitalize text-white`}>
+                        {loadingRequest && <span className="loading loading-ring loading-sm"></span>}
+                        <span className='subscribe_to_plan_label_id'>Subscribe to plan</span>
+                      </button>
                     </div>
                 : <></>
               }
@@ -218,10 +276,12 @@ const AccountSubscription = () =>{
   const MembershipStatus = () =>{
     return(
       <div className="p-6 space-y-5 bg-white border border-gray-200 rounded-lg shadow-md">
-        <h3 className="mb-4 text-lg font-semibold text-gray-900">Membership Status</h3>
+        <h3 className="mb-4 text-lg font-semibold text-gray-900 membership_status_label_id">
+          Membership Status
+        </h3>
         {
           loadingRequest
-          ? <_LoadingComp/>
+          ? _LoadingComp()
           :
             <div>
               <div className="mb-4 text-center">
@@ -233,19 +293,46 @@ const AccountSubscription = () =>{
                 <h4 className="font-extrabold text-gray-900">
                   {
                     !loadingRequest &&
-                    AccountSubscriptionDetails.details.subscription_category.membership_type.type_title
+                    selectedLanguage.current == null 
+                    ? AccountSubscriptionDetails.details.subscription_category.membership_type.type_title
+                    : (
+                        AccountSubscriptionDetails.details.subscription_category.membership_type.translation.translation
+                        ?
+                          (
+                              AccountSubscriptionDetails.details.subscription_category.membership_type.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                            ? AccountSubscriptionDetails.details.subscription_category.membership_type.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title 
+                            : AccountSubscriptionDetails.details.subscription_category.membership_type.type_title
+                          )
+                        : AccountSubscriptionDetails.details.subscription_category.membership_type.type_title
+                      )
                   }
                 </h4>
                 <p className="text-sm text-gray-600">
                   {
                     !loadingRequest &&
-                    AccountSubscriptionDetails.details.subscription_category.subscription_range.subscription_range_name
+                    selectedLanguage.current == null 
+                    ? AccountSubscriptionDetails.details.subscription_category.subscription_range.subscription_range_name
+                    : (
+                        AccountSubscriptionDetails.details.subscription_category.subscription_range.params 
+                        ?
+                          (
+                            AccountSubscriptionDetails.details.subscription_category.subscription_range.params.translation
+                            ?
+                              (
+                                  AccountSubscriptionDetails.details.subscription_category.subscription_range.params.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                ? AccountSubscriptionDetails.details.subscription_category.subscription_range.params.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).subscription_range_name 
+                                : AccountSubscriptionDetails.details.subscription_category.subscription_range.subscription_range_name
+                              )
+                            : AccountSubscriptionDetails.details.subscription_category.subscription_range.subscription_range_name
+                          )
+                        : AccountSubscriptionDetails.details.subscription_category.subscription_range.subscription_range_name
+                      )
                   }
                 </p>
               </div>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Subscription Plan Expiration</span>
+                  <span className="text-gray-600 subscription_plan_expiration_label_id">Subscription Plan Expiration</span>
                   <span className="font-medium">
                     {
                       !loadingRequest &&
@@ -274,8 +361,8 @@ const AccountSubscription = () =>{
                     {
                       !loadingRequest &&
                       AccountSubscriptionDetails.days_remaining < 0 
-                      ? "days expired"
-                      : "days left before expiry"
+                      ? <span className='days_expired_label_id'>days expired</span>
+                      : <span className='days_left_before_expiry_label_id'>days left before expiry</span>
                     }
                     
                   </span>
@@ -298,18 +385,20 @@ const AccountSubscription = () =>{
     <div>
       <div className='grid grid-cols-1 pb-10 space-y-5 md:space-x-5 md:grid-cols-2'>
         <div>
-          <MembershipStatus/>
+          {MembershipStatus()}
         </div>
         <div className='space-y-3'>
           <div className='flex justify-start'>
             <div className='md:w-[75%] w-[95%]'>
-              <p className='font-bold text-[#001d3d] text-[18px] capitalize'>Membership Plans</p>
+              <p className='font-bold text-[#001d3d] text-[18px] capitalize membership_plans_label_id'>
+                Membership Plans
+              </p>
             </div>
           </div>
           {
             loadingContent 
-            ? <_LoadingComp/>
-            : <_PlanSelect dataList={subscriptionList}/>
+            ? _LoadingComp()
+            : _PlanSelect(subscriptionList)
           }
         </div>
       </div>

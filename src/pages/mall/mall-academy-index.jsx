@@ -65,7 +65,7 @@ const AcademyIndex = () => {
                     {/* Categories Filter */}
                     <section className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
                         <div className="flex items-center justify-between mb-8">
-                            <h2 className="text-3xl font-bold">Featured Courses</h2>
+                            <h2 className="text-3xl font-bold featured_courses_label_id">Featured Courses</h2>
                         </div>
 
                         {/* Course Grid */}
@@ -91,7 +91,10 @@ const AcademyIndex = () => {
                                             <h3 className="mb-2 text-xl font-semibold line-clamp-2">
                                                 {course.title}
                                             </h3>
-                                            <p className="mb-3 text-gray-400">by {course.instructor}</p>
+                                            <p className="mb-3 space-x-1 text-gray-400">
+                                                <span className='by_label_id'>by</span> 
+                                                <span>{course.instructor}</span>
+                                            </p>
                                             
                                             <div className="flex items-center mb-4 space-x-4 text-sm text-gray-400">
                                                 {/* <div className="flex items-center space-x-1">
@@ -117,9 +120,12 @@ const AcademyIndex = () => {
                                                         {course.originalPrice}
                                                     </span>
                                                 </div>
-                                                <span className="text-sm text-gray-400">
-                                                {course.lessons} lessons
-                                                </span>
+                                                <p className="flex items-center space-x-1">
+                                                    <span className="text-sm text-gray-400">
+                                                    {course.lessons} 
+                                                    </span>
+                                                    <span className='lesson_label_id'>lessons</span>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>

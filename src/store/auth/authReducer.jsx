@@ -21,7 +21,9 @@ export default (state = InitialStates, action) =>{
         case REDUX_LOGOUT_USER:
             return{
                 ...state,
-                StateToken              : action.StateToken
+                StateToken              : action.StateToken,
+                StateUserInformation              : action.StateUserInformation,
+                SelectedLanguage              : action.SelectedLanguage,
             }
         case REDUX_GET_USER_ACCESS_INFORMATION:
             return{

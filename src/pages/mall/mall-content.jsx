@@ -1,10 +1,3 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { MdOutlineAirplanemodeActive } from "react-icons/md";
-import { MdOutlineStorefront } from "react-icons/md";
-import { RiGraduationCapLine } from "react-icons/ri";
-import { HiShoppingBag } from "react-icons/hi2";
-
 import {
   Outlet,
 } from "react-router";
@@ -20,7 +13,9 @@ const MallContent = () =>{
       </div>
       <div className='flex justify-center my-5'>
         <div className='md:w-[75%] w-[95%]'>
-          <p className='font-extrabold text-[#001d3d] text-[25px] capitalize'>discover next adventure</p>
+          <p className='font-extrabold text-[#001d3d] text-[25px] capitalize discover_next_adventure_label_id'>
+            discover next adventure
+          </p>
         </div>
       </div>
       {/* content */}

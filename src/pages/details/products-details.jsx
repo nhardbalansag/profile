@@ -99,10 +99,10 @@ const ProductDetails = () =>{
     const [currentStep, setCurrentStep] = useState(0);
 
     const steps = [
-        'Choose Booking Offers',
-        'Adjust',
-        'Info',
-        'Pay',
+        <span className='choose_booking_offers_label_id'>Choose Booking Offers</span>,
+        <span className='adjust_label_id'>Adjust</span>,
+        <span className='info_label_id'>Info</span>,
+        <span className='pay_label_id'>Pay</span>,
     ];
 
     const editorRef = useRef(ResultGetHomeContents && ResultGetHomeContents.content_description);
@@ -115,35 +115,51 @@ const ProductDetails = () =>{
     
             const content_title = selectedLanguage.current == null 
             ? AllContentData.content_title
-            : (
-                AllContentData.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                ? AllContentData.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
+            : 
+                AllContentData.translation
+                ?
+                    (
+                        AllContentData.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                        ? AllContentData.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
+                        : AllContentData.content_title
+                    )
                 : AllContentData.content_title
-                )
         
             const membership_type = selectedLanguage.current == null 
             ? selectedTab.offers_table.membership_type_table.type_title
-            : (
-                selectedTab.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                ? selectedTab.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
+            : 
+                selectedTab.offers_table.membership_type_table.translation.translation
+                ?
+                    (
+                        selectedTab.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                        ? selectedTab.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
+                        : selectedTab.offers_table.membership_type_table.type_title
+                    )
                 : selectedTab.offers_table.membership_type_table.type_title
-                )
         
             const room_type_name = selectedLanguage.current == null 
             ? selectedTab.offers_table.supplier_table.room_type.room_type_name
-            : (
-                selectedTab.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                ? selectedTab.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).room_type_name
+            : 
+                selectedTab.offers_table.supplier_table.room_type.translation
+                ?
+                    (
+                        selectedTab.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                        ? selectedTab.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).room_type_name
+                        : selectedTab.offers_table.supplier_table.room_type.room_type_name
+                    )
                 : selectedTab.offers_table.supplier_table.room_type.room_type_name
-                )
         
             const tier_category_name = selectedLanguage.current == null 
             ? selectedTab.offers_table.tier_category_table.tier_category_name
-            : (
-                selectedTab.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                ? selectedTab.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
-                : selectedTab.offers_table.tier_category_table.tier_category_name
-                )
+            :
+                    selectedTab.offers_table.tier_category_table.translation
+                    ?
+                        (
+                            selectedTab.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                            ? selectedTab.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
+                            : selectedTab.offers_table.tier_category_table.tier_category_name
+                        )
+                    : selectedTab.offers_table.tier_category_table.tier_category_name
           
             const reqBody = {
                 content_offers_id: selectedTab.id,
@@ -704,7 +720,7 @@ const ProductDetails = () =>{
                 }
             }
         })
-    },[auth_states, loadingContent])
+    },[auth_states, loadingContent, getGuestInformation])
 
     useEffect(() => {
         if (editorRef.current) {
@@ -747,7 +763,7 @@ const ProductDetails = () =>{
                 <dialog ref={modalSubscriptionRef} id="my_modal_2" className="modal">
                     <div className="modal-box">
                         <div className="flex-1 mt-5 space-y-1 md:space-y-8">
-                            <h2 className="text-2xl font-extrabold leading-tight text-center text-black capitalize md:text-3xl">
+                            <h2 className="text-2xl font-extrabold leading-tight text-center text-black capitalize md:text-3xl available_only_for_vip_members_id">
                             available only for VIP members.
                             </h2>
 
@@ -767,7 +783,7 @@ const ProductDetails = () =>{
                                 </div>
 
                                 <div className='flex justify-center'>
-                                    <button onClick={() => navigate('/subscriptions')} className="px-6 py-3 text-white transition-colors bg-[#031956] rounded-lg whitespace-nowrap">
+                                    <button onClick={() => navigate('/subscriptions')} className="px-6 py-3 text-white transition-colors bg-[#031956] rounded-lg whitespace-nowrap upgrade_membership_id">
                                     Upgrade Membership
                                     </button>
                                 </div>
@@ -775,22 +791,10 @@ const ProductDetails = () =>{
                         </div>
                     </div>
                     <form method="dialog" className="modal-backdrop">
-                        <button>close</button>
+                        <button className='close_label_id'>close</button>
                     </form>
                 </dialog>
             </div>
-        )
-    }
-
-    const TabItem = ({ icon, label, active, path }) =>{
-
-        return (
-            <Link to={path}>
-                <div className={`flex flex-col items-center ${active ? "text-white" : "text-gray-400"} `}>
-                <div className="mb-1 text-lg">{icon}</div>
-                <span className="text-[14px]">{label}</span>
-                </div>
-            </Link>
         )
     }
 
@@ -798,15 +802,35 @@ const ProductDetails = () =>{
         return (
             <div 
             style={{
-                position: 'fixed',
-                height: '70px',
-                zIndex: 1000
+            position: 'fixed',
+            height: '70px',
+            zIndex: 1000
             }}
             className="md:hidden bottom-4 left-1/2 transform -translate-x-1/2 bg-[#031956] text-white rounded-xl px-4 py-1 flex justify-between items-center w-[90%] space-x-6 shadow-lg">
-                <TabItem icon={<TiHomeOutline size={20}/>} path={'/'} label="Home" active />
-                <TabItem icon={<LuTickets size={20}/>} path={'/event'} label="Events" />
-                <TabItem icon={<HiMiniBuildingOffice2 size={20}/>} path={'/account'} label="Office" />
-                <TabItem icon={<FaRegCircleUser size={20}/>} path={'/details'} label="Profile" />
+                <Link to={'/'}>
+                    <div className={`flex flex-col items-center text-white `}>
+                        <div className="mb-1 text-lg"><TiHomeOutline size={20}/></div>
+                        <span className="text-[14px] home_label_id">Home</span>
+                    </div>
+                </Link>
+                <Link to={'/event'}>
+                    <div className={`flex flex-col items-center ${((location.pathname.split("/")).includes('event') ? true : false) ? "text-white" : "text-gray-400"} `}>
+                        <div className="mb-1 text-lg"><LuTickets size={20}/></div>
+                        <span className="text-[14px] events_label_id">Events</span>
+                    </div>
+                </Link>
+                <Link to={'/account'}>
+                    <div className={`flex flex-col items-center ${((location.pathname.split("/")).includes('account') ? true : false) ? "text-white" : "text-gray-400"} `}>
+                        <div className="mb-1 text-lg"><HiMiniBuildingOffice2 size={20}/></div>
+                        <span className="text-[14px] office_label_id">Office</span>
+                    </div>
+                </Link>
+                <Link to={'details'}>
+                    <div className={`flex flex-col items-center ${((location.pathname.split("/")).includes('details') ? true : false) ? "text-white" : "text-gray-400"} `}>
+                        <div className="mb-1 text-lg"><FaRegCircleUser size={20}/></div>
+                        <span className="text-[14px] profile_label_id">Profile</span>
+                    </div>
+                </Link>
             </div>
         )
     }
@@ -858,103 +882,102 @@ const ProductDetails = () =>{
         )
     }
 
-    const GuestDetailsForm = () =>{
+    const [formData, setFormData] = useState({
+        passportName: '',
+        passportNumber: '',
+        birthdate: '',
+        contactNumber: '',
+        contactEmail: '',
+        gender: ''
+    });
 
-        const [formData, setFormData] = useState({
-            passportName: '',
-            passportNumber: '',
-            birthdate: '',
-            contactNumber: '',
-            contactEmail: '',
-            gender: ''
-        });
+    const [errors, setErrors] = useState({});
 
-        const [errors, setErrors] = useState({});
-
-        const handleInputChange = (e) => {
-            const { name, value } = e.target;
-                setFormData(prev => ({
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+            setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+        
+        // Clear error when user starts typing
+        if (errors[name]) {
+            setErrors(prev => ({
                 ...prev,
-                [name]: value
+                [name]: ''
             }));
-            
-            // Clear error when user starts typing
-            if (errors[name]) {
-                setErrors(prev => ({
-                    ...prev,
-                    [name]: ''
-                }));
-            }
-        };
+        }
+    };
 
-        const validateForm = () => {
-            const newErrors = {};
+    const validateForm = () => {
+        const newErrors = {};
 
-            if (!formData.passportName.trim()) {
-                newErrors.passportName = 'Passport name is required';
-            }
-
-            if (!formData.passportNumber.trim()) {
-                newErrors.passportNumber = 'Passport number is required';
-            }
-
-            if (!formData.birthdate) {
-                newErrors.birthdate = 'Birthdate is required';
-            }
-
-            if (!formData.contactNumber.trim()) {
-                newErrors.contactNumber = 'Contact number is required';
-            }
-
-            if (!formData.contactEmail.trim()) {
-                newErrors.contactEmail = 'Email is required';
-            } else if (!/\S+@\S+\.\S+/.test(formData.contactEmail)) {
-                newErrors.contactEmail = 'Email format is invalid';
-            }
-
-            if (!formData.gender) {
-                newErrors.gender = 'Gender is required';
-            }
-
-            setErrors(newErrors);
-            return Object.keys(newErrors).length === 0;
-        };
-
-        const AddToList = () =>{
-            if (validateForm()){
-                setGuestInformation(prev => [...prev, {
-                    passportName: formData.passportName,
-                    passportNumber: formData.passportNumber,
-                    birthdate: formData.birthdate,
-                    contactNumber: formData.contactNumber,
-                    contactEmail: formData.contactEmail,
-                    gender: formData.gender
-                }])
-
-                setFormData({
-                    passportName: '',
-                    passportNumber: '',
-                    birthdate: '',
-                    contactNumber: '',
-                    contactEmail: '',
-                    gender: ''
-                })
-            }
+        if (!formData.passportName.trim()) {
+            newErrors.passportName = 'Passport name is required';
         }
 
-        const removeGuest = (indexToRemove) => {
-            setGuestInformation(prev =>
-                prev.filter((_, index) => index !== indexToRemove)
-            )
+        if (!formData.passportNumber.trim()) {
+            newErrors.passportNumber = 'Passport number is required';
         }
 
+        if (!formData.birthdate) {
+            newErrors.birthdate = 'Birthdate is required';
+        }
+
+        if (!formData.contactNumber.trim()) {
+            newErrors.contactNumber = 'Contact number is required';
+        }
+
+        if (!formData.contactEmail.trim()) {
+            newErrors.contactEmail = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(formData.contactEmail)) {
+            newErrors.contactEmail = 'Email format is invalid';
+        }
+
+        if (!formData.gender) {
+            newErrors.gender = 'Gender is required';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const AddToList = () =>{
+        if (validateForm()){
+            setGuestInformation(prev => [...prev, {
+                passportName: formData.passportName,
+                passportNumber: formData.passportNumber,
+                birthdate: formData.birthdate,
+                contactNumber: formData.contactNumber,
+                contactEmail: formData.contactEmail,
+                gender: formData.gender
+            }])
+
+            setFormData({
+                passportName: '',
+                passportNumber: '',
+                birthdate: '',
+                contactNumber: '',
+                contactEmail: '',
+                gender: ''
+            })
+        }
+    }
+
+    const removeGuest = (indexToRemove) => {
+        setGuestInformation(prev =>
+            prev.filter((_, index) => index !== indexToRemove)
+        )
+    }
+
+    const GuestDetailsForm = () =>{
         return(
             <div className="flex items-center justify-center p-4 bg-gradient-to-br from-background to-muted">
                 <div className="w-full max-w-2xl">
                     {/* Header */}
                     <div className="mb-8 text-center">
-                        <h1 className="mb-2 text-4xl font-bold text-foreground">Complete Your Booking</h1>
-                        <p className="text-lg text-muted-foreground">Please provide your details to proceed with checkout</p>
+                        <h1 className="mb-2 text-4xl font-bold text-foreground complete_your_booking_label_id">Complete Your Booking</h1>
+                        <p className="text-lg text-muted-foreground please_provide_details_label_id">Please provide your details to proceed with checkout</p>
                     </div>
 
                     {/* Form Card */}
@@ -964,7 +987,7 @@ const ProductDetails = () =>{
                             <div className="space-y-6">
                                 {/* Passport Name */}
                                 <div className="space-y-2">
-                                    <label htmlFor="passportName" className="block text-sm font-semibold text-foreground">
+                                    <label htmlFor="passportName" className="block text-sm font-semibold passport_name_label_id text-foreground">
                                     Passport Name *
                                     </label>
                                     <input
@@ -985,7 +1008,7 @@ const ProductDetails = () =>{
 
                                 {/* Passport Number */}
                                 <div className="space-y-2">
-                                    <label htmlFor="passportNumber" className="block text-sm font-semibold text-foreground">
+                                    <label htmlFor="passportNumber" className="block text-sm font-semibold passport_number_label_id text-foreground">
                                     Passport Number *
                                     </label>
                                     <input
@@ -1008,7 +1031,7 @@ const ProductDetails = () =>{
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     {/* Birthdate */}
                                     <div className="space-y-2">
-                                    <label htmlFor="birthdate" className="block text-sm font-semibold text-foreground">
+                                    <label htmlFor="birthdate" className="block text-sm font-semibold date_of_birth_label_id text-foreground">
                                         Date of Birth *
                                     </label>
                                     <input
@@ -1028,7 +1051,7 @@ const ProductDetails = () =>{
 
                                     {/* Gender */}
                                     <div className="space-y-2">
-                                    <label htmlFor="gender" className="block text-sm font-semibold text-foreground">
+                                    <label htmlFor="gender" className="block text-sm font-semibold gender_label_id text-foreground">
                                         Gender *
                                     </label>
                                     <select
@@ -1040,11 +1063,11 @@ const ProductDetails = () =>{
                                         errors.gender ? 'border-destructive' : 'border-border'
                                         }`}
                                     >
-                                        <option value="">Select gender</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                        <option value="other">Other</option>
-                                        <option value="prefer-not-to-say">Prefer not to say</option>
+                                        <option value=""><span className='select_gender_label_id'>Select gender</span></option>
+                                        <option value="male"><span className='male_label_id'>Male</span></option>
+                                        <option value="female"><span className='female_label_id'>Female</span></option>
+                                        <option value="other"><span className='other_label_id'>Other</span></option>
+                                        <option value="prefer-not-to-say"><span className='prefer_not_to_say_label_id'>Prefer not to say</span></option>
                                     </select>
                                     {errors.gender && (
                                         <p className="mt-1 text-sm text-destructive">{errors.gender}</p>
@@ -1055,7 +1078,7 @@ const ProductDetails = () =>{
                                 <div className='flex flex-wrap justify-start gap-5'>
                                     {/* Contact Number */}
                                     <div className="space-y-2">
-                                        <label htmlFor="contactNumber" className="block text-sm font-semibold text-foreground">
+                                        <label htmlFor="contactNumber" className="block text-sm font-semibold contact_number_label_id text-foreground">
                                         Contact Number *
                                         </label>
                                         <input
@@ -1076,7 +1099,7 @@ const ProductDetails = () =>{
 
                                     {/* Contact Email */}
                                     <div className="space-y-2">
-                                        <label htmlFor="contactEmail" className="block text-sm font-semibold text-foreground">
+                                        <label htmlFor="contactEmail" className="block text-sm font-semibold email_address_label_id text-foreground">
                                         Email Address *
                                         </label>
                                         <input
@@ -1098,7 +1121,7 @@ const ProductDetails = () =>{
 
                                 <button 
                                 onClick={() => AddToList()} 
-                                className="flex-1 h-12 px-3 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] checkout_id">
+                                className="save_label_id flex-1 h-12 px-3 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]">
                                     Save
                                 </button>
                             </div>
@@ -1113,42 +1136,42 @@ const ProductDetails = () =>{
                                     <div  className='space-y-5'>
                                         <div>
                                             <div className="flex items-center space-x-3">
-                                                <label className="block text-sm font-semibold text-foreground">
+                                                <label className="block text-sm font-semibold text-foreground passport_name_label_id">
                                                 Passport Name
                                                 </label>
                                                 <span>:</span>
                                                 <p>{guest.passportName}</p>
                                             </div>
                                             <div className="flex items-center space-x-3">
-                                                <label className="block text-sm font-semibold text-foreground">
+                                                <label className="block text-sm font-semibold text-foreground passport_number_label_id">
                                                 Passport Number
                                                 </label>
                                                 <span>:</span>
                                                 <p>{guest.passportNumber}</p>
                                             </div>
                                             <div className="flex items-center space-x-3">
-                                                <label className="block text-sm font-semibold text-foreground">
+                                                <label className="block text-sm font-semibold text-foreground date_of_birth_label_id">
                                                 Date of Birth
                                                 </label>
                                                 <span>:</span>
                                                 <p>{guest.birthdate}</p>
                                             </div>
                                             <div className="flex items-center space-x-3">
-                                                <label className="block text-sm font-semibold text-foreground">
+                                                <label className="block text-sm font-semibold text-foreground gender_label_id">
                                                 Gender
                                                 </label>
                                                 <span>:</span>
                                                 <p>{guest.gender}</p>
                                             </div>
                                             <div className="flex items-center space-x-3">
-                                                <label className="block text-sm font-semibold text-foreground">
+                                                <label className="block text-sm font-semibold text-foreground contact_number_label_id">
                                                 Contact Number
                                                 </label>
                                                 <span>:</span>
                                                 <p>{guest.contactNumber}</p>
                                             </div>
                                             <div className="flex items-center space-x-3">
-                                                <label className="block text-sm font-semibold text-foreground">
+                                                <label className="block text-sm font-semibold text-foreground email_address_label_id">
                                                 Email Address
                                                 </label>
                                                 <span>:</span>
@@ -1158,7 +1181,7 @@ const ProductDetails = () =>{
                                         <button onClick={() => removeGuest(index)}>
                                             <div className='flex items-center justify-center space-x-2'>
                                                 <IoIosCloseCircleOutline  className="text-[23px] text-red-700" />
-                                                <p className='font-bold text-red-700'>Remove</p>
+                                                <p className='font-bold text-red-700 remove_label_id'>Remove</p>
                                             </div>
                                         </button>
                                     </div>
@@ -1171,7 +1194,7 @@ const ProductDetails = () =>{
                         <div className="flex gap-3 pt-4">
                             <button  
                             onClick={() => setCurrentStep(prev => Math.max(prev - 1, 0))} 
-                            className="px-2 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-100 cancel_id"
+                            className="px-2 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-100 back_to_previous_label_id"
                             >Back To Previous
                             </button>
                             {
@@ -1179,7 +1202,7 @@ const ProductDetails = () =>{
                                 <button
                                 onClick={() => setCurrentStep(prev => Math.min(prev + 1, steps.length - 1))}
                                 type="submit"
-                                className="w-[80%] bg-gradient-to-r from-orange-500 via-orange-600 hover:shadow-lg text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                                className="complete_booking_label_id w-[80%] bg-gradient-to-r from-orange-500 via-orange-600 hover:shadow-lg text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                                 >
                                 Complete Booking & Checkout
                                 </button>
@@ -1188,7 +1211,7 @@ const ProductDetails = () =>{
 
                         {/* Additional Info */}
                         <div className="pt-4 text-center">
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-sm text-muted-foreground your_information_is_secure_label_id">
                             Your information is secure and encrypted. We respect your privacy.
                             </p>
                         </div>
@@ -1196,7 +1219,7 @@ const ProductDetails = () =>{
 
                     {/* Footer */}
                     <div className="mt-8 text-center">
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground need_help_contact_support_label_id">
                         Need help? Contact our support team for assistance.
                         </p>
                     </div>
@@ -1209,11 +1232,18 @@ const ProductDetails = () =>{
         return (
             <div className="flex justify-center">
                 <ul className="steps">
-                    {steps.map((label, index) => (
-                        <li key={index} className={`step ${index <= currentStep ? 'step-primary' : ''}`}>
-                        <span>{label}</span>
-                        </li>
-                    ))}
+                    <li className={`step ${0 <= currentStep ? 'step-primary' : ''}`}>
+                        <span className="choose_booking_offers_label_id">Choose Booking Offers</span>
+                    </li>
+                    <li className={`step ${1 <= currentStep ? 'step-primary' : ''}`}>
+                        <span className="adjust_label_id">Adjust</span>
+                    </li>
+                    <li className={`step ${2 <= currentStep ? 'step-primary' : ''}`}>
+                        <span className="info_label_id">Info</span>
+                    </li>
+                    <li className={`step ${3 <= currentStep ? 'step-primary' : ''}`}>
+                        <span className="pay_label_id">Pay</span>
+                    </li>
                 </ul>
             </div>
         )
@@ -1248,11 +1278,15 @@ const ProductDetails = () =>{
                                     {
                                     selectedLanguage.current == null 
                                     ? ResultGetHomeContents.content_title
-                                    : (
-                                            ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                        ? ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
-                                        : ResultGetHomeContents.content_title
-                                        )
+                                    : 
+                                        ResultGetHomeContents.translation
+                                        ?
+                                            (
+                                                ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                                ? ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
+                                                : ResultGetHomeContents.content_title
+                                            )
+                                        : ResultGetHomeContents.translation
                                     }
                                 </p>
                                 {
@@ -1308,13 +1342,15 @@ const ProductDetails = () =>{
                                 dangerouslySetInnerHTML={{
                                 __html: selectedLanguage.current == null 
                                         ? ResultGetHomeContents.content_description
-                                        : (
-                                                ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                            ? ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
+                                        : 
+                                            ResultGetHomeContents.translation
+                                            ?
+                                                (
+                                                    ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                                    ? ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
+                                                    : ResultGetHomeContents.content_description
+                                                )
                                             : ResultGetHomeContents.content_description
-                                            )
-                                    
-                                    
                                 }} 
 
                                 ></div>
@@ -1411,8 +1447,10 @@ const ProductDetails = () =>{
             
                     tabData={activeTab}
 
-                    guestDetails={<GuestDetailsForm/>}
-                    stepperDetails={<Stepper/>}
+                    guestDetails={GuestDetailsForm()}
+                    // guestDetails={<GuestDetailsForm/>}
+                    // stepperDetails={<Stepper/>}
+                    stepperDetails={() => Stepper()}
                     handleNextStep={() => setCurrentStep(prev => Math.min(prev + 1, steps.length - 1))}
                     handlePrevStep={() => setCurrentStep(prev => Math.max(prev - 1, 0))}
                     currentStep={currentStep}
@@ -1468,14 +1506,14 @@ const ProductDetails = () =>{
                                                             selectedLanguage.current == null 
                                                             ? item.offers_table.membership_type_table.type_title
                                                             : 
-                                                            item.offers_table.membership_type_table.translation
-                                                            ?
-                                                                (
-                                                                    item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                                                    ? item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
-                                                                    : item.offers_table.membership_type_table.type_title
-                                                                )
-                                                            :   item.offers_table.membership_type_table.type_title
+                                                                item.offers_table.membership_type_table.translation
+                                                                ?
+                                                                    (
+                                                                        item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                                                        ? item.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
+                                                                        : item.offers_table.membership_type_table.type_title
+                                                                    )
+                                                                :   item.offers_table.membership_type_table.type_title
                                                         }
                                                         </span>
                                                     </p>
@@ -1505,9 +1543,9 @@ const ProductDetails = () =>{
                                             <FaRegCalendar  className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                                             <div className="min-w-0">
                                                 <p className="space-x-1 text-sm font-medium text-gray-900 capitalize">
-                                                    <span className='registration_end_id'>Registration</span>
+                                                    <span className='registration_id'>Registration</span>
                                                 </p>
-                                                <p className="text-xs text-gray-600 end_id">Ends {item.offers_table.offers_end_daily_period}</p>
+                                                <p className="text-xs text-gray-600 ends_id">Ends {item.offers_table.offers_end_daily_period}</p>
                                                 <p className="mt-1 text-xs text-gray-500">{format(new Date(item.offers_table.offers_end_effectivity_date), 'MMM dd, yyyy')}</p>
                                             </div>
                                         </div>

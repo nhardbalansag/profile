@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import Logo1 from '../../assets/images/ten/logo.png';
-import Logo2 from '../../assets/images/ten/logo2.png';
-import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {useSelector} from 'react-redux';
+
 import { FaTiktok } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
@@ -9,6 +8,31 @@ import { IoLogoYoutube } from "react-icons/io";
 import { Link } from "react-router-dom";
 
 export default function FooterWrapper() {
+
+  const auth_states = useSelector(state => state.AuthReducer);
+
+  useEffect(() =>{
+    auth_states.PageLanguages.map((item, key) =>{
+      const translation = item.translation
+      
+      if(translation.length > 0 && auth_states.SelectedLanguage){
+        const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
+        const targetElement = document.getElementsByClassName(item.page_config_id)
+        if (targetElement) {
+          if (targetElement.length > 0 && filteredTranslation) {
+            Array.from(targetElement).forEach((el) => {
+              el.textContent = filteredTranslation.page_config_title;
+            })
+          } else if (targetElement.length > 0) {
+            Array.from(targetElement).forEach((el) => {
+              el.textContent = item.page_config_title;
+            })
+          }
+        }
+      }
+    })
+  },[auth_states])
+
   const [footerData] = useState({
     company: {
       name: 'Club TEN',
@@ -21,8 +45,17 @@ export default function FooterWrapper() {
       ],
     },
     links: {
-      quick: ['About Us', 'Events', 'Blog', 'Contact Us'],
-      legal: ['Privacy Policy', 'Terms of Service', 'Cookie Policy'],
+      quick: [
+        <span className="about_us_label_id">About Us</span>,
+        <span className="events_label_id">Events</span>,
+        <span className="blog_label_id">Blog</span>,
+        <span className="contact_us_label_id">Contact Us</span>
+      ],
+      legal: [
+        <span className="privacy_policy_label_id">Privacy Policy</span>,
+        <span className="terms_of_service_label_id">Terms of Service</span>,
+        <span className="cookie_policy_label_id">Cookie Policy</span>
+      ]
     },
     contact: {
       website: 'https://www.clubtenglobal.com/',
@@ -37,8 +70,8 @@ export default function FooterWrapper() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {/* Company Info */}
             <div className="space-y-4">
-              <h3 className="text-xl font-bold text-white">{footerData.company.name}</h3>
-              <p className="text-sm text-gray-300">{footerData.company.description}</p>
+              <h3 className="text-xl font-bold text-white company_name_label_id">{footerData.company.name}</h3>
+              <p className="text-sm text-gray-300 company_description_label_id">{footerData.company.description}</p>
               <div className="flex space-x-4">
                 {footerData.company.socials.map((social, index) => (
                   <a key={index} href={social.href} className="text-gray-300 transition-colors hover:text-blue-400">
@@ -50,7 +83,7 @@ export default function FooterWrapper() {
 
             {/* Quick Links */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white">Quick Links</h3>
+              <h3 className="text-lg font-semibold text-white quick_links_label_id">Quick Links</h3>
               <ul className="space-y-2">
                 {footerData.links.quick.map((link, index) => (
                   <li key={index}>
@@ -64,7 +97,7 @@ export default function FooterWrapper() {
 
             {/* Legal */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white">Legal</h3>
+              <h3 className="text-lg font-semibold text-white legal_label_id">Legal</h3>
               <ul className="space-y-2">
                 {footerData.links.legal.map((link, index) => (
                   <li key={index}>
@@ -98,7 +131,11 @@ export default function FooterWrapper() {
           <div className="pt-8 mt-8 border-t border-gray-800">
             <div className="flex flex-col items-center justify-between space-y-4 md:flex-row md:space-y-0">
               <div className="text-sm text-gray-400">
-                Copyright © {new Date().getFullYear()} - All right reserved
+                <span className='copyright_label_id'>Copyright</span>
+                <span>© </span>
+                <span>{new Date().getFullYear()} </span>
+                <span>-</span>
+                <span className='all_rights_reserved_label_id'>All right reserved</span>
               </div>
               <div className="flex space-x-6">
                 {footerData.links.legal.slice(0, 2).map((link, index) => (

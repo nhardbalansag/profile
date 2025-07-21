@@ -5979,6 +5979,22 @@ body{
   padding: 0;
 }
 
+.selection\:capitalize *::-moz-selection {
+  text-transform: capitalize;
+}
+
+.selection\:capitalize *::selection {
+  text-transform: capitalize;
+}
+
+.selection\:capitalize::-moz-selection {
+  text-transform: capitalize;
+}
+
+.selection\:capitalize::selection {
+  text-transform: capitalize;
+}
+
 .first\:ml-0:first-child {
   margin-left: 0px;
 }

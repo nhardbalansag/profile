@@ -163,8 +163,8 @@ const MallTravel = () =>{
   const _PlanSelect = ({dataList}) => {
     return(
       <div className="w-full p-6 ">
-        <h2 className="mb-2 text-2xl font-bold text-center">Select Membership</h2>
-        <p className="mb-6 text-sm text-center text-gray-600">
+        <h2 className="mb-2 text-2xl font-bold text-center select_membership_label_id">Select Membership</h2>
+        <p className="mb-6 text-sm text-center text-gray-600 select_membership_that_matches_your_goals_id">
           Select the membership that matches your goals
         </p>
         <div className="space-y-4">
@@ -243,7 +243,11 @@ const MallTravel = () =>{
                     }
                   </span>
                 </p>
-                <p className="text-xs text-gray-400">Billed after {item.subscription_range.subscription_range_days_count} days</p>
+                <p className="space-x-1 text-xs text-gray-400">
+                  <span className='billed_after_label_id'>Billed after </span>
+                  <span>{item.subscription_range.subscription_range_days_count}</span> 
+                  <span className='days_id'>days</span>
+                </p>
               </div>
             </div>
           ))}
@@ -265,7 +269,7 @@ const MallTravel = () =>{
               />
             </div>
             <div className="flex-1 mt-5 space-y-1 md:space-y-8">
-              <h2 className="text-2xl font-extrabold leading-tight text-center text-black capitalize md:text-3xl">
+              <h2 className="text-2xl font-extrabold leading-tight text-center text-black capitalize md:text-3xl available_only_for_paid_and_active_memberships_label_id">
                 available only for paid and active memberships.
               </h2>
 
@@ -278,8 +282,8 @@ const MallTravel = () =>{
                   </div>
                   {/* Text Content */}
                   <div className="flex-1 text-center">
-                      <p className="text-sm font-semibold earn_more_points_id">Earn more points</p>
-                      <p className="text-xs text-gray-600 members_could_save_id">
+                      <p className="text-sm font-semibold earn_more_points_label_id">Earn more points</p>
+                      <p className="text-xs text-gray-600 paid_memberships_could_save_time_and_money_finding_great_deals_label_id">
                           Paid Memberships could save time and money finding great deals.
                       </p>
                   </div>
@@ -300,7 +304,7 @@ const MallTravel = () =>{
             </div>
           </div>
           <form method="dialog" className="modal-backdrop">
-            <button>close</button>
+            <button className='close_label_id'>close</button>
           </form>
         </dialog>
       </div>
@@ -321,23 +325,27 @@ const MallTravel = () =>{
     
         {/* Right: Text Content */}
         <div className="flex-1 space-y-1 md:space-y-8">
-          <span className="inline-block px-3 py-1 text-xs font-semibold text-black bg-yellow-400 rounded-full w-fit">
+          <span className="inline-block px-3 py-1 text-xs font-semibold text-black bg-yellow-400 rounded-full w-fit new_label_id">
             NEW
           </span>
           <ol className='space-y-2'>
-            <li className='text-2xl leading-tight text-black capitalize md:text-3xl'>
-              <span className='mr-3 font-bold'>1.</span> 
-              Enjoy huge savings and wholesale
+            <li className='space-x-1 text-2xl leading-tight text-black capitalize md:text-3xl'>
+              <span className='mr-3 font-bold 1_label_id'>1.</span> 
+              <span className='enjoy_huge_savings_and_wholesale_discounts_on_hotels_worldwide_label_id'>
+                Enjoy huge savings and wholesale
               discounts on hotels worldwide
+              </span>
             </li>
-             <li className='text-2xl leading-tight text-black capitalize md:text-3xl'>
-              <span className='mr-3 font-bold'>2.</span> 
-              Preferred customers earn 0.5%
+             <li className='space-x-1 text-2xl leading-tight text-black capitalize md:text-3xl'>
+              <span className='mr-3 font-bold 2_label_id'>2.</span> 
+              <span className='preferred_customers_earn_0_5_cashback_label_id'>
+                Preferred customers earn 0.5%
               cashback
+              </span>
             </li>
              <li className='text-2xl leading-tight text-black capitalize md:text-3xl'>
-              <span className='mr-3 font-bold'>3.</span> 
-              VIP members earn 1% cashback
+              <span className='mr-3 font-bold 3_label_id'>3.</span> 
+              <span className='vip_members_earn_1_cashback_label_id'>VIP members earn 1% cashback</span>
             </li>
           </ol>
   
@@ -354,7 +362,7 @@ const MallTravel = () =>{
                   disabled={getPlatformLoading.launchButton}
                   onClick={() => requestToken()}
                   className="px-6 py-2 font-bold text-white bg-orange-500 btn hover:bg-orange-600 rounded-xl">
-                  <div>LAUNCH NOW</div>
+                  <p className='launch_now_label_id'>LAUNCH NOW</p>
                 </button>
             }
           </div>
@@ -369,7 +377,7 @@ const MallTravel = () =>{
         <dialog ref={modalSubscriptionRef} id="my_modal_2" className="modal">
           <div className="modal-box">
             <div className="flex-1 mt-5 space-y-1 md:space-y-8">
-                <h2 className="text-2xl font-extrabold leading-tight text-center text-black capitalize md:text-3xl">
+                <h2 className="text-2xl font-extrabold leading-tight text-center text-black capitalize md:text-3xl available_only_for_vip_members_label_id">
                 available only for VIP members.
                 </h2>
 
@@ -382,14 +390,14 @@ const MallTravel = () =>{
                   </div>
                   {/* Text Content */}
                   <div className="flex-1 text-center">
-                    <p className="text-sm font-semibold earn_more_points_id">Earn more points</p>
-                    <p className="text-xs text-gray-600 members_could_save_id">
+                    <p className="text-sm font-semibold earn_more_points_label_id">Earn more points</p>
+                    <p className="text-xs text-gray-600 paid_memberships_could_save_time_and_money_finding_great_deals_label_id">
                       Paid Memberships could save time and money finding great deals.
                     </p>
                   </div>
 
                   <div className='flex justify-center'>
-                    <button onClick={() => navigate('/subscriptions')} className="px-6 py-3 text-white transition-colors bg-[#031956] rounded-lg whitespace-nowrap">
+                    <button onClick={() => navigate('/subscriptions')} className="px-6 py-3 text-white transition-colors bg-[#031956] rounded-lg whitespace-nowrap upgrade_membership_label_id">
                     Upgrade Membership
                     </button>
                   </div>
@@ -397,7 +405,7 @@ const MallTravel = () =>{
             </div>
           </div>
           <form method="dialog" className="modal-backdrop">
-              <button>close</button>
+              <button className='close_label_id'>close</button>
           </form>
         </dialog>
       </div>
@@ -443,17 +451,19 @@ const MallTravel = () =>{
     <div className=''>
       <div className='flex justify-center my-5'>
         <div className='md:w-[75%] w-[95%]'>
-          <p className='font-extrabold text-[#001d3d] text-[25px] text-center capitalize'>Travel the world with Club TEN</p>
+          <p className='font-extrabold text-[#001d3d] text-[25px] text-center capitalize travel_the_world_with_club_ten_label_id'>
+            Travel the world with Club TEN
+          </p>
         </div>
       </div>
       <div className='flex justify-center mb-[50px]'>
         <div className='md:w-[75%] w-[95%]'>
-          <NoCodePromo/>
+          {NoCodePromo()}
         </div>
       </div>
       <div className='flex justify-center'>
         <div className='md:w-[75%] w-[95%]'>
-          <p className='font-extrabold text-[#001d3d] text-[25px] capitalize'>Upcoming Bucket List Experiences</p>
+          <p className='font-extrabold text-[#001d3d] text-[25px] capitalize upcoming_bucket_list_experiences_label_id'>Upcoming Bucket List Experiences</p>
         </div>
       </div>
       <div className='flex justify-center my-5 mb-[150px]'>

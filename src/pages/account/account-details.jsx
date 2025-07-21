@@ -94,12 +94,56 @@ const AccountDetails = () =>{
   const fileInputRef = useRef(null);
 
   const tabs = [
-    { id: 'basic', label: 'Basic Info', icon: User },
-    { id: 'social', label: 'Social Media', icon: Globe },
-    { id: 'interests', label: 'Interests', icon: Heart },
-    { id: 'media', label: 'Media', icon: Camera },
-    { id: 'professional', label: 'Professional', icon: Briefcase }
-  ];
+    {
+      id: 'basic',
+      label: <span className="basic_info_label_id">Basic Info</span>,
+      icon: User
+    },
+    {
+      id: 'social',
+      label: <span className="social_media_label_id">Social Media</span>,
+      icon: Globe
+    },
+    {
+      id: 'interests',
+      label: <span className="interests_label_id">Interests</span>,
+      icon: Heart
+    },
+    {
+      id: 'media',
+      label: <span className="media_label_id">Media</span>,
+      icon: Camera
+    },
+    {
+      id: 'professional',
+      label: <span className="professional_label_id">Professional</span>,
+      icon: Briefcase
+    }
+  ]
+
+  const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
+
+  useEffect(() =>{
+    auth_states.PageLanguages.map((item, key) =>{
+      const translation = item.translation
+      
+      if(translation.length > 0 && auth_states.SelectedLanguage){
+        const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
+        const targetElement = document.getElementsByClassName(item.page_config_id)
+        if (targetElement) {
+          if (targetElement.length > 0 && filteredTranslation) {
+            Array.from(targetElement).forEach((el) => {
+              el.textContent = filteredTranslation.page_config_title;
+            });
+          } else if (targetElement.length > 0) {
+            Array.from(targetElement).forEach((el) => {
+              el.textContent = item.page_config_title;
+            });
+          }
+        }
+      }
+    })
+  },[auth_states, requestLoading, activeTab, isEditing])
 
   const handleInputChange = (field, value) => {
     setUserData((prev) => ({ ...prev, [field]: value }));
@@ -393,8 +437,8 @@ const AccountDetails = () =>{
         <div className="p-3 ">
           {/* Header */}
           <div className="mb-6 sm:mb-8">
-            <h1 className="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl">Profile Management</h1>
-            <p className="text-sm text-gray-600 sm:text-base">Manage your comprehensive personal profile</p>
+            <h1 className="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl profile_management_label_id">Profile Management</h1>
+            <p className="text-sm text-gray-600 sm:text-base manage_your_comprehensive_personal_profile_label_id">Manage your comprehensive personal profile</p>
           </div>
 
           {/* Mobile Menu Button */}
@@ -425,7 +469,7 @@ const AccountDetails = () =>{
                   }`}
                 >
                   <Icon className="w-4 h-4" />
-                  <span>{label}</span>
+                  <p>{label}</p>
                 </button>
               ))}
             </nav>
@@ -447,7 +491,7 @@ const AccountDetails = () =>{
                     }`}
                   >
                     <Icon className="w-4 h-4" />
-                    <span>{label}</span>
+                    <p>{label}</p>
                   </button>
                 ))}
               </div>
@@ -458,11 +502,21 @@ const AccountDetails = () =>{
           <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6">
             <div className="flex flex-col gap-4 mb-6 sm:flex-row sm:justify-between sm:items-center">
               <h2 className="text-lg font-semibold text-gray-900 sm:text-xl">
-                {activeTab === 'basic' && 'Basic Information'}
-                {activeTab === 'social' && 'Social Media & Contact'}
-                {activeTab === 'interests' && 'Interests & Bucket List'}
-                {activeTab === 'media' && 'Photos & Videos'}
-                {activeTab === 'professional' && 'Professional Information'}
+                {activeTab === 'basic' && (
+                  <span className="basic_information_label_id">Basic Information</span>
+                )}
+                {activeTab === 'social' && (
+                  <span className="social_media_contact_label_id">Social Media & Contact</span>
+                )}
+                {activeTab === 'interests' && (
+                  <span className="interests_bucket_list_label_id">Interests & Bucket List</span>
+                )}
+                {activeTab === 'media' && (
+                  <span className="photos_videos_label_id">Photos & Videos</span>
+                )}
+                {activeTab === 'professional' && (
+                  <span className="professional_information_label_id">Professional Information</span>
+                )}
               </h2>
               <button
                 onClick={() => {
@@ -479,7 +533,9 @@ const AccountDetails = () =>{
                 }`}
               >
                 {isEditing ? <Save className="w-4 h-4" /> : <Edit2 className="w-4 h-4" />}
-                <span>{isEditing ? 'Save' : 'Edit'}</span>
+                <span className={isEditing ? 'save_label_id' : 'edit_label_id'}>
+                  {isEditing ? 'Save' : 'Edit'}
+                </span>
               </button>
             </div>
             {activeTab === 'basic' && (
@@ -503,14 +559,18 @@ const AccountDetails = () =>{
                     {
                       userData.occupation &&
                       userData.company &&
-                      <p className="mt-1 text-sm text-gray-500">{userData.occupation} at {userData.company}</p>
+                      <p className="mt-1 space-x-1 text-sm text-gray-500">
+                        <span>{userData.occupation} </span>
+                        <span className='at_label_id'>at</span> 
+                        <span>{userData.company}</span>
+                      </p>
                     }
                   </div>
                 </div>
 
                 {/* Personal Introduction */}
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-700">Personal Introduction</label>
+                  <label className="block mb-2 text-sm font-medium text-gray-700 personal_introduction_label_id">Personal Introduction</label>
                   {isEditing ? (
                     <textarea
                       value={userData.personal_introduction}
@@ -527,7 +587,7 @@ const AccountDetails = () =>{
                 {/* Basic Information Grid */}
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-700">First Name</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-700 first_name_label_id">First Name</label>
                     {isEditing ? (
                       <input
                         type="text"
@@ -541,7 +601,7 @@ const AccountDetails = () =>{
                   </div>
 
                   <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-700">Last Name</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-700 last_name_label_id">Last Name</label>
                     {isEditing ? (
                       <input
                         type="text"
@@ -555,7 +615,7 @@ const AccountDetails = () =>{
                   </div>
 
                   <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-700">Mobile Number</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-700 mobile_number_label_id">Mobile Number</label>
                     {isEditing ? (
                       <input
                         type="tel"
@@ -569,7 +629,7 @@ const AccountDetails = () =>{
                   </div>
 
                   <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-700">Date of Birth</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-700 date_of_birth_label_id">Date of Birth</label>
                     {isEditing ? (
                       <input
                         type="date"
@@ -583,7 +643,7 @@ const AccountDetails = () =>{
                   </div>
 
                   <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-700">Address</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-700 address_label_id">Address</label>
                     {isEditing ? (
                       <input
                         type="text"
@@ -600,7 +660,7 @@ const AccountDetails = () =>{
                   </div>
 
                   <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-700">City</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-700 city_label_id">City</label>
                     {isEditing ? (
                       <input
                         type="text"
@@ -616,12 +676,12 @@ const AccountDetails = () =>{
 
                 {/* Google Maps Integration */}
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-700">Location Map</label>
+                  <label className="block mb-2 text-sm font-medium text-gray-700 location_map_label_id">Location Map</label>
                   <div className="flex items-center justify-center w-full h-48 bg-gray-200 rounded-lg sm:h-64">
                     <div className="text-center">
                       <MapPin className="w-6 h-6 mx-auto mb-2 text-gray-400 sm:w-8 sm:h-8" />
-                      <p className="text-sm text-gray-500 sm:text-base">Google Maps will display here</p>
-                      <p className="text-xs text-gray-400 sm:text-sm">coming soon</p>
+                      <p className="text-sm text-gray-500 sm:text-base google_maps_display_label_id">Google Maps will display here</p>
+                      <p className="text-xs text-gray-400 sm:text-sm coming_soon_label_id">coming soon</p>
                     </div>
                   </div>
                 </div>
@@ -648,7 +708,7 @@ const AccountDetails = () =>{
             {activeTab === 'professional' && (
               <div className="space-y-6">
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-700">Occupation</label>
+                  <label className="block mb-2 text-sm font-medium text-gray-700 occupation_label_id">Occupation</label>
                   {isEditing ? (
                     <input
                       type="text"
@@ -665,7 +725,7 @@ const AccountDetails = () =>{
                 </div>
 
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-700">Company</label>
+                  <label className="block mb-2 text-sm font-medium text-gray-700 company_label_id">Company</label>
                   {isEditing ? (
                     <input
                       type="text"
@@ -679,7 +739,7 @@ const AccountDetails = () =>{
                 </div>
 
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-700">Business Description</label>
+                  <label className="block mb-2 text-sm font-medium text-gray-700 business_description_label_id">Business Description</label>
                   {isEditing ? (
                     <textarea
                       value={userData.business_description}
@@ -698,7 +758,7 @@ const AccountDetails = () =>{
 
           {/* Main Content */}
           <div className="flex-1">
-            <p className="mb-4 text-sm text-gray-500">
+            <p className="mb-4 text-sm text-gray-500 personal_info_management_label_id">
               Manage your personal information, including phone numbers and email address where you can be contacted
             </p>
             {/* {ProfileInfo()} */}
@@ -708,7 +768,7 @@ const AccountDetails = () =>{
     )
   }
 
-   const handleSocialMediaChange = (platform, value) => {
+  const handleSocialMediaChange = (platform, value) => {
     setUserData((prev) => ({
       ...prev,
       social_media: { ...prev.social_media, [platform]: value }
@@ -823,7 +883,7 @@ const AccountDetails = () =>{
     return (
       <div className="space-y-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <h4 className="font-medium text-gray-900">Photo Gallery</h4>
+          <h4 className="font-medium text-gray-900 photo_gallery_label_id">Photo Gallery</h4>
           <span className="text-sm text-gray-500">
             {/* {userData.user_uploads_table.length}/{photoLimit} photos ({userPlan} Plan) */}
           </span>
@@ -848,8 +908,8 @@ const AccountDetails = () =>{
               className="hidden"
             />
             <Upload className="w-6 h-6 mx-auto mb-2 text-gray-400 sm:w-8 sm:h-8" />
-            <p className="text-sm text-gray-600">Drop photos here or click to upload</p>
-            <p className="text-xs text-gray-400">PNG, JPG up to 5MB each</p>
+            <p className="text-sm text-gray-600 drop_photos_here_or_click_to_upload_label_id">Drop photos here or click to upload</p>
+            <p className="text-xs text-gray-400 png_jpg_up_to_5mb_each_label_id">PNG, JPG up to 5MB each</p>
           </div>
         )}
 
@@ -886,11 +946,12 @@ const AccountDetails = () =>{
 
   const SocialMediaSection = () => (
     <div className="space-y-4">
-      <h4 className="font-medium text-gray-900">Social Media Links</h4>
+      <h4 className="font-medium text-gray-900 social_media_links_label_id">Social Media Links</h4>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-700">
-            <Facebook className="inline w-4 h-4 mr-1" /> Facebook
+            <Facebook className="inline w-4 h-4 mr-1" /> 
+            <span className='facebook_label_id'>Facebook</span>
           </label>
           {isEditing ? (
             <input
@@ -909,7 +970,8 @@ const AccountDetails = () =>{
 
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-700">
-            <Instagram className="inline w-4 h-4 mr-1" /> Instagram
+            <Instagram className="inline w-4 h-4 mr-1" /> 
+            <span className='instagram_label_id'>Instagram</span>
           </label>
           {isEditing ? (
             <input
@@ -928,7 +990,8 @@ const AccountDetails = () =>{
 
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-700">
-            <Twitter className="inline w-4 h-4 mr-1" /> Twitter
+            <Twitter className="inline w-4 h-4 mr-1" /> 
+            <span className='twitter_label_id'>Twitter</span>
           </label>
           {isEditing ? (
             <input
@@ -947,7 +1010,8 @@ const AccountDetails = () =>{
 
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-700">
-            <Youtube className="inline w-4 h-4 mr-1" /> YouTube
+            <Youtube className="inline w-4 h-4 mr-1" /> 
+            <span className='youtube_label_id'>YouTube</span>
           </label>
           {isEditing ? (
             <input
@@ -969,7 +1033,7 @@ const AccountDetails = () =>{
 
   const HobbiesSection = () => (
     <div className="space-y-4">
-      <h4 className="font-medium text-gray-900">Hobbies & Interests</h4>
+      <h4 className="font-medium text-gray-900 hobbies_and_interests_label_id">Hobbies & Interests</h4>
       <div className="flex flex-wrap gap-2">
         {userData.hobbies.map((hobby, index) => (
           <span key={index} className="inline-flex items-center px-3 py-1 text-sm text-blue-800 bg-blue-100 rounded-full">
@@ -1003,7 +1067,7 @@ const AccountDetails = () =>{
 
   const BucketListSection = () => (
     <div className="space-y-4">
-      <h4 className="font-medium text-gray-900">Bucket List Destinations</h4>
+      <h4 className="font-medium text-gray-900 bucket_list_label_id">Bucket List Destinations</h4>
       <div className="space-y-3">
         {userData.bucket_list.map((item, index) => (
           <div key={index} className="p-4 border border-gray-200 rounded-lg">
@@ -1040,7 +1104,7 @@ const AccountDetails = () =>{
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             rows={2}
           />
-          <button onClick={addBucketListItem} className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+          <button onClick={addBucketListItem} className="px-4 py-2 text-white bg-blue-600 rounded-lg add_destination_label_id hover:bg-blue-700">
             Add Destination
           </button>
         </div>
@@ -1050,7 +1114,7 @@ const AccountDetails = () =>{
 
   const YouTubeSection = () => (
     <div className="space-y-4">
-      <h4 className="font-medium text-gray-900">YouTube Videos</h4>
+      <h4 className="font-medium text-gray-900 youtube_videos_label_id">YouTube Videos</h4>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {userData.youtube_videos.map((video, index) => {
           const videoId = extractYoutubeId(video);
@@ -1068,7 +1132,7 @@ const AccountDetails = () =>{
                 </div>
               ) : (
                 <div className="flex items-center justify-center bg-gray-200 rounded-lg aspect-video">
-                  <p className="text-gray-500">Invalid YouTube URL</p>
+                  <p className="text-gray-500 invalid_youtube_url_label_id">Invalid YouTube URL</p>
                 </div>
               )}
               {isEditing && (

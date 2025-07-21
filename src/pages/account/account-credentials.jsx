@@ -55,6 +55,36 @@ const AccountCredentials = () =>{
     }
   })
 
+  const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
+
+  useEffect(() =>{
+    if(auth_states.SelectedLanguage){
+      selectedLanguage.current = parseInt(auth_states.SelectedLanguage.id)
+    }
+  },[auth_states])
+
+  useEffect(() =>{
+      auth_states.PageLanguages.map((item, key) =>{
+          const translation = item.translation
+          
+          if(translation.length > 0 && auth_states.SelectedLanguage){
+              const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
+              const targetElement = document.getElementsByClassName(item.page_config_id)
+              if (targetElement) {
+                  if (targetElement.length > 0 && filteredTranslation) {
+                      Array.from(targetElement).forEach((el) => {
+                          el.textContent = filteredTranslation.page_config_title;
+                      });
+                  } else if (targetElement.length > 0) {
+                      Array.from(targetElement).forEach((el) => {
+                          el.textContent = item.page_config_title;
+                      });
+                  }
+              }
+          }
+      })
+  },[auth_states, isEditing, requestLoading])
+
   const handleInputChange = (field, value) => {
     setUserData((prev) => ({ ...prev, [field]: value }));
   };
@@ -122,11 +152,11 @@ const AccountCredentials = () =>{
        <div className="pb-10 space-y-6 lg:col-span-2">
         {/* Pin & Password */}
         <div className="p-6 space-y-3 bg-white border border-gray-200 rounded-lg shadow-md">
-          <h3 className="mb-4 text-lg font-semibold text-gray-900">Pin and Password</h3>
+          <h3 className="mb-4 text-lg font-semibold text-gray-900 pin_and_password_label_id">Pin and Password</h3>
           {isEditing && (
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
-                <label className="block mb-2 text-sm font-medium text-gray-700">PIN</label>
+                <label className="block mb-2 text-sm font-medium text-gray-700 pin_uppercase_label_id">PIN</label>
                 <input
                   type="number"
                   value={userData.pin}
@@ -136,7 +166,7 @@ const AccountCredentials = () =>{
               </div>
 
               <div>
-                <label className="block mb-2 text-sm font-medium text-gray-700">Password</label>
+                <label className="block mb-2 text-sm font-medium text-gray-700 password_label_id">Password</label>
                 <input
                   type="password"
                   value={userData.password}
@@ -159,8 +189,8 @@ const AccountCredentials = () =>{
           <div className="flex-1">
             {/* Header */}
             <div className="mb-6 sm:mb-8">
-              <h1 className="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl">Setup Credentials</h1>
-              <p className="text-sm text-gray-600 sm:text-base">Manage your credentials</p>
+              <h1 className="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl setup_credentials_label_id">Setup Credentials</h1>
+              <p className="text-sm text-gray-600 sm:text-base manage_your_wallet_label_id">Manage your credentials</p>
             </div>
             <div className="flex flex-col gap-4 mb-6 sm:flex-row sm:justify-between sm:items-center">
               <button
@@ -177,7 +207,7 @@ const AccountCredentials = () =>{
                 }`}
               >
                 {isEditing ? <Save className="w-4 h-4" /> : <Edit2 className="w-4 h-4" />}
-                <span>{isEditing ? 'Save' : 'Edit'}</span>
+                <p>{isEditing ? <span className="save_label_id">Save</span> : <span className='edit_label_id'>Edit</span>}</p>
               </button>
             </div>
             {ProfileInfo()}

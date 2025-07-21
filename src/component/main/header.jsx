@@ -7,11 +7,9 @@ import { IoLanguageOutline } from "react-icons/io5";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { AiOutlineLogout } from "react-icons/ai";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
-import { PiBuildingOfficeLight } from "react-icons/pi";
 import { FaRegUser } from "react-icons/fa6";
 import { LuTickets } from "react-icons/lu";
 import { Link } from "react-router-dom";
-import { TfiReceipt } from "react-icons/tfi";
 import { FaRegEnvelopeOpen } from "react-icons/fa";
 import { GrShieldSecurity } from "react-icons/gr";
 import { TiHomeOutline } from "react-icons/ti";
@@ -113,7 +111,7 @@ const Header = ({
                             </a>
                           </button>
                         :
-                          <Link to={'login'}>
+                          <Link to={'/login'}>
                             <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                               <FaRegCircleUser  size={20}/>
                               <p className='login_id text-[#001d3d] capitalize ml-2 '>Login</p>
@@ -143,7 +141,7 @@ const Header = ({
       <div style={{zIndex: 2000}} className="drawer">
         <input id="my-drawer" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content">
-          <Header/>
+          {Header()}
         </div> 
         <div className="z-50 drawer-side">
           <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
@@ -155,7 +153,7 @@ const Header = ({
                   <Link to={'/'}>
                     <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <TiHomeOutline  size={20}/>
-                      <p className='events_id text-[#001d3d] capitalize ml-2 '>Home</p>
+                      <p className='home_label_id text-[#001d3d] capitalize ml-2 '>Home</p>
                     </a>
                   </Link>
                 }
@@ -164,7 +162,7 @@ const Header = ({
                   <Link to={'/travel'}>
                     <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <MdOutlineTravelExplore  size={20}/>
-                      <p className='events_id text-[#001d3d] capitalize ml-2 '>Travel</p>
+                      <p className='travel_label_id text-[#001d3d] capitalize ml-2 '>Travel</p>
                     </a>
                   </Link>
                 }
@@ -173,7 +171,7 @@ const Header = ({
                   <Link to={'/academy-index'}>
                     <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <RiGraduationCapLine  size={20}/>
-                      <p className='events_id text-[#001d3d] capitalize ml-2 '>Learn</p>
+                      <p className='learn_label_id text-[#001d3d] capitalize ml-2 '>Learn</p>
                     </a>
                   </Link>
                 }
@@ -183,7 +181,7 @@ const Header = ({
                   <Link to={'/event'}>
                     <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <LuTickets  size={20}/>
-                      <p className='events_id text-[#001d3d] capitalize ml-2 '>events</p>
+                      <p className='events_label_id text-[#001d3d] capitalize ml-2 '>events</p>
                     </a>
                   </Link>
                 }
@@ -211,7 +209,7 @@ const Header = ({
                   <Link to={'/subscriptions'}>
                     <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <FaRegEnvelopeOpen  size={20}/>
-                      <p className='events_id text-[#001d3d] capitalize ml-2 '>subscription</p>
+                      <p className='subscription_id text-[#001d3d] capitalize ml-2 '>subscription</p>
                     </a>
                   </Link>
                 }
@@ -221,7 +219,7 @@ const Header = ({
                   <Link to={'/orders'}>
                     <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <HiOutlineShoppingBag  size={20}/>
-                      <p className='events_id text-[#001d3d] capitalize ml-2 '>orders</p>
+                      <p className='orders_id text-[#001d3d] capitalize ml-2 '>orders</p>
                     </a>
                   </Link>
                 }
@@ -231,7 +229,7 @@ const Header = ({
                   <Link to={'/security'}>
                     <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <GrShieldSecurity  size={20}/>
-                      <p className='events_id text-[#001d3d] capitalize ml-2 '>security</p>
+                      <p className='security_id text-[#001d3d] capitalize ml-2 '>security</p>
                     </a>
                   </Link>
                 }
@@ -300,7 +298,7 @@ const Header = ({
 
   return (
     <div>
-      <DrawerComp/>
+      {DrawerComp()}
     </div>
   )
 }

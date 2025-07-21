@@ -210,9 +210,9 @@ const DistributionList = () =>{
           {/* head */}
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Account Number</th>
-              <th>Membership</th>
+              <th className='name_label_id'>Name</th>
+              <th className='account_number_label_id'>Account Number</th>
+              <th className='membership_label_id'>Membership</th>
             </tr>
           </thead>
           <tbody>
@@ -251,7 +251,7 @@ const DistributionList = () =>{
           <button
             onClick={() => setPaginate(getPaginationButtonNextPrev.prev_page_url)}
             disabled={getPaginationButtonNextPrev.current_page === 1}
-            className="px-4 py-2 font-medium text-gray-700 transition-colors duration-200 bg-white rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 font-medium text-gray-700 transition-colors duration-200 bg-white rounded-lg previous_label_id hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Previous
           </button>
@@ -275,7 +275,7 @@ const DistributionList = () =>{
           <button
             onClick={() => setPaginate(getPaginationButtonNextPrev.next_page_url)}
             disabled={getPaginationButtonNextPrev.current_page === getPaginationButtonNextPrev.last_page}
-            className="px-4 py-2 font-medium text-gray-700 transition-colors duration-200 bg-white rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 font-medium text-gray-700 transition-colors duration-200 bg-white rounded-lg next_label_id hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Next
           </button>
@@ -292,8 +292,8 @@ const DistributionList = () =>{
           <div className="flex-1">
             {/* Header */}
             <div className="mb-2">
-              <h1 className="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl">Connections</h1>
-              <p className="text-sm text-gray-600 sm:text-base">my sponsored members</p>
+              <h1 className="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl connections_label_id">Connections</h1>
+              <p className="text-sm text-gray-600 sm:text-base my_sponsored_members_label_id">my sponsored members</p>
             </div>
             {
               requestLoading

@@ -368,21 +368,28 @@ const EventContent = () =>{
                       title={
                         selectedLanguage.current == null 
                         ? item_content.content_title
-                        : (
+                        : 
+                          item_content.translation ?
+                          (
                               item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
                             ? item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
                             : item_content.content_title
                           )
+                          : item_content.content_title
                       }
                       clickSeeDetails={() => HandleSeeDetails(item_content)}
                       details={
                         selectedLanguage.current == null 
                         ? item_content.content_description
-                        : (
-                              item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                            ? item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
-                            : item_content.content_description
-                          )
+                        : 
+                          item_content.translation 
+                          ?
+                            (
+                                item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                              ? item_content.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
+                              : item_content.content_description
+                            )
+                          : item_content.content_description
                       }
                       image={
                           item_content.uploads_table_main_view.upload_type === "url" 
@@ -451,22 +458,30 @@ const EventContent = () =>{
                         {     
                           selectedLanguage.current == null 
                           ? item.offers_table.tier_category_table.tier_category_name
-                          : (
-                                item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                              ? item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
-                              : item.offers_table.tier_category_table.tier_category_name
-                            )
+                          : 
+                            item.offers_table.tier_category_table.translation
+                            ?
+                              (
+                                  item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                ? item.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
+                                : item.offers_table.tier_category_table.tier_category_name
+                              )
+                            : item.offers_table.tier_category_table.tier_category_name
                         }
                       </span>
                       <span>
                         {
                           selectedLanguage.current == null 
                           ? item.offers_table.membership_type_table.type_title
-                          : (
-                                item.offers_table.membership_type_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                              ? item.offers_table.membership_type_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
-                              : item.offers_table.membership_type_table.type_title
-                            )
+                          : 
+                            item.offers_table.membership_type_table.translation
+                            ?
+                              (
+                                  item.offers_table.membership_type_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                ? item.offers_table.membership_type_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
+                                : item.offers_table.membership_type_table.type_title
+                              )
+                            : item.offers_table.membership_type_table.type_title
                         }
                       </span>
                       <span className='text-[18px] font-normal'>
@@ -474,11 +489,15 @@ const EventContent = () =>{
                           {
                             selectedLanguage.current == null 
                             ? item.offers_table.supplier_table.room_type.room_type_name
-                            : (
-                                  item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                ? item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).room_type_name
-                                : item.offers_table.supplier_table.room_type.room_type_name
-                              )
+                            : 
+                              item.offers_table.supplier_table.room_type.translation
+                              ?
+                                (
+                                    item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                  ? item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).room_type_name
+                                  : item.offers_table.supplier_table.room_type.room_type_name
+                                )
+                              : item.offers_table.supplier_table.room_type.room_type_name
                           }
                         )
                       </span>

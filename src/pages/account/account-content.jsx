@@ -71,6 +71,37 @@ const AccountContent = () =>{
     AccountTransaction:[]
   });
 
+  const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
+
+  useEffect(() =>{
+    if(auth_states.SelectedLanguage){
+      selectedLanguage.current = parseInt(auth_states.SelectedLanguage.id)
+    }
+  },[auth_states])
+
+  useEffect(() =>{
+      auth_states.PageLanguages.map((item, key) =>{
+          const translation = item.translation
+          
+          if(translation.length > 0 && auth_states.SelectedLanguage){
+              const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
+              const targetElement = document.getElementsByClassName(item.page_config_id)
+              if (targetElement) {
+                  if (targetElement.length > 0 && filteredTranslation) {
+                      Array.from(targetElement).forEach((el) => {
+                          el.textContent = filteredTranslation.page_config_title;
+                      });
+                  } else if (targetElement.length > 0) {
+                      Array.from(targetElement).forEach((el) => {
+                          el.textContent = item.page_config_title;
+                      });
+                  }
+              }
+          }
+      })
+  },[auth_states, getPaginationButtonNextPrev])
+  //#endregion
+
   const getTBucksAndTPoints = async() =>{
     setLoadingContent(true)
     await api_account.getTBucksAndTPoints(auth_states.StateToken).then((result) =>{
@@ -149,7 +180,7 @@ const AccountContent = () =>{
       try {
         await navigator.share({
           title: 'CLUB TEN Referral',
-          text: 'Start your journey with CLUB TEN',
+          text: '',
           url: shareUrl,
         });
         console.log('Content shared successfully');
@@ -167,57 +198,9 @@ const AccountContent = () =>{
     }
   }
 
-  const _SlideComponent = ({children}) =>{
-
-    const wallet_details = [
-      {
-        title: 'travel dollars',
-        balance: walletData.t_dollars,
-        button:[
-          {
-            onPressAction: () => console.log(),
-            title: 'Redeem',
-            icon: <MdOutlineRedeem className="text-[20px] text-white" />
-          }
-        ]
-      },
-      {
-        title: 't-points',
-        balance: walletData.t_points,
-        button:[
-          {
-            onPressAction: () => validateTPointsTransfer(),
-            title: 'Transfer',
-            icon: <TbTransfer className="text-[20px] text-white" />
-          }
-        ]
-      },
-      {
-        title: 't-bucks',
-        balance: walletData.t_bucks,
-        button:[
-          {
-            onPressAction: () => navigate('/t-bucks-transfer'),
-            title: 'Transfer',
-            icon: <TbTransfer className="text-[20px] text-white" />
-          },
-          {
-            onPressAction: () => navigate('/t-bucks-withdraw'),
-            title: 'withdraw',
-            icon: <PiBankBold className="text-[20px] text-white" />
-          }
-        ]
-      }
-    ]
-
+  const _SlideComponent = () =>{
     return(
       <Swiper
-      //#region swiper parameter
-
-      // effect={'cards'}
-      //   grabCursor={true}
-      //   modules={[EffectCards]}
-
         pagination={{
           dynamicBullets: true,
         }}
@@ -225,27 +208,107 @@ const AccountContent = () =>{
         spaceBetween={5}
         slidesPerView={1}
         navigation={true}
-
         onSlideChange={() => setCollapseDetails(false)}
-      //#endregion
       >
-        {
-          wallet_details.map((item, index) => (
-            <SwiperSlide key={index} className='flex justify-center py-5'>
-              <_WalletCard title={item.title} amount={item.balance} buttons={item.button}/>
-            </SwiperSlide>
-          ))
-        }
+
+        {/* Travel Dollars */}
+        <SwiperSlide className='flex justify-center py-5'>
+          <div className="w-[90%] border rounded-2xl p-5 bg-white shadow-lg space-y-3 relative z-0">
+            <p className="text-[18px] md:text-[25px] uppercase font-semibold">
+              <span className='travel_dollars_label_id'>travel dollars</span>
+            </p>
+            <div>
+              <p className="text-[15px] md:text-[18px] capitalize balance_label_id">balance</p>
+              <p className="text-[20px] md:text-[40px] font-bold">{parseFloat(walletData.t_dollars)}</p>
+            </div>
+            <div className="my-5">
+              <div className="flex items-center justify-start space-x-5">
+                <button onClick={() => console.log()} className="bg-white shadow-sm btn rounded-xl">
+                  <div className="bg-blue-600 p-2 flex justify-center text-xl w-[35px] h-[35px] font-bold text-white rounded-full">
+                    <MdOutlineRedeem className="text-[20px] text-white" />
+                  </div>
+                  <p className="mt-1 text-sm capitalize">
+                    <span className='redeem_label_id'>Redeem</span>
+                  </p>
+                </button>
+              </div>
+            </div>
+          </div>
+        </SwiperSlide>
+
+        {/* T-Points */}
+        <SwiperSlide className='flex justify-center py-5'>
+          <div className="w-[90%] border rounded-2xl p-5 bg-white shadow-lg space-y-3 relative z-0">
+            <p className="text-[18px] md:text-[25px] uppercase font-semibold">
+              <span className='tpoints_label_id'>t-points</span>
+            </p>
+            <div>
+              <p className="text-[15px] md:text-[18px] capitalize balance_label_id">balance</p>
+              <p className="text-[20px] md:text-[40px] font-bold">{parseFloat(walletData.t_points)}</p>
+            </div>
+            <div className="my-5">
+              <div className="flex items-center justify-start space-x-5">
+                <button onClick={() => validateTPointsTransfer()} className="bg-white shadow-sm btn rounded-xl">
+                  <div className="bg-blue-600 p-2 flex justify-center text-xl w-[35px] h-[35px] font-bold text-white rounded-full">
+                    <TbTransfer className="text-[20px] text-white" />
+                  </div>
+                  <p className="mt-1 text-sm capitalize">
+                    <span className='transfer_label_id'>Transfer</span>
+                  </p>
+                </button>
+              </div>
+            </div>
+          </div>
+        </SwiperSlide>
+
+        {/* T-Bucks */}
+        <SwiperSlide className='flex justify-center py-5'>
+          <div className="w-[90%] border rounded-2xl p-5 bg-white shadow-lg space-y-3 relative z-0">
+            <p className="text-[18px] md:text-[25px] uppercase font-semibold">
+              <span className='tbucks_label_id'>t-bucks</span>
+            </p>
+            <div>
+              <p className="text-[15px] md:text-[18px] capitalize balance_label_id">balance</p>
+              <p className="text-[20px] md:text-[40px] font-bold">{parseFloat(walletData.t_bucks)}</p>
+            </div>
+            <div className="my-5">
+              <div className="flex items-center justify-start space-x-5">
+
+                {/* Transfer Button */}
+                <button onClick={() => navigate('/t-bucks-transfer')} className="bg-white shadow-sm btn rounded-xl">
+                  <div className="bg-blue-600 p-2 flex justify-center text-xl w-[35px] h-[35px] font-bold text-white rounded-full">
+                    <TbTransfer className="text-[20px] text-white" />
+                  </div>
+                  <p className="mt-1 text-sm capitalize">
+                    <span className='transfer_label_id'>Transfer</span>
+                  </p>
+                </button>
+
+                {/* Withdraw Button */}
+                <button onClick={() => navigate('/t-bucks-withdraw')} className="bg-white shadow-sm btn rounded-xl">
+                  <div className="bg-blue-600 p-2 flex justify-center text-xl w-[35px] h-[35px] font-bold text-white rounded-full">
+                    <PiBankBold className="text-[20px] text-white" />
+                  </div>
+                  <p className="mt-1 text-sm capitalize">
+                    <span className='withdraw_label_id'>Withdraw</span>
+                  </p>
+                </button>
+
+              </div>
+            </div>
+          </div>
+        </SwiperSlide>
+
       </Swiper>
     )
   }
 
-  const _WalletCard = ({title, amount, buttons}) =>{
+  const _WalletCard = (title, amount, buttons) =>{
     return(
       <div className="w-[90%] border rounded-2xl p-5 bg-white shadow-lg space-y-3 relative z-0">
         <p className="text-[18px] md:text-[25px] uppercase font-semibold">{title}</p>
         <div>
-          <p className="text-[15px] md:text-[18px] capitalize">balance</p>
+          <p className="text-[15px] md:text-[18px] capitalize balance_label_id">balance</p>
           <p className="text-[20px] md:text-[40px] font-bold">{parseFloat(amount)}</p>
         </div>
         <div className="my-5">  
@@ -321,7 +384,7 @@ const AccountContent = () =>{
                       }
                       <span className='space-x-1'>
                         <span>{parseFloat(item.t_bucks).toFixed(2)}</span>
-                        <span className='text-xs font-extralight '>T-BUCKS</span>
+                        <span className='text-xs font-extralight t_bucks_uppercase_label_id'>T-BUCKS</span>
                       </span>
                     </p>
                     
@@ -332,7 +395,7 @@ const AccountContent = () =>{
                       }
                       <span className='space-x-1'>
                         <span>{parseFloat(item.t_points).toFixed(2)}</span>
-                        <span className='text-xs font-extralight '>T-POINTS</span>
+                        <span className='text-xs font-extralight t_points_uppercase_label_id'>T-POINTS</span>
                       </span>
                     </p>
                   </div>
@@ -341,65 +404,84 @@ const AccountContent = () =>{
           }
         </div>
         <div className="pb-16 space-x-3">
-          <_Buttons onPressAction={() => setPaginate(getPaginationButtonNextPrev.prev_page_url)} title={'Previous'}/>
-          <_Buttons onPressAction={() => setPaginate(getPaginationButtonNextPrev.next_page_url)} title={'Next'}/>
+          <button
+            onClick={() => setPaginate(getPaginationButtonNextPrev.prev_page_url)}
+            className="bg-white shadow-sm btn rounded-xl"
+          >
+            <p className="mt-1 text-sm capitalize">
+              <span className="previous_label_id">Previous</span>
+            </p>
+          </button>
+
+          <button
+            onClick={() => setPaginate(getPaginationButtonNextPrev.next_page_url)}
+            className="bg-white shadow-sm btn rounded-xl"
+          >
+            <p className="mt-1 text-sm capitalize">
+              <span className="next_label_id">Next</span>
+            </p>
+          </button>
+          {/* <_Buttons onPressAction={() => setPaginate(getPaginationButtonNextPrev.prev_page_url)} title={<span className='previous_label_id'>Previous</span>}/>
+          <_Buttons onPressAction={() => setPaginate(getPaginationButtonNextPrev.next_page_url)} title={<span className='next_label_id'>Next</span>}/> */}
         </div>
       </div>
-    )
-  }
-
-  const _BonusCard = ({icon, title, value, rate, rateStatus = true, onPressAction}) =>{
-    return(
-      <button onClick={onPressAction} className="flex flex-col w-[100%] gap-2 p-4 bg-white shadow-md rounded-xl border">
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <div className="">
-            {icon}
-          </div>
-          <p>{title}</p>
-        </div>
-        <div className="text-[18px] md:text-2xl font-semibold text-black">{value}</div>
-        <div className="px-2 py-1 text-sm font-medium text-green-600 bg-green-100 rounded w-fit">
-        {rateStatus ? '+' : '-'}{rate}%
-        </div>
-      </button>
     )
   }
 
   const FinanceSummary = () => {
     return (
       <div className="w-[95%] grid grid-cols-2 gap-3">
-        <_BonusCard
-          onPressAction={() => navigate('/connects')}
-          icon={<LuHandshake size={18} className="text-gray-600" />}
-          title={'Direct Bonus'}
-          value={walletData.direct}
-          rate={0.0}
-          rateStatus={true}
-        />
-        
-        <_BonusCard
-          icon={<FaRegStar size={18} className="text-gray-600" />}
-          title={'Stars Bonus'}
-          value={0.00}
-          rate={0.0}
-          rateStatus={false}
-        />
+        <button onClick={() => navigate('/connects')} className="flex flex-col w-[100%] gap-2 p-4 bg-white shadow-md rounded-xl border">
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <div>
+              <LuHandshake size={18} className="text-gray-600" />
+            </div>
+            <p><span className='direct_bonus_label_id'>Direct Bonus</span></p>
+          </div>
+          <div className="text-[18px] md:text-2xl font-semibold text-black">{walletData.direct}</div>
+          <div className="px-2 py-1 text-sm font-medium text-green-600 bg-green-100 rounded w-fit">
+            +0.0%
+          </div>
+        </button>
 
-        <_BonusCard
-          icon={<TbWorldDollar size={18} className="text-gray-600" />}
-          title={'Global Bonus'}
-          value={0.00}
-          rate={0.0}
-          rateStatus={false}
-        />
+        <button className="flex flex-col w-[100%] gap-2 p-4 bg-white shadow-md rounded-xl border">
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <div>
+              <FaRegStar size={18} className="text-gray-600" />
+            </div>
+            <p><span className='star_bonus_label_id'>Stars Bonus</span></p>
+          </div>
+          <div className="text-[18px] md:text-2xl font-semibold text-black">0.00</div>
+          <div className="px-2 py-1 text-sm font-medium text-green-600 bg-green-100 rounded w-fit">
+            -0.0%
+          </div>
+        </button>
 
-        <_BonusCard
-          icon={<BsBarChartLine size={18} className="text-gray-600" />}
-          title={'Milestone Bonus'}
-          value={0.00}
-          rate={0.0}
-          rateStatus={false}
-        />
+        <button className="flex flex-col w-[100%] gap-2 p-4 bg-white shadow-md rounded-xl border">
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <div>
+              <TbWorldDollar size={18} className="text-gray-600" />
+            </div>
+            <p><span className='global_bonus_label_id'>Global Bonus</span></p>
+          </div>
+          <div className="text-[18px] md:text-2xl font-semibold text-black">0.00</div>
+          <div className="px-2 py-1 text-sm font-medium text-green-600 bg-green-100 rounded w-fit">
+            -0.0%
+          </div>
+        </button>
+
+        <button className="flex flex-col w-[100%] gap-2 p-4 bg-white shadow-md rounded-xl border">
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <div>
+              <BsBarChartLine size={18} className="text-gray-600" />
+            </div>
+            <p><span className='milestone_bonus_label_id'>Milestone Bonus</span></p>
+          </div>
+          <div className="text-[18px] md:text-2xl font-semibold text-black">0.00</div>
+          <div className="px-2 py-1 text-sm font-medium text-green-600 bg-green-100 rounded w-fit">
+            -0.0%
+          </div>
+        </button>
       </div>
     )
   }
@@ -425,13 +507,13 @@ const AccountContent = () =>{
               </div>
               <button onClick={() => handleShare(auth_states.payload)} className="px-4 py-2 text-black ">
                 <div className='flex items-center justify-center space-x-2'>
-                  <p className='text-[18px]'>Share</p>
+                  <p className='text-[18px] share_label_id'>Share</p>
                   <FaRegShareFromSquare size={18}/>
                 </div>
               </button>
             </div>
           </div>
-          <label className="modal-backdrop" htmlFor="my_modal_7">Close</label>
+          <label className="modal-backdrop close_label_id" htmlFor="my_modal_7">Close</label>
         </div>
       </div>
     )
@@ -443,7 +525,7 @@ const AccountContent = () =>{
         <dialog ref={modalSubscriptionRef} id="my_modal_2" className="modal">
           <div className="modal-box">
             <div className="flex-1 mt-5 space-y-1 md:space-y-8">
-                <h2 className="text-2xl font-extrabold leading-tight text-center text-black capitalize md:text-3xl">
+                <h2 className="text-2xl font-extrabold leading-tight text-center text-black capitalize available_only_for_active_vip_members_label_id md:text-3xl">
                 available only for active VIP members.
                 </h2>
 
@@ -463,7 +545,7 @@ const AccountContent = () =>{
                   </div>
 
                   <div className='flex justify-center'>
-                    <button onClick={() => navigate('/subscriptions')} className="px-6 py-3 text-white transition-colors bg-[#031956] rounded-lg whitespace-nowrap">
+                    <button onClick={() => navigate('/subscriptions')} className="upgrade_membership_label_id px-6 py-3 text-white transition-colors bg-[#031956] rounded-lg whitespace-nowrap">
                     Upgrade Membership
                     </button>
                   </div>
@@ -483,10 +565,10 @@ const AccountContent = () =>{
       <div className="grid grid-cols-1 md:grid-cols-2">
         <div className="">
         <div className="flex items-center justify-between">
-            <p className="capitalize font-semibold text-[20px]">your wallet</p>
+            <p className="capitalize font-semibold text-[20px] your_wallet_label_id">your wallet</p>
           </div>
           <div className="flex items-center justify-between px-3">
-            <p className="capitalize text-[15px] md:text-[18px]">account number</p>
+            <p className="capitalize text-[15px] md:text-[18px] account_number_label_id">account number</p>
             <p className="font-semibold capitalize text-[25px] md:text-[25px]">{auth_states.StateUserInformation.accounts_table.account_number}</p>
             <label htmlFor="my_modal_7">
               <LuQrCode size={40}/>
@@ -509,7 +591,7 @@ const AccountContent = () =>{
                   </div>
                 </div>
               :
-                <_SlideComponent/>
+                _SlideComponent()
             }
           </div>
 
@@ -518,14 +600,14 @@ const AccountContent = () =>{
           </div> */}
           
           <div className="flex items-center justify-center my-5">
-            <FinanceSummary/>
+            {FinanceSummary()}
           </div>
         </div>
         <div className="px-3 space-y-5">
           <div className="flex items-center justify-between">
-            <p className="capitalize font-semibold text-[20px]">transaction history</p>
+            <p className="capitalize font-semibold text-[20px] transaction_history_label_id">transaction history</p>
           </div>
-          <_TransactionTable/>
+          {_TransactionTable()}
         </div>
       </div>
       <ModalComp/>

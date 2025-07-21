@@ -87,17 +87,17 @@ const DetailsPage = () =>{
 
   //#endregion
 
-  const TabItem = ({ icon, label, active, path }) =>{
+  // const TabItem = ({ icon, label, active, path }) =>{
 
-    return (
-      <Link to={path}>
-        <div className={`flex flex-col items-center ${active ? "text-white" : "text-gray-400"} `}>
-          <div className="mb-1 text-lg">{icon}</div>
-          <span className="text-[14px]">{label}</span>
-        </div>
-      </Link>
-    )
-  }
+  //   return (
+  //     <Link to={path}>
+  //       <div className={`flex flex-col items-center ${active ? "text-white" : "text-gray-400"} `}>
+  //         <div className="mb-1 text-lg">{icon}</div>
+  //         <span className="text-[14px]">{label}</span>
+  //       </div>
+  //     </Link>
+  //   )
+  // }
 
   const BottomTabNavigator = () =>{
     return (
@@ -108,11 +108,30 @@ const DetailsPage = () =>{
         zIndex: 1000
       }}
       className="md:hidden bottom-4 left-1/2 transform -translate-x-1/2 bg-[#031956] text-white rounded-xl px-4 py-1 flex justify-between items-center w-[90%] space-x-6 shadow-lg">
-        <TabItem icon={<TiHomeOutline size={20}/>} path={'/'} label="Home" active />
-        <TabItem icon={<LuTickets size={20}/>} path={'/event'} label="Events" />
-        <TabItem icon={<FaShoppingBag size={20}/>} path={'/mall'} label="Mall" />
-        <TabItem icon={<HiMiniBuildingOffice2 size={20}/>} path={'/account'} label="Office" />
-        <TabItem icon={<FaRegCircleUser size={20}/>} path={'/details'} label="Profile" />
+        <Link to={'/'}>
+          <div className={`flex flex-col items-center ${active ? "text-white" : "text-gray-400"} `}>
+            <div className="mb-1 text-lg"><TiHomeOutline size={20}/></div>
+            <span className="text-[14px] home_label_id">Home</span>
+          </div>
+        </Link>
+        <Link to={'/event'}>
+          <div className={`flex flex-col items-center ${active ? "text-white" : "text-gray-400"} `}>
+            <div className="mb-1 text-lg"><LuTickets size={20}/></div>
+            <span className="text-[14px] events_label_id">Events</span>
+          </div>
+        </Link>
+        <Link to={'/account'}>
+          <div className={`flex flex-col items-center ${active ? "text-white" : "text-gray-400"} `}>
+            <div className="mb-1 text-lg"><HiMiniBuildingOffice2 size={20}/></div>
+            <span className="text-[14px] office_label_id">Office</span>
+          </div>
+        </Link>
+        <Link to={'/details'}>
+          <div className={`flex flex-col items-center ${active ? "text-white" : "text-gray-400"} `}>
+            <div className="mb-1 text-lg"><FaRegCircleUser size={20}/></div>
+            <span className="text-[14px] profile_label_id">Profile</span>
+          </div>
+        </Link>
       </div>
     )
   }
@@ -214,11 +233,15 @@ const DetailsPage = () =>{
                         {
                           selectedLanguage.current == null 
                           ? ResultGetHomeContents.content_title
-                          : (
-                                ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                              ? ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
-                              : ResultGetHomeContents.content_title
-                            )
+                          : 
+                            ResultGetHomeContents.translation
+                            ?
+                              (
+                                  ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                ? ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
+                                : ResultGetHomeContents.content_title
+                              )
+                            : ResultGetHomeContents.content_title
                         }
                       </p>
                       {
@@ -272,13 +295,15 @@ const DetailsPage = () =>{
                       dangerouslySetInnerHTML={{
                       __html: selectedLanguage.current == null 
                               ? ResultGetHomeContents.content_description
-                              : (
-                                    ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                  ? ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
-                                  : ResultGetHomeContents.content_description
-                                )
-                        
-                        
+                              : 
+                                ResultGetHomeContents.translation
+                                ?
+                                  (
+                                      ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                    ? ResultGetHomeContents.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_description
+                                    : ResultGetHomeContents.content_description
+                                  )
+                                : ResultGetHomeContents.content_description
                       }} 
 
                     ></div>
