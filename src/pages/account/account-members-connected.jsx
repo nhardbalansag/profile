@@ -101,7 +101,13 @@ const DistributionList = () =>{
               <tr>
                 <th>{member.account.users_table.first_name}</th>
                 <td>{member.account.account_number}</td>
-                <td>{member.account.subscription__sales__transactions_one.subscription_category.membership_type.type_title}</td>
+                <td>
+                  {
+                      member.account.subscription__sales__transactions_one 
+                    ? member.account.subscription__sales__transactions_one.subscription_category.membership_type.type_title
+                    : 'No Membership'
+                  }
+                </td>
               </tr>
               ))
             }
