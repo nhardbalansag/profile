@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {useSelector} from 'react-redux';
+import { format, parseISO } from 'date-fns';
 
 import { GoVerified } from "react-icons/go";
 import { ToastContainer, toast } from 'react-toastify';
@@ -367,6 +368,22 @@ const AccountSubscription = () =>{
                     
                   </span>
                 </p>
+                <p className="space-x-2 text-xs text-gray-500">
+                  <span>
+                    {
+                      !loadingRequest &&
+                      AccountSubscriptionDetails.details.subscription_category.membership_type.translation.membership.is_paid_account &&
+                      <span className='expires_on_label_id'>Expires on</span>
+                    }
+                    
+                  </span>
+                  <span>
+                  {
+                    !loadingRequest &&
+                    format(parseISO(AccountSubscriptionDetails.details.subscription_end), 'MMMM d, yyyy')
+                  }
+                  </span>
+                </p>
               </div>
             </div>
         }
@@ -374,7 +391,7 @@ const AccountSubscription = () =>{
           !loadingRequest &&
           AccountSubscriptionDetails.details.subscription_category.membership_type.translation.membership.is_paid_account &&
           !AccountSubscriptionDetails.details.is_unsubscribe  &&
-          AccountSubscriptionDetails.paidMembershipCount > 1 &&
+          AccountSubscriptionDetails.paidMembershipCount > 0 &&
           <ButtonComp onPress={() => UnsubscribeToStripe()} className='btn-error' title='Unsubscribe'/>
         }
       </div>
