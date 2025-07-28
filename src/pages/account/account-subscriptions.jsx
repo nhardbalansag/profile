@@ -215,85 +215,6 @@ const AccountSubscription = () =>{
     }
   }
 
-  const handleCustomBucks = (event) => {
-
-      const currentWalletAmount = walletTBucksRef.current;
-      const finalPrice = parseFloat(totalPriceWithPoints) + parseFloat(TBucksCustom);
-
-      const { name, type, checked, value } = event.target;
-      const validatedNaNInput = (Number.isNaN(value) ? parseInt(0) : parseInt(value))
-
-      if(Number.isNaN(validatedNaNInput)){
-          setTotalPriceWithPoints(prev => prev + TBucksCustom);
-          setWalletData(prev => ({...prev, t_bucks: prev.t_bucks + TBucksCustom}))
-          setTBucksCustom(value !== "" ? 0 : value);
-          return;
-      } 
-
-      if(!getUseTBucksWalletFullAmount){
-          // Calculate the actual points allowed and usable
-          const safeInput = Math.max(0, validatedNaNInput); // prevents negative values
-          const tBucksLimit = Math.min(safeInput, currentWalletAmount);
-          const pointsAllowed = Math.min(tBucksLimit, finalPrice);
-          const pointsToUse = Math.min(pointsAllowed, finalPrice);
-
-          // Derived values
-          const remainingWalletBalance = currentWalletAmount - pointsToUse;
-          const finalPriceNewValue = finalPrice - pointsToUse;
-
-          // Set new state values
-          setTotalPriceWithPoints(finalPriceNewValue);
-          setWalletData(prev => ({...prev, t_bucks: remainingWalletBalance}))
-          setTBucksCustom(pointsToUse);
-      }
-  
-  }
-
-  const handleIncreaseCustomBucks = (item) => {
-
-    const currentWalletAmount = walletTBucksRef.current;
-    const finalPrice = parseFloat(totalPriceWithPoints);
-
-    // check if full points toggle is enabled
-    if(!getUseTBucksWalletFullAmount){
-
-      const nextCustomValue = TBucksCustom + 1;
-
-      // Prevent exceeding limits
-      if (
-          finalPrice == 0 &&
-          (
-              nextCustomValue > currentWalletAmount || // exceeds wallet balance
-              nextCustomValue > finalPrice // exceeds price
-          )
-      ) {
-          return; // Don't apply if limit reached
-      }
-
-      // Apply increment
-      setTBucksCustom(nextCustomValue);
-      setWalletData(prev => ({...prev, t_bucks: prev.t_bucks - 1}))
-      setTotalPriceWithPoints(prev => prev - 1);
-    }
-  };
-
-  const handleDecreaseCustomBucks = (item) => {
-    // check if full points toggle is enabled
-    if (!getUseTBucksWalletFullAmount) {
-      const nextCustomValue = TBucksCustom - 1;
-
-      // Prevent going below 0
-      if (nextCustomValue < 0) {
-          return;
-      }
-
-      // Apply decrement
-      setTBucksCustom(nextCustomValue);
-      setWalletData(prev => ({...prev, t_bucks: prev.t_bucks + 1}))
-      setTotalPriceWithPoints(prev => prev + 1);
-    }
-  };
-
   const resetOnClose = () =>{
 
     getTBucksAndTPoints()
@@ -366,47 +287,6 @@ const AccountSubscription = () =>{
                 onChange={() => handleTbucks()}
                 className="toggle toggle-sm " /> 
             </div>
-            {
-                !getUseTBucksWalletFullAmount && 
-                parseFloat(TBucksCustom) === 0 &&
-                parseFloat(parseFloat(totalPriceWithPoints).toFixed(2)) === 0
-                ?   <></> 
-                :
-                      parseFloat(TBucksCustom) === 0 &&
-                      parseFloat(parseFloat(totalPriceWithPoints).toFixed(2)) === 0
-                      ?   <></> 
-                      :
-                        !getUseTBucksWalletFullAmount && 
-                        (
-                            <div className="space-y-4">
-                                <span className="text-sm font-semibold text-gray-900 tbucks_amount_label_id">T-Bucks Amount</span>
-                                <div className="flex items-end justify-center space-x-2">
-                                    <button onClick={handleDecreaseCustomBucks } className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
-                                        <CiCircleMinus   className="text-[25px] text-[#FF5722]" />
-                                    </button>
-                                    <div className='flex items-center justify-center text-center'>
-                                        <div>
-                                            <input 
-                                            type="number" 
-                                            placeholder="0" 
-                                            name='customTBucks' 
-                                            value={TBucksCustom} 
-                                            onChange={() => handleCustomBucks(text)} 
-                                            className="w-[80px] input input-bordered input-md" />
-                                        </div>
-                                    </div>
-                                    <button onClick={handleIncreaseCustomBucks} className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
-                                        <CiCirclePlus   className="text-[25px] text-[#FF5722]" />
-                                    </button>
-                                </div>
-
-                                <div className="p-3 text-center bg-blue-100 rounded-lg">
-                                    <div className="text-2xl font-bold text-orange-700">${TBucksCustom}</div>
-                                    <div className="text-xs text-orange-600 usd_equivalent_label_id">USD equivalent</div>
-                                </div>
-                            </div>
-                        )
-            }
         </div>
       }
       </div>
@@ -518,7 +398,9 @@ const AccountSubscription = () =>{
 
               <div>
                 {
-                  selectedPlan === item.id 
+                  selectedPlan === item.id &&
+                  AccountSubscriptionDetails.paidMembershipCount <= 0 &&
+                  item.subscription_range.subscription_range_days_count === 365
                   ? TbucksWalletDetails(item)
                   : <></>
                 }
@@ -601,60 +483,63 @@ const AccountSubscription = () =>{
                   }
                 </p>
               </div>
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 subscription_plan_expiration_label_id">Subscription Plan Expiration</span>
-                  <span className="font-medium">
-                    {
-                      !loadingRequest &&
-                      AccountSubscriptionDetails.percentage
-                    }
-                    %
-                  </span>
-                </div>
-                <div className="w-full h-2 bg-gray-200 rounded-full">
-                  <div 
-                  className="h-2 rounded-full bg-gradient-to-r from-blue-600 to-purple-600" 
-                  style={{ width: `${AccountSubscriptionDetails.percentage}%` }}
-                  >
-
+              {
+                AccountSubscriptionDetails.paidMembershipCount > 0 && 
+                <div className="space-y-3">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600 subscription_plan_expiration_label_id">Subscription Plan Expiration</span>
+                    <span className="font-medium">
+                      {
+                        !loadingRequest &&
+                        AccountSubscriptionDetails.percentage
+                      }
+                      %
+                    </span>
                   </div>
+                  <div className="w-full h-2 bg-gray-200 rounded-full">
+                    <div 
+                    className="h-2 rounded-full bg-gradient-to-r from-blue-600 to-purple-600" 
+                    style={{ width: `${AccountSubscriptionDetails.percentage}%` }}
+                    >
+
+                    </div>
+                  </div>
+                  <p className="space-x-2 text-xs text-gray-500">
+                    <span>
+                    {
+                      !loadingRequest &&
+                      AccountSubscriptionDetails.days_remaining
+                    }
+                    </span>
+                    
+                    <span>
+                      {
+                        !loadingRequest &&
+                        AccountSubscriptionDetails.days_remaining < 0 
+                        ? <span className='days_expired_label_id'>days expired</span>
+                        : <span className='days_left_before_expiry_label_id'>days left before expiry</span>
+                      }
+                      
+                    </span>
+                  </p>
+                  <p className="space-x-2 text-xs text-gray-500">
+                    <span>
+                      {
+                        !loadingRequest &&
+                        AccountSubscriptionDetails.details.subscription_category.membership_type.translation.membership.is_paid_account &&
+                        <span className='expires_on_label_id'>Expires on</span>
+                      }
+                      
+                    </span>
+                    <span>
+                    {
+                      !loadingRequest &&
+                      format(parseISO(AccountSubscriptionDetails.details.subscription_end), 'MMMM d, yyyy')
+                    }
+                    </span>
+                  </p>
                 </div>
-                <p className="space-x-2 text-xs text-gray-500">
-                  <span>
-                  {
-                    !loadingRequest &&
-                    AccountSubscriptionDetails.days_remaining
-                  }
-                  </span>
-                  
-                  <span>
-                    {
-                      !loadingRequest &&
-                      AccountSubscriptionDetails.days_remaining < 0 
-                      ? <span className='days_expired_label_id'>days expired</span>
-                      : <span className='days_left_before_expiry_label_id'>days left before expiry</span>
-                    }
-                    
-                  </span>
-                </p>
-                <p className="space-x-2 text-xs text-gray-500">
-                  <span>
-                    {
-                      !loadingRequest &&
-                      AccountSubscriptionDetails.details.subscription_category.membership_type.translation.membership.is_paid_account &&
-                      <span className='expires_on_label_id'>Expires on</span>
-                    }
-                    
-                  </span>
-                  <span>
-                  {
-                    !loadingRequest &&
-                    format(parseISO(AccountSubscriptionDetails.details.subscription_end), 'MMMM d, yyyy')
-                  }
-                  </span>
-                </p>
-              </div>
+               }
             </div>
         }
         {
