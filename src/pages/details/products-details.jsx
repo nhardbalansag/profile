@@ -227,7 +227,7 @@ const ProductDetails = () =>{
 
         if (toggledUseFullAmount) {
             // Calculate the actual points allowed and usable
-            const pointsAllowed = Math.min(currentWalletAmount, maxPointsAllowed);
+            const pointsAllowed = Math.min(currentWalletAmount, (maxPointsAllowed * count));
             const pointsToUse = Math.min(pointsAllowed, finalPrice);
 
             // Derived values

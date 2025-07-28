@@ -5,12 +5,17 @@ import { format, parseISO } from 'date-fns';
 import { GoVerified } from "react-icons/go";
 import { ToastContainer, toast } from 'react-toastify';
 
+import { LuDollarSign } from "react-icons/lu";
+import { CiCircleMinus } from "react-icons/ci";
+import { CiCirclePlus } from "react-icons/ci";
+
 import {
   Checkout
 } from '../index.jsx'
 
 import * as api_orders from '../../services/account/orders.api.js'
 import * as api_subscription from '../../services/account/subscription.api.js'
+import * as api_account from '../../services/account/account.api.js'
 
 const AccountSubscription = () =>{
 
@@ -18,6 +23,11 @@ const AccountSubscription = () =>{
 
   // refs
   const paymentBContent = useRef({})
+
+  const walletRef = useRef(0)
+  const walletTBucksRef = useRef(0)
+  const walletTDollarsRef = useRef(0)
+  
 
   // loading states
   const [loadingContent, setLoadingContent] = useState(false);
@@ -29,6 +39,16 @@ const AccountSubscription = () =>{
   const [getPaymentIntentSession, setPaymentIntentSession] = useState(null)
   const [selectedPlan, setSelectedPlan] = useState("");
   const [SelectedSubscriptionCategoryId, SetSelectedSubscriptionCategoryId] = useState(null);
+
+  const [totalPriceWithPoints, setTotalPriceWithPoints] = useState(0);
+  const [getUseTBucksWalletFullAmount, setUseTBucksWalletFullAmount] = useState(false);
+  const [TBucksCustom, setTBucksCustom] = useState(0);
+  const [walletData, setWalletData] = useState({
+      t_points: 0,
+      t_bucks: 0,
+      t_dollars: 0,
+      AccountTransaction:[]
+  });
 
   // behaviour
   const [openBottomPayment, setOpenBottomPayment] = useState(false);
@@ -85,7 +105,12 @@ const AccountSubscription = () =>{
 
   const handleCheckout = async (selectedTab) =>{
     const reqBody = {
-      subscription_categories_id: selectedTab.id
+      subscription_categories_id: selectedTab.id,
+      final_amount_with_points: parseFloat(totalPriceWithPoints),
+
+      bucks_applied: parseFloat(TBucksCustom) || 0,
+      bucks_wallet_before: walletTBucksRef.current,
+      bucks_wallet_after: walletData.t_bucks,
     }
 
     SetSelectedSubscriptionCategoryId(selectedTab.id)
@@ -97,6 +122,16 @@ const AccountSubscription = () =>{
     setLoadingRequest(true)
     await api_subscription.GetClientSecret(auth_states.StateToken, reqBody).then((result) =>{
       if(result.status){
+
+        if(result.data.isWalletPayment){
+          toast.success("Payment succeed");
+
+          setLoadingRequest(false)
+          resetOnClose()
+          CloseBottomPayment()
+          return;
+        }
+
         setclientSecret(result.data.clientSecret)
         setPaymentIntentSession(result.data.sessionId)
         setLoadingRequest(false)
@@ -127,6 +162,149 @@ const AccountSubscription = () =>{
     })
   }
 
+  const getTBucksAndTPoints = async() =>{
+      setLoadingContent(true)
+      await api_account.getTBucksAndTPoints(auth_states.StateToken).then((result) =>{
+          if(result.status){
+              setLoadingContent(false)
+              // setWalletData(result.data.data)
+              Object.keys(result.data.data).map((item, key) =>{
+                  setWalletData((prev) => ({
+                      ...prev,
+                      [item]: result.data.data[item]
+                  }));
+              })
+
+              walletRef.current = result.data.data.t_points
+              walletTBucksRef.current = result.data.data.t_bucks
+              walletTDollarsRef.current = result.data.data.t_dollars
+          }
+        
+          setLoadingContent(false)
+  
+      }).catch((err) =>{
+          setLoadingContent(false)
+      })
+  }
+
+  const handleTbucks = () => {
+    const toggledUseFullAmount = !getUseTBucksWalletFullAmount;
+    setUseTBucksWalletFullAmount(toggledUseFullAmount);
+
+    const currentWalletAmount = walletTBucksRef.current;
+    const finalPrice = parseFloat(totalPriceWithPoints) + parseFloat(TBucksCustom);
+
+    if (toggledUseFullAmount) {
+        // Calculate the actual points allowed and usable
+      const pointsAllowed = Math.min(currentWalletAmount, finalPrice);
+      const pointsToUse = Math.min(pointsAllowed, finalPrice);
+
+      // Derived values
+      const remainingWalletBalance = currentWalletAmount - pointsToUse;
+      const finalPriceNewValue = finalPrice - pointsToUse;
+
+      // Set new state values
+      setTotalPriceWithPoints(finalPriceNewValue);
+      setWalletData(prev => ({...prev, t_bucks: remainingWalletBalance}))
+      setTBucksCustom(pointsToUse);
+    } else {
+      // Revert values when toggle is off
+      setTotalPriceWithPoints(prev => prev + TBucksCustom);
+      setWalletData(prev => ({...prev, t_bucks: walletTBucksRef.current}))
+      setTBucksCustom(0);
+    }
+  }
+
+  const handleCustomBucks = (event) => {
+
+      const currentWalletAmount = walletTBucksRef.current;
+      const finalPrice = parseFloat(totalPriceWithPoints) + parseFloat(TBucksCustom);
+
+      const { name, type, checked, value } = event.target;
+      const validatedNaNInput = (Number.isNaN(value) ? parseInt(0) : parseInt(value))
+
+      if(Number.isNaN(validatedNaNInput)){
+          setTotalPriceWithPoints(prev => prev + TBucksCustom);
+          setWalletData(prev => ({...prev, t_bucks: prev.t_bucks + TBucksCustom}))
+          setTBucksCustom(value !== "" ? 0 : value);
+          return;
+      } 
+
+      if(!getUseTBucksWalletFullAmount){
+          // Calculate the actual points allowed and usable
+          const safeInput = Math.max(0, validatedNaNInput); // prevents negative values
+          const tBucksLimit = Math.min(safeInput, currentWalletAmount);
+          const pointsAllowed = Math.min(tBucksLimit, finalPrice);
+          const pointsToUse = Math.min(pointsAllowed, finalPrice);
+
+          // Derived values
+          const remainingWalletBalance = currentWalletAmount - pointsToUse;
+          const finalPriceNewValue = finalPrice - pointsToUse;
+
+          // Set new state values
+          setTotalPriceWithPoints(finalPriceNewValue);
+          setWalletData(prev => ({...prev, t_bucks: remainingWalletBalance}))
+          setTBucksCustom(pointsToUse);
+      }
+  
+  }
+
+  const handleIncreaseCustomBucks = (item) => {
+
+    const currentWalletAmount = walletTBucksRef.current;
+    const finalPrice = parseFloat(totalPriceWithPoints);
+
+    // check if full points toggle is enabled
+    if(!getUseTBucksWalletFullAmount){
+
+      const nextCustomValue = TBucksCustom + 1;
+
+      // Prevent exceeding limits
+      if (
+          finalPrice == 0 &&
+          (
+              nextCustomValue > currentWalletAmount || // exceeds wallet balance
+              nextCustomValue > finalPrice // exceeds price
+          )
+      ) {
+          return; // Don't apply if limit reached
+      }
+
+      // Apply increment
+      setTBucksCustom(nextCustomValue);
+      setWalletData(prev => ({...prev, t_bucks: prev.t_bucks - 1}))
+      setTotalPriceWithPoints(prev => prev - 1);
+    }
+  };
+
+  const handleDecreaseCustomBucks = (item) => {
+    // check if full points toggle is enabled
+    if (!getUseTBucksWalletFullAmount) {
+      const nextCustomValue = TBucksCustom - 1;
+
+      // Prevent going below 0
+      if (nextCustomValue < 0) {
+          return;
+      }
+
+      // Apply decrement
+      setTBucksCustom(nextCustomValue);
+      setWalletData(prev => ({...prev, t_bucks: prev.t_bucks + 1}))
+      setTotalPriceWithPoints(prev => prev + 1);
+    }
+  };
+
+  const resetOnClose = () =>{
+
+    getTBucksAndTPoints()
+    setTotalPriceWithPoints(0)
+
+    setTBucksCustom(0)
+
+    setWalletData(prev => ({...prev, t_bucks: walletTBucksRef.current}))
+
+    setUseTBucksWalletFullAmount(false)
+  }
 
   const CloseBottomPayment = () =>{
     setOpenBottomPayment(false)
@@ -139,6 +317,7 @@ const AccountSubscription = () =>{
   useEffect(()=>{
     GetUserAccountSubscriptionDetails()
     userSubscriptionCategories()
+    getTBucksAndTPoints()
   },[])
 
   const _LoadingComp = () =>{
@@ -161,6 +340,79 @@ const AccountSubscription = () =>{
     )
   }
 
+  const TbucksWalletDetails = (SelectedSubscriptionCategoryContent) =>{
+    return(
+      <div>
+      {
+        walletTBucksRef.current > 0 &&
+        <div className="max-w-xl p-5 space-y-4 border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <LuDollarSign className="w-5 h-5 text-gray-600" />
+                    <span className="font-semibold text-gray-900 my_tbucks_wallet_label_id">My T-Bucks Wallet</span>
+                </div>
+                <span className="text-xl font-bold text-gray-900">{parseFloat(walletData.t_bucks).toFixed(2)}</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
+                <span className="text-sm font-medium text-gray-700 redeem_full_t_bucks_amount">Redeem Full T-Bucks Amount</span>
+                <input 
+                type="checkbox" 
+                disabled={
+                  parseFloat(parseFloat(totalPriceWithPoints).toFixed(2)) === 0 
+                  ? (parseFloat(TBucksCustom) === 0 ? true : false) 
+                  : false
+                }
+                checked={getUseTBucksWalletFullAmount} 
+                onChange={() => handleTbucks()}
+                className="toggle toggle-sm " /> 
+            </div>
+            {
+                !getUseTBucksWalletFullAmount && 
+                parseFloat(TBucksCustom) === 0 &&
+                parseFloat(parseFloat(totalPriceWithPoints).toFixed(2)) === 0
+                ?   <></> 
+                :
+                      parseFloat(TBucksCustom) === 0 &&
+                      parseFloat(parseFloat(totalPriceWithPoints).toFixed(2)) === 0
+                      ?   <></> 
+                      :
+                        !getUseTBucksWalletFullAmount && 
+                        (
+                            <div className="space-y-4">
+                                <span className="text-sm font-semibold text-gray-900 tbucks_amount_label_id">T-Bucks Amount</span>
+                                <div className="flex items-end justify-center space-x-2">
+                                    <button onClick={handleDecreaseCustomBucks } className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                        <CiCircleMinus   className="text-[25px] text-[#FF5722]" />
+                                    </button>
+                                    <div className='flex items-center justify-center text-center'>
+                                        <div>
+                                            <input 
+                                            type="number" 
+                                            placeholder="0" 
+                                            name='customTBucks' 
+                                            value={TBucksCustom} 
+                                            onChange={() => handleCustomBucks(text)} 
+                                            className="w-[80px] input input-bordered input-md" />
+                                        </div>
+                                    </div>
+                                    <button onClick={handleIncreaseCustomBucks} className='flex items-center justify-center p-1 bg-white border shadow-lg rounded-badge'>
+                                        <CiCirclePlus   className="text-[25px] text-[#FF5722]" />
+                                    </button>
+                                </div>
+
+                                <div className="p-3 text-center bg-blue-100 rounded-lg">
+                                    <div className="text-2xl font-bold text-orange-700">${TBucksCustom}</div>
+                                    <div className="text-xs text-orange-600 usd_equivalent_label_id">USD equivalent</div>
+                                </div>
+                            </div>
+                        )
+            }
+        </div>
+      }
+      </div>
+    )
+  }
+
   const _PlanSelect = (dataList) => {
 
     return(
@@ -176,7 +428,15 @@ const AccountSubscription = () =>{
                     : "border-gray-200"
                 }`}
                 // onClick={() => setSelectedPlan(item.subscription_earning_table.id)}
-                onClick={() => setSelectedPlan(item.id)}
+                onClick={() => {
+                  resetOnClose()
+                  setSelectedPlan(item.id);
+                  setTotalPriceWithPoints(
+                    AccountSubscriptionDetails.paidMembershipCount > 0
+                    ? item.params.renewal.subscription_renewal_price
+                    : item.subscription_price
+                  )
+                }}
               >
                 <div>
                   <h3 className="text-3xl font-extrabold">
@@ -254,6 +514,14 @@ const AccountSubscription = () =>{
                     : <span className="text-sm font-normal">--</span>
                   }
                 </div>
+              </div>
+
+              <div>
+                {
+                  selectedPlan === item.id 
+                  ? TbucksWalletDetails(item)
+                  : <></>
+                }
               </div>
               {
                 selectedPlan === item.id 

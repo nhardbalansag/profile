@@ -15,6 +15,7 @@ import { DollarSign, Users, Play, Megaphone } from 'lucide-react';
 import { LuListVideo } from "react-icons/lu";
 import { MdOutlineRedeem } from "react-icons/md";
 import { FaRegStar } from "react-icons/fa";
+import { FaDollarSign } from "react-icons/fa6";
 
 import { format } from 'date-fns';
 
@@ -68,6 +69,10 @@ const AccountContent = () =>{
     t_bucks: 0,
     t_dollars: 0,
     direct: 0,
+
+    total_direct_commission: 0,
+    total_stars_commission: 0,
+
     AccountTransaction:[]
   });
 
@@ -393,7 +398,7 @@ const AccountContent = () =>{
                 :
                 <div key={index} className="flex justify-between">
                   <div className="w-[200px]">
-                    <p className="font-medium uppercase ">{item.description}</p>
+                    <p className="font-medium uppercase ">{item.account_transaction_type}</p>
                     <p className="text-xs font-thin uppercase ">{format(new Date(item.created_at), 'MMM dd, yyyy')}</p>
                   </div>
                   <div className="w-[200px] text-right">
@@ -456,9 +461,14 @@ const AccountContent = () =>{
             <div>
               <LuHandshake size={18} className="text-gray-600" />
             </div>
-            <p><span className='direct_bonus_label_id'>Direct Bonus</span></p>
+            <p>
+              <span className='direct_bonus_label_id'>Direct Bonus</span>
+            </p>
           </div>
-          <div className="text-[18px] md:text-2xl font-semibold text-black">{walletData.direct}</div>
+          <div className="text-[18px] md:text-2xl font-semibold text-black flex items-center space-x-2 justify-center">
+            <span><FaDollarSign size={18} className="text-gray-600" /></span>
+            <span>{parseFloat(walletData.total_direct_commission).toFixed(2)}</span>
+          </div>
           <div className="px-2 py-1 text-sm font-medium text-green-600 bg-green-100 rounded w-fit">
             +0.0%
           </div>
@@ -471,7 +481,10 @@ const AccountContent = () =>{
             </div>
             <p><span className='star_bonus_label_id'>Stars Bonus</span></p>
           </div>
-          <div className="text-[18px] md:text-2xl font-semibold text-black">{parseFloat(getLegacyCommissionTotal).toFixed(2)}</div>
+          <div className="text-[18px] md:text-2xl font-semibold text-black flex items-center space-x-2 justify-center">
+            <span><FaDollarSign size={18} className="text-gray-600" /></span>
+            <span>{parseFloat(parseFloat(getLegacyCommissionTotal) + parseFloat(walletData.total_stars_commission)).toFixed(2)}</span>
+          </div>
           <div className="px-2 py-1 text-sm font-medium text-green-600 bg-green-100 rounded w-fit">
             -0.0%
           </div>
