@@ -119,7 +119,7 @@ const HomePage = () => {
               }`}
             >
               <div className="mb-1 text-xl"><RiGraduationCapLine /></div>
-              <span className="text-[12px] md:text-[15px] academy_label_id">academy</span>
+              <span className="text-[12px] md:text-[15px] academy_label_id">Academy</span>
             </div>
           </Link>
 

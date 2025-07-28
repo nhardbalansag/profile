@@ -1450,7 +1450,7 @@ const ProductDetails = () =>{
                     guestDetails={GuestDetailsForm()}
                     // guestDetails={<GuestDetailsForm/>}
                     // stepperDetails={<Stepper/>}
-                    stepperDetails={() => Stepper()}
+                    stepperDetails={Stepper()}
                     handleNextStep={() => setCurrentStep(prev => Math.min(prev + 1, steps.length - 1))}
                     handlePrevStep={() => setCurrentStep(prev => Math.max(prev - 1, 0))}
                     currentStep={currentStep}

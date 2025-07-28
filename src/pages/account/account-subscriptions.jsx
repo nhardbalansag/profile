@@ -119,6 +119,7 @@ const AccountSubscription = () =>{
       toast.success("You are successfully unsubscribed");
 
       GetUserAccountSubscriptionDetails()
+      userSubscriptionCategories()
       
     }).catch((err) =>{
       toast.error("Something went wrong");
@@ -132,6 +133,7 @@ const AccountSubscription = () =>{
 
     // CheckSubscriptionPaymentIntentStatus()
     GetUserAccountSubscriptionDetails()
+    userSubscriptionCategories()
   }
 
   useEffect(()=>{
@@ -391,7 +393,8 @@ const AccountSubscription = () =>{
           !loadingRequest &&
           AccountSubscriptionDetails.details.subscription_category.membership_type.translation.membership.is_paid_account &&
           !AccountSubscriptionDetails.details.is_unsubscribe  &&
-          AccountSubscriptionDetails.paidMembershipCount > 0 &&
+          // AccountSubscriptionDetails.paidMembershipCount > 0 && 
+          AccountSubscriptionDetails.details.params?.subscription &&
           <ButtonComp onPress={() => UnsubscribeToStripe()} className='btn-error' title='Unsubscribe'/>
         }
       </div>

@@ -395,7 +395,7 @@ const OffersBottomSheet = ({
                                                             <RiCoinsLine className="w-5 h-5 text-orange-600" />
                                                         </div>
                                                         <div className="flex-1">
-                                                            <span className="font-semibold text-orange-900 redeemable_t_points">Redeemable T-Points</span>
+                                                            <span className="font-semibold text-orange-900 redeemable_t_points">Redeemable T-Points Per Guest</span>
                                                             <div className="flex items-center gap-2 mt-1">
                                                                 <span className="text-lg font-bold text-orange-600">{tabData.offers_table.offers_points_amount}</span>
                                                                 <span className="text-xs text-orange-700 available_label_id">available</span>
