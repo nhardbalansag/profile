@@ -109,25 +109,25 @@ const DetailsPage = () =>{
       }}
       className="md:hidden bottom-4 left-1/2 transform -translate-x-1/2 bg-[#031956] text-white rounded-xl px-4 py-1 flex justify-between items-center w-[90%] space-x-6 shadow-lg">
         <Link to={'/'}>
-          <div className={`flex flex-col items-center ${active ? "text-white" : "text-gray-400"} `}>
+          <div className={`flex flex-col items-center text-white`}>
             <div className="mb-1 text-lg"><TiHomeOutline size={20}/></div>
             <span className="text-[14px] home_label_id">Home</span>
           </div>
         </Link>
         <Link to={'/event'}>
-          <div className={`flex flex-col items-center ${active ? "text-white" : "text-gray-400"} `}>
+          <div className={`flex flex-col items-center ${((location.pathname.split("/")).includes('event') ? true : false) ? "text-white" : "text-gray-400"} `}>
             <div className="mb-1 text-lg"><LuTickets size={20}/></div>
             <span className="text-[14px] events_label_id">Events</span>
           </div>
         </Link>
         <Link to={'/account'}>
-          <div className={`flex flex-col items-center ${active ? "text-white" : "text-gray-400"} `}>
+          <div className={`flex flex-col items-center ${((location.pathname.split("/")).includes('account') ? true : false) ? "text-white" : "text-gray-400"} `}>
             <div className="mb-1 text-lg"><HiMiniBuildingOffice2 size={20}/></div>
             <span className="text-[14px] office_label_id">Office</span>
           </div>
         </Link>
         <Link to={'/details'}>
-          <div className={`flex flex-col items-center ${active ? "text-white" : "text-gray-400"} `}>
+          <div className={`flex flex-col items-center ${((location.pathname.split("/")).includes('details') ? true : false) ? "text-white" : "text-gray-400"} `}>
             <div className="mb-1 text-lg"><FaRegCircleUser size={20}/></div>
             <span className="text-[14px] profile_label_id">Profile</span>
           </div>
@@ -149,63 +149,40 @@ const DetailsPage = () =>{
     )
   }
 
-  const editorRef = useRef(ResultGetHomeContents.content_description);
-  const quillRef = useRef(null);
-
-  useEffect(() => {
-    if (editorRef.current) {
-      quillRef.current = new Quill(editorRef.current, {
-        theme: 'snow',
-        modules: {
-          toolbar: [
-            [{ 'header': [1, 2, false] }],
-            ['bold', 'italic'],
-            ['link', 'image'],
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-          ]
-        }
-      });
-
-      // Paste HTML directly
-      quillRef.current.clipboard.dangerouslyPasteHTML(
-        ResultGetHomeContents.content_description
-      );
-    }
-  }, []);
-
-    const EmbeddedVideoUrl = ({type, videoId}) => {
-      return (
-        <div  className=' w-[100%] h-[100%] '>
-          <div className="w-full overflow-hidden rounded-lg aspect-video ">
-            {
-              type == "embed" 
-              ? 
-                (
-                  <iframe
-                    src={videoId + "&autoplay=0"}
-                    title="Embedded video"
-                    className="w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    frameBorder="0"
-                  />
-                ) 
-              : 
-                ( 
-                  type === "video"
-                  ?
-                      <video
-                      src={env.VITE_APP_BACKEND_STORAGE_URL +  videoId }
-                      controls
-                      className="object-cover w-full h-full rounded-lg"
-                      />  
-                  : <></>
-                )
-            }
-          </div>
+  const EmbeddedVideoUrl = ({type, videoId}) => {
+    return (
+      <div  className=' w-[100%] h-[100%] '>
+        <div className="w-full overflow-hidden rounded-lg aspect-video ">
+          {
+            type == "embed" 
+            ? 
+              (
+                <iframe
+                  src={videoId + "&autoplay=0"}
+                  title="Embedded video"
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  frameBorder="0"
+                />
+              ) 
+            : 
+              ( 
+                type === "video"
+                ?
+                    <video
+                    src={env.VITE_APP_BACKEND_STORAGE_URL +  videoId }
+                    controls
+                    className="object-cover w-full h-full rounded-lg"
+                    />  
+                : <></>
+              )
+          }
         </div>
-      )
+      </div>
+    )
   }
+  
   return (
     <div>
         <div>

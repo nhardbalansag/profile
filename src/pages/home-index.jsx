@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useSelector} from 'react-redux';
 import { useLocation, Link } from 'react-router-dom';
 import {
@@ -48,6 +48,28 @@ const HomePage = () => {
   //     </Link>
   //   )
   // }
+
+  useEffect(() =>{
+    auth_states.PageLanguages.map((item, key) =>{
+      const translation = item.translation
+      
+      if(translation.length > 0 && auth_states.SelectedLanguage){
+        const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
+        const targetElement = document.getElementsByClassName(item.page_config_id)
+        if (targetElement) {
+          if (targetElement.length > 0 && filteredTranslation) {
+            Array.from(targetElement).forEach((el) => {
+              el.textContent = filteredTranslation.page_config_title;
+            });
+          } else if (targetElement.length > 0) {
+            Array.from(targetElement).forEach((el) => {
+              el.textContent = item.page_config_title;
+            });
+          }
+        }
+      }
+    })
+  },[auth_states])
 
   const BottomTabNavigator = () =>{
     return (

@@ -82,7 +82,9 @@ const AccountPage = () => {
           <div className="text-sm ">
             <p className="text-xs text-gray-400 welcome_back_label_id">Welcome back!</p>
             <p className="font-medium text-black">
-              {`${auth_states.StateToken ? auth_states.StateUserInformation.first_name : ","}`}
+              {/* {`${auth_states.StateToken ? auth_states.StateUserInformation.first_name : ","}`} */}
+              {/* {`${auth_states.StateToken ? auth_states.StateUserInformation.first_name : ","}`} */}
+              {auth_states.StateUserInformation.nick_names ? auth_states.StateUserInformation.nick_names : auth_states.StateUserInformation.first_name}
             </p>
           </div>
         </div>
@@ -138,7 +140,8 @@ const AccountPage = () => {
             <div class="flex items-center space-x-2 my-6">
               <FiUser />
               <span class="text-sm text-gray-700">
-                {`${auth_states.StateUserInformation.first_name} ${auth_states.StateUserInformation.last_name}`}
+                {/* {`${auth_states.StateUserInformation.first_name} ${auth_states.StateUserInformation.last_name}`} */}
+                {auth_states.StateUserInformation.nick_names ? auth_states.StateUserInformation.nick_names : auth_states.StateUserInformation.first_name}
               </span>
             </div>
             <nav class="space-y-2">

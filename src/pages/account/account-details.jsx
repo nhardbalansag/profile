@@ -143,7 +143,7 @@ const AccountDetails = () =>{
         }
       }
     })
-  },[auth_states, requestLoading, activeTab, isEditing])
+  },[auth_states, requestLoading, activeTab, isEditing, isMobileMenuOpen])
 
   const handleInputChange = (field, value) => {
     setUserData((prev) => ({ ...prev, [field]: value }));
@@ -211,6 +211,7 @@ const AccountDetails = () =>{
     const reqBody = {
       user_id: userData.id,
       first_name: userData.first_name,
+      nick_names: userData.nick_names,
       last_name: userData.last_name,
       mobile_number: userData.mobile_number,
       current_address: userData.current_address,
@@ -554,7 +555,19 @@ const AccountDetails = () =>{
                      {UploadPhoto()}
                   </div>
                   <div className="flex-1 text-center sm:text-left">
-                    <h3 className="text-xl font-bold text-gray-900 sm:text-2xl">{userData.first_name} {userData.last_name}</h3>
+                    <div>
+                      <label className="block mb-2 text-sm font-medium text-gray-700 display_name_label_id">Display Name</label>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={userData.nick_names}
+                          onChange={(e) => handleInputChange('nick_names', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        />
+                      ) : (
+                        <h3 className="text-xl font-bold text-gray-900 sm:text-2xl">{userData.nick_names ? userData.nick_names : "--"}</h3>
+                      )}
+                    </div>
                     <p className="text-gray-600 break-all">{userData.email}</p>
                     {
                       userData.occupation &&

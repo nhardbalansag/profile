@@ -342,7 +342,8 @@ const HomeContent = () =>{
           <div className='md:w-[75%] w-[95%]'>
             <p className='text-gray-500 text-[20px] font-semibold'>
               <span className='mr-1 hello_label_id'>Hello</span>
-              <span>{`${auth_states.StateToken ? auth_states.StateUserInformation.first_name : ","}`}</span>
+              {/* <span>{`${auth_states.StateToken ? auth_states.StateUserInformation.first_name : ","}`}</span> */}
+              <span>{auth_states.StateUserInformation.nick_names ? auth_states.StateUserInformation.nick_names : auth_states.StateUserInformation.first_name}</span>
             </p>
             <p className='font-extrabold text-[#001d3d] text-[30px]'>
               {

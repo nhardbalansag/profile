@@ -7,7 +7,7 @@ import { FaInstagram } from "react-icons/fa";
 import { IoLogoYoutube } from "react-icons/io";
 import { Link } from "react-router-dom";
 
-export default function FooterWrapper() {
+const Footer = () => {
 
   const auth_states = useSelector(state => state.AuthReducer);
 
@@ -63,93 +63,92 @@ export default function FooterWrapper() {
     },
   });
 
-  const Footer = () => {
-    return (
-      <footer className="text-white bg-gray-900">
-        <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {/* Company Info */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-bold text-white company_name_label_id">{footerData.company.name}</h3>
-              <p className="text-sm text-gray-300 company_description_label_id">{footerData.company.description}</p>
-              <div className="flex space-x-4">
-                {footerData.company.socials.map((social, index) => (
-                  <a key={index} href={social.href} className="text-gray-300 transition-colors hover:text-blue-400">
-                    {social.icon}
-                  </a>
-                ))}
-              </div>
+  return (
+    <footer className="text-white bg-gray-900">
+      <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {/* Company Info */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-bold text-white company_name_label_id">{footerData.company.name}</h3>
+            <p className="text-sm text-gray-300 company_description_label_id">{footerData.company.description}</p>
+            <div className="flex space-x-4">
+              {footerData.company.socials.map((social, index) => (
+                <a key={index} href={social.href} className="text-gray-300 transition-colors hover:text-blue-400">
+                  {social.icon}
+                </a>
+              ))}
             </div>
-
-            {/* Quick Links */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white quick_links_label_id">Quick Links</h3>
-              <ul className="space-y-2">
-                {footerData.links.quick.map((link, index) => (
-                  <li key={index}>
-                    <a href="#" className="text-sm text-gray-300 transition-colors hover:text-white">
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Legal */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white legal_label_id">Legal</h3>
-              <ul className="space-y-2">
-                {footerData.links.legal.map((link, index) => (
-                  <li key={index}>
-                    <Link to={'/policy'}>
-                    <a href="#" className="text-sm text-gray-300 transition-colors hover:text-white">
-                      {link}
-                    </a>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Contact Info */}
-            {/* <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white">Contact Info</h3>
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3">
-                  <Mail size={16} className="text-gray-400" />
-                  <span className="text-sm text-gray-300">{footerData.contact.website}</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Phone size={16} className="text-gray-400" />
-                  <span className="text-sm text-gray-300">{footerData.contact.phone}</span>
-                </div>
-              </div>
-            </div> */}
           </div>
 
-          {/* Bottom Section */}
-          <div className="pt-8 mt-8 border-t border-gray-800">
-            <div className="flex flex-col items-center justify-between space-y-4 md:flex-row md:space-y-0">
-              <div className="text-sm text-gray-400">
-                <span className='copyright_label_id'>Copyright</span>
-                <span>© </span>
-                <span>{new Date().getFullYear()} </span>
-                <span>-</span>
-                <span className='all_rights_reserved_label_id'>All right reserved</span>
-              </div>
-              <div className="flex space-x-6">
-                {footerData.links.legal.slice(0, 2).map((link, index) => (
-                  <a key={index} href="#" className="text-sm text-gray-400 transition-colors hover:text-white">
+          {/* Quick Links */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white quick_links_label_id">Quick Links</h3>
+            <ul className="space-y-2">
+              {footerData.links.quick.map((link, index) => (
+                <li key={index}>
+                  <a href="#" className="text-sm text-gray-300 transition-colors hover:text-white">
                     {link}
                   </a>
-                ))}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white legal_label_id">Legal</h3>
+            <ul className="space-y-2">
+              {footerData.links.legal.map((link, index) => (
+                <li key={index}>
+                  <Link to={'/policy'}>
+                  <a href="#" className="text-sm text-gray-300 transition-colors hover:text-white">
+                    {link}
+                  </a>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          {/* <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white">Contact Info</h3>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-3">
+                <Mail size={16} className="text-gray-400" />
+                <span className="text-sm text-gray-300">{footerData.contact.website}</span>
               </div>
+              <div className="flex items-center space-x-3">
+                <Phone size={16} className="text-gray-400" />
+                <span className="text-sm text-gray-300">{footerData.contact.phone}</span>
+              </div>
+            </div>
+          </div> */}
+        </div>
+
+        {/* Bottom Section */}
+        <div className="pt-8 mt-8 border-t border-gray-800">
+          <div className="flex flex-col items-center justify-between space-y-4 md:flex-row md:space-y-0">
+            <div className="text-sm text-gray-400">
+              <span className='copyright_label_id'>Copyright</span>
+              <span>© </span>
+              <span>{new Date().getFullYear()} </span>
+              <span>-</span>
+              <span className='all_rights_reserved_label_id'>All right reserved</span>
+            </div>
+            <div className="flex space-x-6">
+              {footerData.links.legal.slice(0, 2).map((link, index) => (
+                <a key={index} href="#" className="text-sm text-gray-400 transition-colors hover:text-white">
+                  {link}
+                </a>
+              ))}
             </div>
           </div>
         </div>
-      </footer>
-    );
-  };
+      </div>
+    </footer>
+  )
 
-  return <Footer />;
 }
+
+export default Footer;
