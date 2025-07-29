@@ -80,3 +80,27 @@ export const CheckBookingPaymentIntentStatus = async (token, reqBody) => {
         data: reqBody
     });
 }
+
+export const GetEarnPageContent = async (token) => {
+
+    return await axios({
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+        method: "GET",
+        url: `${BaseAPIUrl}account/earn/get-earn-content`
+    });
+}
+
+export const GetGrowPageContent = async (token) => {
+
+    return await axios({
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+        method: "GET",
+        url: `${BaseAPIUrl}account/grow/get-grow-content`
+    });
+}

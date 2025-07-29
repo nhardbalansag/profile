@@ -1330,11 +1330,21 @@ const ProductDetails = () =>{
                                 {
                                     ResultGetHomeContents.content_date_from &&
                                     ResultGetHomeContents.content_date_to &&
-                                    <p className='text-[#001d3d] capitalize space-x-3 text-left my-5'>
-                                    <span className='font-bold duration_id'>Duration </span> 
-                                    <span className='days_id'>{ResultGetHomeContents.content_days_count} days</span>
-                                    <span className='nights_id'>{ResultGetHomeContents.content_night_count} nights</span>
-                                    </p>
+                                    <div className='flex items-center justify-start space-x-3'>
+                                        <p className='text-[#001d3d] capitalize space-x-3 text-left my-5'>
+                                            <span className='font-bold duration_id'>Duration </span> 
+                                        </p>
+                                        <div className='flex items-start justify-start space-x-2'>
+                                            <p className='text-[#001d3d] capitalize space-x-3 text-left my-5 justify-start items-center'>
+                                                <span className=''>{ResultGetHomeContents.content_days_count}</span>
+                                                <span className='days_id'>days</span>
+                                            </p>
+                                            <p className='text-[#001d3d] capitalize space-x-3 text-left my-5 justify-start items-center'>
+                                                <span className=''>{ResultGetHomeContents.content_night_count}</span>
+                                                <span className='nights_id'>nights</span>
+                                            </p>
+                                        </div>
+                                    </div>
                                 }
                                 
                                 <div 

@@ -61,7 +61,11 @@ import {
 
     ProductDetails,
 
-    LegacyCommissionList
+    LegacyCommissionList,
+
+    MallGrow,
+    MallShop,
+    MallSocial
 } from '../pages/index'
 
 import {
@@ -188,7 +192,33 @@ const router = createBrowserRouter([
                 ),
                 errorElement: <ErrorPage />
             },
-            
+            {
+                path: "grow",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <MallGrow />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "shop",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <MallShop />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "social",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <MallSocial />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
         ]
     },
     {

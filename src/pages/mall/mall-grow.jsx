@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 
 import * as api_content from '../../services/content/content.api'
 
-const MallEarn = () => {
+const MallGrow = () => {
 
   const auth_states = useSelector(state => state.AuthReducer);
 
@@ -16,7 +16,7 @@ const MallEarn = () => {
   const ShowContent = async() =>{
     setLoadingContent(true)
 
-    await api_content.GetEarnPageContent(auth_states.StateToken).then((result) =>{
+    await api_content.GetGrowPageContent(auth_states.StateToken).then((result) =>{
       if(result.status){
         setLoadingContent(false)
         if (result.data.data) {
@@ -107,5 +107,5 @@ const MallEarn = () => {
   );
 };
 
-export default MallEarn;
+export default MallGrow;
 

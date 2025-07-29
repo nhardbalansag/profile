@@ -50,6 +50,10 @@ import ProductDetails from "./details/products-details";
 
 import LegacyCommissionList from "./account/account-members-legacy-commission";
 
+import MallGrow from "./mall/mall-grow";
+import MallShop from "./mall/mall-shop";
+import MallSocial from "./mall/mall-social";
+
 export{
     HomePage,
     HomeContent,
@@ -98,5 +102,9 @@ export{
 
     ProductDetails,
 
-    LegacyCommissionList
+    LegacyCommissionList,
+
+    MallGrow,
+    MallShop,
+    MallSocial
 }

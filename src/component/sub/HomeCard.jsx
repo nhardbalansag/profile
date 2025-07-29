@@ -254,7 +254,7 @@ const HomeCard = ({
                             <FaRegClock className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
                             <div className="min-w-0">
                                 <p className="text-sm font-medium text-gray-900 duration_id">Duration</p>
-                                <p className="text-xs text-gray-600">{contentDetails.content_days_count} <span className="days_id">Days</span>, {contentDetails.content_night_count} <span className="days_id">Nights</span></p>
+                                <p className="text-xs text-gray-600">{contentDetails.content_days_count} <span className="days_id">Days</span>, {contentDetails.content_night_count} <span className="nights_id">Nights</span></p>
                                 <p className="mt-1 text-xs text-gray-500">{format(new Date(contentDetails.content_date_from), 'MMM dd, yyyy')} - {format(new Date(contentDetails.content_date_to), 'MMM dd, yyyy')}</p>
                             </div>
                         </div>

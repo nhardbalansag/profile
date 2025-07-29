@@ -19,6 +19,9 @@ import { AiFillNotification } from "react-icons/ai";
 import { TiHomeOutline } from "react-icons/ti";
 import { LuCircleDollarSign } from "react-icons/lu";
 import { IoFitnessOutline } from "react-icons/io5";
+import { PiPottedPlantBold } from "react-icons/pi";
+import { BiStore } from "react-icons/bi";
+import { BiLike } from "react-icons/bi";
 
 import { MdOutlineAirplanemodeActive } from "react-icons/md";
 import { MdOutlineStorefront } from "react-icons/md";
@@ -100,7 +103,7 @@ const HomePage = () => {
 
   const TopCategories = () =>{
     return(
-      <div className="flex items-center justify-center space-x-2">
+      <div className="flex flex-wrap items-center justify-center gap-2">
           <Link to={'/travel'}>
             <div
               className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
@@ -119,7 +122,7 @@ const HomePage = () => {
               }`}
             >
               <div className="mb-1 text-xl"><RiGraduationCapLine /></div>
-              <span className="text-[12px] md:text-[15px] academy_label_id">Academy</span>
+              <span className="text-[12px] md:text-[15px] academy_label_id">Learn</span>
             </div>
           </Link>
 
@@ -134,6 +137,28 @@ const HomePage = () => {
             </div>
           </Link>
 
+          <Link to={'/grow'}>
+            <div
+              className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
+                ((location.pathname.split("/")).includes('grow') ? true : false) ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
+              }`}
+            >
+              <div className="mb-1 text-xl"><PiPottedPlantBold /></div>
+              <span className="text-[12px] md:text-[15px] grow_label_id">Grow</span>
+            </div>
+          </Link>
+
+          <Link to={'/shop'}>
+            <div
+              className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
+                ((location.pathname.split("/")).includes('shop') ? true : false) ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
+              }`}
+            >
+              <div className="mb-1 text-xl"><BiStore /></div>
+              <span className="text-[12px] md:text-[15px] shop_label_id">Shop</span>
+            </div>
+          </Link>
+
           <Link to={'/lifestyle'}>
             <div
               className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
@@ -142,6 +167,17 @@ const HomePage = () => {
             >
               <div className="mb-1 text-xl"><IoFitnessOutline /></div>
               <span className="text-[12px] md:text-[15px] lifestyle_label_id">Lifestyle</span>
+            </div>
+          </Link>
+          
+          <Link to={'/social'}>
+            <div
+              className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
+                ((location.pathname.split("/")).includes('social') ? true : false) ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
+              }`}
+            >
+              <div className="mb-1 text-xl"><BiLike /></div>
+              <span className="text-[12px] md:text-[15px] social_label_id">Social</span>
             </div>
           </Link>
       </div>

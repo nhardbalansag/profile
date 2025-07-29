@@ -164,6 +164,7 @@ const LoginContent = () =>{
       "first_name": getRegisterForm.first_name,
       "last_name": getRegisterForm.last_name,
       "email": getRegisterForm.email,
+      "country_id": getRegisterForm.country_id,
       "password": getRegisterForm.password,
       "is_paid_account": payment,
     }
