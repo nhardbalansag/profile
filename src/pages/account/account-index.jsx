@@ -1,6 +1,7 @@
 import React, {useState, useRef, useEffect } from 'react'
 import {useSelector} from 'react-redux';
 import { useDispatch } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 
 import {
     Outlet,
@@ -32,6 +33,7 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import { LuTickets } from "react-icons/lu";
 import { AiFillNotification } from "react-icons/ai";
 import { FiAlignLeft } from "react-icons/fi";
+import { IoIosArrowBack } from "react-icons/io";
 
 import Logo2 from '../../assets/images/ten/logo2.png'
 
@@ -50,6 +52,7 @@ import {
 const AccountPage = () => {
 
   const dispatch = useDispatch()
+  const navigate = useNavigate();
 
   const auth_states = useSelector(state => state.AuthReducer);
 
@@ -73,7 +76,7 @@ const AccountPage = () => {
 
   const Header = ({onPressDropDown}) =>{
     return (
-      <header className="flex items-center justify-between w-full px-3 py-2 mb-8 text-white">
+      <header className="flex items-center w-full px-3 py-2 mb-8 text-white">
         {/* Right Section */}
         <div className="flex items-center space-x-4 ">
           <label htmlFor="my-drawer" className="btn btn-square btn-ghost drawer-button">

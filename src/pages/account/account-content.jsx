@@ -73,7 +73,8 @@ const AccountContent = () =>{
     total_direct_commission: 0,
     total_stars_commission: 0,
 
-    AccountTransaction:[]
+    AccountTransaction:[],
+    sponsor: null
   });
 
   const [getLegacyCommissionTotal, setLegacyCommissionTotal] = useState(0)
@@ -375,7 +376,6 @@ const AccountContent = () =>{
           <_Buttons title={'amount'}/>
         </div> */}
         <div className="my-8 space-y-6">
-          
           {
             loadingContent 
             ?
@@ -398,7 +398,17 @@ const AccountContent = () =>{
                 :
                 <div key={index} className="flex justify-between">
                   <div className="w-[200px]">
-                    <p className="font-medium uppercase ">{item.account_transaction_type}</p>
+                    <p className="font-medium capitalize ">
+                      {
+                        item.account_transaction_type == "direct"
+                        ? item.account_transaction_type + " commission"
+                        : (
+                            item.account_transaction_type == "star"
+                            ? item.account_transaction_type + " commission"
+                            : item.description
+                          )
+                      }
+                    </p>
                     <p className="text-xs font-thin uppercase ">{format(new Date(item.created_at), 'MMM dd, yyyy')}</p>
                   </div>
                   <div className="w-[200px] text-right">
@@ -597,18 +607,39 @@ const AccountContent = () =>{
     <div className="">
       <div className="grid grid-cols-1 md:grid-cols-2">
         <div className="">
-        <div className="flex items-center justify-between">
+          
+          <div className="flex items-center justify-between">
             <p className="capitalize font-semibold text-[20px] your_wallet_label_id">your wallet</p>
           </div>
-          <div className="flex items-center justify-between px-3">
-            <p className="capitalize text-[15px] md:text-[18px] account_number_label_id">account number</p>
-            <p className="font-semibold capitalize text-[25px] md:text-[25px]">{auth_states.StateUserInformation.accounts_table.account_number}</p>
-            <label htmlFor="my_modal_7">
-              <LuQrCode size={40}/>
-            </label>
-          </div>
 
+          <div className='my-3 space-y-5'>
+            <div className="flex items-center justify-between px-3">
+              <p className="capitalize text-[15px] md:text-[18px] your_sponsor_label_id">Your Sponsor</p>
+              <button onClick={() => navigate('/sponsor-details')}>
+              {
+                loadingContent 
+                ? "--"
+                :
+                  <p className="font-semibold capitalize text-[18px] md:text-[18px]">
+                    {
+                      walletData.sponsor &&
+                      walletData.sponsor?.users_table.nick_names
+                      ? walletData.sponsor?.users_table.nick_names
+                      : walletData.sponsor?.users_table.first_name
+                    }
+                  </p>
+              }
+              </button>
+            </div>
           
+            <div className="flex items-center justify-between px-3">
+              <p className="capitalize text-[15px] md:text-[18px] account_number_label_id">account number</p>
+              <p className="font-semibold capitalize text-[25px] md:text-[25px]">{auth_states.StateUserInformation.accounts_table.account_number}</p>
+              <label htmlFor="my_modal_7">
+                <LuQrCode size={40}/>
+              </label>
+            </div>
+          </div>
 
           <div className="flex items-center justify-center mb-5">
             {

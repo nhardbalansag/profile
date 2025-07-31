@@ -31,6 +31,7 @@ import { LuCalendarClock } from "react-icons/lu";
 import { MdOutlineVerified } from "react-icons/md";
 import { MdOutlineLocalHotel } from "react-icons/md";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { IoIosArrowBack } from "react-icons/io";
 
 import * as api_content from '../../services/content/content.api'
 import * as api_subscription from '../../services/account/subscription.api.js'
@@ -586,9 +587,10 @@ const ProductDetails = () =>{
     
     const HandleOfferDetails = (item) =>{
         getTBucksAndTPoints()
-        setOpenBottomOffer(true)
         ResultSetHomeContentsDetails(item)
         setTotalPriceWithPoints(0)
+        setOpenBottomOffer(true)
+        setLoadingContent(false)
     }
  
     const resetOnClose = () =>{
@@ -666,7 +668,6 @@ const ProductDetails = () =>{
         const id = searchParams.get('view')
         await api_content.GetTravelProductContent(id, auth_states.StateToken).then((result) =>{
             if(result.status){
-                setLoadingContent(false)
                 HandleOfferDetails(result.data.data)
             }
         }).catch((err) =>{
@@ -720,7 +721,7 @@ const ProductDetails = () =>{
                 }
             }
         })
-    },[auth_states, loadingContent, getGuestInformation])
+    },[auth_states, loadingContent, getGuestInformation, openBottomOffer])
 
     useEffect(() => {
         if (editorRef.current) {
@@ -1259,6 +1260,7 @@ const ProductDetails = () =>{
                 logoutNavigate={() => navigate('/login')}
                 />
             </div>
+
             <main >
 
             {
@@ -1273,6 +1275,13 @@ const ProductDetails = () =>{
                     <div className='mb-[150px] flex justify-center'>
                         <div className='flex justify-center w-[90%] md:w-[70%]'>
                             <div className='md:w-[75%] w-[95%] space-y-5'>
+
+                                <button onClick={() => navigate(-1)}>
+                                    <div className='flex items-center space-x-1'>
+                                        <IoIosArrowBack size={30} className='text-black'/>
+                                        <p className='text-black'>Back</p>
+                                    </div>
+                                </button>
                                 
                                 <p className='font-bold text-[#001d3d] text-[35px] capitalize'>
                                     {
@@ -1534,16 +1543,16 @@ const ProductDetails = () =>{
                                                     <p className='text-[15px] font-normal capitalize'>
                                                         {
                                                             selectedLanguage.current == null 
-                                                            ? item.offers_table.supplier_table.room_type.room_type_name
+                                                            ? item.offers_table.supplier_table.supplier_description
                                                             : 
-                                                                item.offers_table.supplier_table.room_type.translation
+                                                                item.offers_table.supplier_table.translation
                                                                 ?
                                                                     (
-                                                                        item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                                                        ? item.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).room_type_name
-                                                                        : item.offers_table.supplier_table.room_type.room_type_name
+                                                                        item.offers_table.supplier_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                                                        ? item.offers_table.supplier_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).supplier_description
+                                                                        : item.offers_table.supplier_table.supplier_description
                                                                     )
-                                                                :   item.offers_table.supplier_table.room_type.room_type_name 
+                                                                :   item.offers_table.supplier_table.supplier_description
                                                         }
                                                     </p>
                                                 </div>
@@ -1556,7 +1565,7 @@ const ProductDetails = () =>{
                                                     <span className='registration_id'>Registration</span>
                                                 </p>
                                                 <p className="text-xs text-gray-600 ends_id">Ends {item.offers_table.offers_end_daily_period}</p>
-                                                <p className="mt-1 text-xs text-gray-500">{format(new Date(item.offers_table.offers_end_effectivity_date), 'MMM dd, yyyy')}</p>
+                                                <p className="mt-1 text-xs text-gray-500">{format(new Date(item.offers_table.offers_end_effectivity_date), 'M/d/yyyy')}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1576,7 +1585,7 @@ const ProductDetails = () =>{
                 dataContent={paymentBContent.current} 
                 handleClose={() => {
                     setOpenBottomPayment(false)
-                    resetOnClose()
+                    // resetOnClose()
                 }}
                 />
             }

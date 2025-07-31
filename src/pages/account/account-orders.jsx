@@ -261,7 +261,7 @@ const AccountOrders = () =>{
                                 Wallet Applied
                               </h4>
                               <p className="px-2 py-1 text-xs font-medium text-indigo-600 bg-indigo-100 rounded-full">
-                                <span className='save_label_id'>Save </span>
+                                <span className='save_label_id'>Total Savings </span>
                                 ${parseFloat((parseFloat(item.appliedTBucks) + parseFloat(item.appliedTDollars) + parseFloat(item.appliedTPoints))).toFixed(2)}
                               </p>
                             </div>
@@ -285,6 +285,71 @@ const AccountOrders = () =>{
                                 textColor="text-black"
                               />
                             </div>
+                          </div>
+
+                          {/* Guest details */}
+                          <span className="font-bold text-gray-900 guest_details_label_id">Guest Details</span>
+                          <div className='flex flex-wrap gap-5'>
+                              { 
+                                JSON.parse(JSON.stringify(item.params))?.guest_details &&
+                                item.params.guest_details.length > 0 && 
+                                typeof item.params === 'string'
+                                ? JSON.parse(item.params)
+                                : 
+                                  Array.isArray(item.params.guest_details) &&
+                                  item.params.guest_details.map((guest, guest_index) => (
+                                    <div
+                                        key={guest_index}
+                                        className="flex items-start gap-3 p-3 mb-4 border border-blue-100 bg-blue-50 rounded-xl"
+                                    >
+                                        <div  className='space-y-5'>
+                                            <div>
+                                                <div className="flex items-center space-x-3">
+                                                    <label className="block text-sm font-semibold text-foreground passport_name_label_id">
+                                                    Passport Name
+                                                    </label>
+                                                    <span>:</span>
+                                                    <p>{guest.passportName}</p>
+                                                </div>
+                                                <div className="flex items-center space-x-3">
+                                                    <label className="block text-sm font-semibold text-foreground passport_number_label_id">
+                                                    Passport Number
+                                                    </label>
+                                                    <span>:</span>
+                                                    <p>{guest.passportNumber}</p>
+                                                </div>
+                                                <div className="flex items-center space-x-3">
+                                                    <label className="block text-sm font-semibold text-foreground date_of_birth_label_id">
+                                                    Date of Birth
+                                                    </label>
+                                                    <span>:</span>
+                                                    <p>{guest.birthdate}</p>
+                                                </div>
+                                                <div className="flex items-center space-x-3">
+                                                    <label className="block text-sm font-semibold text-foreground gender_label_id">
+                                                    Gender
+                                                    </label>
+                                                    <span>:</span>
+                                                    <p>{guest.gender}</p>
+                                                </div>
+                                                <div className="flex items-center space-x-3">
+                                                    <label className="block text-sm font-semibold text-foreground contact_number_label_id">
+                                                    Contact Number
+                                                    </label>
+                                                    <span>:</span>
+                                                    <p>{guest.contactNumber}</p>
+                                                </div>
+                                                <div className="flex items-center space-x-3">
+                                                    <label className="block text-sm font-semibold text-foreground email_address_label_id">
+                                                    Email Address
+                                                    </label>
+                                                    <span>:</span>
+                                                    <p>{guest.contactEmail}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
                           </div>
 
                           {/* Pricing */}

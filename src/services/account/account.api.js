@@ -142,6 +142,17 @@ export const GetUserDetails = async (token) => {
     });
 }
 
+export const GetUserSponsorDetails = async (token) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET', 
+        url: `${BaseAPIUrl}account/sponsor-details`,
+    });
+}
+
 export const UpdateUserInformation = async (token, reqBody) => {
     return await axios({ 
         headers: {

@@ -3,15 +3,8 @@ import {useSelector} from 'react-redux';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
 import { ToastContainer, toast } from 'react-toastify';
-import { Upload, User, X } from 'lucide-react';
 
-import { CiUser } from "react-icons/ci";
-import { CiMail } from "react-icons/ci";
-import { CiPhone } from "react-icons/ci";
-import { FiMapPin } from "react-icons/fi";
-import { FiAward } from "react-icons/fi";
-import { IoIosTrendingUp } from "react-icons/io";
-import { MapPin, Briefcase, Heart, Camera, Video, Globe, Plus, Edit2, Save, Trash2, Menu } from 'lucide-react';
+import { Edit2, Save} from 'lucide-react';
 
 import * as api_account from '../../services/account/account.api.js'
 
@@ -55,6 +48,9 @@ const AccountCredentials = () =>{
     }
   })
 
+  const [getRetypePassword, setRetypePassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
 
   useEffect(() =>{
@@ -83,7 +79,7 @@ const AccountCredentials = () =>{
               }
           }
       })
-  },[auth_states, isEditing, requestLoading])
+  },[auth_states, isEditing, requestLoading, showPassword])
 
   const handleInputChange = (field, value) => {
     setUserData((prev) => ({ ...prev, [field]: value }));
@@ -120,8 +116,37 @@ const AccountCredentials = () =>{
   }
 
   const UpdateUserInformation = async () => {
+
     const reqBody = {
       pin: userData.pin || undefined,
+    };
+
+    setRequestLoading(true);
+
+    try {
+      const result = await api_account.UpdateUserInformation(auth_states.StateToken, reqBody);
+      if (result.status) {
+        toast.success("User information updated!");
+        GetUserDetails(); // Refresh after update
+        setIsEditing(false);
+      } else {
+        toast.error("Update failed");
+      }
+    } catch (err) {
+      toast.error("Something went wrong");
+    } finally {
+      setRequestLoading(false);
+    }
+  }
+
+  const UpdatePassword = async () => {
+
+    if(getRetypePassword !== userData.password){
+      toast.warning("Password Not Match");
+      return;
+    }
+
+    const reqBody = {
       password: userData.password || undefined,
     };
 
@@ -152,28 +177,91 @@ const AccountCredentials = () =>{
        <div className="pb-10 space-y-6 lg:col-span-2">
         {/* Pin & Password */}
         <div className="p-6 space-y-3 bg-white border border-gray-200 rounded-lg shadow-md">
-          <h3 className="mb-4 text-lg font-semibold text-gray-900 pin_and_password_label_id">Pin and Password</h3>
+          <h3 className="mb-4 text-lg font-semibold text-gray-900 pin_uppercase_label_id">PIN</h3>
           {isEditing && (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-700 pin_uppercase_label_id">PIN</label>
-                <input
-                  type="number"
-                  value={userData.pin}
-                  onChange={(e) => handleInputChange("pin", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
+            <div className='space-y-5'>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-700 pin_uppercase_label_id">PIN</label>
+                  <input
+                    type="number"
+                    value={userData.pin}
+                    onChange={(e) => handleInputChange("pin", e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
               </div>
+               {
+                requestLoading
+                ?
+                  <span className="text-blue-500 loading loading-spinner loading-md"></span>
+                :
+                  <button 
+                    onClick={() => UpdateUserInformation()}
+                    className="px-6 py-2 font-bold text-white bg-blue-500 btn hover:bg-blue-600 rounded-xl">
+                    <p className='update_pin_label_id'>Update Pin</p>
+                  </button>
+              }
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
 
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-700 password_label_id">Password</label>
-                <input
-                  type="password"
-                  value={userData.password}
-                  onChange={(e) => handleInputChange("password", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
+   const PasswordComponent = () =>{ 
+    return(
+       <div className="pb-10 space-y-6 lg:col-span-2">
+        {/* Pin & Password */}
+        <div className="p-6 space-y-3 bg-white border border-gray-200 rounded-lg shadow-md">
+          <div className='space-y-2'>
+            <h3 className="mb-4 text-lg font-semibold text-gray-900 password_label_id">Password</h3>
+            {
+              isEditing &&
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-sm text-blue-600 focus:outline-none"
+              >
+                {showPassword ? <span className='hide_label_id'>Hide</span> : <span className='show_label_id'>Show</span>}
+              </button>
+            }
+          </div>
+          {isEditing && (
+            <div className='space-y-5'>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-700 password_label_id">Password</label>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={userData.password}
+                    onChange={(e) => handleInputChange("password", e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                  
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-700 confirm_password_label_id">Confirm Password</label>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={getRetypePassword}
+                    onChange={(e) => setRetypePassword(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
               </div>
+              {
+                requestLoading
+                ?
+                  <span className="text-blue-500 loading loading-spinner loading-md"></span>
+                :
+                  <button 
+                    onClick={() => UpdatePassword()}
+                    className="px-6 py-2 font-bold text-white bg-blue-500 btn hover:bg-blue-600 rounded-xl">
+                    <p className='update_password_label_id'>Update Password</p>
+                  </button>
+              }
             </div>
           )}
         </div>
@@ -195,9 +283,9 @@ const AccountCredentials = () =>{
             <div className="flex flex-col gap-4 mb-6 sm:flex-row sm:justify-between sm:items-center">
               <button
                 onClick={() => {
-                  if(isEditing){
-                    UpdateUserInformation();
-                  }
+                  // if(isEditing){
+                  //   UpdateUserInformation();
+                  // }
                   setIsEditing(!isEditing);
                 }}
                 className={`flex items-center space-x-2 py-2 rounded-lg ${
@@ -206,11 +294,12 @@ const AccountCredentials = () =>{
                     : ' text-black '
                 }`}
               >
-                {isEditing ? <Save className="w-4 h-4" /> : <Edit2 className="w-4 h-4" />}
-                <p>{isEditing ? <span className="save_label_id">Save</span> : <span className='edit_label_id'>Edit</span>}</p>
+                {isEditing ? <></> : <Edit2 className="w-4 h-4" />}
+                <p>{isEditing ? <span className="done_label_id">Done</span> : <span className='edit_label_id'>Edit</span>}</p>
               </button>
             </div>
             {ProfileInfo()}
+            {PasswordComponent()}
           </div>
         </div>
       </div>

@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import {useSelector} from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 import {
     Outlet,
 } from "react-router";
@@ -14,10 +16,13 @@ import {
 import { HiMiniBuildingOffice2 } from "react-icons/hi2";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { TiHomeOutline } from "react-icons/ti";
+import { IoIosArrowBack } from "react-icons/io";
 
 import { LuTickets } from "react-icons/lu";
 
 const EventPage = () => {
+
+  const navigate = useNavigate();
 
   const auth_states = useSelector(state => state.AuthReducer);
 
@@ -110,8 +115,16 @@ const EventPage = () => {
         ActionState={open}
         />
       </div>
+
       <div className='flex justify-center my-5'>
         <div className='md:w-[75%] w-[95%]'>
+          <button onClick={() => navigate(-1)}>
+            <div className='flex items-center space-x-1'>
+              <IoIosArrowBack size={30} className='text-black'/>
+              <p className='text-black'>Back</p>
+            </div>
+          </button>
+
           <p className='font-extrabold text-[#001d3d] text-[25px] capitalize'>Events Near you</p>
         </div>
       </div>

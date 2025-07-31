@@ -345,8 +345,8 @@ const OffersBottomSheet = ({
                                                                             tabData.offers_table.tier_category_table.translation
                                                                             ?
                                                                                 (
-                                                                                    tabData.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                                                                    ? tabData.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
+                                                                                    tabData.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id)
+                                                                                    ? tabData.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id).tier_category_name
                                                                                     : tabData.offers_table.tier_category_table.tier_category_name
                                                                                 )
                                                                             :   tabData.offers_table.tier_category_table.tier_category_name

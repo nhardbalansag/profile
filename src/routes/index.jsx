@@ -65,7 +65,9 @@ import {
 
     MallGrow,
     MallShop,
-    MallSocial
+    MallSocial,
+
+    AccountSponsorProfile
 } from '../pages/index'
 
 import {
@@ -271,6 +273,15 @@ const router = createBrowserRouter([
                 element: ( 
                     <AuthenticatedUsers route={'/login'}>
                         <AccountDetails />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "sponsor-details",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <AccountSponsorProfile />
                     </AuthenticatedUsers> 
                 ),
                 errorElement: <ErrorPage />
