@@ -165,7 +165,7 @@ const OffersBottomSheet = ({
                                     {offersData.content_night_count} 
                                     <span className="nights_id">Nights</span>
                                 </p>
-                                <p className="mt-1 text-xs text-gray-500">{format(new Date(offersData.content_date_from), 'MMM dd, yyyy')} - {format(new Date(offersData.content_date_to), 'MMM dd, yyyy')}</p>
+                                <p className="mt-1 text-xs text-gray-500">{format(new Date(offersData.content_date_from), 'M/d/yyyy')} - {format(new Date(offersData.content_date_to), 'M/d/yyyy')}</p>
                             </div>
                         </div>
                         {
@@ -178,7 +178,7 @@ const OffersBottomSheet = ({
                                         <span className='ends_id'>Ends</span> 
                                         <span>{tabData.offers_table.offers_end_daily_period}</span>
                                     </p>
-                                    <p className="mt-1 text-xs text-gray-500">{format(new Date(tabData.offers_table.offers_end_effectivity_date), 'MMM dd, yyyy')}</p>
+                                    <p className="mt-1 text-xs text-gray-500">{format(new Date(tabData.offers_table.offers_end_effectivity_date), 'M/d/yyyy')}</p>
                                 </div>
                             </div>
                         }
@@ -328,7 +328,7 @@ const OffersBottomSheet = ({
                                                         <div className="min-w-0">
                                                             <p className="text-sm font-medium text-gray-900 duration_id">Duration</p>
                                                             <p className="text-xs text-gray-600">{offersData.content_days_count} <span className="days_id">Days</span>, {offersData.content_night_count} <span className="days_id">Nights</span></p>
-                                                            <p className="mt-1 text-xs text-gray-500">{format(new Date(offersData.content_date_from), 'MMM dd, yyyy')} - {format(new Date(offersData.content_date_to), 'MMM dd, yyyy')}</p>
+                                                            <p className="mt-1 text-xs text-gray-500">{format(new Date(offersData.content_date_from), 'M/d/yyyy')} - {format(new Date(offersData.content_date_to), 'M/d/yyyy')}</p>
                                                         </div>
                                                     </div>
                                                     {
@@ -355,7 +355,7 @@ const OffersBottomSheet = ({
                                                                     <span className='registration_id'>Registration</span>
                                                                 </p>
                                                                 <p className="text-xs text-gray-600 ends_id">Ends {tabData.offers_table.offers_end_daily_period}</p>
-                                                                <p className="mt-1 text-xs text-gray-500">{format(new Date(tabData.offers_table.offers_end_effectivity_date), 'MMM dd, yyyy')}</p>
+                                                                <p className="mt-1 text-xs text-gray-500">{format(new Date(tabData.offers_table.offers_end_effectivity_date), 'M/d/yyyy')}</p>
                                                             </div>
                                                         </div>
                                                     }
@@ -368,18 +368,22 @@ const OffersBottomSheet = ({
                                                     <div>
                                                         <p className="font-medium capitalize">{
                                                             auth_states.SelectedLanguage == null
-                                                            ? tabData.offers_table.supplier_table.room_type.room_type_name
+                                                            ? tabData.offers_table.supplier_table.supplier_description
                                                             : 
-                                                                tabData.offers_table.supplier_table.room_type.translation
+                                                                tabData.offers_table.supplier_table.translation
                                                                 ?
                                                                     (
-                                                                        tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id)
-                                                                        ? tabData.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id).room_type_name 
-                                                                        : tabData.offers_table.supplier_table.room_type.room_type_name
+                                                                        tabData.offers_table.supplier_table.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id)
+                                                                        ? tabData.offers_table.supplier_table.translation.find((filter_item) => filter_item.language_id == auth_states.SelectedLanguage.id).supplier_description 
+                                                                        : tabData.offers_table.supplier_table.supplier_description
                                                                     )
-                                                                :   tabData.offers_table.supplier_table.room_type.room_type_name
+                                                                :   tabData.offers_table.supplier_table.supplier_description
                                                         }</p>
-                                                        <p className="text-sm text-gray-500">{tabData.offers_table.supplier_table.room_type.room_type_guest_count} <span className='guest_per_room'>guest per room</span></p>
+                                                        <p className="text-sm text-gray-500">
+                                                            {
+                                                                tabData.offers_table.supplier_table.room_type.room_type_guest_count
+                                                            } 
+                                                        <span className='guest_per_room'>guest per room</span></p>
                                                     </div>
                                                     <div className="text-lg font-bold text-center"> 
                                                         <p>{tabData.offers_table.currency_table.currency_symbol}{tabData.offers_table.offers_amount}</p>

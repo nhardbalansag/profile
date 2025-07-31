@@ -1277,9 +1277,9 @@ const ProductDetails = () =>{
                             <div className='md:w-[75%] w-[95%] space-y-5'>
 
                                 <button onClick={() => navigate(-1)}>
-                                    <div className='flex items-center space-x-1'>
+                                    <div className='flex items-center p-5 space-x-1'>
                                         <IoIosArrowBack size={30} className='text-black'/>
-                                        <p className='text-black'>Back</p>
+                                        <p className='text-black back_label_id'>Back</p>
                                     </div>
                                 </button>
                                 

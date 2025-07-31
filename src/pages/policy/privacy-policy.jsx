@@ -78,7 +78,7 @@ const PrivacyPolicy = () => {
               <div className="space-y-2 text-sm text-gray-400">
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4" />
-                  <span>support@ten.club</span>
+                  <span>support@clubten.app</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Globe className="w-4 h-4" />
@@ -214,7 +214,7 @@ const PrivacyPolicyContent = () => (
             <li>• Lodge a complaint with a data protection authority</li>
           </ul>
           <p className="mt-4 text-sm text-gray-600">
-            To exercise these rights, contact us at <strong>support@ten.club</strong>.
+            To exercise these rights, contact us at <strong>support@clubten.app</strong>.
           </p>
         </div>
       </section>
@@ -249,7 +249,7 @@ const PrivacyPolicyContent = () => (
         <p className="mb-4 text-gray-600">If you have any questions or concerns about this Privacy Policy, please contact us at:</p>
         <div className="space-y-2 text-gray-600">
           <p><strong>Planet Empire FZCO</strong></p>
-          <p>Email: support@ten.club</p>
+          <p>Email: support@clubten.app</p>
           <p>Website: https://clubten.app</p>
         </div>
       </section>
@@ -264,7 +264,7 @@ const TermsOfServiceContent = () => (
       <p className="text-sm text-gray-700 sm:text-base">
         <strong>Company:</strong> Planet Empire FZCO<br />
         <strong>Website:</strong> https://clubten.app<br />
-        <strong>Support Email:</strong> support@ten.club
+        <strong>Support Email:</strong> support@clubten.app
       </p>
     </div>
 
@@ -374,7 +374,7 @@ const TermsOfServiceContent = () => (
       <section className="p-6 rounded-lg bg-blue-50">
         <h2 className="mb-4 text-xl font-semibold text-gray-900 sm:text-2xl">11. Contact Us</h2>
         <p className="text-gray-600">Questions about these Terms? Contact us:</p>
-        <p className="mt-2 text-gray-600">Email: support@ten.club</p>
+        <p className="mt-2 text-gray-600">Email: support@clubten.app</p>
       </section>
     </div>
   </div>
@@ -482,7 +482,7 @@ const CookiePolicyContent = () => (
       <section className="p-6 rounded-lg bg-blue-50">
         <h2 className="mb-4 text-xl font-semibold text-gray-900 sm:text-2xl">6. Contact Us</h2>
         <p className="text-gray-600">If you have any questions about our use of cookies, contact us at:</p>
-        <p className="mt-2 text-gray-600">Email: support@ten.club</p>
+        <p className="mt-2 text-gray-600">Email: support@clubten.app</p>
       </section>
     </div>
   </div>

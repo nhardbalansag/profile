@@ -37,6 +37,7 @@ import * as api_account from '../../services/account/account.api.js'
 import * as api_subscription from '../../services/account/subscription.api.js'
 
 const env = import.meta.env;
+const VITE_APP_PORTAL = env.VITE_APP_PORTAL
 
 const AccountContent = () =>{
 
@@ -543,7 +544,7 @@ const AccountContent = () =>{
               </div>
               <div>
                 <QRCode
-                  value={auth_states.StateUserInformation.accounts_table.account_number}
+                  value={VITE_APP_PORTAL + "login?sponsor=" + auth_states.StateUserInformation.accounts_table.account_number}
                   size={150}
                   viewBox={`0 0 256 256`}
                 />
@@ -613,23 +614,67 @@ const AccountContent = () =>{
           </div>
 
           <div className='my-3 space-y-5'>
-            <div className="flex items-center justify-between px-3">
-              <p className="capitalize text-[15px] md:text-[18px] your_sponsor_label_id">Your Sponsor</p>
-              <button onClick={() => navigate('/sponsor-details')}>
-              {
-                loadingContent 
-                ? "--"
-                :
-                  <p className="font-semibold capitalize text-[18px] md:text-[18px]">
-                    {
-                      walletData.sponsor &&
-                      walletData.sponsor?.users_table.nick_names
-                      ? walletData.sponsor?.users_table.nick_names
-                      : walletData.sponsor?.users_table.first_name
-                    }
-                  </p>
-              }
-              </button>
+            <div className="p-3 bg-blue-100 rounded-md shadow-md">
+              <div className="flex items-end space-x-2">
+                <p className="capitalize text-[15px] your_sponsor_label_id">Your Sponsor</p>
+                <div>
+                  {
+                    loadingContent 
+                    ? "--"
+                    :
+                      <p className="font-semibold capitalize text-[15px] space-x-1">
+                        <span>
+                        {
+                          walletData.sponsor &&
+                          walletData.sponsor.account_number
+                        }
+                        </span>
+                        <span>
+                        {
+                          walletData.sponsor &&
+                          walletData.sponsor?.users_table.nick_names
+                        }
+                        </span>
+                      </p>
+                  }
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <p className="capitalize text-[15px] phone_label_id">Phone</p>
+                <div>
+                  {
+                    loadingContent 
+                    ? "--"
+                    :
+                      <p className="font-semibold capitalize text-[15px]">
+                        {
+                          walletData.sponsor &&
+                          walletData.sponsor?.users_table.mobile_number
+                          ? walletData.sponsor?.users_table.mobile_number
+                          : "--"
+                        }
+                      </p>
+                  }
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <p className="capitalize text-[15px] email_label_id">Email</p>
+                <div>
+                  {
+                    loadingContent 
+                    ? "--"
+                    :
+                      <p className="font-semibold capitalize text-[15px]">
+                        {
+                          walletData.sponsor &&
+                          walletData.sponsor?.users_table.email
+                          ? walletData.sponsor?.users_table.email
+                          : "--"
+                        }
+                      </p>
+                  }
+                </div>
+              </div>
             </div>
           
             <div className="flex items-center justify-between px-3">

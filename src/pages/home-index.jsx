@@ -140,7 +140,7 @@ const HomePage = () => {
           <Link to={'academy-index'}>
             <div
               className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-                ((location.pathname.split("/")).includes('academy-index') ? true : false) ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
+                ((location.pathname.includes('academy-index') || location.pathname.includes('academy')) ? true : false) ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
               }`}
             >
               <div className="mb-1 text-xl"><RiGraduationCapLine /></div>

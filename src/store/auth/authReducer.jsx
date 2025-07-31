@@ -13,8 +13,8 @@ const InitialStates  = {
     StateUserInformation:   [],
     PageLanguages:  [],
     Languages:  [],
-    // SelectedLanguage:  null
-    SelectedLanguage:  1
+    SelectedLanguage:  null
+    // SelectedLanguage:  1
 }
 
 export default (state = InitialStates, action) =>{

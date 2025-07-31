@@ -44,6 +44,8 @@ const LoginContent = () =>{
 
   const dispatch = useDispatch()
 
+  const [getStateSelectedLanguage, setStateSelectedLanguage] = useState(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)
+
   const [isLoading, setLoading] = useState(false)
   const [isLoadingRegister, setLoadingRegister] = useState(false)
   
@@ -101,6 +103,7 @@ const LoginContent = () =>{
     if(auth_states.SelectedLanguage){
       selectedLanguage.current = parseInt(auth_states.SelectedLanguage.id)
       // userSubscriptionCategories()
+      setStateSelectedLanguage(parseInt(auth_states.SelectedLanguage.id))
     }
   },[auth_states])
   
@@ -373,14 +376,14 @@ const LoginContent = () =>{
               <div>
                 <h3 className="text-lg font-semibold">
                   {
-                    selectedLanguage.current == null 
+                    getStateSelectedLanguage == null 
                     ? item.membership_type.type_title
                     : (
                         item.membership_type.translation.translation
                         ?
                           (
-                              item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                            ? item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title 
+                              item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == getStateSelectedLanguage)
+                            ? item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == getStateSelectedLanguage).type_title 
                             : item.membership_type.type_title
                           )
                         : item.membership_type.type_title
@@ -389,14 +392,14 @@ const LoginContent = () =>{
                 </h3>
                 <p className="text-sm text-gray-500">
                   {
-                    selectedLanguage.current == null 
+                    getStateSelectedLanguage == null 
                     ? item.membership_type.type_description
                     : (
                         item.membership_type.translation.translation
                         ?
                           (
-                              item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                            ? item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_description 
+                              item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == getStateSelectedLanguage)
+                            ? item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == getStateSelectedLanguage).type_description 
                             : item.membership_type.type_description
                           )
                         : item.membership_type.type_description
@@ -410,7 +413,7 @@ const LoginContent = () =>{
                   <span>/</span>
                   <span className="text-sm font-normal">
                     {
-                      selectedLanguage.current == null 
+                      getStateSelectedLanguage == null 
                       ? item.subscription_range.subscription_range_name
                       : (
                           item.subscription_range.params 
@@ -419,8 +422,8 @@ const LoginContent = () =>{
                               item.subscription_range.params.translation
                               ?
                                 (
-                                    item.subscription_range.params.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                  ? item.subscription_range.params.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).subscription_range_name 
+                                    item.subscription_range.params.translation.find((filter_item) => filter_item.language_id == getStateSelectedLanguage)
+                                  ? item.subscription_range.params.translation.find((filter_item) => filter_item.language_id == getStateSelectedLanguage).subscription_range_name 
                                   : item.subscription_range.subscription_range_name
                                 )
                               : item.subscription_range.subscription_range_name
@@ -454,8 +457,8 @@ const LoginContent = () =>{
                 type="text"
                 placeholder="Email"
                 className="input input-bordered"
-                name='getRequest'
-                value={getRequest.getRequest} 
+                name='email'
+                value={getRequest.email} 
                 onChange={handleChange}
               />
             </div>
@@ -493,7 +496,7 @@ const LoginContent = () =>{
                 src={Logo1} />
               </div>
               <p className="mb-6 md:text-2xl md:w-[300px] connect_with_friends_and_create_community_in_club_ten_label_id">
-                Connect with friends and create community in CLUB TEN
+                Connect with our global social community and enrich your life!
               </p>
               {/* <div>
                 <img

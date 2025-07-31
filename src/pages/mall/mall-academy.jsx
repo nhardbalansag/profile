@@ -50,55 +50,130 @@ const MallAcademy = () =>{
                     lessons: [
                         { id: 1, title: "Why become a business owner and Investor? - PCA", duration: "10:00", membership: ['pca', 'vip'], completed: false, videoUrl: `<iframe width="560" height="315" src="https://play.webvideocore.net/popplayer.php?it=80hvimf6emck&is_link=1&w=720&h=405&pause=1&title=dbwa_lesson001_whybecomeabusinessowner&skin=3&repeat=&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D10472000%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute&floating_player=none" frameborder="0" allowfullscreen></iframe>`},
                         { id: 2, title: "Active VS Passive Income – PCA", duration: "10:00", membership: ['pca', 'vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=86b0c21f320f4f96ba378d20dd01c6e6&videoId=f245a3aaabe647a0a719
-c118977539b7&compId=comp-mceu4oyq&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=3nlvtkraiew4&is_link=1&w=720
+                        &h=405&pause=1&title=dbwa_lesson002_activevspassiveincome&skin=3&repeat=&brandN
+                        W=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&f
+                        s_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%23
+                        7f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_posi
+                        tionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&c
+                        c_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvid
+                        eoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D104
+                        75692%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&pl
+                        ay_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute
+                        &floating_player=none 
+                        " frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 3, title: "Assets VS Liabilities - PCA", duration: "10:00", membership: ['pca', 'vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=86b0c21f320f4f96ba378d20dd01c6e6&videoId=c6c74004701748d5a8de
-01bc92b28364&compId=comp-mceu4oyq&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=2m1oeag9mqm8&is_link=1&w
+                        =720&h=405&pause=1&title=dbwa_lesson003_assetsvsliabilities&skin=3&repeat=&brandN
+                        W=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&f
+                        s_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%23
+                        7f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_posi
+                        tionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&c
+                        c_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvid
+                        eoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D104
+                        75731%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&pl
+                        ay_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute
+                        &floating_player=none" frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 4, title: "Financial Freedom VS Time Freedom - PCA", duration: "10:00", membership: ['pca', 'vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=86b0c21f320f4f96ba378d20dd01c6e6&videoId=f366596fab69405cb2b5
-ddc9e6b76c5e&compId=comp-mceu4oyq&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=9593czr6uc08&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_lesson004_financialfreedomvstimefreedom&skin=3&repeat
+                        =&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fulls
+                        creen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHigh
+                        light=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=botto
+                        m&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=
+                        %23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.st
+                        reamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip
+                        _id%3D10475688%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_b
+                        utton=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_ty
+                        pe=unMute&floating_player=none" frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 5, title: "The Million Dollar Formula - PCA", duration: "10:00", membership: ['pca', 'vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=86b0c21f320f4f96ba378d20dd01c6e6&videoId=1fdb78de775f4829b32a
-1af8393427af&compId=comp-mceu4oyq&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=bv4w7advzlcs&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_lesson005_milliondollarformula&skin=3&repeat=&brandN
+                        W=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&f
+                        s_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%23
+                        7f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_posi
+                        tionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&c
+                        c_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvid
+                        eoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D104
+                        75686%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&pl
+                        ay_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute
+                        &floating_player=none" frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 6, title: "The Perfect Business - PCA", duration: "10:00", membership: ['pca', 'vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=86b0c21f320f4f96ba378d20dd01c6e6&videoId=347c4c06a82446e8b0b0
-de4ed512f8c9&compId=comp-mceu4oyq&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=buz6wa7ry9cs&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_lesson006_theperfectbusiness&skin=3&repeat=&brandNW
+                        =1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&fs_
+                        mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%237f
+                        54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_positi
+                        onOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&cc
+                        _bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvide
+                        oprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D1047
+                        5705%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&pla
+                        y_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute&
+                        floating_player=none" frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 7, title: "What is Affiliate Marketing? - PCA", duration: "10:00", membership: ['pca', 'vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=86b0c21f320f4f96ba378d20dd01c6e6&videoId=91bf260e396a4b89bfa0f
-d4951265561&compId=comp-mceu4oyq&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe>` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=8vm7fi3c2igw&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_lesson007_whatisaffiliatemarketing&skin=3&repeat=&bran
+                        dNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=
+                        1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=
+                        %237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_
+                        positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffff
+                        ff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamin
+                        gvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3
+                        D10475706%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button
+                        =1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=un
+                        Mute&floating_player=none
+                        " frameborder="0"
+                        allowfullscreen></iframe>` },
                         { id: 8, title: "The Power of 100% Duplication - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=86b0c21f320f4f96ba378d20dd01c6e6&videoId=9ac29fa83d40495ca136
-90465e91710c&compId=comp-mceu4oyq&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=2t5553r45nok&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_lesson008_powerof100duplication&skin=3&repeat=&brand
+                        NW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1
+                        &fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%
+                        237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_p
+                        ositionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff
+                        &cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingv
+                        ideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D1
+                        0475687%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1
+                        &play_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unM
+                        ute&floating_player=none
+                        " frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 9, title: "Personal Franchising - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=86b0c21f320f4f96ba378d20dd01c6e6&videoId=95df1c5867504cb18b58
-a6bc71045704&compId=comp-mceu4oyq&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=elp4a3xg6eos&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_lesson009_personalfranchising&skin=3&repeat=&brandNW
+                        =1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&fs_
+                        mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%237f
+                        54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_positi
+                        onOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&cc
+                        _bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvide
+                        oprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D1047
+                        5721%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&pla
+                        y_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute&
+                        floating_player=none" frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 10, title: "How to choose the right company? - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=86b0c21f320f4f96ba378d20dd01c6e6&videoId=d03630dcadb74e61bec5
-4794b1277f99&compId=comp-mceu4oyq&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` }
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=9puxxhf5smww&is_link=1&w=7
+                        20&h=405&pause=1&title=dbwa_lesson010_howtochoosetherightcompany&skin=3&repeat
+                        =&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fulls
+                        creen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHigh
+                        light=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=botto
+                        m&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=
+                        %23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.st
+                        reamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip
+                        _id%3D10475735%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_b
+                        utton=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_ty
+                        pe=unMute&floating_player=none " frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` }
                     ]
                 },
                 {
@@ -106,124 +181,309 @@ allowfullscreen></iframe>
                     title: "How To Build Your Global Sales Team?",
                     lessons: [
                         { id: 1, title: "The 6 Skills To Master Success - PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=16f73bb522534f2bb85b
-e01afb973697&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=etvod15l7dw0&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_lesson_mod2_1_sixskillsforsuccess&skin=3&repeat=&brand
+                        NW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1
+                        &fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%
+                        237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_p
+                        ositionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff
+                        &cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingv
+                        ideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D1
+                        0477763%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1
+                        &play_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unM
+                        ute&floating_player=none
+                        " frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 2, title: "Skill Number 1 – Prospecting - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=31a7690f1e084ceaac98
-a03a54a2750f&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=2s8q5wkfk5k4&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_lesson_mod2_2_skill1_prospecting&skin=3&repeat=&bran
+                        dNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=
+                        1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=
+                        %237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_
+                        positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffff
+                        ff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamin
+                        gvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3
+                        D10477917%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button
+                        =1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=un
+                        Mute&floating_player=none" frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 3, title: "Skill Number 2 – Inviting - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=e4bbda99e5ca4f249af6
-0809dbf4a692&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=5wov7osnr68s&is_link=1&w=7
+                        20&h=405&pause=1&title=dbwa_mod2_3_skill2_inviting&skin=3&repeat=&brandNW=1&st
+                        art_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&fs_mode
+                        =2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%237f54f8&
+                        direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_positionOffs
+                        et=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&cc_bkgC
+                        olor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvideoprovi
+                        der.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D10477924%
+                        26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&play_butt
+                        on_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute&floatin
+                        g_player=none" frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 4, title: "Skill Number 3 – Sharing - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=eb8aa0febb2847fa8155
-d0a64e3c57d7&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=7xdt7ie0a4o4&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_mod2_skill3_sharing&skin=3&repeat=&brandNW=1&start_
+                        volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&fs_mode=2&
+                        skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%237f54f8&dire
+                        ct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_positionOffset=
+                        70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&cc_bkgColor
+                        =%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvideoprovider.
+                        com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D10478092%26s
+                        ize%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&play_button
+                        _style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute&floating_
+                        player=none 
+                        " frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 5, title: "Skill Number 4 – Enrolling - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=dfec5d1577c34637a499
-c604ceaf5d6d&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=9kgjextnh2os&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_mod2_skill4_enrolling&skin=3&repeat=&brandNW=1&start
+                        _volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&fs_mode=2
+                        &skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%237f54f8&dir
+                        ect=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_positionOffset
+                        =70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&cc_bkgCol
+                        or=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvideoprovid
+                        er.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D10478110%2
+                        6size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&play_butto
+                        n_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute&floating
+                        _player=none " frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 6, title: "Skill Number 5 – Educating - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=fa6dfc1754424fb89475c
-d55081710a5&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=9mzxe2eq5n48&is_link=1&w=7
+                        20&h=405&pause=1&title=dbwa_mod2_skill5_educating&skin=3&repeat=&brandNW=1&st
+                        art_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&fs_mode
+                        =2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%237f54f8&
+                        direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_positionOffs
+                        et=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&cc_bkgC
+                        olor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvideoprovi
+                        der.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D10478097%
+                        26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&play_butt
+                        on_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute&floatin
+                        g_player=none" frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 7, title: "Skill Number 6 – Promoting - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=b4c24349a28d4c97bdbf
-9f8361bb872a&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=9r5boh9rw7c4&is_link=1&w=7
+                        20&h=405&pause=1&title=dbwa_mod2_skill5_promoting&skin=3&repeat=&brandNW=1&s
+                        tart_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&fs_mod
+                        e=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%237f54f8
+                        &direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_positionOf
+                        fset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&cc_bkg
+                        Color=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvideopro
+                        vider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D10477878
+                        %26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&play_bu
+                        tton_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute&floati
+                        ng_player=none
+                        " frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 8, title: "How to Turn Every No To a YES - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=6b96da49a84d43468a3
-6a55a6cdeb81f&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=d844bdtpwrkk&is_link=1&w=7
+                        20&h=405&pause=1&title=dbwa_mod2_skill3_1_howtoturnnotoYES&skin=3&repeat=&bran
+                        dNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=
+                        1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=
+                        %237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_
+                        positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffff
+                        ff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamin
+                        gvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3
+                        D10477874%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button
+                        =1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=un
+                        Mute&floating_player=none
+                        " frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 9, title: "The 6 Laws of Leadership - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=b5757c112d684105807
-02fadf6f57f8a&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=4jj3pgecznok&is_link=1&w=720
+                        &h=405&pause=1&title=dbwa_mod2_sixlawsofleadership&skin=3&repeat=&brandNW=1&s
+                        tart_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&fs_mod
+                        e=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%237f54f8
+                        &direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_positionOf
+                        fset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&cc_bkg
+                        Color=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvideopro
+                        vider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D10477927
+                        %26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&play_bu
+                        tton_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute&floati
+                        ng_player=none" frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 10, title: "The 5 Golden Rules - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=4ad18f20ddf548aab750
-ac2c2681f330&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=3pxic717a2sk&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_mod2_5goldenrules&skin=3&repeat=&brandNW=1&start_
+                        volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&fs_mode=2&
+                        skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%237f54f8&dire
+                        ct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_positionOffset=
+                        70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&cc_bkgColor
+                        =%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvideoprovider.
+                        com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D10477926%26s
+                        ize%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&play_button
+                        _style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute&floating_
+                        player=none " frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 11, title: "The 6 Paths to Freedom (1)- PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=425d0811dad84a13902
-1083198f11561&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe>` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=8ad3k113fxc0&is_link=1&w=72
+                        0&h=405&pause=1&title=dennis_bay_way%2C_six_paths_to_freedom_path_1+%28360p%2
+                        9&skin=3&repeat=&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=
+                        %23e9e9e9&fullscreen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%
+                        23ffffff&colorHighlight=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&c
+                        c_position=bottom&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_t
+                        extOutlineColor=%23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%
+                        2F%2Fmember.streamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateT
+                        humbnail%26clip_id%3D10475960%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio
+                        =16%3A9&play_button=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play
+                        =0&auto_play_type=unMute&floating_player=none
+                        " frameborder="0"
+                        allowfullscreen></iframe>` },
                         { id: 11, title: "The 6 Paths to Freedom (2)- PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=2c03d8f798cf4bed94fd5
-33e0242cb70&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=alxg8sc3ck8c&is_link=1&w=720
+                        &h=405&pause=1&title=dennis_bay_way%2C_six_path_to_freedom_path_2+%28360p%29
+                        &skin=3&repeat=&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=
+                        %23e9e9e9&fullscreen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%
+                        23ffffff&colorHighlight=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&c
+                        c_position=bottom&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_t
+                        extOutlineColor=%23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%
+                        2F%2Fmember.streamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateT
+                        humbnail%26clip_id%3D10475956%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio
+                        =16%3A9&play_button=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play
+                        =0&auto_play_type=unMute&floating_player=none
+                        " frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 11, title: "The 6 Paths to Freedom (3)- PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=b22610679a0141c5a001
-af869a10bf2f&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe>` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=4l3las4ehf6s&is_link=1&w=720
+                        &h=405&pause=1&title=dennis_bay_way%2C_six_path_to_freedom_path_3+%28360p%29
+                        &skin=3&repeat=&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=
+                        %23e9e9e9&fullscreen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%
+                        23ffffff&colorHighlight=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&c
+                        c_position=bottom&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_t
+                        extOutlineColor=%23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%
+                        2F%2Fmember.streamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateT
+                        humbnail%26clip_id%3D10475968%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio
+                        =16%3A9&play_button=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play
+                        =0&auto_play_type=unMute&floating_player=none
+                        " frameborder="0"
+                        allowfullscreen></iframe>` },
                         { id: 11, title: "The 6 Paths to Freedom (4)- PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=518466522a6144fd9889
-364342a6ccf5&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=8rni5tpjfm04&is_link=1&w=720
+                        &h=405&pause=1&title=dennis_bay_way%2C_six_path_to_freedom_path_4+%28360p%29
+                        &skin=3&repeat=&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=
+                        %23e9e9e9&fullscreen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%
+                        23ffffff&colorHighlight=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&c
+                        c_position=bottom&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_t
+                        extOutlineColor=%23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%
+                        2F%2Fmember.streamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateT
+                        humbnail%26clip_id%3D10476044%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio
+                        =16%3A9&play_button=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play
+                        =0&auto_play_type=unMute&floating_player=none" frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 11, title: "The 6 Paths to Freedom (5)- PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=24035bd16c844288b7e
-40c9ad0a4e0a3&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=ai3dtqca5kgs&is_link=1&w=720
+                        &h=405&pause=1&title=dennis_bay_way%2C_six_path_to_freedom_path_5+%28360p%29
+                        &skin=3&repeat=&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=
+                        %23e9e9e9&fullscreen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%
+                        23ffffff&colorHighlight=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&c
+                        c_position=bottom&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_t
+                        extOutlineColor=%23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%
+                        2F%2Fmember.streamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateT
+                        humbnail%26clip_id%3D10476050%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio
+                        =16%3A9&play_button=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play
+                        =0&auto_play_type=unMute&floating_player=none" frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 11, title: "The 6 Paths to Freedom (6)- PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=b8ad2309fffe489e9478
-384573967d84&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=9iwb0qk85ios&is_link=1&w=72
+                        0&h=405&pause=1&title=dennis_bay_way%2C_six_path_to_freedom_path_6+%28360p%2
+                        9&skin=3&repeat=&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=
+                        %23e9e9e9&fullscreen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%
+                        23ffffff&colorHighlight=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&c
+                        c_position=bottom&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_t
+                        extOutlineColor=%23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%
+                        2F%2Fmember.streamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateT
+                        humbnail%26clip_id%3D10476081%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio
+                        =16%3A9&play_button=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play
+                        =0&auto_play_type=unMute&floating_player=none" frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 12, title: "The 6 Keys to Happiness - PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=e89eeabbdf714f5aa854
-e7d0e1cbe353&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=au1yyd3hzdc8&is_link=1&w=72
+                        0&h=405&pause=1&title=dennis_bay_way%2C_six_keys_to_happiness_1st_key+%28360p%
+                        29&skin=3&repeat=&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2
+                        =%23e9e9e9&fullscreen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=
+                        %23ffffff&colorHighlight=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0
+                        &cc_position=bottom&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&c
+                        c_textOutlineColor=%23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3
+                        A%2F%2Fmember.streamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenera
+                        teThumbnail%26clip_id%3D10475964%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ra
+                        tio=16%3A9&play_button=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_pl
+                        ay=0&auto_play_type=unMute&floating_player=none" frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 12, title: "The 6 Keys to Happiness - PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=e9949155e62743e9adf7
-80671c4d28a9&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=efuc1wsy1ds0&is_link=1&w=72
+                        0&h=405&pause=1&title=dennis_bay_way%2C_six_keys_to_happiness_2nd_key+%28360p
+                        %29&skin=3&repeat=&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradien
+                        t2=%23e9e9e9&fullscreen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon
+                        =%23ffffff&colorHighlight=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=
+                        0&cc_position=bottom&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&
+                        cc_textOutlineColor=%23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3
+                        A%2F%2Fmember.streamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenera
+                        teThumbnail%26clip_id%3D10476094%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ra
+                        tio=16%3A9&play_button=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_pl
+                        ay=0&auto_play_type=unMute&floating_player=none" frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 12, title: "The 6 Keys to Happiness - PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=4268e1b33edf45fe9665
-e5f910aae97f&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=1wgcubkl3iqs&is_link=1&w=72
+                        0&h=405&pause=1&title=dennis_bay_way%2C_six_keys_to_happiness_3rd_key+%28360p
+                        %29&skin=3&repeat=&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradien
+                        t2=%23e9e9e9&fullscreen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon
+                        =%23ffffff&colorHighlight=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=
+                        0&cc_position=bottom&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&
+                        cc_textOutlineColor=%23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3
+                        A%2F%2Fmember.streamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenera
+                        teThumbnail%26clip_id%3D10475991%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ra
+                        tio=16%3A9&play_button=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_pl
+                        ay=0&auto_play_type=unMute&floating_player=none
+                        " frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 12, title: "The 6 Keys to Happiness - PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=defc137fe5fb4f8fa9454c
-b217e93585&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe>` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=ddy0v8smxog0&is_link=1&w=7
+                        20&h=405&pause=1&title=dennis_bay_way%2C_six_keys_to_happiness_4th_key+%28360p
+                        %29&skin=3&repeat=&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradien
+                        t2=%23e9e9e9&fullscreen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon
+                        =%23ffffff&colorHighlight=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=
+                        0&cc_position=bottom&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&
+                        cc_textOutlineColor=%23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3
+                        A%2F%2Fmember.streamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenera
+                        teThumbnail%26clip_id%3D10475966%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ra
+                        tio=16%3A9&play_button=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_pl
+                        ay=0&auto_play_type=unMute&floating_player=none " frameborder="0"
+                        allowfullscreen></iframe>` },
                         { id: 12, title: "The 6 Keys to Happiness - PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=defc137fe5fb4f8fa9454c
-b217e93585&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=e3orjcr9c3k0&is_link=1&w=720
+                        &h=405&pause=1&title=dennis_bay_way%2C_six_keys_to_happiness_5th_key+%28360p%2
+                        9&skin=3&repeat=&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=
+                        %23e9e9e9&fullscreen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%
+                        23ffffff&colorHighlight=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&c
+                        c_position=bottom&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_t
+                        extOutlineColor=%23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%
+                        2F%2Fmember.streamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateT
+                        humbnail%26clip_id%3D10476095%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio
+                        =16%3A9&play_button=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play
+                        =0&auto_play_type=unMute&floating_player=none
+                        " frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 12, title: "The 6 Keys to Happiness - PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=a6fe469cb9cc4503b365b6577255a6c5&videoId=5ed89ef019fa48a9a71fc
-5063ece3170&compId=comp-mceu51lv&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=zuor9pe0edc4&is_link=1&w=72
+                        0&h=405&pause=1&title=dennis_bay_way%2C_six_keys_to_happiness_6th_key+%28360p%
+                        29&skin=3&repeat=&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2
+                        =%23e9e9e9&fullscreen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=
+                        %23ffffff&colorHighlight=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0
+                        &cc_position=bottom&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&c
+                        c_textOutlineColor=%23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3
+                        A%2F%2Fmember.streamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenera
+                        teThumbnail%26clip_id%3D10475965%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ra
+                        tio=16%3A9&play_button=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_pl
+                        ay=0&auto_play_type=unMute&floating_player=none " frameborder="0"
+                        allowfullscreen></iframe> ` },
                     ]
                 },
                 {
@@ -231,83 +491,201 @@ allowfullscreen></iframe> ` },
                     title: "Becoming a Multi-Asset Investor and Trader",
                     lessons: [
                         { id: 1, title: "How do you grow more money while you sleep? - PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=83b25e4f97f54543802c36151b6e2916&videoId=8e5a2596d98943b4861
-c46aa737aa76c&compId=comp-mcevurpn&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe>` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=9dbmg2vyqrs4&is_link=1&w=7
+                        20&h=405&pause=1&title=dbwa_mod3_1_howtogrowmoneywhileyousleep&skin=3&repeat
+                        =&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fulls
+                        creen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHigh
+                        light=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=botto
+                        m&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=
+                        %23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.st
+                        reamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip
+                        _id%3D10477891%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_b
+                        utton=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_ty
+                        pe=unMute&floating_player=none 
+                        " frameborder="0"
+                        allowfullscreen></iframe>` },
                         { id: 2, title: "What is a Multi-Asset Investor and Trader? - PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=83b25e4f97f54543802c36151b6e2916&videoId=6cd5e4d408f44ff4ac110
-2dc72fe493a&compId=comp-mcevurpn&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=dtdc6monqwgs&is_link=1&w=7
+                        20&h=405&pause=1&title=dbwa_lesson_mod_3_2_whatisaMultiAssetTrader&skin=3&repe
+                        at=&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fu
+                        llscreen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHi
+                        ghlight=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bott
+                        om&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor
+                        =%23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.s
+                        treamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26cli
+                        p_id%3D10477828%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_
+                        button=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_t
+                        ype=unMute&floating_player=none 
+                        " frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 3, title: "Money VS The Stock Market - PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=83b25e4f97f54543802c36151b6e2916&videoId=a434fe6a611547dfb940
-c851c1360207&compId=comp-mcevurpn&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=9rfq1g22wu80&is_link=1&w=7
+                        20&h=405&pause=1&title=dbwa_mod3_3_moneyvsstocks&skin=3&repeat=&brandNW=1&
+                        start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&fs_mo
+                        de=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%237f54f
+                        8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_position
+                        Offset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&cc_b
+                        kgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvideop
+                        rovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D104779
+                        07%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&play_
+                        button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute&flo
+                        ating_player=none" frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 4, title: "Money VS Indices - PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=83b25e4f97f54543802c36151b6e2916&videoId=e19488eb7ab8450bb87
-da5af4b87748c&compId=comp-mcevurpn&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=3ctuhjrm7n6s&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_mod3_4_moneyvsindices&skin=3&repeat=&brandNW=1&s
+                        tart_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&fs_mod
+                        e=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%237f54f8
+                        &direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_positionOf
+                        fset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&cc_bkg
+                        Color=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvideopro
+                        vider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D10477770
+                        %26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&play_bu
+                        tton_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute&floati
+                        ng_player=none
+                        " frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 5, title: "Money VS Commodities - PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=83b25e4f97f54543802c36151b6e2916&videoId=1c04cb97b91349c59d6
-5540f83a82177&compId=comp-mcevurpn&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=kgzwpr9bhe8c&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_mod3_5_moneyvscommodities&skin=3&repeat=&brandN
+                        W=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&f
+                        s_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%23
+                        7f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_posi
+                        tionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&c
+                        c_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvid
+                        eoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D104
+                        77901%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&pl
+                        ay_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute
+                        &floating_player=none " frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 6, title: "Money VS Currency Pairs - PCA", duration: "10:00", membership: ['vip', 'pca'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=83b25e4f97f54543802c36151b6e2916&videoId=ceb33fe31f45449db9e7
-0e5a2b0a1d46&compId=comp-mcevurpn&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=8dzjkbiihfgg&is_link=1&w=720
+                        &h=405&pause=1&title=dbwa_mod3_6_moneyvscurrencypairs&skin=3&repeat=&brandNW
+                        =1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&fs_
+                        mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%237f
+                        54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_positi
+                        onOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&cc
+                        _bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvide
+                        oprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D1047
+                        7902%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&pla
+                        y_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute&
+                        floating_player=none" frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 7, title: "How do I buy stocks with just $100? - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=83b25e4f97f54543802c36151b6e2916&videoId=5fb28bd6c43444aa8826
-baf0920265c0&compId=comp-mcevurpn&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=cm2u7u0wleok&is_link=1&w=7
+                        20&h=405&pause=1&title=dbwa_mod3_7_howtobuystockswith100&skin=3&repeat=&bran
+                        dNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=
+                        1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=
+                        %237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_
+                        positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffff
+                        ff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamin
+                        gvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3
+                        D10477781%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button
+                        =1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=un
+                        Mute&floating_player=none" frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 8, title: "How to open an investing and trading account? - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=83b25e4f97f54543802c36151b6e2916&videoId=ba97078333634be8a41
-a37f7c4878622&compId=comp-mcevurpn&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=8thqu9v3044c&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_mod3_8_howtoopenIBRKaccount&skin=3&repeat=&brand
+                        NW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1
+                        &fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%
+                        237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_p
+                        ositionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff
+                        &cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingv
+                        ideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D1
+                        0476071%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1
+                        &play_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unM
+                        ute&floating_player=none
+                        " frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 9, title: "How to deposit funds to your trading account? - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=83b25e4f97f54543802c36151b6e2916&videoId=891b5f19a40a412685dc
-a378bd35455a&compId=comp-mcevurpn&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=ad2uci5uqs8c&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_mod3_14_howtodeposittoIBKR&skin=3&repeat=&brandN
+                        W=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&f
+                        s_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%23
+                        7f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_posi
+                        tionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&c
+                        c_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvid
+                        eoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D104
+                        78942%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&pl
+                        ay_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute
+                        &floating_player=none" frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 10, title: "What are stock options? - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=83b25e4f97f54543802c36151b6e2916&videoId=ba9b75ebe5af45cab02c
-1f97fb2ad3f1&compId=comp-mcevurpn&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> ` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=7xsidiarzl0k&is_link=1&w=720
+                        &h=405&pause=1&title=dbwa_mod3_9_whatarestockoptions&skin=3&repeat=&brandNW=
+                        1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&fs_
+                        mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%237f
+                        54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_positi
+                        onOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&cc
+                        _bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvide
+                        oprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D1047
+                        7925%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&pla
+                        y_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute&
+                        floating_player=none 
+                        " frameborder="0"
+                        allowfullscreen></iframe> ` },
                         { id: 11, title: "How to generate income from real estate? - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=83b25e4f97f54543802c36151b6e2916&videoId=7ba6b50cd7964d19a5c
-3f57f5bfd698d&compId=comp-mcevurpn&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=3av1x12222sk&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_mod3_10_howtogenerateincomefromrealestate&skin=3&r
+                        epeat=&brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9
+                        &fullscreen=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&col
+                        orHighlight=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=
+                        bottom&cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineC
+                        olor=%23ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmemb
+                        er.streamingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%2
+                        6clip_id%3D10477923%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&pl
+                        ay_button=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_pla
+                        y_type=unMute&floating_player=none
+                        " frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 12, title: "How to leverage the banks to invest in real estate? - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=83b25e4f97f54543802c36151b6e2916&videoId=6fdee9df6c3c4a8eb5c2
-173db8b2da9b&compId=comp-mcevurpn&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe>` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=59vjwobbu18o&is_link=1&w=7
+                        20&h=405&pause=1&title=dbwa_mod3_10_howtoleveragebanks&skin=3&repeat=&brandN
+                        W=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&f
+                        s_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%23
+                        7f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_posi
+                        tionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&c
+                        c_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvid
+                        eoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D104
+                        77918%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&pl
+                        ay_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute
+                        &floating_player=none" frameborder="0"
+                        allowfullscreen></iframe>` },
                         { id: 13, title: "How To Use Airbnb to Generate More Passive Income? - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=83b25e4f97f54543802c36151b6e2916&videoId=75d23faa45f7453794e1
-536e456f7cc7&compId=comp-mcevurpn&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` },
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=852ntff9p8w8&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_mod3_10_howtouseAirBNB&skin=3&repeat=&brandNW=1
+                        &start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscreen=1&fs_m
+                        ode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlight=%237f54
+                        f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&cc_position
+                        Offset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%23ffffff&cc_b
+                        kgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.streamingvideop
+                        rovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id%3D104778
+                        48%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_button=1&play_
+                        button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=unMute&flo
+                        ating_player=none" frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` },
                         { id: 14, title: "The power of teamwork in real estate? - VIP", duration: "10:00", membership: ['vip'], completed: false, videoUrl: `<iframe width="560" height="315"
-src="https://embed.wix.com/video?instanceId=2623bb45-d55d-4819-b948-
-bf46f0f92395&biToken=31e12868-a8e4-02d3-1fbb-b9462cd879f3&pathToPage=%2Fdbwacourse&channelId=83b25e4f97f54543802c36151b6e2916&videoId=cd91c710dc6e4e948c39
-8098ab83c14c&compId=comp-mcevurpn&sitePageId=za57d" frameborder="0"
-allowfullscreen></iframe> 
-` }
+                        src="https://play.streamingvideoprovider.com/popplayer.php?it=4qtyvz83x44k&is_link=1&w=72
+                        0&h=405&pause=1&title=dbwa_mod3_13_powerofteamworkrealestate&skin=3&repeat=&
+                        brandNW=1&start_volume=34&bg_gradient1=%23ffffff&bg_gradient2=%23e9e9e9&fullscre
+                        en=1&fs_mode=2&skinAlpha=50&colorBase=%23250864&colorIcon=%23ffffff&colorHighlig
+                        ht=%237f54f8&direct=false&no_ctrl=&auto_hide=1&viewers_limit=0&cc_position=bottom&
+                        cc_positionOffset=70&cc_multiplier=0.03&cc_textColor=%23ffffff&cc_textOutlineColor=%2
+                        3ffffff&cc_bkgColor=%23000000&cc_bkgAlpha=0.1&image=https%3A%2F%2Fmember.strea
+                        mingvideoprovider.com%2Fpanel%2Fserver%2Fclip%3Fa%3DGenerateThumbnail%26clip_id
+                        %3D10478052%26size%3Dlarge&mainBg_Color=%23ffffff&aspect_ratio=16%3A9&play_butt
+                        on=1&play_button_style=pulsing&sleek_player=1&stretch=&auto_play=0&auto_play_type=
+                        unMute&floating_player=none " frameborder="0"
+                        allowfullscreen></iframe> 
+                        ` }
                     ]
                 }
             ],

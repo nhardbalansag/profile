@@ -46,10 +46,18 @@ const Footer = () => {
     },
     links: {
       quick: [
-        <span className="about_us_label_id">About Us</span>,
-        <span className="events_label_id">Events</span>,
-        <span className="blog_label_id">Blog</span>,
-        <span className="contact_us_label_id">Contact Us</span>
+        <a href="https://www.clubtenglobal.com/" className="text-sm text-gray-300 transition-colors hover:text-white">
+          <span className="about_us_label_id">About Us</span>
+        </a>,
+        // <a href="#" className="text-sm text-gray-300 transition-colors hover:text-white">
+        //   <span className="events_label_id">Events</span>
+        // </a>,
+        // <a href="#" className="text-sm text-gray-300 transition-colors hover:text-white">
+        //   <span className="blog_label_id">Blog</span>
+        // </a>,
+        <a href="mailto:support@clubten.app" className="text-sm text-gray-300 transition-colors hover:text-white">
+          <span className="contact_us_label_id">Contact Us</span>
+        </a>
       ],
       legal: [
         <span className="privacy_policy_label_id">Privacy Policy</span>,
@@ -86,9 +94,7 @@ const Footer = () => {
             <ul className="space-y-2">
               {footerData.links.quick.map((link, index) => (
                 <li key={index}>
-                  <a href="#" className="text-sm text-gray-300 transition-colors hover:text-white">
-                    {link}
-                  </a>
+                  {link}
                 </li>
               ))}
             </ul>

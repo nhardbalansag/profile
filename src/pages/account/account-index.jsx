@@ -74,7 +74,7 @@ const AccountPage = () => {
     })
   }
 
-  const Header = ({onPressDropDown}) =>{
+  const Header = () =>{
     return (
       <header className="flex items-center w-full px-3 py-2 mb-8 text-white">
         {/* Right Section */}
@@ -85,8 +85,6 @@ const AccountPage = () => {
           <div className="text-sm ">
             <p className="text-xs text-gray-400 welcome_back_label_id">Welcome back!</p>
             <p className="font-medium text-black">
-              {/* {`${auth_states.StateToken ? auth_states.StateUserInformation.first_name : ","}`} */}
-              {/* {`${auth_states.StateToken ? auth_states.StateUserInformation.first_name : ","}`} */}
               {auth_states.StateUserInformation.nick_names ? auth_states.StateUserInformation.nick_names : auth_states.StateUserInformation.first_name}
             </p>
           </div>
@@ -128,7 +126,7 @@ const AccountPage = () => {
       className="drawer">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
-        <Header onPressDropDown={() => setBottomDetailsOpen(true)}/>
+          {Header()}
         {/* navigation pages */}
         <div className=''>
           <div className='w-11/12 mx-auto'>

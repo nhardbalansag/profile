@@ -67,7 +67,7 @@ import {
     MallShop,
     MallSocial,
 
-    AccountSponsorProfile
+    // AccountSponsorProfile
 } from '../pages/index'
 
 import {
@@ -277,15 +277,15 @@ const router = createBrowserRouter([
                 ),
                 errorElement: <ErrorPage />
             },
-            {
-                path: "sponsor-details",
-                element: ( 
-                    <AuthenticatedUsers route={'/login'}>
-                        <AccountSponsorProfile />
-                    </AuthenticatedUsers> 
-                ),
-                errorElement: <ErrorPage />
-            },
+            // {
+            //     path: "sponsor-details",
+            //     element: ( 
+            //         <AuthenticatedUsers route={'/login'}>
+            //             <AccountSponsorProfile />
+            //         </AuthenticatedUsers> 
+            //     ),
+            //     errorElement: <ErrorPage />
+            // },
             {
                 path: "orders",
                 element: ( 

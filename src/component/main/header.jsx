@@ -74,7 +74,8 @@ const Header = ({
         <div className=" md:w-[75%] w-[95%]">
           <div className="flex items-center justify-between ">
             <div>
-              <Link to={'/'}>
+              
+              <Link to={auth_states.StateToken ? "/" : '/login'}>
                 <a href="#">
                   <img
                     className="w-[60px] md:w-[100px]"
@@ -91,12 +92,15 @@ const Header = ({
                       ActionState ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full' 
                     }`}
                   >
-                    <button onClick={handleLanguageVisibility}>
-                      <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
-                        <IoLanguageOutline  size={20}/>
-                        <p className='language_id text-[#001d3d] capitalize ml-2 '>Language</p>
-                      </a>
-                    </button>
+                    {
+                      auth_states.StateToken &&
+                      <button onClick={handleLanguageVisibility}>
+                        <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                          <IoLanguageOutline  size={20}/>
+                          <p className='language_id text-[#001d3d] capitalize ml-2 '>Language</p>
+                        </a>
+                      </button>
+                    }
 
                     <div className='flex items-center justify-start space-x-3 md:px-10'>
                       {
