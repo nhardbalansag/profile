@@ -19,6 +19,9 @@ const LanguageBottomSheet = ({
     const SelectContent = (item) => {
         selectItem(item)
         handleSelectContent(item)
+        // if(item.id == 1){
+        //     window.location.reload();
+        // }
         dispatch(AuthAction.AddSelectedLanguage(item))
     }
 

@@ -129,6 +129,16 @@ const Header = ({
                   <AiOutlineAlignRight  color='black' size={25}/>
                 </label>
               }
+
+              {
+                !auth_states.StateToken &&
+                <button onClick={handleLanguageVisibility}>
+                  <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                    <IoLanguageOutline  size={20}/>
+                    <p className='language_id text-[#001d3d] capitalize ml-2 '>Language</p>
+                  </a>
+                </button>
+              }
             </div>
           </div>
         </div>
