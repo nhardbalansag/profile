@@ -88,15 +88,30 @@ const LoginContent = () =>{
             Array.from(targetElement).forEach((el) => {
               el.textContent = filteredTranslation.page_config_title;
             });
+
+            Array.from(targetElement).forEach((el) => {
+              el.setAttribute(
+                'placeholder',
+                filteredTranslation?.page_config_title || item.page_config_title
+              );
+            });
+            
           } else if (targetElement.length > 0) {
             Array.from(targetElement).forEach((el) => {
               el.textContent = item.page_config_title;
+            });
+
+            Array.from(targetElement).forEach((el) => {
+              el.setAttribute(
+                'placeholder',
+                item.page_config_title
+              );
             });
           }
         }
       }
     })
-  },[auth_states, isLoading, enableResetPassword])
+  },[auth_states, isLoading, enableResetPassword, searchParams])
   //#endregion
 
   useEffect(() =>{
@@ -325,6 +340,9 @@ const LoginContent = () =>{
   }
 
   const getSponsorDetails = async (event) =>{
+
+   
+
     setLoading(true)
 
     const requestBody = {
@@ -346,8 +364,19 @@ const LoginContent = () =>{
   }
 
   useEffect(() => {
-   userSubscriptionCategories()
-   getSponsorDetails()
+    userSubscriptionCategories()
+
+    if(searchParams.get('sponsor')){
+      getSponsorDetails()
+    }
+  }, [])
+
+  useEffect(() => {
+    if(searchParams.get('status') == "success"){
+      toast.success("Your account has been successfully verified.");
+    }else if(searchParams.get('status') == "failed"){
+      toast.warning("Failed to verify your email.");
+    }
   }, [])
 
   const _PlanSelect = (dataList) => {
@@ -456,7 +485,7 @@ const LoginContent = () =>{
               <input
                 type="text"
                 placeholder="Email"
-                className="input input-bordered"
+                className="input input-bordered email_label_id"
                 name='email'
                 value={getRequest.email} 
                 onChange={handleChange}
@@ -520,7 +549,7 @@ const LoginContent = () =>{
                         <input
                           type="text"
                           placeholder="Email"
-                          className="input input-bordered"
+                          className="input input-bordered login_id"
                           name='email'
                           value={getRequest.email} 
                           onChange={handleChange}
@@ -528,7 +557,7 @@ const LoginContent = () =>{
                         <input
                           type="password"
                           placeholder="Password"
-                          className="input input-bordered"
+                          className="input input-bordered password_label_id"
                           name='password'
                           value={getRequest.password} 
                           onChange={handleChange}
@@ -576,11 +605,25 @@ const LoginContent = () =>{
                       <label className="w-full max-w-xs form-control">
                         <label className="capitalize label font-bold text-gray-500 text-[15px] country_label_id">Country</label>
                         <select name='country_id' value={getRegisterForm.country_id} onChange={handleChangeForRegister} className="select select-bordered">
-                          <option value={null} className='select_country'>Select Your Country</option>
+                          <option value={null} className='select_country_label_id'>Select Your Country</option>
                             {
                               countriesList.map((item, key) =>
                                 <option key={key} value={item.id}>
-                                  {`${item.name} (${item.iso_code_3})`}
+                                  {/* {`${item.name} (${item.iso_code_3})`} */}
+
+                                  {
+                                    selectedLanguage.current == null 
+                                    ? item.name
+                                    : 
+                                      item.params
+                                      ?
+                                          (
+                                              item.params.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                              ? item.params.find((filter_item) => filter_item.language_id == selectedLanguage.current).title
+                                              : ResultGetHomeContents.title
+                                          )
+                                      : item.name
+                                  }
                                 </option>
                               )
                             }
@@ -593,7 +636,7 @@ const LoginContent = () =>{
                           <input
                             type="text"
                             placeholder="First name"
-                            className="input input-bordered input-md"
+                            className="input input-bordered input-md first_name_label_id"
                             name='first_name'
                             value={getRegisterForm.first_name} 
                             onChange={handleChangeForRegister}
@@ -601,7 +644,7 @@ const LoginContent = () =>{
                           <input
                             type="text"
                             placeholder="Last name"
-                            className="input input-bordered input-md"
+                            className="input input-bordered input-md last_name_label_id"
                             name='last_name'
                             value={getRegisterForm.last_name} 
                             onChange={handleChangeForRegister}
@@ -612,7 +655,7 @@ const LoginContent = () =>{
                       <input
                         type="email"
                         placeholder="Email"
-                        className="w-full input input-bordered input-md"
+                        className="w-full input input-bordered input-md email_label_id"
                         name='email'
                         value={getRegisterForm.email} 
                         onChange={handleChangeForRegister}
@@ -623,7 +666,7 @@ const LoginContent = () =>{
                         <input
                           type="password"
                           placeholder="Password"
-                          className=" input input-bordered input-md"
+                          className=" input input-bordered input-md password_label_id"
                           name='password'
                           value={getRegisterForm.password} 
                           onChange={handleChangeForRegister}
@@ -635,7 +678,7 @@ const LoginContent = () =>{
                         <input
                           type="password"
                           placeholder="Confirm Password"
-                          className=" input input-bordered input-md"
+                          className=" input input-bordered input-md confirm_password_label_id"
                           name='confirmPassword'
                           value={getRegisterForm.confirmPassword} 
                           onChange={handleChangeForRegister}

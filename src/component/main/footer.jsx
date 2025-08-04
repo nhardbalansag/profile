@@ -35,8 +35,8 @@ const Footer = () => {
 
   const [footerData] = useState({
     company: {
-      name: 'Club TEN',
-      description: 'Connect with friends and create community in CLUB TEN.',
+      name: 'Club TEN Global',
+      description: 'Enrich your life.',
       socials: [
         { icon: <FaFacebookF size={20} />, href: 'https://www.facebook.com/clubtenglobal' },
         { icon: <FaTiktok size={20} />, href: 'https://www.tiktok.com/@clubtenglobal' },

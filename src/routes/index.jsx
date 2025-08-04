@@ -80,13 +80,41 @@ import * as AuthAction from '../store/auth/authAction'
 import * as api_page_config from '../services/page/page.api'
 
 const ErrorPage = () =>{
-  const error = useRouteError();
+    const error = useRouteError();
+
+    const CreateFrontendErrorLogs = async () => {
+        if (!error) return;
+
+        const requestBody = {
+            message: error.message || "Unknown message",
+            statusText: error.statusText || "Unknown statusText",
+            pathname: window.location.pathname,
+            userAgent: navigator.userAgent,
+            error: JSON.stringify(error, Object.getOwnPropertyNames(error))
+        };
+
+        try {
+            await api_page_config.CreateFrontendErrorLogs(requestBody);
+        } catch (err) {
+            console.error("Failed to send error log", err);
+        } 
+    };
+
+    useEffect(() => {
+
+        CreateFrontendErrorLogs()
+        
+        // Delay to let user briefly see the error
+        const timer = setTimeout(() => {
+            window.location.reload(); // Hard refresh
+        }, 2000); // 2 seconds
+
+        return () => clearTimeout(timer);
+    }, []);
+
   return (
     <div>
-      <h1>Oops!</h1>
-      <p>{error.statusText || error.message}</p>
-      {/* <p>{error}</p> */}
-
+        <p>{error.message}</p>
         <div className="flex items-center justify-center p-4">
             <div className="">
                 <div className='text-center'>

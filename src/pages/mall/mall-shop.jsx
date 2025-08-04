@@ -1,11 +1,36 @@
-import { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import {useSelector} from 'react-redux';
 import { Mail, Github, Twitter, Linkedin, Sparkles } from 'lucide-react';
 
 const MallShop = () => {
+  
+  const auth_states = useSelector(state => state.AuthReducer);
+
+  useEffect(() =>{
+    auth_states.PageLanguages.map((item, key) =>{
+      const translation = item.translation
+      
+      if(translation.length > 0 && auth_states.SelectedLanguage){
+        const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
+        const targetElement = document.getElementsByClassName(item.page_config_id)
+        if (targetElement) {
+          if (targetElement.length > 0 && filteredTranslation) {
+            Array.from(targetElement).forEach((el) => {
+              el.textContent = filteredTranslation.page_config_title;
+            });
+          } else if (targetElement.length > 0) {
+            Array.from(targetElement).forEach((el) => {
+              el.textContent = item.page_config_title;
+            });
+          }
+        }
+      }
+    })
+  },[auth_states])
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
-      {/* Main content */}
+          {/* Main content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           {/* Icon */}
@@ -18,11 +43,11 @@ const MallShop = () => {
 
           {/* Main heading */}
           <h1 className="mb-6 text-4xl font-bold leading-tight sm:text-6xl md:text-7xl lg:text-8xl text-foreground">
-            <span className="text-transparent bg-gradient-to-r from-primary via-primary to-accent bg-clip-text">
+            <span className="text-transparent bg-gradient-to-r from-primary via-primary to-accent bg-clip-text coming_label_id">
               Coming
             </span>
             <br />
-            <span className="text-foreground">Soon</span>
+            <span className="text-foreground soon_label_id">Soon</span>
             <br />
             {/* <span className="text-transparent bg-gradient-to-r from-accent via-primary to-primary bg-clip-text">
               is Coming
@@ -32,7 +57,7 @@ const MallShop = () => {
 
         {/* Footer */}
         <div className="absolute transform -translate-x-1/2 bottom-8 left-1/2">
-          <p className="text-sm text-center text-muted-foreground">
+          <p className="text-sm text-center text-muted-foreground coming_soon_all_rights_reserved">
             © 2024 Coming Soon. All rights reserved.
           </p>
         </div>
@@ -46,7 +71,7 @@ const MallShop = () => {
         <div className="absolute w-1 h-1 rounded-full top-1/2 right-1/4 bg-primary/30 animate-bounce delay-3000"></div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default MallShop;

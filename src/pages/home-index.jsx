@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import {useSelector} from 'react-redux';
 import { useLocation, Link } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+
 import {
     Outlet,
 } from "react-router";
@@ -32,22 +34,11 @@ const HomePage = () => {
 
   const auth_states = useSelector(state => state.AuthReducer);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [open, setOpen] = useState(false)
   const [getOpenLanguageSelection, setOpenLanguageSelection] = useState(false)
   const [getSelectedLanguage, setSelectedLanguage] = useState("")
-
-  // const TabItem = ({ icon, label, active, path }) =>{
-
-  //   return (
-  //     <Link to={path}>
-  //       <div className={`flex flex-col items-center ${active ? "text-white" : "text-gray-400"} `}>
-  //         <div className="mb-1 text-lg">{icon}</div>
-  //         <span className="text-[14px]">{label}</span>
-  //       </div>
-  //     </Link>
-  //   )
-  // }
 
   useEffect(() =>{
     auth_states.PageLanguages.map((item, key) =>{
@@ -108,107 +99,85 @@ const HomePage = () => {
     )
   }
 
-  // const CategorizeButton  = ({icon, label, active, path}) =>{
-  //   return(
-  //     <Link to={path}>
-  //       <div
-  //         className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-  //           active ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-  //         }`}
-  //       >
-  //         <div className="mb-1 text-xl">{icon}</div>
-  //         <span className="text-[12px] md:text-[15px]">{label}</span>
-  //       </div>
-  //     </Link>
-  //   )
-  // }
-
   const TopCategories = () =>{
     return(
       <div className="flex flex-wrap items-center justify-center gap-2">
-          <Link to={'/travel'}>
-            <div
-              className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-                ((location.pathname.split("/")).includes('travel') ? true : false) ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-              }`}
-            >
-              <div className="mb-1 text-xl"><MdOutlineAirplanemodeActive /></div>
-              <span className="text-[12px] md:text-[15px] travel_label_id">Travel</span>
-            </div>
-          </Link>
-          
-          <Link to={'academy-index'}>
-            <div
-              className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-                ((location.pathname.includes('academy-index') || location.pathname.includes('academy')) ? true : false) ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-              }`}
-            >
-              <div className="mb-1 text-xl"><RiGraduationCapLine /></div>
-              <span className="text-[12px] md:text-[15px] academy_label_id">Learn</span>
-            </div>
-          </Link>
+        <div
+          onClick={() => navigate('/travel')}
+          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
+            location.pathname.includes('travel') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
+          }`}
+        >
+          <div className="mb-1 text-xl"><MdOutlineAirplanemodeActive /></div>
+          <span className="text-[12px] md:text-[15px] travel_label_id">Travel</span>
+        </div>
 
-          <Link to={'/earn'}>
-            <div
-              className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-                ((location.pathname.split("/")).includes('earn') ? true : false) ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-              }`}
-            >
-              <div className="mb-1 text-xl"><LuCircleDollarSign /></div>
-              <span className="text-[12px] md:text-[15px] earn_label_id">Earn</span>
-            </div>
-          </Link>
+        <div
+          onClick={() => navigate('/academy-index')}
+          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
+            location.pathname.includes('academy-index') || location.pathname.includes('academy') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
+          }`}
+        >
+          <div className="mb-1 text-xl"><RiGraduationCapLine /></div>
+          <span className="text-[12px] md:text-[15px] academy_label_id">Learn</span>
+        </div>
 
-          <Link to={'/grow'}>
-            <div
-              className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-                ((location.pathname.split("/")).includes('grow') ? true : false) ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-              }`}
-            >
-              <div className="mb-1 text-xl"><PiPottedPlantBold /></div>
-              <span className="text-[12px] md:text-[15px] grow_label_id">Grow</span>
-            </div>
-          </Link>
+        <div
+          onClick={() => navigate('/earn')}
+          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
+            location.pathname.includes('earn') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
+          }`}
+        >
+          <div className="mb-1 text-xl"><LuCircleDollarSign /></div>
+          <span className="text-[12px] md:text-[15px] earn_label_id">Earn</span>
+        </div>
 
-          <Link to={'/shop'}>
-            <div
-              className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-                ((location.pathname.split("/")).includes('shop') ? true : false) ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-              }`}
-            >
-              <div className="mb-1 text-xl"><BiStore /></div>
-              <span className="text-[12px] md:text-[15px] shop_label_id">Shop</span>
-            </div>
-          </Link>
+        <div
+          onClick={() => navigate('/grow')}
+          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
+            location.pathname.includes('grow') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
+          }`}
+        >
+          <div className="mb-1 text-xl"><PiPottedPlantBold /></div>
+          <span className="text-[12px] md:text-[15px] grow_label_id">Grow</span>
+        </div>
 
-          <Link to={'/lifestyle'}>
-            <div
-              className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-                ((location.pathname.split("/")).includes('lifestyle') ? true : false) ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-              }`}
-            >
-              <div className="mb-1 text-xl"><IoFitnessOutline /></div>
-              <span className="text-[12px] md:text-[15px] lifestyle_label_id">Lifestyle</span>
-            </div>
-          </Link>
-          
-          <Link to={'/social'}>
-            <div
-              className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-                ((location.pathname.split("/")).includes('social') ? true : false) ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-              }`}
-            >
-              <div className="mb-1 text-xl"><BiLike /></div>
-              <span className="text-[12px] md:text-[15px] social_label_id">Social</span>
-            </div>
-          </Link>
+        <div
+          onClick={() => navigate('/shop')}
+          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
+            location.pathname.includes('shop') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
+          }`}
+        >
+          <div className="mb-1 text-xl"><BiStore /></div>
+          <span className="text-[12px] md:text-[15px] shop_label_id">Shop</span>
+        </div>
+
+        <div
+          onClick={() => navigate('/lifestyle')}
+          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
+            location.pathname.includes('lifestyle') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
+          }`}
+        >
+          <div className="mb-1 text-xl"><IoFitnessOutline /></div>
+          <span className="text-[12px] md:text-[15px] lifestyle_label_id">Lifestyle</span>
+        </div>
+
+        <div
+          onClick={() => navigate('/social')}
+          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
+            location.pathname.includes('social') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
+          }`}
+        >
+          <div className="mb-1 text-xl"><BiLike /></div>
+          <span className="text-[12px] md:text-[15px] social_label_id">Social</span>
+        </div>
       </div>
     )
   }
 
   return (
     <div>
-      <div>
+      <div className=''>
         <Header 
         handleLanguageVisibility={() => setOpenLanguageSelection(true)}
         onPressAction={() => setOpen(!open)} 
@@ -216,8 +185,8 @@ const HomePage = () => {
         />
       </div>
 
-      {/* <TopCategories/> */}
       {TopCategories()}
+
       {/* pages */}
       <Outlet />
       {/* pages */}

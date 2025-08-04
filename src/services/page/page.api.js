@@ -22,3 +22,14 @@ export const GetAllLanguages = async () => {
         url: `${PublicAPI}languages`
     });
 }
+
+export const CreateFrontendErrorLogs = async (reqBody) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'POST', 
+        url: `${env.VITE_APP_BACKEND_API_URL}add-log`,
+        data: reqBody
+    });
+}

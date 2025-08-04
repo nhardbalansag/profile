@@ -96,9 +96,24 @@ const OffersBottomSheet = ({
                         Array.from(targetElement).forEach((el) => {
                             el.textContent = filteredTranslation.page_config_title;
                         });
+
+                        Array.from(targetElement).forEach((el) => {
+                            el.setAttribute(
+                                'placeholder',
+                                filteredTranslation?.page_config_title || item.page_config_title
+                            );
+                        });
+
                     } else if (targetElement.length > 0) {
                         Array.from(targetElement).forEach((el) => {
                             el.textContent = item.page_config_title;
+                        });
+
+                        Array.from(targetElement).forEach((el) => {
+                            el.setAttribute(
+                                'placeholder',
+                                item.page_config_title
+                            );
                         });
                     }
                 }
@@ -226,7 +241,7 @@ const OffersBottomSheet = ({
                                     <span className="text-green-600">${finalAmount}</span>
                                 </div>
                                 <div className="flex justify-between text-xl font-bold">
-                                    <span className="text-gray-900 total_wallet_label_id">Total Wallet</span>
+                                    <span className="text-gray-900 total_wallet_label_id">Total Redeemed</span>
                                     <span className="text-red-600">${parseFloat((parseFloat(customTPoints) + parseFloat(customTBucks) + parseFloat(customTDollars))).toFixed(2)}</span>
                                 </div>
                             </div>

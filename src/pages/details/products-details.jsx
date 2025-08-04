@@ -67,6 +67,8 @@ const ProductDetails = () =>{
 
     const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
 
+    const [selectedLanguageLocale, setSelectedLanguageLocale] = useState(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.language_locale : null);
+
     const [openBottomOffer, setOpenBottomOffer] = useState(false);
     const [openBottomPayment, setOpenBottomPayment] = useState(false);
     const [ResultGetHomeContents, ResultSetHomeContents] = useState(null);
@@ -713,15 +715,30 @@ const ProductDetails = () =>{
                         Array.from(targetElement).forEach((el) => {
                             el.textContent = filteredTranslation.page_config_title;
                         });
+
+                        Array.from(targetElement).forEach((el) => {
+                            el.setAttribute(
+                                'placeholder',
+                                filteredTranslation?.page_config_title || item.page_config_title
+                            );
+                        });
+
                     } else if (targetElement.length > 0) {
                         Array.from(targetElement).forEach((el) => {
                             el.textContent = item.page_config_title;
+                        });
+
+                        Array.from(targetElement).forEach((el) => {
+                            el.setAttribute(
+                                'placeholder',
+                                item.page_config_title
+                            );
                         });
                     }
                 }
             }
         })
-    },[auth_states, loadingContent, getGuestInformation, openBottomOffer])
+    },[auth_states, loadingContent, getGuestInformation, openBottomOffer, count])
 
     useEffect(() => {
         if (editorRef.current) {
@@ -826,7 +843,7 @@ const ProductDetails = () =>{
                         <span className="text-[14px] office_label_id">Office</span>
                     </div>
                 </Link>
-                <Link to={'details'}>
+                <Link to={'/details'}>
                     <div className={`flex flex-col items-center ${((location.pathname.split("/")).includes('details') ? true : false) ? "text-white" : "text-gray-400"} `}>
                         <div className="mb-1 text-lg"><FaRegCircleUser size={20}/></div>
                         <span className="text-[14px] profile_label_id">Profile</span>
@@ -997,14 +1014,14 @@ const ProductDetails = () =>{
                                     name="passportName"
                                     value={formData.passportName}
                                     onChange={handleInputChange}
-                                    className={`w-full px-4 py-3 rounded-lg border transition-all duration-300 bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
+                                    className={`w-full px-4 py-3 rounded-lg passport_name_label_id border transition-all duration-300 bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
                                         errors.passportName ? 'border-destructive' : 'border-border'
                                     }`}
                                     placeholder="Enter your full name as on passport"
                                     />
-                                    {errors.passportName && (
+                                    {/* {errors.passportName && (
                                     <p className="mt-1 text-sm text-destructive">{errors.passportName}</p>
-                                    )}
+                                    )} */}
                                 </div>
 
                                 {/* Passport Number */}
@@ -1018,14 +1035,14 @@ const ProductDetails = () =>{
                                     name="passportNumber"
                                     value={formData.passportNumber}
                                     onChange={handleInputChange}
-                                    className={`w-full px-4 py-3 rounded-lg border transition-all duration-300 bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
+                                    className={`w-full px-4 py-3 passport_number_label_id rounded-lg border transition-all duration-300 bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
                                         errors.passportNumber ? 'border-destructive' : 'border-border'
                                     }`}
                                     placeholder="Enter passport number"
                                     />
-                                    {errors.passportNumber && (
+                                    {/* {errors.passportNumber && (
                                     <p className="mt-1 text-sm text-destructive">{errors.passportNumber}</p>
-                                    )}
+                                    )} */}
                                 </div>
 
                                 {/* Birthdate and Gender Row */}
@@ -1036,18 +1053,43 @@ const ProductDetails = () =>{
                                         Date of Birth *
                                     </label>
                                     <input
-                                        type="date"
-                                        id="birthdate"
-                                        name="birthdate"
-                                        value={formData.birthdate}
-                                        onChange={handleInputChange}
-                                        className={`w-full px-4 py-3 rounded-lg border transition-all duration-300 bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
+                                    type="text"
+                                    id="birthdate"
+                                    name="birthdate"
+                                    placeholder="MM/DD/YYYY"
+                                    maxLength={10}
+                                    value={formData.birthdate}
+                                    onChange={(e) => {
+                                        let value = e.target.value;
+
+                                        // Remove all non-digit characters
+                                        value = value.replace(/\D/g, '');
+
+                                        // Auto-insert slashes as user types
+                                        if (value.length >= 3 && value.length <= 4) {
+                                        value = value.slice(0, 2) + '/' + value.slice(2);
+                                        } else if (value.length >= 5) {
+                                        value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4, 8);
+                                        }
+
+                                        setFormData((prev) => ({ ...prev, birthdate: value }));
+
+                                        // Validate full format when length is 10
+                                        const dateRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$/;
+
+                                        if (value.length === 10 && !dateRegex.test(value)) {
+                                        setErrors((prev) => ({
+                                            ...prev,
+                                            birthdate: 'Invalid date format. Use MM/DD/YYYY.',
+                                        }));
+                                        } else {
+                                        setErrors((prev) => ({ ...prev, birthdate: '' }));
+                                        }
+                                    }}
+                                    className={`w-full px-4 py-3 rounded-lg border date_of_birth_label_id transition-all duration-300 bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
                                         errors.birthdate ? 'border-destructive' : 'border-border'
-                                        }`}
+                                    }`}
                                     />
-                                    {errors.birthdate && (
-                                        <p className="mt-1 text-sm text-destructive">{errors.birthdate}</p>
-                                    )}
                                     </div>
 
                                     {/* Gender */}
@@ -1070,9 +1112,9 @@ const ProductDetails = () =>{
                                         <option value="other"><span className='other_label_id'>Other</span></option>
                                         <option value="prefer-not-to-say"><span className='prefer_not_to_say_label_id'>Prefer not to say</span></option>
                                     </select>
-                                    {errors.gender && (
+                                    {/* {errors.gender && (
                                         <p className="mt-1 text-sm text-destructive">{errors.gender}</p>
-                                    )}
+                                    )} */}
                                     </div>
                                 </div>
 
@@ -1088,14 +1130,14 @@ const ProductDetails = () =>{
                                         name="contactNumber"
                                         value={formData.contactNumber}
                                         onChange={handleInputChange}
-                                        className={`w-full px-4 py-3 rounded-lg border transition-all duration-300 bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
+                                        className={`w-full px-4 py-3 contact_number_label_id rounded-lg border transition-all duration-300 bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
                                             errors.contactNumber ? 'border-destructive' : 'border-border'
                                         }`}
                                         placeholder="Enter your phone number"
                                         />
-                                        {errors.contactNumber && (
+                                        {/* {errors.contactNumber && (
                                         <p className="mt-1 text-sm text-destructive">{errors.contactNumber}</p>
-                                        )}
+                                        )} */}
                                     </div>
 
                                     {/* Contact Email */}
@@ -1109,14 +1151,14 @@ const ProductDetails = () =>{
                                         name="contactEmail"
                                         value={formData.contactEmail}
                                         onChange={handleInputChange}
-                                        className={`w-full px-4 py-3 rounded-lg border transition-all duration-300 bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
+                                        className={`w-full px-4 py-3 email_address_label_id rounded-lg border transition-all duration-300 bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary ${
                                             errors.contactEmail ? 'border-destructive' : 'border-border'
                                         }`}
                                         placeholder="Enter your email address"
                                         />
-                                        {errors.contactEmail && (
+                                        {/* {errors.contactEmail && (
                                         <p className="mt-1 text-sm text-destructive">{errors.contactEmail}</p>
-                                        )}
+                                        )} */}
                                     </div>
                                 </div>
 

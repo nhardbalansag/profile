@@ -42,6 +42,28 @@ const AccountTransferTPoints = () =>{
     pin : false,
   })
 
+  useEffect(() =>{
+    auth_states.PageLanguages.map((item, key) =>{
+      const translation = item.translation
+      
+      if(translation.length > 0 && auth_states.SelectedLanguage){
+        const filteredTranslation = translation.find(translation_item => translation_item.language_id == auth_states.SelectedLanguage.id)
+        const targetElement = document.getElementsByClassName(item.page_config_id)
+        if (targetElement) {
+          if (targetElement.length > 0 && filteredTranslation) {
+            Array.from(targetElement).forEach((el) => {
+              el.textContent = filteredTranslation.page_config_title;
+            });
+          } else if (targetElement.length > 0) {
+            Array.from(targetElement).forEach((el) => {
+              el.textContent = item.page_config_title;
+            });
+          }
+        }
+      }
+    })
+  },[auth_states, loadingContent, getAccountDetailsToTransfer, currentActiveProcess, getFormData, walletData])
+
   const transfer = async() => {
     const reqBody = {
       account_number: getFormData.account_number,
@@ -178,7 +200,7 @@ const AccountTransferTPoints = () =>{
           <p className="text-[15px] md:text-[18px] capitalize balance_label_id">balance</p>
           <p className="text-[20px] md:text-[40px] font-bold">{parseFloat(amount)}</p>
         </div>
-        <div className="my-5">  
+        {/* <div className="my-5">  
           <div className="flex items-center justify-start space-x-5">
             {
               buttons.map((item, index) => (
@@ -189,7 +211,7 @@ const AccountTransferTPoints = () =>{
               ))
             }
           </div>
-        </div>
+        </div> */}
       </div>
     )
   }
@@ -275,15 +297,20 @@ const AccountTransferTPoints = () =>{
               
                 <div className='grid grid-cols-2 gap-2'>
                   <p className='text-gray-500 capitalize to_account_number_label_id'>to account number</p>
-                  <p className='uppercase'>{`${getAccountDetailsToTransfer ? getAccountDetailsToTransfer.account_number : "invalid account"}`}</p>
+                  <p className='uppercase'>
+                    {
+                      getAccountDetailsToTransfer 
+                      ? (getAccountDetailsToTransfer?.account_number) 
+                      : <span className='invalid_account_label_id'>invalid account</span>
+                    }
+                  </p>
 
                   <p className='text-gray-500 capitalize to_account_name_label_id'>to account name</p>
                   <p className='uppercase'>
                     {
-                      `${getAccountDetailsToTransfer 
-                      ? (getAccountDetailsToTransfer.users_table.first_name + " " + getAccountDetailsToTransfer.users_table.last_name) 
-                      : <span className='invalid_account_label_id'>invalid account</span>}
-                      `
+                      getAccountDetailsToTransfer 
+                      ? (getAccountDetailsToTransfer?.users_table?.first_name || "--" + " " + getAccountDetailsToTransfer?.users_table?.last_name || "--") 
+                      : <span className='invalid_account_label_id'>invalid account</span>
                     }
                   </p>
 
@@ -306,7 +333,7 @@ const AccountTransferTPoints = () =>{
             currentActiveProcess > 0 &&
             <button 
               onClick={() => handlePrevious()}
-              className="w-full py-3 text-white bg-blue-600 rounded-xl">
+              className="w-full py-3 text-white bg-blue-600 rounded-xl previous_label_id">
               Previous
             </button>
           }

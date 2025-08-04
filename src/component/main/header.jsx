@@ -1,6 +1,10 @@
 import React, {useEffect} from 'react'
 import { useDispatch } from "react-redux";
 import {useSelector} from 'react-redux';
+
+import { useLocation, Link } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+
 import Logo2 from '../../assets/images/ten/logo2.png'
 import { AiOutlineAlignRight } from "react-icons/ai";
 import { IoLanguageOutline } from "react-icons/io5";
@@ -9,13 +13,20 @@ import { AiOutlineLogout } from "react-icons/ai";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { FaRegUser } from "react-icons/fa6";
 import { LuTickets } from "react-icons/lu";
-import { Link } from "react-router-dom";
 import { FaRegEnvelopeOpen } from "react-icons/fa";
 import { GrShieldSecurity } from "react-icons/gr";
 import { TiHomeOutline } from "react-icons/ti";
 import { MdOutlineTravelExplore } from "react-icons/md";
-import { RiGraduationCapLine } from "react-icons/ri";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
+
+import { LuCircleDollarSign } from "react-icons/lu";
+import { IoFitnessOutline } from "react-icons/io5";
+import { PiPottedPlantBold } from "react-icons/pi";
+import { BiStore } from "react-icons/bi";
+import { BiLike } from "react-icons/bi";
+
+import { MdOutlineAirplanemodeActive } from "react-icons/md";
+import { RiGraduationCapLine } from "react-icons/ri";
 
 import {
   clear
@@ -85,10 +96,11 @@ const Header = ({
               </Link>
             </div>
             <div className='flex items-center '>
-              <div className=''>
+              <div className='hidden md:block'>
                 <nav className="container relative flex items-center justify-between px-6 mx-auto text-white">
                   <div
-                    className={` place-content-center grid grid-cols-1 absolute inset-x-0 z-30 w-full px-6 py-8 mt-4 space-y-6 transition-all duration-300 ease-in-out bg-[#2596be]  top-16 md:mt-0 md:p-0 md:top-0 md:relative md:bg-transparent md:w-auto md:opacity-100 md:translate-x-0 md:space-y-0 md:-mx-6 md:flex md:items-center ${
+                    className={` place-content-center grid grid-cols-1 absolute inset-x-0 z-30 w-full px-6 py-8 mt-4 space-y-6 transition-all duration-300 ease-in-out bg-[#2596be]  
+                      top-16 md:mt-0 md:p-0 md:top-0 md:relative md:bg-transparent md:w-auto md:opacity-100 md:translate-x-0 md:space-y-0 md:-mx-6 md:flex md:items-center ${
                       ActionState ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full' 
                     }`}
                   >
@@ -248,14 +260,12 @@ const Header = ({
                   </Link>
                 }
 
-                <Link>
                 <button onClick={handleLanguageVisibility}>
                   <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                     <IoLanguageOutline  size={20}/>
                     <p className='language_id text-[#001d3d] capitalize ml-2 '>Language</p>
                   </a>
                 </button>
-                </Link>
 
                 {
                   auth_states.StateToken
@@ -276,33 +286,6 @@ const Header = ({
                 }
 
               </nav>
-
-              {/* <nav class="space-y-2 md:hidden flex flex-col">
-                <button onClick={handleLanguageVisibility}>
-                  <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
-                    <IoLanguageOutline  size={20}/>
-                    <p className='language_id text-[#001d3d] capitalize ml-2 '>Language</p>
-                  </a>
-                </button>
-                
-                {
-                  auth_states.StateToken
-                  ?
-                    <button onClick={() => LogoutUser()}>
-                      <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
-                        <AiOutlineLogout  size={20}/>
-                        <p className='logout_id text-[#001d3d] capitalize ml-2 '>Logout</p>
-                      </a>
-                    </button>
-                  :
-                    <Link to={'/login'}>
-                      <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
-                        <FaRegCircleUser  size={20}/>
-                        <p className='login_id text-[#001d3d] capitalize ml-2 '>Login</p>
-                      </a>
-                    </Link>
-                }
-              </nav> */}
             </aside>
           </div>
         </div>
