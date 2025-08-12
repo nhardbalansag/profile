@@ -104,3 +104,16 @@ export const GetGrowPageContent = async (token) => {
         url: `${BaseAPIUrl}account/grow/get-grow-content`
     });
 }
+
+
+export const GetGrowPagePaidContent = async (token) => {
+
+    return await axios({
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        },
+        method: "GET",
+        url: `${BaseAPIUrl}account/grow/get-grow-paid-content`
+    });
+}

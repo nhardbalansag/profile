@@ -39,6 +39,7 @@ const LoginContent = () =>{
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
+  const accessParams = new URLSearchParams(location.access);
 
   const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
 
@@ -260,6 +261,24 @@ const LoginContent = () =>{
     })
   }
 
+  const AdminForceLogin = async (token) =>{
+
+    await auth_service_api.GetLoginDataToUsersAccount(token).then((result) =>{
+
+      var token = result.data.token
+      var userInformation = result.data.data
+      var payload = result.data.payload
+
+      setItem(STORAGE_TOKEN, token)
+      setItem(STORAGE_USER_INFORMATION, JSON.stringify(userInformation))
+      setItem(REDUX_PAYLOAD_INFORMATION, payload)
+
+      dispatch(AuthAction.LoginUser(token, userInformation, payload))
+    }).catch((err) =>{
+      toast.error("Invalid Credentials");
+    })
+  }
+
   const ForgotPassword = async (e) =>{
     e.preventDefault()
 
@@ -317,7 +336,6 @@ const LoginContent = () =>{
       toast.error("Something went wrong");
     }
   }
-    
 
   useEffect(() => {
     const token = searchParams.get('token');
@@ -327,6 +345,17 @@ const LoginContent = () =>{
     } 
     
   }, []);
+
+  
+  useEffect(() => {
+    const token = searchParams.get('access');
+
+    if (token) {
+      AdminForceLogin(token)
+    } 
+    
+  }, []);
+
 
   const userSubscriptionCategories = async (event) =>{
     setLoading(true)

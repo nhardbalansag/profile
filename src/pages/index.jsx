@@ -56,6 +56,8 @@ import MallSocial from "./mall/mall-social";
 
 import AccountSponsorProfile from "./account/account-sponsor-profile";
 
+import MallGrowPaidContent from "./mall/mall-grow-paid-content";
+
 export{
     HomePage,
     HomeContent,
@@ -110,5 +112,6 @@ export{
     MallShop,
     MallSocial,
 
-    AccountSponsorProfile
+    AccountSponsorProfile,
+    MallGrowPaidContent
 }

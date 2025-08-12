@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import {useSelector} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import * as api_content from '../../services/content/content.api'
+import * as api_content from '../../services/content/content.api.js'
 import * as api_subscription from '../../services/account/subscription.api.js'
 
 import Logo2 from '../../assets/images/ten/logo2.png'
 
-const MallGrow = () => {
+const MallGrowPaidContent = () => {
 
   const modalSubscriptionRef = useRef(null);
   const navigate = useNavigate();
@@ -17,38 +17,37 @@ const MallGrow = () => {
   const [loadingContent, setLoadingContent] = useState(true);
   
   const [ResultGetHomeContents, ResultSetHomeContents] = useState(null);
-  const [AccountSubscriptionDetails, SetAccountSubscriptionDetails] = useState([])
   const [requestLoading, setRequestLoading] = useState(false);
 
   const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
 
-  const GetUserAccountSubscriptionDetails = async () =>{
-    setRequestLoading(true)
-    await api_subscription.GetUserAccountSubscriptionDetails(auth_states.StateToken).then((result) =>{
-      SetAccountSubscriptionDetails(result.data.data)
-      setRequestLoading(false)
-    }).catch((err) =>{
-      setRequestLoading(false)
-    })
-  }
-  
-  const validateAccess = () =>{
+  const GetUserAccountSubscriptionDetails = async () => {
+    try {
+      setRequestLoading(true);
 
-    const account_membership_is_paid = AccountSubscriptionDetails.details.subscription_category.membership_type.translation.membership.is_paid_account
-
-    if(!account_membership_is_paid){
-      setTimeout(() => {
-        modalSubscriptionRef.current?.showModal();
-      }, 0)
-    }else{
-      navigate('/grow-paid-content')
+      const result = await api_subscription.GetUserAccountSubscriptionDetails(auth_states.StateToken);
+      if (result?.data?.data) {
+        validateAccess(result.data.data);
+      }
+    } catch (err) {
+      console.error("Error fetching subscription details:", err);
+    } finally {
+      setRequestLoading(false);
     }
-  }
+  };
+
+  const validateAccess = (data) => {
+    const isPaid = data?.details?.subscription_category?.membership_type?.translation?.membership?.is_paid_account;
+
+    if (!isPaid) {
+      navigate("/grow");
+    }
+  };
 
   const ShowContent = async() =>{
     setLoadingContent(true)
 
-    await api_content.GetGrowPageContent(auth_states.StateToken).then((result) =>{
+    await api_content.GetGrowPagePaidContent(auth_states.StateToken).then((result) =>{
       if(result.status){
         setLoadingContent(false)
         if (result.data.data) {
@@ -152,17 +151,6 @@ const MallGrow = () => {
     <div className='mb-[150px] flex justify-center'>
       <div className=' w-[90%] md:w-[70%] my-10'>
         {
-          !loadingContent &&
-          <div className='flex justify-center'>
-            <button 
-              onClick={() => validateAccess()}
-              className="px-6 py-2 font-bold text-white bg-orange-300 btn hover:bg-orange-600 rounded-xl">
-              <p className='text-lg stocks_picks_button_label_id'>VIP Access</p>
-            </button>
-          </div>
-        }
-        
-        {
           loadingContent
           ? 
             <div className='w-full'>
@@ -193,5 +181,5 @@ const MallGrow = () => {
   );
 };
 
-export default MallGrow;
+export default MallGrowPaidContent;
 

@@ -179,6 +179,19 @@ const AccountDetails = () =>{
     })
   }
 
+  const ResendVerificationEmail = async() =>{
+    setRequestLoading(true)
+    await api_account.ResendVerificationEmail(auth_states.StateToken).then((result) =>{
+      if(result.status){
+        toast.success("Email Verification Sent.");
+      }
+      setRequestLoading(false)
+    }).catch((err) =>{
+      setRequestLoading(false)
+      toast.error("Something went wrong");
+    })
+  }
+
   const UploadContentPhotos = async() =>{
     try {
 
@@ -569,6 +582,21 @@ const AccountDetails = () =>{
                       )}
                     </div>
                     <p className="text-gray-600 break-all">{userData.email}</p>
+                    <p className="break-all">
+                      {
+                        userData.email_verified_at 
+                        ? <span className='text-green-600 verified_label_id'>Verified</span>
+                        : <span className='text-red-600 unverified_label_id'>Unverified</span>
+                      }
+                    </p>
+                    {
+                      requestLoading
+                      ?  <span className="loading loading-spinner loading-md"></span>
+                      : 
+                        <button onClick={() => ResendVerificationEmail()}>
+                          <p className='text-blue-600 underline click_here_to_verify_label_id'>Click here to verify</p>
+                        </button>
+                    }
                     {
                       userData.occupation &&
                       userData.company &&

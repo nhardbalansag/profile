@@ -13,6 +13,17 @@ export const LoginUser = async (reqBody) => {
     });
 }
 
+export const GetLoginDataToUsersAccount = async (token) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET', 
+        url: `${PublicAPI}cms/support/get-login-data-to-user`, 
+    });
+}
+
 export const ForgotPassword = async (reqBody) => {
     return await axios({ 
         headers: {

@@ -67,6 +67,8 @@ import {
     MallShop,
     MallSocial,
 
+    MallGrowPaidContent
+
     // AccountSponsorProfile
 } from '../pages/index'
 
@@ -227,6 +229,15 @@ const router = createBrowserRouter([
                 element: ( 
                     <AuthenticatedUsers route={'/login'}>
                         <MallGrow />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "grow-paid-content",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <MallGrowPaidContent />
                     </AuthenticatedUsers> 
                 ),
                 errorElement: <ErrorPage />

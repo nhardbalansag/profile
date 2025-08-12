@@ -142,6 +142,17 @@ export const GetUserDetails = async (token) => {
     });
 }
 
+export const ResendVerificationEmail = async (token) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'GET', 
+        url: `${BaseAPIUrl}account/resend-email-verification`,
+    });
+}
+
 export const GetUserSponsorDetails = async (token) => {
     return await axios({ 
         headers: {

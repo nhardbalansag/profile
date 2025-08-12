@@ -78,7 +78,10 @@ const AccountContent = () =>{
     sponsor: null
   });
 
-  const [getLegacyCommissionTotal, setLegacyCommissionTotal] = useState(0)
+  const [getLegacyCommissionTotal, setLegacyCommissionTotal] = useState({
+    "market": 0,
+    "direct": 0
+  })
 
   const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
 
@@ -137,8 +140,12 @@ const AccountContent = () =>{
     await api_account.getLegacyCommissionsTotalCommission(auth_states.StateToken).then((result) =>{
       if(result.status){
         setLoadingContent(false)
-        // setWalletData(result.data.data)
-        setLegacyCommissionTotal(result.data.data)
+        Object.keys(result.data.data).map((item, key) =>{
+          setLegacyCommissionTotal((prev) => ({
+            ...prev,
+            [item]: result.data.data[item]
+          }));
+        })
       }
       
       setLoadingContent(false)
@@ -238,31 +245,6 @@ const AccountContent = () =>{
         onSlideChange={() => setCollapseDetails(false)}
       >
 
-        {/* Travel Dollars */}
-        <SwiperSlide className='flex justify-center py-5'>
-          <div className="w-[90%] border rounded-2xl p-5 bg-white shadow-lg space-y-3 relative z-0">
-            <p className="text-[18px] md:text-[25px] uppercase font-semibold">
-              <span className='travel_dollars_label_id'>travel dollars</span>
-            </p>
-            <div>
-              <p className="text-[15px] md:text-[18px] capitalize balance_label_id">balance</p>
-              <p className="text-[20px] md:text-[40px] font-bold">{parseFloat(walletData.t_dollars)}</p>
-            </div>
-            <div className="my-5">
-              <div className="flex items-center justify-start space-x-5">
-                <button onClick={() => console.log()} className="bg-white shadow-sm btn rounded-xl">
-                  <div className="bg-blue-600 p-2 flex justify-center text-xl w-[35px] h-[35px] font-bold text-white rounded-full">
-                    <MdOutlineRedeem className="text-[20px] text-white" />
-                  </div>
-                  <p className="mt-1 text-sm capitalize">
-                    <span className='redeem_label_id'>Redeem</span>
-                  </p>
-                </button>
-              </div>
-            </div>
-          </div>
-        </SwiperSlide>
-
         {/* T-Points */}
         <SwiperSlide className='flex justify-center py-5'>
           <div className="w-[90%] border rounded-2xl p-5 bg-white shadow-lg space-y-3 relative z-0">
@@ -271,7 +253,7 @@ const AccountContent = () =>{
             </p>
             <div>
               <p className="text-[15px] md:text-[18px] capitalize balance_label_id">balance</p>
-              <p className="text-[20px] md:text-[40px] font-bold">{parseFloat(walletData.t_points)}</p>
+              <p className="text-[20px] md:text-[40px] font-bold">{parseFloat(walletData.t_points).toFixed(2)}</p>
             </div>
             <div className="my-5">
               <div className="flex items-center justify-start space-x-5">
@@ -296,7 +278,7 @@ const AccountContent = () =>{
             </p>
             <div>
               <p className="text-[15px] md:text-[18px] capitalize balance_label_id">balance</p>
-              <p className="text-[20px] md:text-[40px] font-bold">{parseFloat(walletData.t_bucks)}</p>
+              <p className="text-[20px] md:text-[40px] font-bold">{parseFloat(walletData.t_bucks).toFixed(2)}</p>
             </div>
             <div className="my-5">
               <div className="flex items-center justify-start space-x-5">
@@ -321,6 +303,31 @@ const AccountContent = () =>{
                   </p>
                 </button>
 
+              </div>
+            </div>
+          </div>
+        </SwiperSlide>
+
+        {/* Travel Dollars */}
+        <SwiperSlide className='flex justify-center py-5'>
+          <div className="w-[90%] border rounded-2xl p-5 bg-white shadow-lg space-y-3 relative z-0">
+            <p className="text-[18px] md:text-[25px] uppercase font-semibold">
+              <span className='travel_dollars_label_id'>travel dollars</span>
+            </p>
+            <div>
+              <p className="text-[15px] md:text-[18px] capitalize balance_label_id">balance</p>
+              <p className="text-[20px] md:text-[40px] font-bold">{parseFloat(walletData.t_dollars).toFixed(2)}</p>
+            </div>
+            <div className="my-5">
+              <div className="flex items-center justify-start space-x-5">
+                <button onClick={() => console.log()} className="bg-white shadow-sm btn rounded-xl">
+                  <div className="bg-blue-600 p-2 flex justify-center text-xl w-[35px] h-[35px] font-bold text-white rounded-full">
+                    <MdOutlineRedeem className="text-[20px] text-white" />
+                  </div>
+                  <p className="mt-1 text-sm capitalize">
+                    <span className='redeem_label_id'>Redeem</span>
+                  </p>
+                </button>
               </div>
             </div>
           </div>
@@ -406,7 +413,7 @@ const AccountContent = () =>{
                         : (
                             item.account_transaction_type == "star"
                             ? item.account_transaction_type + " commission"
-                            : item.description
+                            : item.account_transaction_type
                           )
                       }
                     </p>
@@ -478,7 +485,7 @@ const AccountContent = () =>{
           </div>
           <div className="text-[18px] md:text-2xl font-semibold text-black flex items-center space-x-2 justify-center">
             <span><FaDollarSign size={18} className="text-gray-600" /></span>
-            <span>{parseFloat(walletData.total_direct_commission).toFixed(2)}</span>
+            <span>{parseFloat(parseFloat(getLegacyCommissionTotal.direct || 0) + parseFloat(walletData.total_direct_commission || 0)).toFixed(2)}</span>
           </div>
           <div className="px-2 py-1 text-sm font-medium text-green-600 bg-green-100 rounded w-fit">
             +0.0%
@@ -494,7 +501,7 @@ const AccountContent = () =>{
           </div>
           <div className="text-[18px] md:text-2xl font-semibold text-black flex items-center space-x-2 justify-center">
             <span><FaDollarSign size={18} className="text-gray-600" /></span>
-            <span>{parseFloat(parseFloat(getLegacyCommissionTotal) + parseFloat(walletData.total_stars_commission)).toFixed(2)}</span>
+            <span>{parseFloat(parseFloat(getLegacyCommissionTotal.market || 0) + parseFloat(walletData.total_stars_commission || 0)).toFixed(2)}</span>
           </div>
           <div className="px-2 py-1 text-sm font-medium text-green-600 bg-green-100 rounded w-fit">
             -0.0%
