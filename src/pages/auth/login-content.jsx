@@ -624,7 +624,7 @@ const LoginContent = () =>{
                             <p className="capitalize label text-[18px]">
                               {
                                 GetSponsorDetails.success
-                                ? GetSponsorDetails.data.users_table.first_name
+                                ? (GetSponsorDetails.data.users_table.nick_names ? GetSponsorDetails.data.users_table.nick_names : GetSponsorDetails.data.users_table.email)
                                 : "sponsor not exist"
                               }
                             </p>

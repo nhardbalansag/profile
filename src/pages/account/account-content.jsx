@@ -134,7 +134,7 @@ const AccountContent = () =>{
       setLoadingContent(false)
     })
   }
-
+ 
   const getLegacyCommissionsTotalCommission = async() =>{
     setLoadingContent(true)
     await api_account.getLegacyCommissionsTotalCommission(auth_states.StateToken).then((result) =>{
@@ -546,7 +546,14 @@ const AccountContent = () =>{
           <div className="modal-box">
             <div className="flex flex-col items-center justify-center space-y-5">
               <div className="text-center">
-                <p className="text-[18px] font-semibold uppercase">{`${auth_states.StateUserInformation.first_name} ${auth_states.StateUserInformation.last_name}`}</p>
+                <p className="text-[18px] font-semibold uppercase">
+                {
+                  walletData.sponsor &&
+                  walletData.sponsor?.users_table.nick_names
+                  ? walletData.sponsor?.users_table.nick_names
+                  : "--"
+                }
+                </p>
                 <p className="text-[15px] font-thin">{auth_states.StateUserInformation.accounts_table.account_number}</p>
               </div>
               <div>
