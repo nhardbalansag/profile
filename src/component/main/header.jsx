@@ -171,9 +171,9 @@ const Header = ({
         </div> 
         <div className="z-50 drawer-side">
           <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
-          <div class="flex h-screen">
-            <aside class="w-64 bg-white border-r border-gray-200 p-4">
-              <nav class="space-y-2 flex flex-col">
+          <div class="flex h-screen ">
+            <aside class="  ">
+              <nav class="space-y-2 w-64 p-4 border-r border-gray-200  bg-white flex flex-col">
                 {
                   auth_states.StateToken &&
                   <Link to={'/'}>
@@ -198,6 +198,56 @@ const Header = ({
                     <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <RiGraduationCapLine  size={20}/>
                       <p className='learn_label_id text-[#001d3d] capitalize ml-2 '>Learn</p>
+                    </a>
+                  </Link>
+                }
+
+                {
+                  auth_states.StateToken &&
+                  <Link to={'/earn'}>
+                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <LuCircleDollarSign  size={20}/>
+                      <p className='earn_label_id text-[#001d3d] capitalize ml-2 '>Earn</p>
+                    </a>
+                  </Link>
+                }
+
+                {
+                  auth_states.StateToken &&
+                  <Link to={'/grow'}>
+                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <PiPottedPlantBold  size={20}/>
+                      <p className='grow_label_id text-[#001d3d] capitalize ml-2 '>Grow</p>
+                    </a>
+                  </Link>
+                }
+
+                {
+                  auth_states.StateToken &&
+                  <Link to={'/shop'}>
+                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <BiStore  size={20}/>
+                      <p className='shop_label_id text-[#001d3d] capitalize ml-2 '>Shop</p>
+                    </a>
+                  </Link>
+                }
+
+                {
+                  auth_states.StateToken &&
+                  <Link to={'/lifestyle'}>
+                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <IoFitnessOutline  size={20}/>
+                      <p className='lifestyle_label_id text-[#001d3d] capitalize ml-2 '>Lifestyle</p>
+                    </a>
+                  </Link>
+                }
+
+                {
+                  auth_states.StateToken &&
+                  <Link to={'/social'}>
+                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <BiLike  size={20}/>
+                      <p className='social_label_id text-[#001d3d] capitalize ml-2 '>Social</p>
                     </a>
                   </Link>
                 }

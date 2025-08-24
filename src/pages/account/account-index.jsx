@@ -10,15 +10,9 @@ import { useLocation } from 'react-router-dom';
 import { LuCircleDollarSign } from "react-icons/lu";
 import { MdOutlineTravelExplore } from "react-icons/md";
 
-import { FiBell } from "react-icons/fi";
-import { FaChevronRight } from "react-icons/fa"; 
 import { FiUser } from "react-icons/fi";
 import { FaRegEnvelopeOpen } from "react-icons/fa";
-import { GrDocumentUser } from "react-icons/gr";
 import { FaRegUser } from "react-icons/fa";
-import { FaHistory } from "react-icons/fa";
-import { BiBasket } from "react-icons/bi";
-import { TfiReceipt } from "react-icons/tfi";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { AiOutlineLogout } from "react-icons/ai";
 import { TiHomeOutline } from "react-icons/ti";
@@ -27,15 +21,15 @@ import { RiGraduationCapLine } from "react-icons/ri";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { IoLanguageOutline } from "react-icons/io5";
 
-import { FaUsers, FaShoppingBag, FaUser } from "react-icons/fa";
 import { HiMiniBuildingOffice2 } from "react-icons/hi2";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { LuTickets } from "react-icons/lu";
-import { AiFillNotification } from "react-icons/ai";
 import { FiAlignLeft } from "react-icons/fi";
-import { IoIosArrowBack } from "react-icons/io";
 
-import Logo2 from '../../assets/images/ten/logo2.png'
+import { IoFitnessOutline } from "react-icons/io5";
+import { PiPottedPlantBold } from "react-icons/pi";
+import { BiStore } from "react-icons/bi";
+import { BiLike } from "react-icons/bi";
 
 import {
   LanguageBottomSheet
@@ -56,11 +50,8 @@ const AccountPage = () => {
 
   const auth_states = useSelector(state => state.AuthReducer);
 
-  const [getBottomDetailsOpen, setBottomDetailsOpen] = useState(false);
-
   const location = useLocation();
   
-  const [open, setOpen] = useState(false)
   const [getOpenLanguageSelection, setOpenLanguageSelection] = useState(false)
   const [getSelectedLanguage, setSelectedLanguage] = useState("")
 
@@ -137,15 +128,15 @@ const AccountPage = () => {
       <div className="z-50 drawer-side">
         <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
         <div class="flex h-screen">
-          <aside class="w-64 bg-white border-r border-gray-200 p-4">
-            <div class="flex items-center space-x-2 my-6">
+          <aside class="w-64 bg-white border-r border-gray-200 ">
+            <div class="flex items-center space-x-2 my-6 px-4">
               <FiUser />
               <span class="text-sm text-gray-700">
                 {/* {`${auth_states.StateUserInformation.first_name} ${auth_states.StateUserInformation.last_name}`} */}
                 {auth_states.StateUserInformation.nick_names ? auth_states.StateUserInformation.nick_names : auth_states.StateUserInformation.first_name}
               </span>
             </div>
-            <nav class="space-y-2">
+            <nav class="space-y-2 w-64 bg-white border-r border-gray-200 p-4">
               <a href="#" class={`${("h-1/3").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <TiHomeOutline size={20}/>
                 {_link("/", <span className='home_label_id' >Home</span>)}
@@ -158,6 +149,32 @@ const AccountPage = () => {
                 <RiGraduationCapLine size={20}/>
                 {_link("/academy-index", <span className='learn_label_id' >Learn</span>)}
               </a>
+
+               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                <LuCircleDollarSign size={20}/>
+                {_link("/earn", <span className='earn_label_id' >Earn</span>)}
+              </a>
+
+               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                <PiPottedPlantBold size={20}/>
+                {_link("/grow", <span className='grow_label_id' >Grow</span>)}
+              </a>
+
+               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                <BiStore size={20}/>
+                {_link("/shop", <span className='shop_label_id' >Shop</span>)}
+              </a>
+
+              <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                <IoFitnessOutline size={20}/>
+                {_link("/lifestyle", <span className='lifestyle_label_id' >Lifestyle</span>)}
+              </a>
+
+              <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                <BiLike size={20}/>
+                {_link("/social", <span className='social_label_id' >Social</span>)}
+              </a>
+             
               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <LuTickets size={20}/>
                 {_link("/event", <span className='events_label_id' >Events</span>)}
