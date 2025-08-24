@@ -116,7 +116,7 @@ const ErrorPage = () =>{
 
   return (
     <div>
-        <p>{error.message}</p>
+        {/* <p>{error.message}</p> */}
         <div className="flex items-center justify-center p-4">
             <div className="">
                 <div className='text-center'>

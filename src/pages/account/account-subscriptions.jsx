@@ -17,12 +17,15 @@ import * as api_orders from '../../services/account/orders.api.js'
 import * as api_subscription from '../../services/account/subscription.api.js'
 import * as api_account from '../../services/account/account.api.js'
 
+import Logo2 from '../../assets/images/ten/logo2.png'
+
 const AccountSubscription = () =>{
 
   const auth_states = useSelector(state => state.AuthReducer);
 
   // refs
   const paymentBContent = useRef({})
+  const modalSubscriptionRef = useRef(null);
 
   const walletRef = useRef(0)
   const walletTBucksRef = useRef(0)
@@ -548,10 +551,60 @@ const AccountSubscription = () =>{
           !AccountSubscriptionDetails.details.is_unsubscribe  &&
           // AccountSubscriptionDetails.paidMembershipCount > 0 && 
           AccountSubscriptionDetails.details.params?.subscription &&
-          <ButtonComp onPress={() => UnsubscribeToStripe()} className='btn-error' title='Unsubscribe'/>
+          <ButtonComp onPress={() => ConfirmationModalAction()} className='btn-error' title='Unsubscribe'/>
         }
       </div>
     )
+  }
+
+  const ConfirmationModal = () =>{
+    return(
+      <div>
+        <dialog ref={modalSubscriptionRef} id="my_modal_2" className="modal">
+          <div className="modal-box">
+            <div className="flex-1 mt-5 space-y-1 md:space-y-8">
+                <h2 className="text-2xl font-extrabold leading-tight text-center text-black capitalize are_you_sure_label_id md:text-3xl">
+                Are you sure want to unsubscribe?
+                </h2>
+
+                <div className="flex flex-col items-center space-y-3 ">
+                  <div className="flex items-center justify-center w-10 h-10 bg-yellow-400 rounded-full">
+                    <img
+                    className="w-[60px] md:w-[100px]"
+                    alt="Tailwind CSS chat bubble component"
+                    src={Logo2} />
+                  </div>
+
+                  <div className="flex-1 text-center">
+                    <p className="text-sm font-semibold text-yellow-600 warning_label_id">Warning</p>
+                    <p className="text-xs text-yellow-600 warning_note_label_id">
+                      By unsubscribing, your plan won’t renew automatically.
+                    </p>
+                  </div>
+
+                  <div className='flex justify-center space-x-3'>
+                    <button onClick={() => UnsubscribeToStripe()} className="proceed_label_id px-6 py-3 text-white transition-colors bg-[#031956] rounded-lg whitespace-nowrap">
+                    Proceed
+                    </button>
+                    <button onClick={() => modalSubscriptionRef.current?.close()} className="cancel_label_id px-6 py-3 text-white transition-colors bg-[#df5555] rounded-lg whitespace-nowrap">
+                    Cancel
+                    </button>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <form method="dialog" className="modal-backdrop">
+              <button>close</button>
+          </form>
+        </dialog>
+      </div>
+    )
+  }
+  
+  const ConfirmationModalAction = () =>{
+    setTimeout(() => {
+      modalSubscriptionRef.current?.showModal();
+    }, 0)
   }
 
   return (
@@ -587,6 +640,8 @@ const AccountSubscription = () =>{
       }
 
       <ToastContainer />
+      {ConfirmationModal()}
+
     </div>  
   ) 
 }
