@@ -9,6 +9,7 @@ const categories = ["All", "Development", "Design", "Marketing", "Data Science",
 import CourseImage from '../../assets/images/ten/courses/Imagecourse.jpeg'
 
 import * as api_subscription from '../../services/account/subscription.api.js'
+import * as api_courses from '../../services/academy/academy.api.js'
 
 const courses = [
   {
@@ -39,12 +40,7 @@ const AcademyIndex = () => {
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [searchTerm, setSearchTerm] = useState("");
 
-    const filteredCourses = courses.filter(course => {
-        const matchesCategory = selectedCategory === "All" || course.category === selectedCategory;
-        const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            course.instructor.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesCategory && matchesSearch;
-    });
+    const [allCourses, setAllCourses] = useState("");
 
     const GetUserAccountSubscriptionDetails = async () =>{
         setLoadingRequest(true)
@@ -56,8 +52,19 @@ const AcademyIndex = () => {
         })
     }
 
+    const getAllCoursesContents = async () =>{
+        setLoadingRequest(true)
+        await api_courses.getAllCoursesContents(auth_states.StateToken).then((result) =>{
+            setAllCourses(result.data.data)
+            setLoadingRequest(false)
+        }).catch((err) =>{
+            setLoadingRequest(false)
+        })
+    }
+
     useEffect(()=>{
         GetUserAccountSubscriptionDetails()
+        getAllCoursesContents()
     },[])
 
     useEffect(() =>{
@@ -87,7 +94,33 @@ const AcademyIndex = () => {
                 }
             }
         })
-    },[auth_states])
+    },[auth_states, loadingRequest, allCourses])
+
+    const EmptyState = () => {
+        return (
+            <div className='flex justify-center'>
+                <div className="py-12 text-center ">
+                    <svg
+                        className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                        vectorEffect="non-scaling-stroke"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                    </svg>
+                    <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white no_course_found_label_id">No courses found</h3>
+                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 explore_more_courses_label_id">Explore more courses in the academy.</p>
+                </div>
+            </div>
+        );
+    };
 
     return (
         <div className='flex justify-center my-5 mb-[150px]'>
@@ -99,70 +132,87 @@ const AcademyIndex = () => {
                             <h2 className="text-3xl font-bold featured_courses_label_id">Featured Courses</h2>
                         </div>
 
-                        {/* Course Grid */}
-                        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                            {filteredCourses.map((course) => (
-                                <Link key={course.id} to={`/academy`}>
-                                    <div className="overflow-hidden transition-all duration-300 scale-105 bg-white border shadow-2xl rounded-xl bg-gray-750 hover:bg-gray-750 hover:scale-105 hover:shadow-2xl group">
-                                        <div className="relative">
-                                            <img
-                                                src={course.image}
-                                                alt={course.title}
-                                                className="object-cover w-full h-48"
-                                            />
-                                            <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-300 bg-black opacity-0 bg-opacity-40 group-hover:opacity-100">
-                                                <Play className="w-12 h-12 text-white" />
-                                            </div>
-                                            <div className="absolute px-2 py-1 text-sm font-medium text-white bg-purple-600 rounded top-3 left-3">
-                                                {course.category}
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="p-6">
-                                            <h3 className="mb-2 text-xl font-semibold line-clamp-2">
-                                                {course.title}
-                                            </h3>
-                                            <p className="mb-3 space-x-1 text-gray-400">
-                                                <span className='by_label_id'>by</span> 
-                                                <span>{course.instructor}</span>
-                                            </p>
-                                            
-                                            <div className="flex items-center mb-4 space-x-4 text-sm text-gray-400">
-                                                {/* <div className="flex items-center space-x-1">
-                                                    <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                                                    <span>{course.rating}</span>
-                                                </div> */}
-                                                {/* <div className="flex items-center space-x-1">
-                                                    <Users className="w-4 h-4" />
-                                                    <span>{course.students.toLocaleString()}</span>
-                                                </div> */}
-                                                <div className="flex items-center space-x-1">
-                                                    <Clock className="w-4 h-4" />
-                                                    <span>{course.duration}</span>
-                                                </div>
-                                            </div>
-
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex items-center space-x-2">
-                                                    <span className="text-2xl font-bold text-purple-400">
-                                                        {course.price}
-                                                    </span>
-                                                    <span className="text-gray-500 line-through">
-                                                        {course.originalPrice}
-                                                    </span>
-                                                </div>
-                                                <p className="flex items-center space-x-1">
-                                                    <span className="text-sm text-gray-400">
-                                                    {course.lessons} 
-                                                    </span>
-                                                    <span className='lesson_label_id'>lessons</span>
-                                                </p>
-                                            </div>
-                                        </div>
+                        {
+                            loadingRequest 
+                            ? 
+                                (
+                                    <div className="p-6 animate-pulse">
+                                        <div className="h-4 mb-4 bg-gray-200 rounded dark:bg-gray-700"></div>
+                                        <div className="h-4 mb-4 bg-gray-200 rounded dark:bg-gray-700"></div>
+                                        <div className="h-4 bg-gray-200 rounded dark:bg-gray-700"></div>
                                     </div>
-                                </Link>
-                            ))}
-                        </div>
+                                ) 
+                            : allCourses.length === 0 
+                                ?   
+                                    EmptyState()
+                                :   
+                                    <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                                        {
+                                        allCourses.length > 0 &&
+                                                allCourses.map((course) => (
+                                                    <Link key={course.id} to={`/academy?course=${course.id}`}>
+                                                        <div className="overflow-hidden transition-all duration-300 scale-105 bg-white border shadow-2xl rounded-xl bg-gray-750 hover:bg-gray-750 hover:scale-105 hover:shadow-2xl group">
+                                                            <div className="relative">
+                                                                <img
+                                                                    src={course.thumbnail}
+                                                                    alt={course.title}
+                                                                    className="object-cover w-full h-48"
+                                                                />
+                                                                <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-300 bg-black opacity-0 bg-opacity-40 group-hover:opacity-100">
+                                                                    <Play className="w-12 h-12 text-white" />
+                                                                </div>
+                                                                {/* <div className="absolute px-2 py-1 text-sm font-medium text-white bg-purple-600 rounded top-3 left-3">
+                                                                    {course.category}
+                                                                </div> */}
+                                                            </div>
+                                                            
+                                                            <div className="p-6">
+                                                                <h3 className="mb-2 text-xl font-semibold line-clamp-2">
+                                                                    {course.title}
+                                                                </h3>
+                                                                <p className="mb-3 space-x-1 text-gray-400">
+                                                                    <span className='by_label_id'>by</span> 
+                                                                    <span>{course.author}</span>
+                                                                </p>
+                                                                
+                                                                <div className="flex items-center mb-4 space-x-4 text-sm text-gray-400">
+                                                                    {/* <div className="flex items-center space-x-1">
+                                                                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                                                                        <span>{course.rating}</span>
+                                                                    </div> */}
+                                                                    {/* <div className="flex items-center space-x-1">
+                                                                        <Users className="w-4 h-4" />
+                                                                        <span>{course.students.toLocaleString()}</span>
+                                                                    </div> */}
+                                                                    {/* <div className="flex items-center space-x-1">
+                                                                        <Clock className="w-4 h-4" />
+                                                                        <span>{course.duration}</span>
+                                                                    </div> */}
+                                                                </div>
+
+                                                                <div className="flex items-center justify-between">
+                                                                    {/* <div className="flex items-center space-x-2">
+                                                                        <span className="text-2xl font-bold text-purple-400">
+                                                                            {course.price}
+                                                                        </span>
+                                                                        <span className="text-gray-500 line-through">
+                                                                            {course.originalPrice}
+                                                                        </span>
+                                                                    </div> */}
+                                                                    <p className="flex items-center space-x-1">
+                                                                        <span className="text-sm text-gray-400">
+                                                                        {course.sections.length} 
+                                                                        </span>
+                                                                        <span className='lesson_label_id'>Section</span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </Link>
+                                                ))
+                                        }
+                                    </div>
+                        }
                     </section>
                 </div>
             </div>

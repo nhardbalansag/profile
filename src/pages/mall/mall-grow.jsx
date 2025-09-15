@@ -157,7 +157,7 @@ const MallGrow = () => {
             <button 
               onClick={() => validateAccess()}
               className="px-6 py-2 font-bold text-white bg-orange-300 btn hover:bg-orange-600 rounded-xl">
-              <p className='text-lg stocks_picks_button_label_id'>VIP Access Stock Picks</p>
+              <p className='text-lg stocks_picks_button_label_id'>VIP content area</p>
             </button>
           </div>
         }

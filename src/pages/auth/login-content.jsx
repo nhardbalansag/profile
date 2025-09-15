@@ -434,35 +434,21 @@ const LoginContent = () =>{
               <div>
                 <h3 className="text-lg font-semibold">
                   {
-                    getStateSelectedLanguage == null 
-                    ? item.membership_type.type_title
-                    : (
-                        item.membership_type.translation.translation
-                        ?
-                          (
-                              item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == getStateSelectedLanguage)
-                            ? item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == getStateSelectedLanguage).type_title 
-                            : item.membership_type.type_title
-                          )
-                        : item.membership_type.type_title
-                      )
+                    item.subscription_range.subscription_range_days_count == 30 
+                    ? <span className='registration_vip_monthly_label_id'>VIP Monthly</span>
+                    : item.subscription_range.subscription_range_days_count == 365
+                      ? <span className='registration_vip_annual_label_id'>VIP Annual</span>
+                      : <span className='registration_pca_label_id'>Preferred Customer & Affiliate</span>
                   }
                 </h3>
                 <p className="text-sm text-gray-500">
                   {
-                    getStateSelectedLanguage == null 
-                    ? item.membership_type.type_description
-                    : (
-                        item.membership_type.translation.translation
-                        ?
-                          (
-                              item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == getStateSelectedLanguage)
-                            ? item.membership_type.translation.translation.find((filter_item) => filter_item.language_id == getStateSelectedLanguage).type_description 
-                            : item.membership_type.type_description
-                          )
-                        : item.membership_type.type_description
-                      )
-                  }
+                    item.subscription_range.subscription_range_days_count == 30 
+                    ? <span className='registration_vip_monthly_description_label_id'>VIP Monthly subscription is $100 for the 1st month and $30 monthly starting from the second month onwards, you also receive 200 Tpoints for the 1st year and 60 Tpoints monthly every month you renew your membership fees.</span>
+                    : item.subscription_range.subscription_range_days_count == 365
+                      ? <span className='registration_vip_annual_description_label_id'>VIP Annual subscription is $370 for the 1st 12 months and $300 yearly starting from the second year onwards, you also receive 740 Tpoints for the 1st year and 600 Tpoints yearly every year you renew your membership fees.</span>
+                      : <span className='registration_pca_description_label_id'>Join as a FREE preferred customer & affiliate, receive 100 Welcome Tpoints and upgrade anytime to VIP when you are ready.</span>
+                    }
                 </p>
               </div>
               <div className="text-right">
@@ -491,10 +477,20 @@ const LoginContent = () =>{
                     }
                   </span>
                 </p>
-                <p className="space-x-1 text-xs text-gray-400">
-                  <span className="billed_after_label_id">Billed after </span>
-                  {item.subscription_range.subscription_range_days_count} 
-                  <span className="days_label_id">days</span>
+                <p className="space-x-1 text-xs text-red-400">
+                 
+                  {
+                    item.subscription_range.subscription_range_days_count == 30 
+                    ? <span className='registration_vip_monthly_billing_label_id'>$30 BIlled Monthy After 30 days</span>
+                    : item.subscription_range.subscription_range_days_count == 365
+                      ? <span className='registration_vip_annual_billing_label_id'>$300 Billed Yearly After 365 days</span>
+                      :
+                        <p className='space-x-1 text-xs text-red-400'>
+                          <span className="billed_after_label_id">Billed after </span>
+                          {item.subscription_range.subscription_range_days_count} 
+                          <span className="days_label_id">days</span> 
+                        </p>
+                    }
                 </p>
               </div>
             </div>
