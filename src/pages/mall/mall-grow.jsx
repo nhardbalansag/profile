@@ -121,7 +121,7 @@ const MallGrow = () => {
                   <div className="flex items-center justify-center w-10 h-10 bg-yellow-400 rounded-full">
                     <img
                     className="w-[60px] md:w-[100px]"
-                    alt="Tailwind CSS chat bubble component"
+                    // alt="Tailwind CSS chat bubble component"
                     src={Logo2} />
                   </div>
                   {/* Text Content */}

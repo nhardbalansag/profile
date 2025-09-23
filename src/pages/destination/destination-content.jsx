@@ -303,7 +303,7 @@ const DestinationContent = () =>{
             <div className='my-5'>
               <img
               className="w-[40%]"
-              alt="Tailwind CSS chat bubble component"
+              // alt="Tailwind CSS chat bubble component"
               src={Logo1} />
             </div>
             <div>

@@ -546,7 +546,7 @@ const LoginContent = () =>{
                 <h1 className="text-[30px] font-extrabold text-[#063970] uppercase relative welcome_to_club_ten_id">WELCOME TO CLUB </h1>
                 <img
                 className="w-[40%]"
-                alt="Tailwind CSS chat bubble component"
+                // alt="Tailwind CSS chat bubble component"
                 src={Logo1} />
               </div>
               <p className="mb-6 md:text-2xl md:w-[300px] connect_with_friends_and_create_community_in_club_ten_label_id">

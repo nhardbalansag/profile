@@ -150,7 +150,7 @@ const DestinationCard = ({
                     <div className='flex justify-center'>
                         <img
                         className="w-[100%] md:w-[80%]"
-                        alt="Tailwind CSS chat bubble component"
+                        // alt="Tailwind CSS chat bubble component"
                         src={image} />
                     </div>
                 </div>

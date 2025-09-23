@@ -90,7 +90,7 @@ const Header = ({
                 <a href="#">
                   <img
                     className="w-[60px] md:w-[100px]"
-                    alt="Tailwind CSS chat bubble component"
+                    // alt="Tailwind CSS chat bubble component"
                     src={Logo2} />
                 </a>
               </Link>

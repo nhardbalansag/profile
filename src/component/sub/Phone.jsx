@@ -19,7 +19,7 @@ function Phone() {
                          <div className='flex items-center'>
                             <img
                             className="w-8 h-8 mr-2 md:w-10 md:h-10"
-                            alt="Tailwind CSS chat bubble component"
+                            // alt="Tailwind CSS chat bubble component"
                             src={Logo3} />
                             <h1 className="text-[29px] font-bold text-[#FF4E03] uppercase">Glorijan</h1>
                          </div>

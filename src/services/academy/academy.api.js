@@ -5,14 +5,15 @@ const env = import.meta.env;
 const PublicAPI = env.VITE_APP_BACKEND_API_URL + "account/"
 const BaseAPIUrl = env.VITE_APP_BACKEND_API_URL
 
-export const getAllCoursesContents = async (token) => {
+export const getAllCoursesContents = async (token, reqBody) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-        method: 'GET', 
-        url: `${PublicAPI}courses`
+        method: 'POST', 
+        url: `${PublicAPI}courses`,
+        data: reqBody
     });
 }
 

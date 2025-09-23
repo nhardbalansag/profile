@@ -1,8 +1,15 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import {useSelector} from 'react-redux';
-import { Play, Star, Clock, Users, BookOpen, Search, Filter } from 'lucide-react';
+import { Play, Star, Clock, Users, BookOpen, Search, Filter , Languages} from 'lucide-react';
+import { CiFilter } from "react-icons/ci";
 import { Link } from 'react-router-dom';
+import { IoIosCloseCircleOutline } from "react-icons/io";
+
+import {
+  HomeCard,
+  LanguageBottomSheet
+} from '../../component/index'
 
 const categories = ["All", "Development", "Design", "Marketing", "Data Science", "Business"];
 
@@ -39,8 +46,16 @@ const AcademyIndex = () => {
 
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [searchTerm, setSearchTerm] = useState("");
+    const [getOpenLanguageSelection, setOpenLanguageSelection] = useState(false)
+    const [getSelectedLanguage, setSelectedLanguage] = useState("")
 
     const [allCourses, setAllCourses] = useState("");
+
+    const [getSelectItem, selectItem] = useState(null)
+    
+    const SelectContent = (item) => {
+        selectItem(item)
+    }
 
     const GetUserAccountSubscriptionDetails = async () =>{
         setLoadingRequest(true)
@@ -54,7 +69,12 @@ const AcademyIndex = () => {
 
     const getAllCoursesContents = async () =>{
         setLoadingRequest(true)
-        await api_courses.getAllCoursesContents(auth_states.StateToken).then((result) =>{
+
+        const reqBody = {
+            language_filter: getSelectItem?.id ?? null
+        }
+
+        await api_courses.getAllCoursesContents(auth_states.StateToken, reqBody).then((result) =>{
             setAllCourses(result.data.data)
             setLoadingRequest(false)
         }).catch((err) =>{
@@ -65,7 +85,7 @@ const AcademyIndex = () => {
     useEffect(()=>{
         GetUserAccountSubscriptionDetails()
         getAllCoursesContents()
-    },[])
+    },[getSelectItem])
 
     useEffect(() =>{
         if(auth_states.SelectedLanguage){
@@ -130,18 +150,25 @@ const AcademyIndex = () => {
                     <section className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
                         <div className="flex items-center justify-between mb-8">
                             <h2 className="text-3xl font-bold featured_courses_label_id">Featured Courses</h2>
+
+                            <button onClick={() => setOpenLanguageSelection(true)} className='flex items-center space-x-2'>
+                                <CiFilter className="w-6 h-6 text-gray-800 lg:h-5 lg:w-5" />
+                                <span className="text-[12px] md:text-[15px] language_filter_label_id">Language Filter</span>
+                            </button>
                         </div>
 
                         {
                             loadingRequest 
                             ? 
-                                (
-                                    <div className="p-6 animate-pulse">
-                                        <div className="h-4 mb-4 bg-gray-200 rounded dark:bg-gray-700"></div>
-                                        <div className="h-4 mb-4 bg-gray-200 rounded dark:bg-gray-700"></div>
-                                        <div className="h-4 bg-gray-200 rounded dark:bg-gray-700"></div>
+                                <div className='flex justify-center my-5 mb-[150px]'>
+                                    <div className='md:w-[75%] w-[95%] gap-5 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3'>
+                                        {
+                                            [1,2,3,4].map((item_content, index_content) =>(
+                                                <HomeCard loading={true}/>
+                                            ))
+                                        }
                                     </div>
-                                ) 
+                                </div>
                             : allCourses.length === 0 
                                 ?   
                                     EmptyState()
@@ -216,6 +243,45 @@ const AcademyIndex = () => {
                     </section>
                 </div>
             </div>
+
+            {
+                getOpenLanguageSelection
+                && 
+                <div 
+                style={{zIndex: 3000}}
+                className="fixed inset-0 z-50 flex items-end justify-center bg-black bg-opacity-40">
+                    <div className="w-full md:max-w-[80%] md:p-4 p-2 transition-transform bg-white shadow-lg rounded-t-2xl max-h-[90%] overflow-y-auto">
+                        <div className='flex justify-end'>
+                            <button onClick={() => setOpenLanguageSelection(false)} className='flex items-center justify-center p-1 mr-2'>
+                                <IoIosCloseCircleOutline  className="text-[23px] text-[#ff4949]" />
+                            </button>
+                        </div>
+                        <div>
+                            <p className='font-bold text-[20px] md:text-[30px] choose_language_id'>Choose Language Filter</p>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3 md:grid-cols-4">
+                        {auth_states.Languages.map((item_content, item_key) => {
+                            return (
+                                <button
+                                    key={item_key}
+                                    onClick={() => SelectContent(item_content)}
+                                    className={`text-left border rounded-lg p-2 transition-all duration-200 
+                                        ${
+                                            getSelectItem?.id == item_content.id
+                                            ?   'border-black bg-gray-100 font-semibold'
+                                            :   'border-transparent hover:bg-gray-50'
+                                        }
+                                    `}
+                                >
+                                    <p>{item_content.language_name}</p>
+                                    <p className="text-sm text-gray-500">{item_content.language_locale}</p>
+                                </button>
+                            )
+                        })}
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     );
 };

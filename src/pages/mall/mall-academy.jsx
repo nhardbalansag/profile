@@ -232,48 +232,28 @@ const MallAcademy = () =>{
                                             <div className="relative bg-black aspect-video">
                                                 {
                                                     (
-                                                        // !loadingRequest &&
-                                                        currentLesson.membership
-                                                        // .includes(AccountSubscriptionDetails.details?.subscription_category?.membership_type.type_title.toString().toLowerCase())
+                                                        (
+                                                            currentLesson.membership 
+                                                        )
+                                                        ||
+                                                        (
+                                                            !currentLesson.membership &&
+                                                            AccountSubscriptionDetails.details?.subscription_category?.membership_type.translation.membership.is_paid_account
+                                                        )
                                                     ) 
                                                     ?
-                                                        // <video
-                                                        // className="w-full h-full"
-                                                        // controls
-                                                        // controlsList="nodownload"
-                                                        // poster="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&h=450&fit=crop"
-                                                        // >
-                                                        // <source src={currentLesson?.videoUrl} type="video/mp4" />
-                                                        // Your browser does not support the video tag.
-                                                        // </video>
-
-                                                            <iframe
-                                                                className='rounded-lg'
-                                                                src={currentLesson.videoUrl}
-                                                                // src={videoId}
-                                                                frameBorder="0"
-                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                allowFullScreen
-                                                                title="YouTube Video"
-                                                                style={{
-                                                                    width: '100%',
-                                                                    height: '100%',
-                                                                }}
-                                                            />
-                                                            
-                                                        // <iframe
-                                                        //     className='rounded-lg'
-                                                        //     src={currentLesson.videoUrl}
-                                                        //     // src={videoId}
-                                                        //     frameBorder="0"
-                                                        //     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                        //     allowFullScreen
-                                                        //     title="YouTube Video"
-                                                        //     style={{
-                                                        //     width: '100%',
-                                                        //     height: '200px',
-                                                        //     }}
-                                                        // />
+                                                        <iframe
+                                                            className='rounded-lg'
+                                                            src={currentLesson.videoUrl}
+                                                            frameBorder="0"
+                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                            allowFullScreen
+                                                            title="YouTube Video"
+                                                            style={{
+                                                                width: '100%',
+                                                                height: '100%',
+                                                            }}
+                                                        />
                                                     :   
                                                         <img
                                                         src={selectedCourse?.thumbnail}

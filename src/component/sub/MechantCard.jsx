@@ -8,7 +8,7 @@ function MechantCard({classes, width = "300px", image}) {
                 <figure>
                     <img
                     className={`w-[${width}] rounded-lg`}
-                    alt="Tailwind CSS chat bubble component"
+                    // alt="Tailwind CSS chat bubble component"
                     src={image} />
                 </figure>
                 <div className="p-2">

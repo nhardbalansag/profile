@@ -62,7 +62,7 @@ const HomeLearningCard = ({classes, width = "350px", image, isLiked = false, cap
                         <div className=''>
                             <img
                             className="w-[100%] md:w-[50px] md:hidden block"
-                            alt="Tailwind CSS chat bubble component"
+                            // alt="Tailwind CSS chat bubble component"
                             src={image} />
                         </div>
                         <div className={`p-2`}>
