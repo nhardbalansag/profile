@@ -114,16 +114,17 @@ const AccountPage = () => {
   const DrawerComp = () =>{
     return(
       <div 
+      style={{zIndex: 2000}}
       className="drawer">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
           {Header()}
         {/* navigation pages */}
-        <div className=''>
+        {/* <div className=''>
           <div className='w-11/12 mx-auto'>
             <Outlet />
           </div>
-        </div>
+        </div> */}
       </div> 
       <div className="z-50 drawer-side">
         <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
@@ -305,8 +306,10 @@ const AccountPage = () => {
       
       {/* <div className="h-[100%] w-full bg-white rounded-t-[50px] py-14"> */}
       <div className="h-[100%] w-full bg-white pb-16 pt-5">
-        {/* <Outlet /> */}
         {DrawerComp()}
+        <div className='w-11/12 mx-auto'>
+          <Outlet />
+        </div>
       </div>
       {/* pages */}
 

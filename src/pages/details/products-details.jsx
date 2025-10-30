@@ -111,6 +111,131 @@ const ProductDetails = () =>{
     const editorRef = useRef(ResultGetHomeContents && ResultGetHomeContents.content_description);
     const quillRef = useRef(null);
 
+    const handleEbanxCheckout = async (selectedTab, AllContentData) =>{
+        if(!auth_states.StateToken){
+            navigate('login');
+        }else{
+    
+            const content_title = selectedLanguage.current == null 
+            ? AllContentData.content_title
+            : 
+                AllContentData.translation
+                ?
+                    (
+                        AllContentData.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                        ? AllContentData.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).content_title
+                        : AllContentData.content_title
+                    )
+                : AllContentData.content_title
+        
+            const membership_type = selectedLanguage.current == null 
+            ? selectedTab.offers_table.membership_type_table.type_title
+            : 
+                selectedTab.offers_table.membership_type_table.translation.translation
+                ?
+                    (
+                        selectedTab.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                        ? selectedTab.offers_table.membership_type_table.translation.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).type_title
+                        : selectedTab.offers_table.membership_type_table.type_title
+                    )
+                : selectedTab.offers_table.membership_type_table.type_title
+        
+            const room_type_name = selectedLanguage.current == null 
+            ? selectedTab.offers_table.supplier_table.room_type.room_type_name
+            : 
+                selectedTab.offers_table.supplier_table.room_type.translation
+                ?
+                    (
+                        selectedTab.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                        ? selectedTab.offers_table.supplier_table.room_type.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).room_type_name
+                        : selectedTab.offers_table.supplier_table.room_type.room_type_name
+                    )
+                : selectedTab.offers_table.supplier_table.room_type.room_type_name
+        
+            const tier_category_name = selectedLanguage.current == null 
+            ? selectedTab.offers_table.tier_category_table.tier_category_name
+            :
+                    selectedTab.offers_table.tier_category_table.translation
+                    ?
+                        (
+                            selectedTab.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                            ? selectedTab.offers_table.tier_category_table.translation.find((filter_item) => filter_item.language_id == selectedLanguage.current).tier_category_name
+                            : selectedTab.offers_table.tier_category_table.tier_category_name
+                        )
+                    : selectedTab.offers_table.tier_category_table.tier_category_name
+          
+            const reqBody = {
+                content_offers_id: selectedTab.id,
+                offers_id: selectedTab.offers_id,
+                guest_count: count,
+                finalAmount: totalPriceWithPoints,
+                content_title: content_title,
+                content_days_count: AllContentData.content_days_count,
+                content_night_count: AllContentData.content_night_count,
+                membership_type: membership_type,
+                room_type_name: room_type_name,
+                tier_category_name: tier_category_name,
+                content_date_from: AllContentData.content_date_from,
+                content_date_to: AllContentData.content_date_to,
+        
+                points_applied: parseFloat(TPointsCustom) || 0,
+                points_allowed: selectedTab.offers_table.offers_points_amount,
+                points_wallet_before: walletRef.current,
+                points_wallet_after: TPointsWallet,
+        
+                bucks_applied: parseFloat(TBucksCustom) || 0,
+                bucks_wallet_before: walletTBucksRef.current,
+                bucks_wallet_after: walletData.t_bucks,
+        
+                travel_dollars_applied: parseFloat(TDollarsCustom) || 0,
+                travel_dollars_wallet_before: walletTDollarsRef.current,
+                travel_dollars_wallet_after: walletData.t_dollars,
+
+                guestDetails: getGuestInformation,
+            }
+        
+            paymentBContent.current = reqBody
+            setOpenBottomPayment(true)
+            
+            setLoading(true)
+            await api_content.createEBanxTripPaymentIntent(auth_states.StateToken, paymentBContent.current).then((result) =>{
+                if(result.status){
+        
+                    if(result.data.isWalletPayment){
+                        setLoading(false)
+                        setOpenBottomPayment(false)
+                        setOpenBottomOffer(!openBottomOffer)
+                        resetOnClose()
+                        toast.success("Payment succeed");
+                        navigate('/orders');
+                        return;
+                    }
+
+                    if(result.data.status === 'ERROR'){
+                        setLoading(false)
+                        setOpenBottomPayment(false)
+                        toast.success(result.data?.status_message);
+                        resetOnClose()
+                        return;
+                    }
+                    
+                    
+                    window.open(result.data.redirect_url, "_blank");
+
+                    setLoading(false)
+                    setOpenBottomPayment(false)
+                    resetOnClose()
+                    navigate('/orders');
+            
+                    // setclientSecret(result.data.clientSecret)
+                    // setLoading(false)
+                }
+            }).catch((err) =>{
+                toast.warning("There was a problem processing your payment");
+            })
+        }
+    }
+
     const handleCheckout = async (selectedTab, AllContentData) =>{
         if(!auth_states.StateToken){
             navigate('login');
@@ -1456,6 +1581,7 @@ const ProductDetails = () =>{
                 (
                     <OffersBottomSheet
                     handleCheckout={() => handleCheckout(activeTab, ResultGetHomeContentsDetails)}
+                    handleEbanxCheckout={() => handleEbanxCheckout(activeTab, ResultGetHomeContentsDetails)}
                     handleClose={() => {
                             setOpenBottomOffer(!openBottomOffer)
                             resetOnClose()

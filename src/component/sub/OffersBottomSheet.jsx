@@ -24,6 +24,7 @@ const OffersBottomSheet = ({
     handleDecrease,
     handleIncrease,
     handleCheckout,
+    handleEbanxCheckout,
     count,
     activeTab,
     selectTab,
@@ -253,20 +254,35 @@ const OffersBottomSheet = ({
                             className="px-2 py-2 text-gray-600 border border-gray-300 rounded-md go_back_label_id hover:bg-gray-100 cancel_id"
                             >Go Back
                             </button>
-                            
-                            {
-                                tabData &&
-                                <button 
-                                onClick={handleCheckout} 
-                                className="flex-1 h-12 px-3 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] checkout_id">
-                                    {/* {
-                                        confirmCheckoutStatus
-                                        ? <span>Pay</span>
-                                        : <span>Checkout</span>
-                                    } */}
-                                    <span className='pay_label_id'>Pay</span>
-                                </button>
-                            }
+                            <div className="flex flex-wrap space-x-5">
+                                {
+                                    tabData &&
+                                    <button 
+                                    onClick={handleCheckout} 
+                                    className="flex-1 h-12 px-3 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] checkout_id">
+                                        {/* {
+                                            confirmCheckoutStatus
+                                            ? <span>Pay</span>
+                                            : <span>Checkout</span>
+                                        } */}
+                                        <span className='pay_label_id'>Pay</span>
+                                    </button>
+                                }
+
+                                {
+                                    tabData &&
+                                    <button 
+                                    onClick={handleEbanxCheckout} 
+                                    className="h-12 px-3 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] checkout_id">
+                                        {/* {
+                                            confirmCheckoutStatus
+                                            ? <span>Pay</span>
+                                            : <span>Checkout</span>
+                                        } */}
+                                        <span className='pay_label_id'>EBanx Pay</span>
+                                    </button>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>

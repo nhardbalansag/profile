@@ -547,12 +547,13 @@ const AccountContent = () =>{
             <div className="flex flex-col items-center justify-center space-y-5">
               <div className="text-center">
                 <p className="text-[18px] font-semibold uppercase">
-                {
+                {/* {
                   walletData.sponsor &&
                   walletData.sponsor?.users_table.nick_names
                   ? walletData.sponsor?.users_table.nick_names
                   : "--"
-                }
+                } */}
+                {auth_states.StateUserInformation.nick_names ? auth_states.StateUserInformation.nick_names : auth_states.StateUserInformation.first_name}
                 </p>
                 <p className="text-[15px] font-thin">{auth_states.StateUserInformation.accounts_table.account_number}</p>
               </div>

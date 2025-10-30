@@ -48,14 +48,38 @@ export const GetClientSecret = async (token, reqBody) => {
     });
 }
 
-export const GetTravelBucketListContent = async (token) => {
+export const createEBanxTripPaymentIntent = async (token, reqBody) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'POST', 
+        url: `${BaseAPIUrl}account/ebanx/trip/create-payment-intent`,
+        data: reqBody
+    });
+}
+
+export const GetTravelBucketListContent = async (token, url, request) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'post', 
+        url: url ? url : `${BaseAPIUrl}account/bucket-list`,
+        data: request
+    });
+}
+
+export const GetAllBucketListCategory = async (token) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
         method: 'GET', 
-        url: `${BaseAPIUrl}account/bucket-list`
+        url: `${BaseAPIUrl}account/bucket-list-categories`
     });
 }
 

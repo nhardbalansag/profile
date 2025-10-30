@@ -39,6 +39,7 @@ const AccountSubscription = () =>{
   const [subscriptionList, SetSubscriptionList] = useState([])
   const [AccountSubscriptionDetails, SetAccountSubscriptionDetails] = useState([])
   const [getclientSecret, setclientSecret] = useState(null)
+  const [getclientEbanxSecret, setclientEbanxSecret] = useState(null)
   const [getPaymentIntentSession, setPaymentIntentSession] = useState(null)
   const [selectedPlan, setSelectedPlan] = useState("");
   const [SelectedSubscriptionCategoryId, SetSelectedSubscriptionCategoryId] = useState(null);
@@ -144,6 +145,50 @@ const AccountSubscription = () =>{
     })
   }
 
+  const handleCheckoutEbanx = async (selectedTab) =>{
+    const reqBody = {
+      subscription_categories_id: selectedTab.id,
+      final_amount_with_points: parseFloat(totalPriceWithPoints),
+
+      bucks_applied: parseFloat(TBucksCustom) || 0,
+      bucks_wallet_before: walletTBucksRef.current,
+      bucks_wallet_after: walletData.t_bucks,
+    }
+
+    SetSelectedSubscriptionCategoryId(selectedTab.id)
+
+    paymentBContent.current = reqBody
+
+    setOpenBottomPayment(true)
+    
+    setLoadingRequest(true)
+    await api_subscription.createEbanxPayment(auth_states.StateToken, reqBody).then((result) =>{
+      if(result.status){
+
+        if(result.data.status === 'ERROR'){
+          toast.success(result.data?.status_message);
+          resetOnClose()
+          CloseBottomPayment()
+          return;
+        }
+
+        setLoadingRequest(false)
+        resetOnClose()
+        CloseBottomPayment()
+
+        // ✅ Open EBANX URL in new browser tab
+        window.open(result.data.redirect_url, "_blank");
+
+        // setclientEbanxSecret(result.data.redirect_url)
+        // setLoadingRequest(false)
+      }
+    }).catch((err) =>{
+      setLoadingRequest(false)
+      resetOnClose()
+      CloseBottomPayment()
+    })
+  }
+
   const UnsubscribeToStripe = async () =>{
     setLoadingRequest(true)
     await api_subscription.UnsubscribeToStripe(auth_states.StateToken).then((result) =>{
@@ -222,6 +267,8 @@ const AccountSubscription = () =>{
 
     getTBucksAndTPoints()
     setTotalPriceWithPoints(0)
+
+    setclientEbanxSecret(null)
 
     setTBucksCustom(0)
 
@@ -414,10 +461,14 @@ const AccountSubscription = () =>{
                   loadingRequest
                   ? <span className="loading loading-ring loading-xl"></span>
                   :
-                    <div>
+                    <div className='space-x-3'>
                       <button onClick={() => handleCheckout(item)} className={`btn btn-active btn-primary selection:capitalize text-white`}>
                         {loadingRequest && <span className="loading loading-ring loading-sm"></span>}
                         <span className='subscribe_to_plan_label_id'>Subscribe to plan</span>
+                      </button>
+                      <button onClick={() => handleCheckoutEbanx(item)} className={`btn btn-active btn-primary selection:capitalize text-white`}>
+                        {loadingRequest && <span className="loading loading-ring loading-sm"></span>}
+                        <span className='subscribe_to_plan_using_ebanx_label_id'>Subscribe using Ebanx</span>
                       </button>
                     </div>
                 : <></>
@@ -632,7 +683,8 @@ const AccountSubscription = () =>{
       {
         openBottomPayment && 
         <Checkout 
-        clientSecret={getclientSecret} 
+        isEbanx={getclientEbanxSecret ? true : false}
+        clientSecret={getclientEbanxSecret ? getclientEbanxSecret : getclientSecret} 
         getLoading={loadingRequest} 
         dataContent={paymentBContent.current} 
         handleClose={() => CloseBottomPayment()}

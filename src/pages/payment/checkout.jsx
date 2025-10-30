@@ -23,7 +23,9 @@ function Checkout({
     clientSecret,
     getLoading,
     handleClose,
-    stripePublicKey = env.VITE_APP_STRIPE_PUBLIC_KEY
+    stripePublicKey = env.VITE_APP_STRIPE_PUBLIC_KEY,
+
+    isEbanx = false,
 }) {
 
     const stripePromise = loadStripe(stripePublicKey);
@@ -76,15 +78,26 @@ function Checkout({
                 </div>
                 {
                     !getLoading
-                    ?
-                        <div id="checkout">
-                            <EmbeddedCheckoutProvider
-                            stripe={stripePromise}
-                            options={{clientSecret: clientSecret }}
-                            >
-                                <EmbeddedCheckout />
-                            </EmbeddedCheckoutProvider>
-                        </div>
+                    ? 
+                        isEbanx
+                        ?
+                          <div>
+                            <iframe
+                              src={clientSecret}
+                              title="EBANX Checkout"
+                              width="100%"
+                              height="1000"
+                            />
+                          </div>
+                        :
+                          <div id="checkout">
+                              <EmbeddedCheckoutProvider
+                              stripe={stripePromise}
+                              options={{clientSecret: clientSecret }}
+                              >
+                                  <EmbeddedCheckout />
+                              </EmbeddedCheckoutProvider>
+                          </div>
                     :
                         <main className="grid min-h-full px-6 py-24 bg-white place-items-center sm:py-32 lg:px-8">
                             <div className="text-center">

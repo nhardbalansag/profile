@@ -714,21 +714,8 @@ const AccountDetails = () =>{
                     )}
                   </div>
                 </div>
-
-                {/* Google Maps Integration */}
-                <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-700 location_map_label_id">Location Map</label>
-                  <div className="flex items-center justify-center w-full h-48 bg-gray-200 rounded-lg sm:h-64">
-                    <div className="text-center">
-                      <MapPin className="w-6 h-6 mx-auto mb-2 text-gray-400 sm:w-8 sm:h-8" />
-                      <p className="text-sm text-gray-500 sm:text-base google_maps_display_label_id">Google Maps will display here</p>
-                      <p className="text-xs text-gray-400 sm:text-sm coming_soon_label_id">coming soon</p>
-                    </div>
-                  </div>
-                </div>
               </div>
             )}
-          
 
             {activeTab === 'social' && SocialMediaSection()}
           

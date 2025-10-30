@@ -39,6 +39,18 @@ export const GetClientSecret = async (token, reqBody) => {
     });
 }
 
+export const createEbanxPayment = async (token, reqBody) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        method: 'POST', 
+        url: `${BaseAPIUrl}account/ebanx/create-payment-intent`,
+        data: reqBody
+    });
+}
+
 export const CheckSubscriptionPaymentIntentStatus = async (token, reqBody) => {
     return await axios({ 
         headers: {
