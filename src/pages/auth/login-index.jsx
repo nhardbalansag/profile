@@ -4,6 +4,8 @@ import {
     Outlet,
 } from "react-router";
 
+import QRCode from "react-qr-code";
+
 import {
   Header,
   Footer,
@@ -20,6 +22,20 @@ const LoginPage = () => {
 
   return (
     <div>
+
+      {/* <div className="flex flex-col items-center p-6">
+<h2 className="mb-4 text-xl font-semibold">Scan this QR Code</h2>
+
+<QRCode 
+value={"otpauth://totp/Laravel:admin%40example.com?secret=A5UDGORJWRYNY5HJJ7D4YXP72BTAIQIG&issuer=Laravel&algorithm=SHA1&digits=6&period=30"} 
+size={200} 
+includeMargin={true} />
+
+<p className="mt-4 text-sm text-center text-gray-600">
+Use Google Authenticator, Authy, or any TOTP app to scan the QR code.
+</p>
+</div> */}
+
       <div className='mb-3'>
         <Header 
         handleLanguageVisibility={() => setOpenLanguageSelection(true)}

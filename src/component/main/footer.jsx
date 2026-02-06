@@ -49,12 +49,6 @@ const Footer = () => {
         <a href="https://www.clubtenglobal.com/" className="text-sm text-gray-300 transition-colors hover:text-white">
           <span className="about_us_label_id">About Us</span>
         </a>,
-        // <a href="#" className="text-sm text-gray-300 transition-colors hover:text-white">
-        //   <span className="events_label_id">Events</span>
-        // </a>,
-        // <a href="#" className="text-sm text-gray-300 transition-colors hover:text-white">
-        //   <span className="blog_label_id">Blog</span>
-        // </a>,
         <a href="mailto:support@clubten.app" className="text-sm text-gray-300 transition-colors hover:text-white">
           <span className="contact_us_label_id">Contact Us</span>
         </a>
@@ -115,21 +109,6 @@ const Footer = () => {
               ))}
             </ul>
           </div>
-
-          {/* Contact Info */}
-          {/* <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Contact Info</h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <Mail size={16} className="text-gray-400" />
-                <span className="text-sm text-gray-300">{footerData.contact.website}</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Phone size={16} className="text-gray-400" />
-                <span className="text-sm text-gray-300">{footerData.contact.phone}</span>
-              </div>
-            </div>
-          </div> */}
         </div>
 
         {/* Bottom Section */}

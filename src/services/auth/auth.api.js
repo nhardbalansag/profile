@@ -8,7 +8,7 @@ export const LoginUser = async (reqBody) => {
             'Content-Type': 'application/json',
         },
         method: 'POST', 
-        url: `${PublicAPI}login`, 
+        url: `${PublicAPI}auth/login`, 
         data: reqBody
     });
 }
@@ -30,7 +30,7 @@ export const ForgotPassword = async (reqBody) => {
             'Content-Type': 'application/json',
         },
         method: 'POST', 
-        url: `${PublicAPI}forgot-password`, 
+        url: `${PublicAPI}auth/forgot-password`, 
         data: reqBody
     });
 }
@@ -41,7 +41,7 @@ export const RegisterUser = async (reqBody) => {
             'Content-Type': 'application/json',
         },
         method: 'POST', 
-        url: `${PublicAPI}register`, 
+        url: `${PublicAPI}auth/register`, 
         data: reqBody
     });
 }

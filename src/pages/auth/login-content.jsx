@@ -24,6 +24,8 @@ import * as AuthAction from '../../store/auth/authAction'
 import * as api_subscription from '../../services/account/subscription.api.js'
 import * as api_account from '../../services/account/account.api.js'
 
+import Verification from "../auth/2fa-verification";
+
 const LoginContent = () =>{
 
   //#region translation convertion
@@ -207,10 +209,16 @@ const LoginContent = () =>{
         setOpenBottomPayment(true)
       }else{
         toast.success("Login Successful");
-        setItem(STORAGE_TOKEN, token)
+
+        const auth_headers = 
+        {
+            'Authorization': token,
+        }
+
+        setItem(STORAGE_TOKEN, JSON.stringify(auth_headers))
         setItem(STORAGE_USER_INFORMATION, JSON.stringify(userInformation))
 
-        dispatch(AuthAction.LoginUser(token, userInformation))
+        dispatch(AuthAction.LoginUser(auth_headers, userInformation))
       }
 
       setLoadingRegister(false)
@@ -237,27 +245,52 @@ const LoginContent = () =>{
 
     await auth_service_api.LoginUser(requestBody).then((result) =>{
 
-      var token = result.data.token
-      var userInformation = result.data.data
-      var payload = result.data.payload
-
       if(!result.data.status){
-        toast.error("Invalid Credentials");
+        toast.error(result.data.message);
+        setLoading(false)
         return;
       }
 
-      toast.success("Login Successful");
+      var token = result.data.token
 
-      setItem(STORAGE_TOKEN, token)
-      setItem(STORAGE_USER_INFORMATION, JSON.stringify(userInformation))
-      setItem(REDUX_PAYLOAD_INFORMATION, payload)
+      if(result.data.data){
+        var userInformation = result.data.data
+        var payload = result.data.payload
+        
+        toast.success(result.data.message);
 
-      dispatch(AuthAction.LoginUser(token, userInformation, payload))
-      setLoading(false)
+        setLoading(false)
+
+        const auth_headers = 
+        {
+            'Authorization': token,
+        }
+
+        setItem(STORAGE_TOKEN, JSON.stringify(auth_headers))
+        setItem(STORAGE_USER_INFORMATION, JSON.stringify(userInformation))
+        setItem(REDUX_PAYLOAD_INFORMATION, payload)
+
+        dispatch(AuthAction.LoginUser(auth_headers, userInformation, payload))
+        
+      }else{
+        var verificationId = result.data.verification_id
+
+        const loginResponse = {
+          token: token,
+          verificationId: verificationId
+        }
+
+        navigate('/2factor',  { state: loginResponse });
+      }
       
     }).catch((err) =>{
-      toast.error("Invalid Credentials");
       setLoading(false)
+
+      const err_response = err?.response?.data
+      
+      let message = err_response?.message || "Something went wrong";
+      toast.warning(message);
+      
     })
   }
 
@@ -269,11 +302,16 @@ const LoginContent = () =>{
       var userInformation = result.data.data
       var payload = result.data.payload
 
-      setItem(STORAGE_TOKEN, token)
+      const auth_headers = 
+      {
+        'Authorization': token,
+      }
+
+      setItem(STORAGE_TOKEN, JSON.stringify(auth_headers))
       setItem(STORAGE_USER_INFORMATION, JSON.stringify(userInformation))
       setItem(REDUX_PAYLOAD_INFORMATION, payload)
 
-      dispatch(AuthAction.LoginUser(token, userInformation, payload))
+      dispatch(AuthAction.LoginUser(auth_headers, userInformation, payload))
     }).catch((err) =>{
       toast.error("Invalid Credentials");
     })
@@ -633,21 +671,21 @@ const LoginContent = () =>{
                           <option value={null} className='select_country_label_id'>Select Your Country</option>
                             {
                               countriesList.map((item, key) =>
-                                <option key={key} value={item.id}>
+                                <option key={key} value={item?.id}>
                                   {/* {`${item.name} (${item.iso_code_3})`} */}
 
                                   {
                                     selectedLanguage.current == null 
-                                    ? item.name
+                                    ? item?.name
                                     : 
-                                      item.params
+                                      item?.params
                                       ?
                                           (
-                                              item.params.find((filter_item) => filter_item.language_id == selectedLanguage.current)
-                                              ? item.params.find((filter_item) => filter_item.language_id == selectedLanguage.current).title
+                                              item?.params.find((filter_item) => filter_item.language_id == selectedLanguage.current)
+                                              ? item?.params.find((filter_item) => filter_item.language_id == selectedLanguage.current).title
                                               : ResultGetHomeContents.title
                                           )
-                                      : item.name
+                                      : item?.name
                                   }
                                 </option>
                               )

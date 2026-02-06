@@ -9,7 +9,8 @@ export const getPaginatedOrders = async (token, url) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'GET', 
         // url: `${PublicAPI}paginated`

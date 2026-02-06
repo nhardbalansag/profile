@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useState, useEffect } from 'react'
 import { useDispatch } from "react-redux";
 import {useSelector} from 'react-redux';
 
@@ -24,6 +24,7 @@ import { IoFitnessOutline } from "react-icons/io5";
 import { PiPottedPlantBold } from "react-icons/pi";
 import { BiStore } from "react-icons/bi";
 import { BiLike } from "react-icons/bi";
+import { BiSupport } from "react-icons/bi";
 
 import { MdOutlineAirplanemodeActive } from "react-icons/md";
 import { RiGraduationCapLine } from "react-icons/ri";
@@ -107,7 +108,7 @@ const Header = ({
                     {
                       auth_states.StateToken &&
                       <button onClick={handleLanguageVisibility}>
-                        <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                        <a href="#" className={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                           <IoLanguageOutline  size={20}/>
                           <p className='language_id text-[#001d3d] capitalize ml-2 '>Language</p>
                         </a>
@@ -121,14 +122,14 @@ const Header = ({
                           <button onClick={() => {
                             LogoutUser()
                           }}>
-                            <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                            <a href="#" className={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                               <AiOutlineLogout  size={20}/>
                               <p className='logout_id text-[#001d3d] capitalize ml-2 '>Logout</p>
                             </a>
                           </button>
                         :
                           <Link to={'/login'}>
-                            <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                            <a href="#" className={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                               <FaRegCircleUser  size={20}/>
                               <p className='login_id text-[#001d3d] capitalize ml-2 '>Login</p>
                             </a>
@@ -171,31 +172,29 @@ const Header = ({
         </div> 
         <div className="z-50 drawer-side">
           <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
-          <div class="flex h-screen ">
-            <aside class="  ">
-              <nav class="space-y-2 w-64 p-4 border-r border-gray-200  bg-white flex flex-col">
+          <div className="flex h-screen ">
+            <aside className="bg-white border-r border-gray-200 ">
+              <nav className="flex flex-col w-64 p-4 space-y-2 bg-white border-r border-gray-200">
+
+                <button onClick={() => toggleChat()} className={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                  <BiSupport  size={20}/>
+                  <p className='home_label_id text-[#001d3d] capitalize ml-2 '>{visible ? "Disable Support" : "Enable Support"}</p>
+                </button>
+
                 {
                   auth_states.StateToken &&
                   <Link to={'/'}>
-                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                    <a href="#" className={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <TiHomeOutline  size={20}/>
                       <p className='home_label_id text-[#001d3d] capitalize ml-2 '>Home</p>
                     </a>
                   </Link>
                 }
-                {
-                  auth_states.StateToken &&
-                  <Link to={'/travel'}>
-                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
-                      <MdOutlineTravelExplore  size={20}/>
-                      <p className='travel_label_id text-[#001d3d] capitalize ml-2 '>Travel</p>
-                    </a>
-                  </Link>
-                }
+
                 {
                   auth_states.StateToken &&
                   <Link to={'/academy-index'}>
-                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                    <a href="#" className={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <RiGraduationCapLine  size={20}/>
                       <p className='learn_label_id text-[#001d3d] capitalize ml-2 '>Learn</p>
                     </a>
@@ -204,18 +203,8 @@ const Header = ({
 
                 {
                   auth_states.StateToken &&
-                  <Link to={'/earn'}>
-                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
-                      <LuCircleDollarSign  size={20}/>
-                      <p className='earn_label_id text-[#001d3d] capitalize ml-2 '>Earn</p>
-                    </a>
-                  </Link>
-                }
-
-                {
-                  auth_states.StateToken &&
                   <Link to={'/grow'}>
-                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                    <a href="#" className={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <PiPottedPlantBold  size={20}/>
                       <p className='grow_label_id text-[#001d3d] capitalize ml-2 '>Grow</p>
                     </a>
@@ -224,8 +213,38 @@ const Header = ({
 
                 {
                   auth_states.StateToken &&
+                  <Link to={'/travel'}>
+                    <a href="#" className={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <MdOutlineTravelExplore  size={20}/>
+                      <p className='travel_label_id text-[#001d3d] capitalize ml-2 '>Travel</p>
+                    </a>
+                  </Link>
+                }
+                
+                {
+                  auth_states.StateToken &&
+                  <Link to={'/earn'}>
+                    <a href="#" className={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <LuCircleDollarSign  size={20}/>
+                      <p className='earn_label_id text-[#001d3d] capitalize ml-2 '>Earn</p>
+                    </a>
+                  </Link>
+                }
+
+                {
+                  auth_states.StateToken &&
+                  <Link to={'/social'}>
+                    <a href="#" className={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <BiLike  size={20}/>
+                      <p className='social_label_id text-[#001d3d] capitalize ml-2 '>Social</p>
+                    </a>
+                  </Link>
+                }
+
+                {
+                  auth_states.StateToken &&
                   <Link to={'/shop'}>
-                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                    <a href="#" className={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <BiStore  size={20}/>
                       <p className='shop_label_id text-[#001d3d] capitalize ml-2 '>Shop</p>
                     </a>
@@ -235,19 +254,9 @@ const Header = ({
                 {
                   auth_states.StateToken &&
                   <Link to={'/lifestyle'}>
-                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                    <a href="#" className={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <IoFitnessOutline  size={20}/>
                       <p className='lifestyle_label_id text-[#001d3d] capitalize ml-2 '>Lifestyle</p>
-                    </a>
-                  </Link>
-                }
-
-                {
-                  auth_states.StateToken &&
-                  <Link to={'/social'}>
-                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
-                      <BiLike  size={20}/>
-                      <p className='social_label_id text-[#001d3d] capitalize ml-2 '>Social</p>
                     </a>
                   </Link>
                 }
@@ -255,7 +264,7 @@ const Header = ({
                 {
                   auth_states.StateToken &&
                   <Link to={'/event'}>
-                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                    <a href="#" className={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <LuTickets  size={20}/>
                       <p className='events_label_id text-[#001d3d] capitalize ml-2 '>events</p>
                     </a>
@@ -264,7 +273,7 @@ const Header = ({
                 {
                   auth_states.StateToken &&
                   <Link to={'/account'}>
-                    <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                    <a href="#" className={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <MdOutlineAccountBalanceWallet  size={20}/>
                       <p className='office_id text-[#001d3d] capitalize ml-2 '>office</p>
                     </a>
@@ -273,7 +282,7 @@ const Header = ({
                 {
                   auth_states.StateToken &&
                   <Link to={'/details'}>
-                    <a href="#" class={`${("details").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                    <a href="#" className={`${("details").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <FaRegUser  size={20}/>
                       <p className='profile_id text-[#001d3d] capitalize ml-2 '>profile</p>
                     </a>
@@ -283,7 +292,7 @@ const Header = ({
                 {
                   auth_states.StateToken &&
                   <Link to={'/subscriptions'}>
-                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                    <a href="#" className={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <FaRegEnvelopeOpen  size={20}/>
                       <p className='subscription_id text-[#001d3d] capitalize ml-2 '>subscription</p>
                     </a>
@@ -293,7 +302,7 @@ const Header = ({
                 {
                   auth_states.StateToken &&
                   <Link to={'/orders'}>
-                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                    <a href="#" className={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <HiOutlineShoppingBag  size={20}/>
                       <p className='orders_id text-[#001d3d] capitalize ml-2 '>orders</p>
                     </a>
@@ -303,7 +312,7 @@ const Header = ({
                 {
                   auth_states.StateToken &&
                   <Link to={'/security'}>
-                    <a href="#" class={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                    <a href="#" className={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                       <GrShieldSecurity  size={20}/>
                       <p className='security_id text-[#001d3d] capitalize ml-2 '>security</p>
                     </a>
@@ -311,7 +320,7 @@ const Header = ({
                 }
 
                 <button onClick={handleLanguageVisibility}>
-                  <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                  <a href="#" className={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                     <IoLanguageOutline  size={20}/>
                     <p className='language_id text-[#001d3d] capitalize ml-2 '>Language</p>
                   </a>
@@ -321,14 +330,14 @@ const Header = ({
                   auth_states.StateToken
                   ?
                     <button onClick={() => LogoutUser()}>
-                      <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <a href="#" className={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                         <AiOutlineLogout  size={20}/>
                         <p className='logout_id text-[#001d3d] capitalize ml-2 '>Logout</p>
                       </a>
                     </button>
                   :
                     <Link to={'/login'}>
-                      <a href="#" class={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                      <a href="#" className={`${("account").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
                         <FaRegCircleUser  size={20}/>
                         <p className='login_id text-[#001d3d] capitalize ml-2 '>Login</p>
                       </a>
@@ -342,6 +351,41 @@ const Header = ({
       </div>
     )
   }
+
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    if (window.Tawk_API) return;
+
+    var Tawk_API = window.Tawk_API || {};
+    var Tawk_LoadStart = new Date();
+
+    const s1 = document.createElement("script");
+    const s0 = document.getElementsByTagName("script")[0];
+
+    s1.async = true;
+    s1.src = "https://embed.tawk.to/6981181a16f76a1c388d4033/1jgg4ca3r";
+    s1.charset = "UTF-8";
+    s1.setAttribute("crossorigin", "*");
+
+    s0.parentNode.insertBefore(s1, s0);
+
+    window.Tawk_API = Tawk_API;
+    window.Tawk_LoadStart = Tawk_LoadStart;
+    
+  }, []);
+
+  const toggleChat = () => {
+    if (!window.Tawk_API) return;
+
+    if (visible) {
+      window.Tawk_API.hideWidget();
+    } else {
+      window.Tawk_API.showWidget();
+    }
+
+    setVisible(!visible);
+  };
 
   return (
     <div>

@@ -3,7 +3,8 @@ import {
     REDUX_LOGOUT_USER,
     STORAGE_PAGE_LANGUAGES,
     STORAGE_LANGUAGES,
-    STORAGE_sELECTED_LANGUAGES
+    STORAGE_sELECTED_LANGUAGES,
+    Get_Two_Factor_Authentication
 } from "./authAction"
 
 const InitialStates  = {
@@ -13,12 +14,25 @@ const InitialStates  = {
     StateUserInformation:   [],
     PageLanguages:  [],
     Languages:  [],
-    SelectedLanguage:  null
+    SelectedLanguage:  null,
+    TwoFactorToken:  null,
+    TwoFactor:  [
+        {
+            two_factor_enabled_at: null,
+            two_factor_confirmed_at: null,
+        }
+    ]
     // SelectedLanguage:  1
 }
 
 export default (state = InitialStates, action) =>{
     switch(action.type){
+        case Get_Two_Factor_Authentication:
+            return{
+                ...state,
+                TwoFactor              : action.TwoFactor,
+                TwoFactorToken         : action.TwoFactorToken,
+            }
         case REDUX_LOGOUT_USER:
             return{
                 ...state,

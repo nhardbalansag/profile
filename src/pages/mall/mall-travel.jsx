@@ -7,6 +7,7 @@ import { CiSearch } from "react-icons/ci";
 import { AiOutlineAlignRight } from "react-icons/ai";
 import { LuSettings2 } from "react-icons/lu";
 import { LuTags } from "react-icons/lu";
+import { FiHeart } from "react-icons/fi";
 
 import { Search, ChevronDown, ChevronUp, Grid, List, Heart, Users, Calendar, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -33,6 +34,8 @@ const MallTravel = () =>{
   const modalRef = useRef(null);
   const selectedLanguage = useRef(auth_states.SelectedLanguage ? auth_states.SelectedLanguage.id : null)  // null means main translation is used
 
+  const [currentEngagement, setCurrentEngagement] = useState([]);
+  
   const [paginate, setPaginate] = useState(null)
   const [getPaginatedTripContents, setPaginatedTripContents] = useState({
     prev_page_url:  null,
@@ -498,6 +501,19 @@ const MallTravel = () =>{
     }))
   }
 
+  const AddContentEngagement = async(content_id) =>{
+
+    const request = {
+      content_id: content_id
+    }
+
+    await api_content.AddContentEngagement(auth_states.StateToken, request).then((result) =>{
+      setCurrentEngagement(result.data.data)
+    }).catch((err) =>{
+      console.log("AddContentEngagement", err)
+    })
+  }
+
   useEffect(()=>{
       userSubscriptionCategories()
   },[])
@@ -711,13 +727,29 @@ const MallTravel = () =>{
                       </div>
                     </div>
                 </div>
-                {/* 
+                
                 <button
-                  onClick={() => setIsFavorite(!isFavorite)}
-                  className="absolute p-2 transition-colors rounded-full top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white"
+                  onClick={() => AddContentEngagement(trip?.id)}
+                  className="absolute z-50 p-2 transition-colors rounded-full top-3 right-3 bg-white/90 backdrop-blur-sm hover:bg-white"
                 >
-                  <Heart size={18} className={isFavorite ? "fill-primary text-primary" : "text-foreground"} />
-                </button> */}
+                  <Heart 
+                  size={18} 
+                  className={
+                    currentEngagement &&
+                    currentEngagement?.engagement &&
+                    JSON.parse(currentEngagement?.engagement)?.reaction.length > 0
+                    ?
+                      JSON.parse(currentEngagement.engagement)?.reaction.find(item => item.user_id === auth_states.StateUserInformation.id) && 
+                      "fill-orange-600 text-orange-600"
+                    :
+                      trip.engagement &&
+                      JSON.parse(trip.engagement)?.reaction?.length > 0 &&
+                      JSON.parse(trip.engagement)?.reaction.find(item => item.user_id === auth_states.StateUserInformation.id) && 
+                      "fill-orange-600 text-orange-600"
+                  } 
+                  />
+                </button>
+
                 {featured && (
                   <span className="absolute px-3 py-1 text-xs font-semibold text-white bg-orange-400 rounded-full top-3 left-3">
                     Featured
@@ -755,7 +787,7 @@ const MallTravel = () =>{
                   </p>
                   
                   <div className="flex items-center gap-2 mb-3 text-sm text-muted-foreground">
-                    <MapPin size={14} className="text-orange-400" />
+                    <MapPin size={18} className="text-orange-400" />
                     <span>
                       {
                         selectedLanguage.current == null 
@@ -770,7 +802,7 @@ const MallTravel = () =>{
                   </div>
                   
                   <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground">
-                    <LuTags size={14} className="text-orange-400" />
+                    <LuTags size={18} className="text-orange-400" />
                     <p className='space-x-2 capitalize'>
                       <span className='see_label_id'>see</span>
                       <span>
@@ -783,6 +815,28 @@ const MallTravel = () =>{
                       <span className='offer_label_id'>offer</span>
                     </p>
                   </div>
+
+                  <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground">
+                    <FiHeart size={18} className="text-orange-400" />
+                    <p className='space-x-2 capitalize'>
+                      <span>
+                        {
+                          currentEngagement &&
+                          currentEngagement?.engagement &&
+                          JSON.parse(currentEngagement?.engagement)?.reaction.length > 0
+                          ?
+                            JSON.parse(currentEngagement.engagement)?.reaction.length
+                          :
+                            trip.engagement &&
+                            JSON.parse(trip.engagement)?.reaction?.length > 0 &&
+                            JSON.parse(trip.engagement)?.reaction.find(item => item.user_id === auth_states.StateUserInformation.id) && 
+                            JSON.parse(trip.engagement)?.reaction?.length
+                        }
+                      </span>
+                      <span className='offer_label_id'>likes</span>
+                    </p>
+                  </div>
+
                 </div>
               </div>
 
@@ -821,23 +875,23 @@ const MallTravel = () =>{
                       ?
                           Object.entries(
                           trip?.content_offers_table.reduce((acc, item) => {
-                            const date = item.offers_table.offers_end_effectivity_date;
+                            const date = item?.offers_table?.offers_end_effectivity_date;
                             const tierName =
                               selectedLanguage.current == null
-                                ? item.offers_table.tier_category_table.tier_category_name
-                                : item.offers_table.tier_category_table.translation
+                                ? item.offers_table?.tier_category_table.tier_category_name
+                                : item.offers_table?.tier_category_table.translation
                                 ? (
-                                    item.offers_table.tier_category_table.translation.find(
+                                    item.offers_table?.tier_category_table.translation.find(
                                       (filter_item) =>
                                         filter_item.language_id == selectedLanguage.current
                                     )
-                                      ? item.offers_table.tier_category_table.translation.find(
+                                      ? item.offers_table?.tier_category_table.translation.find(
                                           (filter_item) =>
                                             filter_item.language_id == selectedLanguage.current
                                         ).tier_category_name
-                                      : item.offers_table.tier_category_table.tier_category_name
+                                      : item.offers_table?.tier_category_table.tier_category_name
                                   )
-                                : item.offers_table.tier_category_table.tier_category_name;
+                                : item.offers_table?.tier_category_table.tier_category_name;
 
                             // group by date and collect tier names
                             if (!acc[date]) acc[date] = [];
@@ -1099,7 +1153,7 @@ const MallTravel = () =>{
               </div>
             
               {/* pagination */}
-              <div className='my-10'>
+              <div className='my-10 mb-[120px]'>
                 <p className="text-sm font-semibold text-muted-foreground">
                   <span className='showing_label_id'>Showing</span>{' '}
                   <span>{getPaginatedTripContents.data.length}</span>{' '}

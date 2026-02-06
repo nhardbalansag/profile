@@ -58,6 +58,8 @@ import AccountSponsorProfile from "./account/account-sponsor-profile";
 
 import MallGrowPaidContent from "./mall/mall-grow-paid-content";
 
+import Verification from "./auth/2fa-verification";
+
 export{
     HomePage,
     HomeContent,
@@ -113,5 +115,7 @@ export{
     MallSocial,
 
     AccountSponsorProfile,
-    MallGrowPaidContent
+    MallGrowPaidContent,
+
+    Verification
 }

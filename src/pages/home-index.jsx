@@ -101,16 +101,7 @@ const HomePage = () => {
 
   const TopCategories = () =>{
     return(
-      <div className="flex flex-wrap items-center justify-center gap-2">
-        <div
-          onClick={() => navigate('/travel')}
-          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-            location.pathname.includes('travel') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-          }`}
-        >
-          <div className="mb-1 text-xl"><MdOutlineAirplanemodeActive /></div>
-          <span className="text-[12px] md:text-[15px] travel_label_id">Travel</span>
-        </div>
+      <div className="flex flex-wrap items-center justify-center gap-2 mb-5">
 
         <div
           onClick={() => navigate('/academy-index')}
@@ -120,6 +111,26 @@ const HomePage = () => {
         >
           <div className="mb-1 text-xl"><RiGraduationCapLine /></div>
           <span className="text-[12px] md:text-[15px] academy_label_id">Learn</span>
+        </div>
+
+        <div
+          onClick={() => navigate('/grow')}
+          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
+            location.pathname.includes('grow') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
+          }`}
+        >
+          <div className="mb-1 text-xl"><PiPottedPlantBold /></div>
+          <span className="text-[12px] md:text-[15px] grow_label_id">Grow</span>
+        </div>
+
+        <div
+          onClick={() => navigate('/travel')}
+          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
+            location.pathname.includes('travel') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
+          }`}
+        >
+          <div className="mb-1 text-xl"><MdOutlineAirplanemodeActive /></div>
+          <span className="text-[12px] md:text-[15px] travel_label_id">Travel</span>
         </div>
 
         <div
@@ -133,13 +144,13 @@ const HomePage = () => {
         </div>
 
         <div
-          onClick={() => navigate('/grow')}
+          onClick={() => navigate('/social')}
           className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-            location.pathname.includes('grow') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
+            location.pathname.includes('social') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
           }`}
         >
-          <div className="mb-1 text-xl"><PiPottedPlantBold /></div>
-          <span className="text-[12px] md:text-[15px] grow_label_id">Grow</span>
+          <div className="mb-1 text-xl"><BiLike /></div>
+          <span className="text-[12px] md:text-[15px] social_label_id">Social</span>
         </div>
 
         <div
@@ -161,16 +172,6 @@ const HomePage = () => {
           <div className="mb-1 text-xl"><IoFitnessOutline /></div>
           <span className="text-[12px] md:text-[15px] lifestyle_label_id">Lifestyle</span>
         </div>
-
-        <div
-          onClick={() => navigate('/social')}
-          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-            location.pathname.includes('social') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-          }`}
-        >
-          <div className="mb-1 text-xl"><BiLike /></div>
-          <span className="text-[12px] md:text-[15px] social_label_id">Social</span>
-        </div>
       </div>
     )
   }
@@ -190,9 +191,9 @@ const HomePage = () => {
       {/* pages */}
       <Outlet />
       {/* pages */}
-      <div>
+      {/* <div>
         <Footer/>
-      </div>
+      </div> */}
       {
         getOpenLanguageSelection
         && 

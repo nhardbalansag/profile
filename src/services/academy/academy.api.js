@@ -9,7 +9,8 @@ export const getAllCoursesContents = async (token, reqBody) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`,
+            ...token
         },
         method: 'POST', 
         url: `${PublicAPI}courses`,
@@ -21,7 +22,8 @@ export const getCoursesContents = async (token, id) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'GET', 
         url: `${PublicAPI}courses/view/${id}`

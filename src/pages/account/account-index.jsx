@@ -30,6 +30,7 @@ import { IoFitnessOutline } from "react-icons/io5";
 import { PiPottedPlantBold } from "react-icons/pi";
 import { BiStore } from "react-icons/bi";
 import { BiLike } from "react-icons/bi";
+import { BiSupport } from "react-icons/bi";
 
 import {
   LanguageBottomSheet
@@ -80,9 +81,6 @@ const AccountPage = () => {
             </p>
           </div>
         </div>
-        {/* <div>
-          <FiBell className="w-5 h-5 cursor-pointer hover:text-lime-400" color='black'/>
-        </div> */}
       </header>
     )
   }
@@ -118,13 +116,7 @@ const AccountPage = () => {
       className="drawer">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
-          {Header()}
-        {/* navigation pages */}
-        {/* <div className=''>
-          <div className='w-11/12 mx-auto'>
-            <Outlet />
-          </div>
-        </div> */}
+        {Header()}
       </div> 
       <div className="z-50 drawer-side">
         <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
@@ -133,32 +125,44 @@ const AccountPage = () => {
             <div class="flex items-center space-x-2 my-6 px-4">
               <FiUser />
               <span class="text-sm text-gray-700">
-                {/* {`${auth_states.StateUserInformation.first_name} ${auth_states.StateUserInformation.last_name}`} */}
                 {auth_states.StateUserInformation.nick_names ? auth_states.StateUserInformation.nick_names : auth_states.StateUserInformation.first_name}
               </span>
             </div>
             <nav class="space-y-2 w-64 bg-white border-r border-gray-200 p-4">
+              
+              <button onClick={() => toggleChat()} className={`${("mall").includes(location.pathname) ? '  text-[#001d3d]' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                <BiSupport  size={20}/>
+                <p className='home_label_id text-[#001d3d] capitalize ml-2 '>{visible ? "Disable Support" : "Enable Support"}</p>
+              </button>
+
               <a href="#" class={`${("h-1/3").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <TiHomeOutline size={20}/>
                 {_link("/", <span className='home_label_id' >Home</span>)}
               </a>
-              <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
-                <MdOutlineTravelExplore size={20}/>
-                {_link("/travel", <span className='travel_label_id' >Travel</span>)}
-              </a>
+
               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <RiGraduationCapLine size={20}/>
                 {_link("/academy-index", <span className='learn_label_id' >Learn</span>)}
               </a>
 
-               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+              <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                <PiPottedPlantBold size={20}/>
+                {_link("/grow", <span className='grow_label_id' >Grow</span>)}
+              </a>
+
+              <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                <MdOutlineTravelExplore size={20}/>
+                {_link("/travel", <span className='travel_label_id' >Travel</span>)}
+              </a>
+
+              <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <LuCircleDollarSign size={20}/>
                 {_link("/earn", <span className='earn_label_id' >Earn</span>)}
               </a>
 
-               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
-                <PiPottedPlantBold size={20}/>
-                {_link("/grow", <span className='grow_label_id' >Grow</span>)}
+              <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
+                <BiLike size={20}/>
+                {_link("/social", <span className='social_label_id' >Social</span>)}
               </a>
 
                <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
@@ -169,11 +173,6 @@ const AccountPage = () => {
               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <IoFitnessOutline size={20}/>
                 {_link("/lifestyle", <span className='lifestyle_label_id' >Lifestyle</span>)}
-              </a>
-
-              <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
-                <BiLike size={20}/>
-                {_link("/social", <span className='social_label_id' >Social</span>)}
               </a>
              
               <a href="#" class={`${("account").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
@@ -196,10 +195,6 @@ const AccountPage = () => {
                 <HiOutlineShoppingBag />
                 {_link("/orders", <span className='orders_id' >Orders</span>)}
               </a>
-              {/* <a href="#" class={`${("/content/add-content").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
-                <FaHistory  />
-                {_link("/content/", "Transaction History")}
-              </a> */}
 
               <a href="#" class={`${("details").includes(location.pathname) ? 'bg-gray-100  text-indigo-600' : 'hover:bg-gray-100 text-gray-600'} flex items-center p-2 rounded-lg`}>
                 <GrShieldSecurity />
@@ -259,6 +254,40 @@ const AccountPage = () => {
     )
   }
 
+  useEffect(() => {
+    if (window.Tawk_API) return;
+
+    var Tawk_API = window.Tawk_API || {};
+    var Tawk_LoadStart = new Date();
+
+    const s1 = document.createElement("script");
+    const s0 = document.getElementsByTagName("script")[0];
+
+    s1.async = true;
+    s1.src = "https://embed.tawk.to/6981181a16f76a1c388d4033/1jgg4ca3r";
+    s1.charset = "UTF-8";
+    s1.setAttribute("crossorigin", "*");
+
+    s0.parentNode.insertBefore(s1, s0);
+
+    window.Tawk_API = Tawk_API;
+    window.Tawk_LoadStart = Tawk_LoadStart;
+  }, []);
+
+  const [visible, setVisible] = useState(false);
+
+  const toggleChat = () => {
+    if (!window.Tawk_API) return;
+
+    if (visible) {
+      window.Tawk_API.hideWidget();
+    } else {
+      window.Tawk_API.showWidget();
+    }
+
+    setVisible(!visible);
+  };
+
   useEffect(() =>{
     if(auth_states.SelectedLanguage){
       selectedLanguage.current = parseInt(auth_states.SelectedLanguage.id)
@@ -312,7 +341,7 @@ const AccountPage = () => {
         </div>
       </div>
       {/* pages */}
-
+    
       {BottomTabNavigator()}
 
       {

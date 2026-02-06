@@ -15,6 +15,19 @@ export const GetHomeContents = async () => {
     });
 }
 
+export const AddContentEngagement = async (token, request) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            // 'Authorization': `${token}`
+            ...token
+        },
+        method: 'POST', 
+        url: `${BaseAPIUrl}account/engagement`,
+        data: request
+    });
+}
+
 export const ShowContent = async (id) => {
     return await axios({ 
         headers: {
@@ -29,7 +42,8 @@ export const GetTravelProductContent = async (id, token) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'GET', 
         url: `${BaseAPIUrl}account/show-product-content/${id}`
@@ -40,7 +54,8 @@ export const GetClientSecret = async (token, reqBody) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'POST', 
         url: `${BaseAPIUrl}create-payment-intent`,
@@ -52,7 +67,8 @@ export const createEBanxTripPaymentIntent = async (token, reqBody) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'POST', 
         url: `${BaseAPIUrl}account/ebanx/trip/create-payment-intent`,
@@ -64,7 +80,8 @@ export const GetTravelBucketListContent = async (token, url, request) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'post', 
         url: url ? url : `${BaseAPIUrl}account/bucket-list`,
@@ -76,7 +93,8 @@ export const GetAllBucketListCategory = async (token) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'GET', 
         url: `${BaseAPIUrl}account/bucket-list-categories`
@@ -97,7 +115,8 @@ export const CheckBookingPaymentIntentStatus = async (token, reqBody) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'POST', 
         url: `${BaseAPIUrl}account/orders/validate-payment-intent-status`,
@@ -110,7 +129,8 @@ export const GetEarnPageContent = async (token) => {
     return await axios({
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            // "Authorization": `${token}`,
+            ...token
         },
         method: "GET",
         url: `${BaseAPIUrl}account/earn/get-earn-content`
@@ -122,7 +142,8 @@ export const GetGrowPageContent = async (token) => {
     return await axios({
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            // "Authorization": `${token}`,
+            ...token
         },
         method: "GET",
         url: `${BaseAPIUrl}account/grow/get-grow-content`
@@ -135,7 +156,8 @@ export const GetGrowPagePaidContent = async (token) => {
     return await axios({
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            // "Authorization": `${token}`,
+            ...token
         },
         method: "GET",
         url: `${BaseAPIUrl}account/grow/get-grow-paid-content`

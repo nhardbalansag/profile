@@ -9,7 +9,8 @@ export const getTBucksAndTPoints = async (token) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'GET', 
         url: `${PublicAPI}home`
@@ -20,7 +21,8 @@ export const getLegacyCommissionsTotalCommission = async (token) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'GET', 
         url: `${BaseAPIUrl}account/commission/legacy/sum`
@@ -31,7 +33,8 @@ export const requestToken = async (token) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'GET', 
         url: `${BaseAPIUrl}account/jwt/token`
@@ -42,7 +45,8 @@ export const validateToken = async (body) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            // 'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'POST', 
         url: `${BaseAPIUrl}validate`,
@@ -65,7 +69,8 @@ export const UpdateAccountXeniPlatformAccess = async (token) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'GET', 
         url: `${BaseAPIUrl}account/features/xeni`
@@ -76,7 +81,8 @@ export const getAccountTransaction = async (token, url) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'GET', 
         url: url ? url : `${PublicAPI}paginated-transaction`
@@ -87,7 +93,8 @@ export const getAccountToTransfer = async (token, reqBody) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'POST', 
         url: `${PublicAPI}get-account-to-transfer`,
@@ -99,7 +106,8 @@ export const TransferTPoints = async (token, reqBody) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'POST', 
         url: `${PublicAPI}transfer-tpoints`,
@@ -111,7 +119,8 @@ export const TransferTBucks = async (token, reqBody) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'POST', 
         url: `${PublicAPI}transfer-tbucks`,
@@ -123,7 +132,8 @@ export const WithdrawTBucks = async (token, reqBody) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'POST', 
         url: `${PublicAPI}withdraw-tbucks`,
@@ -135,7 +145,8 @@ export const GetUserDetails = async (token) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'GET', 
         url: `${BaseAPIUrl}account/details`,
@@ -146,7 +157,8 @@ export const ResendVerificationEmail = async (token) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'GET', 
         url: `${BaseAPIUrl}account/resend-email-verification`,
@@ -157,7 +169,8 @@ export const GetUserSponsorDetails = async (token) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'GET', 
         url: `${BaseAPIUrl}account/sponsor-details`,
@@ -168,7 +181,8 @@ export const UpdateUserInformation = async (token, reqBody) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'POST', 
         url: `${BaseAPIUrl}account/update-details`,
@@ -187,7 +201,7 @@ export const UploadFile = async (reqBody, token) => {
     return await axios({
         headers: {
             "Content-Type": "multipart/form-data",
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `${token}`,
         },
         method: "post",
         url: `${BaseAPIUrl}account/upload-file`,
@@ -212,7 +226,8 @@ export const ProfileMultipleDownload = async (token, reqBody) => {
     return await axios({
         headers: {
             "Content-Type": "multipart/form-data",
-            "Authorization": `Bearer ${token}`,
+            // "Authorization": `${token}`,
+            ...token
         },
         method: "post",
         url: `${BaseAPIUrl}account/upload-multiple-file`,
@@ -220,14 +235,16 @@ export const ProfileMultipleDownload = async (token, reqBody) => {
     })
 }
 
-export const GetHomeContents = async (token) => {
+export const GetHomeContents = async (token, url) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
-        method: 'GET', 
-        url: `${BaseAPIUrl}account/contents`,
+        method: 'POST', 
+        url: url ? url : `${BaseAPIUrl}account/contents`,
+        data: {}
     });
 }
 
@@ -235,7 +252,8 @@ export const getNetworkDetails = async (token, url) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'GET', 
         url: url ? url : `${BaseAPIUrl}account/connections`,
@@ -246,7 +264,8 @@ export const getLegacyCommissionsHistoryPaginated = async (token, url) => {
     return await axios({ 
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `${token}`
+            ...token
         },
         method: 'GET', 
         url: url ? url : `${BaseAPIUrl}account/commission/legacy/paginated`,

@@ -1,5 +1,5 @@
 
-import React, {useEffect} from 'react'
+import React, {useEffect, useState } from 'react'
 
 import { useDispatch } from "react-redux";
 import {useSelector} from 'react-redux';
@@ -7,6 +7,8 @@ import { Navigate } from "react-router-dom";
 import { useRouteError } from "react-router-dom";
 import { FaExclamationTriangle } from 'react-icons/fa';
 import { Link } from "react-router-dom";
+
+import MaintenancePage from '../pages/support/maintenance-page'
 
 import {
     createBrowserRouter,
@@ -67,7 +69,9 @@ import {
     MallShop,
     MallSocial,
 
-    MallGrowPaidContent
+    MallGrowPaidContent,
+
+    Verification
 
     // AccountSponsorProfile
 } from '../pages/index'
@@ -144,6 +148,100 @@ const GuestRoute = ({ children, route }) => {
     return children;
 }
 
+// Create a wrapper component for maintenance mode check
+const MaintenanceWrapper = ({ children }) => {
+    const [isMaintenance, setIsMaintenance] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    // useEffect(() => {
+    //     const checkMaintenanceMode = async () => {
+    //         try {
+    //             // Call your API endpoint to check maintenance status
+    //             const response = await api_page_config.getMaintenanceStatus();
+    //             if (response.status && response.data?.is_maintenance) {
+    //                 setIsMaintenance(true);
+    //             } else {
+    //                 setIsMaintenance(false);
+    //             }
+    //         } catch (error) {
+    //             console.error("Error checking maintenance mode:", error);
+    //             // Fallback to not showing maintenance page on error
+    //             setIsMaintenance(false);
+    //         } finally {
+    //             setIsLoading(false);
+    //         }
+    //     };
+
+    //     checkMaintenanceMode();
+        
+    //     // Optional: Poll for maintenance status every 30 seconds
+    //     const intervalId = setInterval(checkMaintenanceMode, 30000);
+        
+    //     return () => clearInterval(intervalId);
+    // }, []);
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gray-900">
+                <div className="text-center">
+                    <div className="w-12 h-12 mx-auto mb-4 border-b-2 border-blue-500 rounded-full animate-spin"></div>
+                    <p className="text-gray-300">Checking system status...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (isMaintenance && !isLoading) {
+        return <MaintenancePage />;
+    }else if(!isMaintenance && !isLoading){
+        const auth_states = useSelector(state => state.AuthReducer);
+        const dispatch = useDispatch()
+
+        const validateAccess = async() =>{
+            var token = await getItem(STORAGE_TOKEN)
+            token = JSON.parse(token)
+            var userInformation = await getItem(STORAGE_USER_INFORMATION)
+            var payload = await getItem(REDUX_PAYLOAD_INFORMATION)
+
+            if(token && userInformation){
+                dispatch(AuthAction.LoginUser(token, JSON.parse(userInformation), payload))
+            }
+        }
+
+        const GetAllLanguages = async() =>{
+            await api_page_config.GetAllLanguages().then((result) =>{
+                if(result.status){
+                    dispatch(AuthAction.GetAllLanguages(result.data.data))
+                }
+            }).catch((err) =>{
+                console.error("GetAllLanguages error:", err);
+            })
+        }
+
+        const getAllActivePageConfig = async() =>{
+            await api_page_config.getAllActivePageConfig().then((result) =>{
+                if(result.status){
+                    dispatch(AuthAction.GetPageLanguageTranslation(result.data.data))
+                }
+            }).catch((err) =>{
+                console.error("getAllActivePageConfig error:", err);
+            })
+        }
+
+        useEffect(() =>{
+
+            if(!auth_states.StateToken){
+                validateAccess()
+            }
+
+            GetAllLanguages()
+            getAllActivePageConfig()
+        },[])
+    }
+
+    return children;
+}
+
 const AuthenticatedUsers = ({ children, route }) => {
     const auth_states = useSelector(state => state.AuthReducer);
     
@@ -152,6 +250,27 @@ const AuthenticatedUsers = ({ children, route }) => {
     }
 
     return <Navigate to={route} replace />
+}
+
+// Wrap your entire router with MaintenanceWrapper
+const AppRouter = () => {
+    return (
+        <MaintenanceWrapper>
+            <RouterProvider 
+                router={router} 
+                fallbackElement={
+                    <div className="flex items-center justify-center min-h-screen">
+                        <div className="w-12 h-12 border-b-2 border-blue-500 rounded-full animate-spin"></div>
+                    </div>
+                } 
+            />
+        </MaintenanceWrapper>
+    )
+}
+
+const Routes = () =>{
+    // Return AppRouter instead of directly returning RouterProvider
+    return <AppRouter/>
 }
 
 const router = createBrowserRouter([
@@ -286,6 +405,15 @@ const router = createBrowserRouter([
                 element: ( 
                     <GuestRoute route={'/'}>
                         <LoginContent />
+                    </GuestRoute> 
+                ),
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "2factor",
+                element: ( 
+                    <GuestRoute route={'/'}>
+                        <Verification />
                     </GuestRoute> 
                 ),
                 errorElement: <ErrorPage />
@@ -485,54 +613,5 @@ const router = createBrowserRouter([
         Component: NotFound,
     },
 ])
-
-const Routes = () =>{
-
-    const auth_states = useSelector(state => state.AuthReducer);
-    const dispatch = useDispatch()
-
-    const validateAccess = async() =>{
-        var token = await getItem(STORAGE_TOKEN)
-        var userInformation = await getItem(STORAGE_USER_INFORMATION)
-        var payload = await getItem(REDUX_PAYLOAD_INFORMATION)
-
-        if(token && userInformation){
-            dispatch(AuthAction.LoginUser(token, JSON.parse(userInformation), payload))
-        }
-    }
-
-    const GetAllLanguages = async() =>{
-        await api_page_config.GetAllLanguages().then((result) =>{
-            if(result.status){
-                dispatch(AuthAction.GetAllLanguages(result.data.data))
-            }
-        }).catch((err) =>{
-            console.error("GetAllLanguages error:", err);
-        })
-    }
-
-    const getAllActivePageConfig = async() =>{
-        await api_page_config.getAllActivePageConfig().then((result) =>{
-            if(result.status){
-                dispatch(AuthAction.GetPageLanguageTranslation(result.data.data))
-            }
-        }).catch((err) =>{
-            console.error("getAllActivePageConfig error:", err);
-        })
-    }
-
-    useEffect(() =>{
-        GetAllLanguages()
-        getAllActivePageConfig()
-    },[])
-
-    useEffect(() =>{
-        if(!auth_states.StateToken){
-            validateAccess()
-        }
-    },[])
-
-    return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
-}
 
 export default Routes;
