@@ -60,68 +60,6 @@ const HomeContent = () => {
     { name: 'YouTube', icon: <BsFileImage className="w-5 h-5" />, color: '#ff0000', users: '2.5B+' }
   ];
 
-  // Video Gallery Component with BsFileImage icons
-  const VideoGallery = ({ platform }) => (
-    <div className="overflow-hidden bg-white shadow-sm rounded-xl">
-      <div className="relative bg-gray-900 aspect-video">
-        {activeVideo === platform.id ? (
-          <iframe
-            src={platform.video}
-            title={`${platform.name} Demo`}
-            className="absolute inset-0 w-full h-full"
-            allowFullScreen
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
-            <div className="text-center">
-              <div className="flex items-center justify-center w-20 h-20 mx-auto mb-4 bg-white rounded-full bg-opacity-10">
-                {platform.icon}
-              </div>
-              <h3 className="mb-2 text-xl font-bold text-white">{platform.name}</h3>
-              <p className="mb-4 text-sm text-gray-400">{platform.description}</p>
-              <button 
-                onClick={() => setActiveVideo(platform.id)}
-                className="flex items-center gap-2 px-6 py-3 mx-auto text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-              >
-                <BsFileImage className="w-4 h-4" />
-                Watch Demo
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-      
-      <div className="p-4">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">Platform Stats:</span>
-            <span className="px-2 py-1 text-xs text-blue-800 bg-blue-100 rounded">★ {platform.stats.rating}</span>
-          </div>
-          <div className="flex gap-1">
-            {[1,2,3,4,5].map((star) => (
-              <BsFileImage key={star} className="w-4 h-4 text-yellow-400" />
-            ))}
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-3 gap-4 text-center">
-          <div>
-            <p className="text-lg font-bold text-gray-900">{platform.stats.stores || platform.stats.sites || platform.stats.users}</p>
-            <p className="text-xs text-gray-500">Active Users</p>
-          </div>
-          <div>
-            <p className="text-lg font-bold text-gray-900">{platform.stats.downloads}</p>
-            <p className="text-xs text-gray-500">Downloads</p>
-          </div>
-          <div>
-            <p className="text-lg font-bold text-gray-900">{platform.features.length}+</p>
-            <p className="text-xs text-gray-500">Features</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
   const plans = [
     {
       name: 'Starter',
@@ -273,44 +211,7 @@ const HomeContent = () => {
           </div>
         </div>
       </div>
-
-      {/* Social Media Integration Section */}
-      <div className="py-20 bg-gray-50">
-        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="mb-12 text-center">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
-              Social Media
-            </h2>
-            <p className="max-w-3xl mx-auto text-xl text-gray-600">
-              Connect with our social media platforms now.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-5">
-            {socialIntegrations.map((social) => (
-              <div key={social.name} className="p-6 text-center transition-all bg-white shadow-sm rounded-xl hover:shadow-lg">
-                <div 
-                  className="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-2xl"
-                  style={{ backgroundColor: `${social.color}20` }}
-                >
-                  <div style={{ color: social.color }}>
-                    {social.icon}
-                  </div>
-                </div>
-                <h3 className="mb-1 font-semibold">{social.name}</h3>
-                <p className="mb-3 text-xs text-gray-500">{social.users} users</p>
-                <button 
-                  className="w-full px-3 py-2 text-sm transition-colors border border-gray-200 rounded-lg hover:bg-gray-50"
-                  style={{ color: social.color }}
-                >
-                  Connect
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
+ 
       {/* Pricing Section */}
       <div className="py-20">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -347,13 +248,13 @@ const HomeContent = () => {
           </div>
 
           {/* Pricing Cards */}
-          <div className='gap-10 md:justify-center md:flex'>
+          <div className='md:gap-10 md:justify-center md:flex'>
             {plans.map((plan) => {
               const price = getPrice(plan);
               return (
                 <div
                   key={plan.name}
-                  className={`relative xs:mb-10 xs:mx-auto xs:w-full w-[300px]  bg-white rounded-2xl shadow-lg overflow-hidden transition-all hover:shadow-2xl hover:-translate-y-1 ${
+                  className={`relative mb-10 xs:mx-auto xs:w-full md:w-[350px]  bg-white rounded-2xl shadow-lg overflow-hidden transition-all hover:shadow-2xl hover:-translate-y-1 ${
                     plan.recommended ? 'ring-2 ring-blue-500 shadow-xl' : ''
                   }`}
                 >
@@ -472,13 +373,6 @@ const HomeContent = () => {
           <p className="max-w-3xl mx-auto mb-10 text-xl text-blue-200">
             Choose your plan, pick a template, connect to us - we handle the rest
           </p>
-          <div className="flex items-center justify-center gap-6 mt-8">
-            {socialIntegrations.map((social) => (
-              <div key={social.name} className="text-blue-200 transition-colors cursor-pointer hover:text-white">
-                {social.icon}
-              </div>
-            ))}
-          </div>
           <p className="mt-8 text-sm text-blue-300">
             <FiCheckCircle className="inline w-3 h-3 mr-1" />
             No contract • Free domain • Free SSL • 30-day money-back guarantee • Free IT Consultations
