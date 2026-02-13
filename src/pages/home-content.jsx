@@ -1,115 +1,492 @@
 import React, { useState } from 'react';
+import { BsFileImage } from "react-icons/bs";
+import { FaPercent } from "react-icons/fa";
+import { MdHeadsetMic, MdHeadset } from 'react-icons/md';
+import { FaGlobe } from 'react-icons/fa';
+import { MdVerified, MdCheckCircle } from 'react-icons/md';
+import { LuTag } from "react-icons/lu";
+import { IoShieldCheckmarkOutline } from "react-icons/io5";
+import { FiCheckCircle } from "react-icons/fi";
+import { FaWordpress, FaOpencart } from 'react-icons/fa';
+import { GiShoppingBag } from "react-icons/gi";
 
-import {
-  Card,
-  ProjectCardShort,
-  ProjectCardLong,
-  Phone,
-  Divider
-} from '../component/index'
+const HomeContent = () => {
+  const [billingCycle, setBillingCycle] = useState('monthly');
+  const [activeVideo, setActiveVideo] = useState(null);
+  const [activePlatform, setActivePlatform] = useState('bagisto');
 
-import {
-  Information,
-  Android,
-  Web,
-  Support
-} from '../assets/icons/index'
+  // Platform Data with BsFileImage icons
+  const platforms = [
+    {
+      id: 'bagisto',
+      name: 'Bagisto',
+      icon: <GiShoppingBag className="w-8 h-8" style={{ color: '#f26522' }} />,
+      color: '#f26522',
+      description: 'Laravel-based eCommerce platform with multi-channel support',
+      features: ['Multi-tenant', 'Multi-channel', 'Multi-lingual', 'Multi-currency'],
+      video: 'https://www.youtube.com/embed/X7PJxUzZ5aA',
+      image: 'https://bagisto.com/wp-content/uploads/2021/09/Bagisto-dashboard.png',
+      stats: { stores: '50k+', downloads: '1M+', rating: '4.8' }
+    },
+    {
+      id: 'opencart',
+      name: 'OpenCart',
+      icon: <FaOpencart className="w-8 h-8" style={{ color: '#3b9c36' }} />,
+      color: '#3b9c36',
+      description: 'Powerful open-source eCommerce platform with extensive marketplace',
+      features: ['Multi-store', 'Multi-language', 'Multi-currency', 'SEO friendly'],
+      video: 'https://www.youtube.com/embed/q7P_kbDy3lY',
+      image: 'https://www.opencart.com/application/view/image/opencart.jpg',
+      stats: { stores: '100k+', downloads: '2M+', rating: '4.7' }
+    },
+    {
+      id: 'wordpress',
+      name: 'WordPress',
+      icon: <FaWordpress className="w-8 h-8" style={{ color: '#21759b' }} />,
+      color: '#21759b',
+      description: 'World\'s most popular CMS with WooCommerce for eCommerce',
+      features: ['Themes', 'Plugins', 'WooCommerce', 'SEO ready'],
+      video: 'https://www.youtube.com/embed/UtUJwTgqP6Y',
+      image: 'https://wordpress.org/files/2023/03/macbook-air-wordpress.png',
+      stats: { sites: '500M+', plugins: '60k+', rating: '4.9' }
+    }
+  ];
 
-import PhilricePresentation from '../assets/images/Product Presentation philrice.png'
-import IOWOToolPresentation from '../assets/images/IOWOpresentation.jpg'
-import IOWOEventToolPresentation from '../assets/images/iowoeventotoolpresentation.png'
-import ExQuizSeat from '../assets/images/ExQuizSeat.png'
-import buyAndSellDashboard from '../assets/images/buyAndSellDashboard.png'
-import IOWOEventToolDashboard from '../assets/images/IOWO Event Tool Dashboard.png'
-import DCODEPOSDASHBOARD from '../assets/images/DCODE POS DASHBOARD.png'
-import Bernard from '../assets/images/bernard.png'
-import Kedica from '../assets/images/kedica.png'
-import iowoapp from '../assets/images/iowoapp.png'
-import ropaapp from '../assets/images/ropaapp.png'
+  const socialIntegrations = [
+    { name: 'Facebook', icon: <BsFileImage className="w-5 h-5" />, color: '#1877f2', users: '2.9B+' },
+    { name: 'Twitter', icon: <BsFileImage className="w-5 h-5" />, color: '#1da1f2', users: '450M+' },
+    { name: 'Instagram', icon: <BsFileImage className="w-5 h-5" />, color: '#e4405f', users: '2B+' },
+    { name: 'LinkedIn', icon: <BsFileImage className="w-5 h-5" />, color: '#0a66c2', users: '900M+' },
+    { name: 'YouTube', icon: <BsFileImage className="w-5 h-5" />, color: '#ff0000', users: '2.5B+' }
+  ];
 
-const HomeContent = () =>{
+  // Video Gallery Component with BsFileImage icons
+  const VideoGallery = ({ platform }) => (
+    <div className="overflow-hidden bg-white shadow-sm rounded-xl">
+      <div className="relative bg-gray-900 aspect-video">
+        {activeVideo === platform.id ? (
+          <iframe
+            src={platform.video}
+            title={`${platform.name} Demo`}
+            className="absolute inset-0 w-full h-full"
+            allowFullScreen
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
+            <div className="text-center">
+              <div className="flex items-center justify-center w-20 h-20 mx-auto mb-4 bg-white rounded-full bg-opacity-10">
+                {platform.icon}
+              </div>
+              <h3 className="mb-2 text-xl font-bold text-white">{platform.name}</h3>
+              <p className="mb-4 text-sm text-gray-400">{platform.description}</p>
+              <button 
+                onClick={() => setActiveVideo(platform.id)}
+                className="flex items-center gap-2 px-6 py-3 mx-auto text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+              >
+                <BsFileImage className="w-4 h-4" />
+                Watch Demo
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+      
+      <div className="p-4">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">Platform Stats:</span>
+            <span className="px-2 py-1 text-xs text-blue-800 bg-blue-100 rounded">★ {platform.stats.rating}</span>
+          </div>
+          <div className="flex gap-1">
+            {[1,2,3,4,5].map((star) => (
+              <BsFileImage key={star} className="w-4 h-4 text-yellow-400" />
+            ))}
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-3 gap-4 text-center">
+          <div>
+            <p className="text-lg font-bold text-gray-900">{platform.stats.stores || platform.stats.sites || platform.stats.users}</p>
+            <p className="text-xs text-gray-500">Active Users</p>
+          </div>
+          <div>
+            <p className="text-lg font-bold text-gray-900">{platform.stats.downloads}</p>
+            <p className="text-xs text-gray-500">Downloads</p>
+          </div>
+          <div>
+            <p className="text-lg font-bold text-gray-900">{platform.features.length}+</p>
+            <p className="text-xs text-gray-500">Features</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
-  const [open, setOpen] = useState(false);
+  const plans = [
+    {
+      name: 'Starter',
+      description: "Best suited for freelancers, creatives, and individuals looking to launch or upgrade their online presence.",      
+      monthlyPrice: "149.00",
+      annuallyPrice: "1,609.2",
+      savings: 'Save ₱178.8!',
+      recommended: true,
+      features: {
+        websites: 'Unlimited web pages',
+        support: 'Customer support',
+        moneyback: 'Money Back Guarantee',
+        domain: 'Free Domain',
+        hosting: 'Free Hosting',
+        maintenance: 'Free Maintenance and update',
+        setup: 'Free Setup',
+        consultation: 'Free Consultations',
+      }
+    },
+    {
+      name: 'Starter Pack E-commerce Platform',
+      description: 'Reliable E-Commerce hosting services with full maintenance and dedicated support for the platform you chose. We take care of server monitoring, automatic updates, security patches, backups, and round-the-clock assistance — keeping your store fast, secure, and always online.',
+      monthlyPrice: "199.00",
+      annuallyPrice: "2,149.2",
+      savings: 'Save ₱238.8!',
+      recommended: true,
+      features: {
+        websites: 'Unlimited Websites',
+        support: 'Customer support',
+        moneyback: 'Money Back Guarantee',
+        domain: 'Free Domain',
+        hosting: 'Free Hosting',
+        maintenance: 'Free Maintenance and update',
+        setup: 'Free Setup',
+        consultation: 'Free IT Consultations',
+      }
+    },
+  ];
+
+  const billingCycles = [
+    { id: 'monthly', label: 'Monthly', suffix: '/mo' },
+    { id: 'annually', label: 'Annually', suffix: '/mo', save: 'Save 10%' }
+  ];
+
+  const locations = [
+    { id: 'us', name: 'United States', flag: '🇺🇸' },
+    { id: 'uk', name: 'United Kingdom', flag: '🇬🇧' },
+    { id: 'eu', name: 'European Union', flag: '🇪🇺' },
+    { id: 'asia', name: 'Asia Pacific', flag: '🇸🇬' }
+  ];
+
+  const getPrice = (plan) => {
+    switch(billingCycle) {
+      case 'monthly':
+        return plan.monthlyPrice;
+      case 'annually':
+        return plan.annuallyPrice;
+      case 'biennially':
+        return plan.bienniallyPrice;
+      case 'triennially':
+        return plan.trienniallyPrice;
+      default:
+        return plan.trienniallyPrice;
+    }
+  };
+
+  const getCycleLabel = () => {
+    switch(billingCycle) {
+      case 'monthly':
+        return 'Paid Monthly';
+      case 'annually':
+        return 'Paid Annually';
+      case 'biennially':
+        return 'Paid Biennially';
+      case 'triennially':
+        return 'Paid Triennially';
+      default:
+        return 'Paid Triennially';
+    }
+  };
 
   return (
-    <div>
-      <main>
-        <section>
-          <div className="relative grid w-full bg-[#000814] h-96 lg:h-[32rem] place-items-center">
-            <div className="flex flex-col items-center mx-auto text-center">
-              <p className="mt-6 text-lg leading-5 text-[#ffc300]">See more details</p>
-              <a href="#about" className="mt-8 cursor-pointer animate-bounce">
-                <svg width="53" height="53" viewBox="0 0 53 53" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="27" cy="26" r="18" stroke="white" strokeWidth="2" />
-                  <path d="M22.41 23.2875L27 27.8675L31.59 23.2875L33 24.6975L27 30.6975L21 24.6975L22.41 23.2875Z" fill="white" />
-                </svg>
-              </a>
-              <Phone/>
-            </div>
-          </div>
-        </section>
-
-        <section className="container px-6 py-8 mx-auto pt-[400px] sm:pt-[400px] lg:pt-[250px] md:pt-[400px] lg:py-16" id="about">
-          <Divider text='about me'/>
-          <div className="lg:flex lg:items-center sm:flex sm:items-center lg:-mx-4 ">
-            <div className="lg:w-1/2 lg:px-4 sm:w-1/2">
-              <h3 className="text-xl font-medium text-gray-800 md:text-2xl lg:text-3xl">
-                Full Stack Web And Mobile Application Developer
-              </h3>
-
-              <p className="mt-6 text-gray-500">
-              I specialize in designing and developing web and mobile applications 
-              that combine functionality, performance, and intuitive user experiences. 
-              My work ranges from crafting responsive websites 
-              to building scalable mobile apps for Android and iOS platforms. 
-              Leveraging modern technologies, I ensure every project meets high standards of usability and innovation, tailored to suit diverse personal and business needs.
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      {/* Hero Section with Platform Icons */}
+      <div className="text-white bg-gradient-to-r from-blue-900 to-blue-800">
+        <div className="px-4 py-16 mx-auto max-w-7xl sm:px-6 lg:px-8 md:py-24">
+          <div className="grid items-center gap-12 md:grid-cols-2">
+            <div>
+              <div className="flex items-center gap-4 mb-6">
+                {platforms.map((platform) => (
+                  <div 
+                    key={platform.id}
+                    className="flex items-center justify-center w-12 h-12 transition-colors bg-white cursor-pointer bg-opacity-10 rounded-xl hover:bg-opacity-20"
+                    style={{ color: platform.color }}
+                    onMouseEnter={() => setActivePlatform(platform.id)}
+                  >
+                    {platform.icon}
+                  </div>
+                ))}
+              </div>
+              <h1 className="mb-6 text-4xl font-bold md:text-5xl lg:text-6xl">
+                Go Online <span className="text-blue-300">Risk-Free for Just</span> ₱149/month
+              </h1>
+              <p className="mb-8 text-xl text-blue-100 md:text-2xl">
+                Whether you're a VA building your personal brand or a small business owner ready to sell online, we provide an affordable, all-in-one solution. Zero hassle, zero hidden fees.
               </p>
+              <div className="flex flex-wrap gap-4">
+                <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full bg-opacity-10">
+                  <FiCheckCircle className="w-4 h-4 text-green-400" />
+                  <span>Free Domain</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full bg-opacity-10">
+                  <FiCheckCircle className="w-4 h-4 text-green-400" />
+                  <span>Free SSL</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full bg-opacity-10">
+                  <FiCheckCircle className="w-4 h-4 text-green-400" />
+                  <span>30-Day Money Back</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full bg-opacity-10">
+                  <FiCheckCircle className="w-4 h-4 text-green-400" />
+                  <span>Free IT Consultations</span>
+                </div>
+              </div>
             </div>
-
-            <div className="w-full px-4 mt-8 sm:w-1/2 lg:w-1/2 lg:px-4 lg:mt-0">
-              <img
-                className="object-cover w-full rounded-xl h-100 lg:h-100"
-                src={Bernard}
-                alt="dashboard thumbnail"
-              />
+            
+            {/* Platform Feature Cards */}
+            <div className="grid grid-cols-2 gap-4">
+              {platforms.map((platform) => (
+                <div 
+                  key={platform.id} 
+                  className="p-6 transition-all bg-white cursor-pointer bg-opacity-10 backdrop-blur-lg rounded-xl hover:bg-opacity-20"
+                  onMouseEnter={() => setActivePlatform(platform.id)}
+                >
+                  <div className="mb-3 text-3xl" style={{ color: platform.color }}>
+                    {platform.icon}
+                  </div>
+                  <h3 className="mb-2 text-lg font-semibold">{platform.name}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {platform.features.slice(0, 2).map((feature, idx) => (
+                      <span key={idx} className="px-2 py-1 text-xs bg-white rounded-full bg-opacity-20">
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </section>
+        </div>
+      </div>
 
-        <section className="container px-6 py-8 mx-auto lg:py-8">
-          <Divider text='What I Do'/>
-          <div className="grid grid-cols-1 gap-8 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
-            <Card icon={<Android/>} cardTitle='mobile app development' sub='Experienced in mobile app development using React Native for cross-platform apps and Kotlin for native Android. Skilled in creating responsive, visually engaging apps with seamless API integration and platform-specific optimizations.'/>
-            <Card icon={<Web/>} cardTitle='web application system' sub='Experienced in web app development with expertise in building responsive and scalable systems. Skilled in using modern frameworks like React or Vue.js for front-end development and Laravel or .NET for back-end services. Proficient in RESTful API integration, database management, and performance optimization to deliver efficient and user-friendly solutions.'/>
-            <Card icon={<Support/>} cardTitle='maintenance and support' sub='Ensures smooth operation through bug fixes, performance optimization, updates, and security enhancements. Provides user support, issue resolution, and continuous improvements based on feedback.'/>
-          </div>
-        </section>
-
-        <section className="container px-6 py-8 mx-auto lg:py-16" id="projects">
-          <h3 className="text-xl font-medium text-gray-800 md:text-2xl lg:text-3xl">Browse Some Of My Projects</h3>
-
-          <div className="flex items-center py-6 mt-4 -mx-2 overflow-x-auto whitespace-nowrap">
-            <button className="inline-flex px-4 mx-2 focus:outline-none items-center py-0.5 text-white bg-indigo-500 hover:bg-indigo-400 duration-300 transition-colors rounded-2xl">
-              All
-            </button>
+      {/* Social Media Integration Section */}
+      <div className="py-20 bg-gray-50">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
+              Social Media
+            </h2>
+            <p className="max-w-3xl mx-auto text-xl text-gray-600">
+              Connect with our social media platforms now.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-10 mt-10 md:grid-cols-2 lg:grid-cols-3">
-            <ProjectCardShort imageSrc={iowoapp}/>
-            <ProjectCardLong imageSrc={ropaapp}/>
-            <ProjectCardLong imageSrc={PhilricePresentation}/>
-            <ProjectCardShort imageSrc={DCODEPOSDASHBOARD}/>
-            <ProjectCardShort imageSrc={IOWOEventToolDashboard}/>
-            <ProjectCardLong imageSrc={IOWOEventToolPresentation}/>
-            <ProjectCardLong imageSrc={ExQuizSeat}/>
-            <ProjectCardShort imageSrc={IOWOToolPresentation}/>
-            <ProjectCardLong imageSrc={buyAndSellDashboard}/>
-            <ProjectCardShort imageSrc={Kedica}/>
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-5">
+            {socialIntegrations.map((social) => (
+              <div key={social.name} className="p-6 text-center transition-all bg-white shadow-sm rounded-xl hover:shadow-lg">
+                <div 
+                  className="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-2xl"
+                  style={{ backgroundColor: `${social.color}20` }}
+                >
+                  <div style={{ color: social.color }}>
+                    {social.icon}
+                  </div>
+                </div>
+                <h3 className="mb-1 font-semibold">{social.name}</h3>
+                <p className="mb-3 text-xs text-gray-500">{social.users} users</p>
+                <button 
+                  className="w-full px-3 py-2 text-sm transition-colors border border-gray-200 rounded-lg hover:bg-gray-50"
+                  style={{ color: social.color }}
+                >
+                  Connect
+                </button>
+              </div>
+            ))}
           </div>
-        </section>
-      </main>
+        </div>
+      </div>
+
+      {/* Pricing Section */}
+      <div className="py-20">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
+              Choose Your Perfect Plan
+            </h2>
+            <p className="max-w-3xl mx-auto text-xl text-gray-600">
+              Optimized hosting for all platforms with 30-day money-back guarantee
+            </p>
+          </div>
+          {/* Billing Cycle Tabs */}
+          <div className="flex justify-center mb-12">
+            <div className="inline-flex flex-wrap p-1 bg-white rounded-full shadow-sm">
+              {billingCycles.map((cycle) => (
+                <button
+                  key={cycle.id}
+                  onClick={() => setBillingCycle(cycle.id)}
+                  className={`relative px-6 py-3 rounded-full text-sm font-medium transition-all ${
+                    billingCycle === cycle.id
+                      ? 'bg-blue-600 text-white shadow-md'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  {cycle.label}
+                  {cycle.save && (
+                    <span className="absolute px-2 py-1 text-xs text-white bg-green-500 rounded-full -top-2 -right-2 whitespace-nowrap">
+                      {cycle.save}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Pricing Cards */}
+          <div className='gap-10 md:justify-center md:flex'>
+            {plans.map((plan) => {
+              const price = getPrice(plan);
+              return (
+                <div
+                  key={plan.name}
+                  className={`relative xs:mb-10 xs:mx-auto xs:w-full w-[300px]  bg-white rounded-2xl shadow-lg overflow-hidden transition-all hover:shadow-2xl hover:-translate-y-1 ${
+                    plan.recommended ? 'ring-2 ring-blue-500 shadow-xl' : ''
+                  }`}
+                >
+                  {plan.recommended && (
+                    <div className="absolute top-0 right-0 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-bl-lg">
+                      <LuTag className="inline w-4 h-4 mr-1" />
+                      On Sale
+                    </div>
+                  )}
+                  
+                  <div className="p-8">
+                    <h3 className="mb-2 text-2xl font-bold text-gray-900">{plan.name}</h3>
+                    <p className="mb-6 text-sm text-gray-600">{plan.description}</p>
+                    
+                    <div className="mb-6">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-4xl font-bold text-gray-900">
+                          ₱{price}
+                        </span>
+                      </div>
+                      <p className="mt-2 text-sm text-gray-600">{getCycleLabel()}</p>
+                      {billingCycle !== 'monthly' && (
+                        <p className="mt-1 text-sm font-medium text-green-600">
+                          Was ${plan.monthlyPrice}/mo • {plan.savings}
+                        </p>
+                      )}
+                    </div>
+                    
+                    <div className="mb-8 space-y-4">
+                      <div className="flex items-start gap-3">
+                        <FaGlobe className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm text-gray-700">
+                          <strong>{plan.features.websites}</strong>
+                        </span>
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <MdHeadsetMic className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm text-gray-700">
+                          <strong>{plan.features.support}</strong>
+                        </span>
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <MdVerified className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm text-gray-700">
+                          <strong>{plan.features.moneyback}</strong>
+                        </span>
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <IoShieldCheckmarkOutline className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm text-gray-700">
+                          <strong>{plan.features.domain}</strong>
+                        </span>
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <IoShieldCheckmarkOutline className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm text-gray-700">
+                          <strong>{plan.features.hosting}</strong>
+                        </span>
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <IoShieldCheckmarkOutline className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm text-gray-700">
+                          <strong>{plan.features.maintenance}</strong>
+                        </span>
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <IoShieldCheckmarkOutline className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm text-gray-700">
+                          <strong>{plan.features.setup}</strong>
+                        </span>
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <IoShieldCheckmarkOutline className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm text-gray-700">
+                          <strong>{plan.features.consultation}</strong>
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-6 text-center">
+                      <span className="text-xs text-gray-500">
+                        <IoShieldCheckmarkOutline className="inline w-3 h-3 mr-1 text-green-500" />
+                        Free Domain • Free SSL • No Setup Fee
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {/* Money Back Guarantee */}
+          <div className="mt-12 text-center">
+            <div className="inline-flex items-center gap-3 px-6 py-4 rounded-full bg-green-50">
+              <MdVerified className="w-5 h-5 text-green-600" />
+              <span className="font-medium text-green-800">
+                30-Day Money Back Guarantee - No questions asked!
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="py-20 text-white bg-gradient-to-r from-blue-800 to-blue-900">
+        <div className="px-4 mx-auto text-center max-w-7xl sm:px-6 lg:px-8">
+          <h2 className="mb-6 text-3xl font-bold md:text-4xl">
+            Ready to Launch Your Online Idea?
+          </h2>
+          <p className="max-w-3xl mx-auto mb-10 text-xl text-blue-200">
+            Choose your plan, pick a template, connect to us - we handle the rest
+          </p>
+          <div className="flex items-center justify-center gap-6 mt-8">
+            {socialIntegrations.map((social) => (
+              <div key={social.name} className="text-blue-200 transition-colors cursor-pointer hover:text-white">
+                {social.icon}
+              </div>
+            ))}
+          </div>
+          <p className="mt-8 text-sm text-blue-300">
+            <FiCheckCircle className="inline w-3 h-3 mr-1" />
+            No contract • Free domain • Free SSL • 30-day money-back guarantee • Free IT Consultations
+          </p>
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default HomeContent
+export default HomeContent;
