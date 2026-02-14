@@ -29,8 +29,8 @@ const Header = ({onPressAction, ActionState}) => {
             }`}
           >
             <a href="#" className="block text-white transition-colors duration-300 md:px-6 hover:text-indigo-300">Home</a>
-            <a href="#about" className="block text-white transition-colors duration-300 md:px-6 hover:text-indigo-300">About</a>
-            <a href="#projects" className="block text-white transition-colors duration-300 md:px-6 hover:text-indigo-300">Portfolio</a>
+            {/* <a href="#about" className="block text-white transition-colors duration-300 md:px-6 hover:text-indigo-300">About</a>
+            <a href="#projects" className="block text-white transition-colors duration-300 md:px-6 hover:text-indigo-300">Portfolio</a> */}
             <a href="#contact" className="block text-white transition-colors duration-300 md:px-6 hover:text-indigo-300">Contact</a>
           </div>
         </nav>

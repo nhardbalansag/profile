@@ -10,9 +10,13 @@ import { FiCheckCircle } from "react-icons/fi";
 import { FaWordpress, FaOpencart } from 'react-icons/fa';
 import { GiShoppingBag } from "react-icons/gi";
 
+import image1 from '../assets/351229fa-a5a1-4b7f-8297-5b5edc9e938c.jpg'
+import image2 from '../assets/6c392137-602d-4807-a84c-3f1b793cb0f9.jpg'
+import image3 from '../assets/b81e91ab-a989-46da-8120-d9220d7cd0ac.jpg'
+import image4 from '../assets/25f36377-66db-4c4b-b754-4c6378fa8e5d.jpg'
+
 const HomeContent = () => {
   const [billingCycle, setBillingCycle] = useState('monthly');
-  const [activeVideo, setActiveVideo] = useState(null);
   const [activePlatform, setActivePlatform] = useState('bagisto');
 
   // Platform Data with BsFileImage icons
@@ -25,7 +29,7 @@ const HomeContent = () => {
       description: 'Laravel-based eCommerce platform with multi-channel support',
       features: ['Multi-tenant', 'Multi-channel', 'Multi-lingual', 'Multi-currency'],
       video: 'https://www.youtube.com/embed/X7PJxUzZ5aA',
-      image: 'https://bagisto.com/wp-content/uploads/2021/09/Bagisto-dashboard.png',
+      image: image2,
       stats: { stores: '50k+', downloads: '1M+', rating: '4.8' }
     },
     {
@@ -36,28 +40,20 @@ const HomeContent = () => {
       description: 'Powerful open-source eCommerce platform with extensive marketplace',
       features: ['Multi-store', 'Multi-language', 'Multi-currency', 'SEO friendly'],
       video: 'https://www.youtube.com/embed/q7P_kbDy3lY',
-      image: 'https://www.opencart.com/application/view/image/opencart.jpg',
+      image: image4,
       stats: { stores: '100k+', downloads: '2M+', rating: '4.7' }
     },
-    {
-      id: 'wordpress',
-      name: 'WordPress',
-      icon: <FaWordpress className="w-8 h-8" style={{ color: '#21759b' }} />,
-      color: '#21759b',
-      description: 'World\'s most popular CMS with WooCommerce for eCommerce',
-      features: ['Themes', 'Plugins', 'WooCommerce', 'SEO ready'],
-      video: 'https://www.youtube.com/embed/UtUJwTgqP6Y',
-      image: 'https://wordpress.org/files/2023/03/macbook-air-wordpress.png',
-      stats: { sites: '500M+', plugins: '60k+', rating: '4.9' }
-    }
-  ];
-
-  const socialIntegrations = [
-    { name: 'Facebook', icon: <BsFileImage className="w-5 h-5" />, color: '#1877f2', users: '2.9B+' },
-    { name: 'Twitter', icon: <BsFileImage className="w-5 h-5" />, color: '#1da1f2', users: '450M+' },
-    { name: 'Instagram', icon: <BsFileImage className="w-5 h-5" />, color: '#e4405f', users: '2B+' },
-    { name: 'LinkedIn', icon: <BsFileImage className="w-5 h-5" />, color: '#0a66c2', users: '900M+' },
-    { name: 'YouTube', icon: <BsFileImage className="w-5 h-5" />, color: '#ff0000', users: '2.5B+' }
+    // {
+    //   id: 'wordpress',
+    //   name: 'WordPress',
+    //   icon: <FaWordpress className="w-8 h-8" style={{ color: '#21759b' }} />,
+    //   color: '#21759b',
+    //   description: 'World\'s most popular CMS with WooCommerce for eCommerce',
+    //   features: ['Themes', 'Plugins', 'WooCommerce', 'SEO ready'],
+    //   video: 'https://www.youtube.com/embed/UtUJwTgqP6Y',
+    //   image: image3,
+    //   stats: { sites: '500M+', plugins: '60k+', rating: '4.9' }
+    // }
   ];
 
   const plans = [
@@ -87,7 +83,7 @@ const HomeContent = () => {
       savings: 'Save ₱238.8!',
       recommended: true,
       features: {
-        websites: 'Unlimited Websites',
+        websites: 'E-Commerce Store Platform',
         support: 'Customer support',
         moneyback: 'Money Back Guarantee',
         domain: 'Free Domain',
@@ -104,25 +100,14 @@ const HomeContent = () => {
     { id: 'annually', label: 'Annually', suffix: '/mo', save: 'Save 10%' }
   ];
 
-  const locations = [
-    { id: 'us', name: 'United States', flag: '🇺🇸' },
-    { id: 'uk', name: 'United Kingdom', flag: '🇬🇧' },
-    { id: 'eu', name: 'European Union', flag: '🇪🇺' },
-    { id: 'asia', name: 'Asia Pacific', flag: '🇸🇬' }
-  ];
-
   const getPrice = (plan) => {
     switch(billingCycle) {
       case 'monthly':
         return plan.monthlyPrice;
       case 'annually':
         return plan.annuallyPrice;
-      case 'biennially':
-        return plan.bienniallyPrice;
-      case 'triennially':
-        return plan.trienniallyPrice;
       default:
-        return plan.trienniallyPrice;
+        return plan.monthlyPrice;
     }
   };
 
@@ -132,12 +117,8 @@ const HomeContent = () => {
         return 'Paid Monthly';
       case 'annually':
         return 'Paid Annually';
-      case 'biennially':
-        return 'Paid Biennially';
-      case 'triennially':
-        return 'Paid Triennially';
       default:
-        return 'Paid Triennially';
+        return 'Paid Monthly';
     }
   };
 
@@ -152,16 +133,15 @@ const HomeContent = () => {
                 {platforms.map((platform) => (
                   <div 
                     key={platform.id}
-                    className="flex items-center justify-center w-12 h-12 transition-colors bg-white cursor-pointer bg-opacity-10 rounded-xl hover:bg-opacity-20"
+                    className="flex items-center justify-center w-12 h-12 transition-colors bg-white cursor-pointer rounded-xl hover:bg-opacity-20"
                     style={{ color: platform.color }}
-                    onMouseEnter={() => setActivePlatform(platform.id)}
                   >
                     {platform.icon}
                   </div>
                 ))}
               </div>
               <h1 className="mb-6 text-4xl font-bold md:text-5xl lg:text-6xl">
-                Go Online <span className="text-blue-300">Risk-Free for Just</span> ₱149/month
+                Go Online <span className="text-blue-300">Risk-Free For Just</span> ₱149/month
               </h1>
               <p className="mb-8 text-xl text-blue-100 md:text-2xl">
                 Whether you're a VA building your personal brand or a small business owner ready to sell online, we provide an affordable, all-in-one solution. Zero hassle, zero hidden fees.
@@ -191,20 +171,15 @@ const HomeContent = () => {
               {platforms.map((platform) => (
                 <div 
                   key={platform.id} 
-                  className="p-6 transition-all bg-white cursor-pointer bg-opacity-10 backdrop-blur-lg rounded-xl hover:bg-opacity-20"
+                  className="p-6 flex justify-center h-[200px] transition-all bg-white cursor-pointer bg-opacity-[.3] backdrop-blur-lg rounded-xl hover:bg-opacity-20"
                   onMouseEnter={() => setActivePlatform(platform.id)}
+                  style={{
+                    backgroundImage: `url(${platform.image})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    // opacity: '0.80'
+                  }}
                 >
-                  <div className="mb-3 text-3xl" style={{ color: platform.color }}>
-                    {platform.icon}
-                  </div>
-                  <h3 className="mb-2 text-lg font-semibold">{platform.name}</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {platform.features.slice(0, 2).map((feature, idx) => (
-                      <span key={idx} className="px-2 py-1 text-xs bg-white rounded-full bg-opacity-20">
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
                 </div>
               ))}
             </div>
