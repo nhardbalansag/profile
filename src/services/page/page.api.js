@@ -3,6 +3,16 @@ import axios from 'axios';
 const env = import.meta.env;
 const PublicAPI = env.VITE_APP_BACKEND_API_URL + "public/"
 
+export const getCurrentConfiguration = async () => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'GET', 
+        url: `${env.VITE_APP_BACKEND_API_URL}maintenance/current`
+    });
+}
+
 export const getAllActivePageConfig = async () => {
     return await axios({ 
         headers: {

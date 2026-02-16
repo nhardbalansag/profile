@@ -416,17 +416,25 @@ const HomeContent = () => {
                               key={index}
                               className={`
                                 relative overflow-hidden bg-gray-100
-                                ${post.uploads_table.length === 1 ? "aspect-video" : "aspect-square"}
                                 ${post.uploads_table.length === 3 && index === 2 ? "col-span-2" : ""}
                               `}
                             >
                               {isVideo ? (
                                 upload.upload_type === "embed" ? (
                                   <div className="relative w-full h-full bg-black">
-                                    <iframe
+                                    {/* <iframe
                                       src={upload?.upload_url + "?autoplay=0"}
                                       className="absolute inset-0 w-full h-full"
                                       allowFullScreen
+                                    /> */}
+
+                                    <iframe
+                                      src={upload?.upload_url + "?autoplay=0"}
+                                      title="Embedded video"
+                                      className="w-full h-full"
+                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                      allowFullScreen
+                                      frameBorder="0"
                                     />
                                   </div>
                                 ) : (
@@ -452,13 +460,13 @@ const HomeContent = () => {
                                 </div>
                               )}
                               
-                              {isVideo && (
+                              {/* {isVideo && (
                                 <div className="absolute inset-0 flex items-center justify-center">
                                   <div className="flex items-center justify-center w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm">
                                     <Play className="w-6 h-6 ml-1 text-white" />
                                   </div>
                                 </div>
-                              )}
+                              )} */}
                             </div>
                           );
                         })}
@@ -472,9 +480,10 @@ const HomeContent = () => {
                       <div className="flex items-center gap-4">
                         <div className="flex items-center gap-1">
                           <div className="flex -space-x-2">
-                            <div className="w-6 h-6 border border-white rounded-full bg-gradient-to-br from-pink-400 to-rose-500"></div>
+                            {/* <div className="w-6 h-6 border border-white rounded-full bg-gradient-to-br from-pink-400 to-rose-500"></div>
                             <div className="w-6 h-6 border border-white rounded-full bg-gradient-to-br from-blue-400 to-cyan-500"></div>
-                            <div className="w-6 h-6 border border-white rounded-full bg-gradient-to-br from-green-400 to-emerald-500"></div>
+                            <div className="w-6 h-6 border border-white rounded-full bg-gradient-to-br from-green-400 to-emerald-500"></div> */}
+                            <Heart className={`w-5 h-5 transition-all text-rose-300 fill-rose-300 group-hover:text-rose-500'}`} />
                           </div>
                           <span className="text-gray-600">
                             {

@@ -1,5 +1,5 @@
 
-import React, {useEffect, useState } from 'react'
+import React, {useEffect, useState, useRef } from 'react'
 
 import { useDispatch } from "react-redux";
 import {useSelector} from 'react-redux';
@@ -154,11 +154,12 @@ const MaintenanceWrapper = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     // useEffect(() => {
+
     //     const checkMaintenanceMode = async () => {
     //         try {
     //             // Call your API endpoint to check maintenance status
-    //             const response = await api_page_config.getMaintenanceStatus();
-    //             if (response.status && response.data?.is_maintenance) {
+    //             const response = await api_page_config.getCurrentConfiguration();
+    //             if (response.status && response.data?.data.maintenance.enabled) {
     //                 setIsMaintenance(true);
     //             } else {
     //                 setIsMaintenance(false);
@@ -203,7 +204,7 @@ const MaintenanceWrapper = ({ children }) => {
             var userInformation = await getItem(STORAGE_USER_INFORMATION)
             var payload = await getItem(REDUX_PAYLOAD_INFORMATION)
 
-            if(token && userInformation){
+            if(token && userInformation){   
                 dispatch(AuthAction.LoginUser(token, JSON.parse(userInformation), payload))
             }
         }
@@ -444,15 +445,6 @@ const router = createBrowserRouter([
                 ),
                 errorElement: <ErrorPage />
             },
-            // {
-            //     path: "sponsor-details",
-            //     element: ( 
-            //         <AuthenticatedUsers route={'/login'}>
-            //             <AccountSponsorProfile />
-            //         </AuthenticatedUsers> 
-            //     ),
-            //     errorElement: <ErrorPage />
-            // },
             {
                 path: "orders",
                 element: ( 
@@ -527,49 +519,6 @@ const router = createBrowserRouter([
             },
         ]
     },
-    // {
-    //     path: "mall",
-    //     Component: MallPage,  
-    //     errorElement: <ErrorPage />,
-    //     children:[
-    //         {
-    //             path: "",
-    //             element: ( 
-    //                 <AuthenticatedUsers route={'/login'}>
-    //                     <MallTravel />
-    //                 </AuthenticatedUsers> 
-    //             ),
-    //             errorElement: <ErrorPage />
-    //         },
-    //         {
-    //             path: "merchant",
-    //             element: ( 
-    //                 <AuthenticatedUsers route={'/login'}>
-    //                     <MallMerchant />
-    //                 </AuthenticatedUsers> 
-    //             ),
-    //             errorElement: <ErrorPage />
-    //         },
-    //         {
-    //             path: "academy",
-    //             element: ( 
-    //                 <AuthenticatedUsers route={'/login'}>
-    //                     <MallAcademy />
-    //                 </AuthenticatedUsers> 
-    //             ),
-    //             errorElement: <ErrorPage />
-    //         },
-    //         {
-    //             path: "academy-index",
-    //             element: ( 
-    //                 <AuthenticatedUsers route={'/login'}>
-    //                     <AcademyIndex />
-    //                 </AuthenticatedUsers> 
-    //             ),
-    //             errorElement: <ErrorPage />
-    //         },
-    //     ]
-    // },
     {
         path: "event",
         Component: EventPage,  

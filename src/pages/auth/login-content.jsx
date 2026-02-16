@@ -482,9 +482,9 @@ const LoginContent = () =>{
                 <p className="text-sm text-gray-500">
                   {
                     item.subscription_range.subscription_range_days_count == 30 
-                    ? <span className='registration_vip_monthly_description_label_id'>VIP Monthly subscription is $100 for the 1st month and $30 monthly starting from the second month onwards, you also receive 200 Tpoints for the 1st year and 60 Tpoints monthly every month you renew your membership fees.</span>
+                    ? <span className='registration_vip_monthly_description_label_id'>VIP Monthly subscription is $10 for the 1st month and $10 monthly starting from the second month onwards, you also receive 10 Tpoints for the 1st year and 10 Tpoints monthly every month you renew your membership fees.</span>
                     : item.subscription_range.subscription_range_days_count == 365
-                      ? <span className='registration_vip_annual_description_label_id'>VIP Annual subscription is $370 for the 1st 12 months and $300 yearly starting from the second year onwards, you also receive 740 Tpoints for the 1st year and 600 Tpoints yearly every year you renew your membership fees.</span>
+                      ? <span className='registration_vip_annual_description_label_id'>VIP Annual subscription is $100 for the 1st 12 months and $100 yearly starting from the second year onwards, you also receive 100 Tpoints for the 1st year and 100 Tpoints yearly every year you renew your membership fees.</span>
                       : <span className='registration_pca_description_label_id'>Join as a FREE preferred customer & affiliate, receive 100 Welcome Tpoints and upgrade anytime to VIP when you are ready.</span>
                     }
                 </p>
@@ -519,9 +519,9 @@ const LoginContent = () =>{
                  
                   {
                     item.subscription_range.subscription_range_days_count == 30 
-                    ? <span className='registration_vip_monthly_billing_label_id'>$30 BIlled Monthy After 30 days</span>
+                    ? <span className='registration_vip_monthly_billing_label_id'>$10 BIlled Monthy After 30 days</span>
                     : item.subscription_range.subscription_range_days_count == 365
-                      ? <span className='registration_vip_annual_billing_label_id'>$300 Billed Yearly After 365 days</span>
+                      ? <span className='registration_vip_annual_billing_label_id'>$100 Billed Yearly After 365 days</span>
                       :
                         <p className='space-x-1 text-xs text-red-400'>
                           <span className="billed_after_label_id">Billed after </span>
