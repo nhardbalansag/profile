@@ -14,6 +14,7 @@ import image1 from '../assets/351229fa-a5a1-4b7f-8297-5b5edc9e938c.jpg'
 import image2 from '../assets/6c392137-602d-4807-a84c-3f1b793cb0f9.jpg'
 import image3 from '../assets/b81e91ab-a989-46da-8120-d9220d7cd0ac.jpg'
 import image4 from '../assets/25f36377-66db-4c4b-b754-4c6378fa8e5d.jpg'
+import image5 from '../assets/dcodefbcover.png'
 
 const HomeContent = () => {
   const [billingCycle, setBillingCycle] = useState('monthly');
@@ -125,7 +126,15 @@ const HomeContent = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Hero Section with Platform Icons */}
-      <div className="text-white bg-gradient-to-r from-blue-900 to-blue-800">
+      <div 
+      className="text-white bg-gradient-to-r from-blue-900 to-blue-800"
+      style={{
+        backgroundImage: `url(${image5})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        // opacity: '0.80'
+      }}
+      >
         <div className="px-4 py-16 mx-auto max-w-7xl sm:px-6 lg:px-8 md:py-24">
           <div className="grid items-center gap-12 md:grid-cols-2">
             <div>
@@ -340,7 +349,15 @@ const HomeContent = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="py-20 text-white bg-gradient-to-r from-blue-800 to-blue-900">
+      <div 
+      className="py-20 text-white bg-gradient-to-r from-blue-800 to-blue-900"
+      style={{
+        backgroundImage: `url(${image5})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        // opacity: '0.80'
+      }}
+      >
         <div className="px-4 mx-auto text-center max-w-7xl sm:px-6 lg:px-8">
           <h2 className="mb-6 text-3xl font-bold md:text-4xl">
             Ready to Launch Your Online Idea?
