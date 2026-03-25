@@ -28,6 +28,8 @@ import EventContent from "./events/event-travel";
 
 import DetailsPage from "./details/details-index";
 
+// import EventDetailsPage from "./details/event-details";
+
 import AccountSubscription from "./account/account-subscriptions";
 
 import AccountTransferTPoints from "./account/account-transfer-tpoints";
@@ -89,6 +91,8 @@ export{
     EventPage,
     EventContent,
     DetailsPage,
+
+    // EventDetailsPage,
 
     AccountSubscription,
 

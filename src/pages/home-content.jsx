@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import { Heart, MessageCircle, Share2, MapPin, Calendar, ExternalLink, Play, MoreVertical, Bookmark, Send, Smile, X } from "lucide-react";
 import { formatDistanceToNow } from 'date-fns';
+import { TbMessageCircleUser } from "react-icons/tb";
 
 import {
   HomeCard,
@@ -42,6 +43,7 @@ const HomeContent = () => {
   const [ResultGetHomeContentsDetails, ResultSetHomeContentsDetails] = useState([]);
   const [loadingContent, setLoadingContent] = useState(false);
   const [currentEngagement, setCurrentEngagement] = useState([]);
+  const [chatLoading, setChatLoading] = useState(false);
   const [paginate, setPaginate] = useState(null);
   const [getPaginatedHomeContents, setPaginatedHomeContents] = useState({
     prev_page_url: null,
@@ -63,6 +65,19 @@ const HomeContent = () => {
   const [loadingComments, setLoadingComments] = useState({});
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   //#endregion
+
+  const openChat = async () => {
+    setChatLoading(true)
+    await api_content.ChatLogin(auth_states.StateToken).then((result) => {
+      if (result.status) {
+        // result
+        window.location.href = result.data.redirect_url;
+      }
+    }).catch((err) => {
+      // error handling
+      console.log(err)
+    });
+  }
 
   const AddContentEngagement = async (content_id) => {
     const request = { content_id: content_id };
@@ -325,6 +340,16 @@ const HomeContent = () => {
                 <p className="text-sm text-gray-500">Your personalized feed</p>
               </div>
             </div>
+            {/* <button onClick={() => openChat()}>
+              <a href="#" className={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                <TbMessageCircleUser className='' size={20}/>
+                {
+                  chatLoading
+                  ? <span className="mx-2 loading loading-spinner loading-sm"></span>
+                  : <p className='mx-2 capitalize language_id '>Chat</p>
+                }
+              </a>
+            </button> */}
           </div>
         </header>
 

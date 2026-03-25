@@ -359,8 +359,9 @@ const EventContent = () =>{
                 item.contents_table.length > 0
                 ?
                   item.contents_table.map((item_content, index_content) =>(
-                    <div className='p-3 border shadow-lg rounded-xl'>
+                    <div className=''>
                       <HomeCard 
+                      cardLayout="events"
                       categoryConfig={item.category_display_content.display.content_home_style}
                       contentDetails={item_content}
                       loading={loadingContent}

@@ -21,6 +21,7 @@ import PricingCard from "./sub/PricingCard";
 import DestinationCard from "./sub/DestinationCard";
 import OffersBottomSheet from "./sub/OffersBottomSheet";
 import LanguageBottomSheet from "./sub/LanguageBottomSheet";
+import ImageGallery from "./sub/ImageGallery";
 
 // import PricingOptions from "./sub/PricingOptions";
 
@@ -48,5 +49,6 @@ export{
     DestinationCard,
     OffersBottomSheet,
     LanguageBottomSheet,
+    ImageGallery,
     // PricingOptions
 }

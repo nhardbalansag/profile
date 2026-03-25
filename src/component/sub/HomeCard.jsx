@@ -23,6 +23,8 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/css/free-mode';
 
+import Logo2 from '../../assets/images/ten/logo2.png';
+
 const HomeCard = ({
     inlineRendering = false,
     categoryConfig,
@@ -42,7 +44,8 @@ const HomeCard = ({
     days = 0,
     nights = 0,
     loading = true,
-    contentDetails
+    contentDetails,
+    cardLayout = "card2" // 'card1', 'card2', 'card3-enhanced'
 }) => {
 
     const navigate = useNavigate();
@@ -259,14 +262,8 @@ const HomeCard = ({
                             </div>
                         </div>
                     }
-                    {/* {
-                        contentDetails.content_offers_table.length > 0 && categoryConfig.show_offers && contentDetails.content_has_payment && 
-                        _OfferTag()
-                    } */}
 
                     {
-                        // contentDetails.content_date_from && 
-                        // contentDetails.content_date_to && 
                         categoryConfig.show_offers &&
                         _OfferTag()
                     }
@@ -290,12 +287,12 @@ const HomeCard = ({
 
     const EventsCard = () => {
         return (
-            <div className="relative max-w-sm m-3 overflow-hidden transition-all duration-300 transform bg-white shadow-lg group hover:shadow-2xl hover:-translate-y-2">
+            <div className="relative w-full overflow-hidden transition-all duration-300 transform bg-white rounded-lg shadow-lg group hover:shadow-2xl hover:-translate-y-2">
                 {/* Background Image */}
                 <div className="relative h-64 overflow-hidden">
                     <img 
                     src={image}
-                    alt="Hot air balloons floating over a scenic landscape"
+                    alt={title}
                     className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                     />
                     {/* Gradient Overlay */}
@@ -303,46 +300,21 @@ const HomeCard = ({
                     
                     {/* Title Overlay */}
                     <div className="absolute bottom-4 left-4 right-4">
-                        <h2 className="mb-2 text-3xl font-bold text-white drop-shadow-lg">Events</h2>
-                        <p className="text-sm text-white/90 drop-shadow-sm">Discover amazing experiences</p>
-                    </div>
-                    
-                    {/* Status Badge */}
-                    <div className="absolute top-4 right-4">
-                        <span className="px-3 py-1 text-xs font-semibold text-white bg-orange-500 rounded-full">
-                            Live Events
-                        </span>
+                        <h2 className="mb-2 text-3xl font-bold text-white drop-shadow-lg">{limitText(title, 50)}</h2>
                     </div>
                 </div>
 
                 <div className="p-6">
                     <div className="space-y-4">
-                        <div className="flex items-center gap-3 text-gray-600">
-                            <Calendar className="w-4 h-4 text-orange-500" />
-                            <span className="text-sm">Next Event: Dec 15, 2024</span>
-                        </div>
-                        
-                        <div className="flex items-center gap-3 text-gray-600">
-                            <MapPin className="w-4 h-4 text-orange-500" />
-                            <span className="text-sm">Cappadocia, Turkey</span>
-                        </div>
-                        
-                        <div className="flex items-center gap-3 text-gray-600">
-                            <Users className="w-4 h-4 text-orange-500" />
-                            <span className="text-sm">50+ Participants</span>
-                        </div>
-                    </div>
-
-                    <p className="mt-4 text-sm leading-relaxed text-gray-700">
-                    Join us for breathtaking hot air balloon adventures and unforgettable experiences in stunning locations around the world.
-                    </p>
-
-                    <div className="mt-6">
-                        <button className="flex items-center justify-center w-full gap-2 px-4 py-3 font-semibold text-white transition-all duration-200 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 group">
-                            View All Events
-                            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                        </button>
-                    </div>
+                        {
+                            contentDetails?.content_date_from &&
+                            <div className="flex items-center gap-3 text-gray-600">
+                                <Calendar className="w-4 h-4 text-orange-500" />
+                                <span className="text-sm date_range_id">{format(new Date(contentDetails.content_date_from), 'MMM dd, yyyy')}</span>
+                            </div>
+                        }
+                    </div> 
+                    {_OfferTag()}
                 </div>
 
                 {/* Animated Border */}
@@ -357,9 +329,10 @@ const HomeCard = ({
                 loading
                 ? LoadComp()
                 : 
-                    <div className='flex justify-center '>
-                        {_Card2()}
-                        {/* <EventsCard/> */}
+                    <div className='flex justify-center w-full'>
+                        {cardLayout === 'card1' && _Card1()}
+                        {cardLayout === 'card2' && _Card2()}
+                        {cardLayout === 'events' && <EventsCard/>}
                     </div>
             }
         </div>

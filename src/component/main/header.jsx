@@ -25,6 +25,7 @@ import { PiPottedPlantBold } from "react-icons/pi";
 import { BiStore } from "react-icons/bi";
 import { BiLike } from "react-icons/bi";
 import { BiSupport } from "react-icons/bi";
+import { TbMessageCircleUser } from "react-icons/tb";
 
 import { MdOutlineAirplanemodeActive } from "react-icons/md";
 import { RiGraduationCapLine } from "react-icons/ri";
@@ -34,6 +35,8 @@ import {
 } from '../../store/store-index'
 
 import * as AuthAction from '../../store/auth/authAction'
+
+import * as api_content from '../../services/content/content.api';
 
 const Header = ({
   handleLanguageVisibility,
@@ -79,6 +82,19 @@ const Header = ({
     })
   }
 
+  const openChat = async () => {
+    await api_content.ChatLogin(auth_states.StateToken).then((result) => {
+      if (result.status) {
+        // result
+        window.location.href = result.data.redirect_url;
+      }
+    }).catch((err) => {
+      // error handling
+      console.log(err)
+    });
+  }
+  
+
   const Header = () =>{
     return (
       <div className="flex justify-center my-3 ">
@@ -105,6 +121,17 @@ const Header = ({
                       ActionState ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full' 
                     }`}
                   >
+
+                    {/* {
+                      auth_states.StateToken &&
+                      <button onClick={() => openChat()}>
+                        <a href="#" className={`${("account").includes(location.pathname) ? 'bg-gray-100' : 'hover:bg-gray-100 '} text-gray-600 flex items-center p-2 rounded-lg`}>
+                          <TbMessageCircleUser   size={20}/>
+                          <p className='language_id text-[#001d3d] capitalize mx-2 '>Chat</p>
+                        </a>
+                      </button>
+                    } */}
+
                     {
                       auth_states.StateToken &&
                       <button onClick={handleLanguageVisibility}>

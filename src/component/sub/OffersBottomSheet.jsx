@@ -171,19 +171,22 @@ const OffersBottomSheet = ({
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div className="flex items-start gap-3 p-3 border border-blue-100 bg-blue-50 rounded-xl">
-                            <FaRegClock className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                            <div className="min-w-0">
-                                <p className="text-sm font-medium text-gray-900 duration_id">Duration</p>
-                                <p className="text-xs text-gray-600">
-                                    {offersData.content_days_count} 
-                                    <span className="days_id">Days</span>, 
-                                    {offersData.content_night_count} 
-                                    <span className="nights_id">Nights</span>
-                                </p>
-                                <p className="mt-1 text-xs text-gray-500">{format(new Date(offersData.content_date_from), 'M/d/yyyy')} - {format(new Date(offersData.content_date_to), 'M/d/yyyy')}</p>
+                        {
+                            offersData.content_category.category_display_content.display.content_home_style.render_to_bucket_list &&
+                            <div className="flex items-start gap-3 p-3 border border-blue-100 bg-blue-50 rounded-xl">
+                                <FaRegClock className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                                <div className="min-w-0">
+                                    <p className="text-sm font-medium text-gray-900 duration_id">Duration</p>
+                                    <p className="text-xs text-gray-600">
+                                        {offersData.content_days_count} 
+                                        <span className="days_id">Days</span>, 
+                                        {offersData.content_night_count} 
+                                        <span className="nights_id">Nights</span>
+                                    </p>
+                                    <p className="mt-1 text-xs text-gray-500">{format(new Date(offersData.content_date_from), 'M/d/yyyy')} - {format(new Date(offersData.content_date_to), 'M/d/yyyy')}</p>
+                                </div>
                             </div>
-                        </div>
+                        }
                         {
                             tabData &&
                             <div className="flex items-start gap-3 p-3 border border-green-100 bg-green-50 rounded-xl">
@@ -254,35 +257,40 @@ const OffersBottomSheet = ({
                             className="px-2 py-2 text-gray-600 border border-gray-300 rounded-md go_back_label_id hover:bg-gray-100 cancel_id"
                             >Go Back
                             </button>
-                            <div className="flex flex-wrap space-x-5">
-                                {
-                                    tabData &&
-                                    <button 
-                                    onClick={handleCheckout} 
-                                    className="flex-1 h-12 px-3 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] checkout_id">
-                                        {/* {
-                                            confirmCheckoutStatus
-                                            ? <span>Pay</span>
-                                            : <span>Checkout</span>
-                                        } */}
-                                        <span className='pay_label_id'>Pay</span>
-                                    </button>
-                                }
 
-                                {
-                                    tabData &&
-                                    <button 
-                                    onClick={handleEbanxCheckout} 
-                                    className="h-12 px-3 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] checkout_id">
-                                        {/* {
-                                            confirmCheckoutStatus
-                                            ? <span>Pay</span>
-                                            : <span>Checkout</span>
-                                        } */}
-                                        <span className='pay_label_id'>EBanx Pay</span>
-                                    </button>
-                                }
-                            </div>
+                            {
+                                offersData?.content_has_payment &&  
+                                <div className="flex flex-wrap space-x-5">
+                                    {
+                                        tabData &&
+                                        <button 
+                                        onClick={handleCheckout} 
+                                        className="flex-1 h-12 px-3 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] checkout_id">
+                                            {/* {
+                                                confirmCheckoutStatus
+                                                ? <span>Pay</span>
+                                                : <span>Checkout</span>
+                                            } */}
+                                            <span className='pay_label_id'>Pay</span>
+                                        </button>
+                                    }
+
+                                    {
+                                        tabData &&
+                                        <button 
+                                        onClick={handleEbanxCheckout} 
+                                        className="h-12 px-3 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 hover:from-orange-600 hover:via-orange-700 hover:to-red-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] checkout_id">
+                                            {/* {
+                                                confirmCheckoutStatus
+                                                ? <span>Pay</span>
+                                                : <span>Checkout</span>
+                                            } */}
+                                            <span className='pay_label_id'>EBanx Pay</span>
+                                        </button>
+                                    }
+                                </div>
+                            }
+
                         </div>
                     </div>
                 </div>
@@ -346,7 +354,7 @@ const OffersBottomSheet = ({
                                 :
                                     tabData &&
                                     <div className="flex flex-wrap justify-center gap-5 p-6 bg-white ">
-                                        <div className='space-y-6 '>
+                                        <div className='space-y-6 md:w-[450px]'>
                                             <div>
                                                 <p className="capitalize label font-extrabold text-red-500 text-[30px] step_2_label_id">Step 2 </p>
                                                 <span className="text-red-500 label manually_adjust_booking_label_id">Manually adjust your booking by adding your e-wallet and the number of guests</span>
@@ -354,14 +362,17 @@ const OffersBottomSheet = ({
                                             <div className='space-y-6'>
                                                 
                                                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                                    <div className="flex items-start gap-3 p-3 border border-blue-100 bg-blue-50 rounded-xl">
-                                                        <FaRegClock className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                                                        <div className="min-w-0">
-                                                            <p className="text-sm font-medium text-gray-900 duration_id">Duration</p>
-                                                            <p className="text-xs text-gray-600">{offersData.content_days_count} <span className="days_id">Days</span>, {offersData.content_night_count} <span className="days_id">Nights</span></p>
-                                                            <p className="mt-1 text-xs text-gray-500">{format(new Date(offersData.content_date_from), 'M/d/yyyy')} - {format(new Date(offersData.content_date_to), 'M/d/yyyy')}</p>
+                                                    {
+                                                        offersData.content_category.category_display_content.display.content_home_style.render_to_bucket_list &&
+                                                        <div className="flex items-start gap-3 p-3 border border-blue-100 bg-blue-50 rounded-xl">
+                                                            <FaRegClock className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                                                            <div className="min-w-0">
+                                                                <p className="text-sm font-medium text-gray-900 duration_id">Duration</p>
+                                                                <p className="text-xs text-gray-600">{offersData.content_days_count} <span className="days_id">Days</span>, {offersData.content_night_count} <span className="days_id">Nights</span></p>
+                                                                <p className="mt-1 text-xs text-gray-500">{format(new Date(offersData.content_date_from), 'M/d/yyyy')} - {format(new Date(offersData.content_date_to), 'M/d/yyyy')}</p>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    }
                                                     {
                                                         tabData &&
                                                         <div className="flex items-start gap-3 p-3 border border-green-100 bg-green-50 rounded-xl">
@@ -395,9 +406,9 @@ const OffersBottomSheet = ({
                                             
                                             {
                                                 tabData &&
-                                                <div className="flex items-center justify-between p-4 border border-blue-500 rounded-lg bg-blue-50">
+                                                <div className="flex flex-wrap items-center justify-between p-4 border border-blue-500 rounded-lg bg-blue-50">
                                                     <div>
-                                                        <p className="font-medium capitalize">{
+                                                        <p className="font-normal capitalize">{
                                                             auth_states.SelectedLanguage == null
                                                             ? tabData.offers_table.supplier_table.supplier_description
                                                             : 
@@ -414,7 +425,7 @@ const OffersBottomSheet = ({
                                                             {
                                                                 tabData.offers_table.supplier_table.room_type.room_type_guest_count
                                                             } 
-                                                        <span className='guest_per_room'>guest per room</span></p>
+                                                        <span className='ml-1 guest_per_room'>guest per room</span></p>
                                                     </div>
                                                     <div className="text-lg font-bold text-center"> 
                                                         <p>{tabData.offers_table.currency_table.currency_symbol}{tabData.offers_table.offers_amount}</p>

@@ -5,6 +5,18 @@ const env = import.meta.env;
 const PublicAPI = env.VITE_APP_BACKEND_API_URL + "public/"
 const BaseAPIUrl = env.VITE_APP_BACKEND_API_URL
 
+export const ChatLogin = async (token) => {
+    return await axios({ 
+        headers: {
+            'Content-Type': 'application/json',
+            // 'Authorization': `${token}`
+            ...token
+        },
+        method: 'GET', 
+        url: `${BaseAPIUrl}chatify-verification`,
+    });
+}
+
 export const GetHomeContents = async () => {
     return await axios({ 
         headers: {

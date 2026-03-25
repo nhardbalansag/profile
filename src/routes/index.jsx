@@ -46,6 +46,8 @@ import {
 
     DetailsPage,
 
+    // EventDetailsPage,
+
     AccountSubscription,
 
     AccountTransferTPoints,
@@ -544,11 +546,18 @@ const router = createBrowserRouter([
     },
     {
         path: "content-details",
-        element: ( 
+        element: (
             <DetailsPage />
         ),
         errorElement: <ErrorPage />,
     },
+    // {
+    //     path: "event-details",
+    //     element: (
+    //         <EventDetailsPage />
+    //     ),
+    //     errorElement: <ErrorPage />,
+    // },
     {
         path: "policy",
         element: ( 

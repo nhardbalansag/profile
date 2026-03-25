@@ -11,7 +11,7 @@ import { format } from 'date-fns';
 import {
     OffersBottomSheet,
     Header,
-    LanguageBottomSheet
+    LanguageBottomSheet,
 } from '../../component/index'
 
 import {
@@ -32,6 +32,7 @@ import { MdOutlineVerified } from "react-icons/md";
 import { MdOutlineLocalHotel } from "react-icons/md";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
+import { FaRegUser } from "react-icons/fa";
 
 import * as api_content from '../../services/content/content.api'
 import * as api_subscription from '../../services/account/subscription.api.js'
@@ -1486,24 +1487,30 @@ const ProductDetails = () =>{
                                     </div>
                                 }
 
-                                {EnableOffersButton()}
+                                {
+                                    ResultGetHomeContents.content_category.category_display_content.display.content_home_style.show_offers &&
+                                    ResultGetHomeContents.content_has_payment &&
+                                    EnableOffersButton()
+                                }
 
                                 {
+                                    ResultGetHomeContents?.content_category?.category_display_content.display.content_home_style.render_to_bucket_list &&
                                     ResultGetHomeContents.content_date_from &&
                                     ResultGetHomeContents.content_date_to &&
                                     <div className='my-5 text-left'>
-                                    <p className='text-[#001d3d] capitalize'> 
-                                        <span className='font-bold from_id'>from </span> 
-                                        <span>{ResultGetHomeContents.content_date_from}</span>
-                                    </p>
-                                    <p className='text-[#001d3d] capitalize'>
-                                        <span className='font-bold to_id'>to </span> 
-                                        <span>{ResultGetHomeContents.content_date_to}</span>
-                                    </p>
+                                        <p className='text-[#001d3d] capitalize'> 
+                                            <span className='font-bold from_id'>from </span> 
+                                            <span>{ResultGetHomeContents.content_date_from}</span>
+                                        </p>
+                                        <p className='text-[#001d3d] capitalize'>
+                                            <span className='font-bold to_id'>to </span> 
+                                            <span>{ResultGetHomeContents.content_date_to}</span>
+                                        </p>
                                     </div>
                                 }
 
                                 {
+                                    ResultGetHomeContents?.content_category?.category_display_content.display.content_home_style.render_to_bucket_list &&
                                     ResultGetHomeContents.content_date_from &&
                                     ResultGetHomeContents.content_date_to &&
                                     <div className='flex items-center justify-start space-x-3'>
@@ -1567,7 +1574,11 @@ const ProductDetails = () =>{
                                 }
                                 </div>
 
-                                {EnableOffersButton()}
+                                {
+                                    ResultGetHomeContents.content_category.category_display_content.display.content_home_style.show_offers &&
+                                    ResultGetHomeContents.content_has_payment &&
+                                    EnableOffersButton()
+                                }
                                 
                             </div>
                         </div>
@@ -1707,7 +1718,16 @@ const ProductDetails = () =>{
                                                 </div>
                                                 
                                                 <div className='flex items-center pb-2 space-x-2 '>
-                                                    <MdOutlineLocalHotel className="flex-shrink-0 w-5 h-5" />
+                                                    {
+                                                        ResultGetHomeContents.content_category.category_display_content.display.content_home_style.render_to_bucket_list
+                                                        && <MdOutlineLocalHotel className="flex-shrink-0 w-5 h-5" />
+                                                    }
+
+                                                    {
+                                                        ResultGetHomeContents.content_category.category_display_content.display.content_home_style.render_to_event_list
+                                                        && <FaRegUser  className="flex-shrink-0 w-5 h-5" />
+                                                    }
+                                                    
                                                     <p className='text-[15px] font-normal capitalize'>
                                                         {
                                                             selectedLanguage.current == null 
