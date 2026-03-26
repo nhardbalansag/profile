@@ -828,25 +828,6 @@ const HomeView = ({ searchQuery, onSelectBoard, token }) => {
 
   return (
     <>
-      {/* {stats && (
-        <div className="grid grid-cols-3 gap-2 mb-4 sm:grid-cols-6">
-          {[
-            {label:'Threads', val:formatCount(stats.total_threads??0), icon:<FileText className="w-3.5 h-3.5"/>},
-            {label:'Posts',   val:formatCount(stats.total_posts??0),   icon:<MessageSquare className="w-3.5 h-3.5"/>},
-            {label:'Members', val:formatCount(stats.total_members??0), icon:<Users className="w-3.5 h-3.5"/>},
-            {label:'Boards',  val:formatCount(stats.total_boards??0),  icon:<Grid className="w-3.5 h-3.5"/>},
-            {label:'Online',  val:formatCount((stats.online_members??0)+(stats.online_guests??0)), icon:<span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"/>},
-            {label:'Record',  val:formatCount(stats.record_online??0), icon:<TrendingUp className="w-3.5 h-3.5"/>},
-          ].map(({label,val,icon})=>(
-            <div key={label} className="bg-background border border-border rounded-2xl px-3 py-2.5 flex flex-col gap-1">
-              <span className="text-muted-foreground">{icon}</span>
-              <p className="text-sm font-black leading-none text-foreground">{val}</p>
-              <p className="text-[10px] text-muted-foreground">{label}</p>
-            </div>
-          ))}
-        </div>
-      )} */}
-
       {filtered.length>0
         ? filtered.map(cat=>(
           <div key={cat.id} className="mb-4 overflow-hidden border rounded-2xl border-border bg-background">
