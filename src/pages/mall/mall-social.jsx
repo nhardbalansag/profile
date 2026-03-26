@@ -1519,7 +1519,7 @@ const ForumPage = ({ onAdminOpen, token, toast }) => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen mb-[100px] bg-background">
       <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur-md">
         <div className="px-4 mx-auto max-w-7xl sm:px-6">
           <div className="flex items-center gap-3 h-14">
