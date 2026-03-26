@@ -122,7 +122,7 @@ const ErrorPage = () =>{
 
   return (
     <div>
-        {/* <p>{error.message}</p> */}
+        <p>{error.message}</p>
         <div className="flex items-center justify-center p-4">
             <div className="">
                 <div className='text-center'>
@@ -373,15 +373,7 @@ const router = createBrowserRouter([
                 ),
                 errorElement: <ErrorPage />
             },
-            {
-                path: "social",
-                element: ( 
-                    <AuthenticatedUsers route={'/login'}>
-                        <MallSocial />
-                    </AuthenticatedUsers> 
-                ),
-                errorElement: <ErrorPage />
-            },
+            
         ]
     },
     {
@@ -521,6 +513,15 @@ const router = createBrowserRouter([
             },
         ]
     },
+    {
+                path: "social",
+                element: ( 
+                    <AuthenticatedUsers route={'/login'}>
+                        <MallSocial />
+                    </AuthenticatedUsers> 
+                ),
+                errorElement: <ErrorPage />
+            },
     {
         path: "event",
         Component: EventPage,  
