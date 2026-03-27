@@ -98,7 +98,7 @@ const ErrorState = ({ message, onRetry }) => (
   <div className="flex flex-col items-center justify-center px-4 py-16 text-center">
     <WifiOff className="w-10 h-10 mb-3 text-muted-foreground/40" />
     <p className="mb-1 font-semibold text-foreground">Failed to load</p>
-    <p className="mb-4 text-sm text-muted-foreground">{message}</p>
+    {/* <p className="mb-4 text-sm text-muted-foreground">{message}</p> */}
     {onRetry && (
       <button onClick={onRetry}
         className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white rounded-full bg-primary hover:opacity-90 active:scale-95 transition-all">
@@ -272,12 +272,16 @@ const QuillEditor = ({
   const modules = useMemo(() => ({
     toolbar: {
       container: [
-        [{ header: [2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike'],
-        ['blockquote', 'code-block'],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        ['link', 'image', 'video'],
-        ['clean'],
+        // [{ header: [2, 3, false] }],
+        // ['bold', 'italic', 'underline', 'strike'],
+        // ['blockquote', 'code-block'],
+        // [{ list: 'ordered' }, { list: 'bullet' }],
+        [
+          // 'link', 
+          'image', 
+          'video'
+        ],
+        // ['clean'],
       ],
       handlers: {
         // Override the built-in image handler to use our upload function
@@ -290,9 +294,18 @@ const QuillEditor = ({
   }), [handleImageUpload]);
 
   const formats = [
-    'header', 'bold', 'italic', 'underline', 'strike',
-    'blockquote', 'code-block', 'list', 'bullet',
-    'link', 'image', 'video',
+    // 'header', 
+    // 'bold', 
+    // 'italic', 
+    // 'underline', 
+    // 'strike',
+    // 'blockquote', 
+    // 'code-block', 
+    // 'list', 
+    // 'bullet',
+    // 'link', 
+    'image', 
+    'video',
   ];
 
   return (
@@ -445,7 +458,7 @@ const NewThreadModal = ({ board, onClose, onSubmit, loading, token }) => {
 
   return (
     <div className="inset-0 z-50 flex flex-col bg-background sm:items-center sm:justify-center sm:bg-black/60 sm:backdrop-blur-sm">
-      <div className="flex flex-col h-full sm:h-auto sm:max-h-[90vh] sm:w-full sm:max-w-2xl sm:rounded-2xl sm:border sm:border-border sm:shadow-2xl sm:bg-background overflow-hidden">
+      <div className="flex my-5 flex-col h-full sm:h-auto sm:max-h-[90vh] sm:w-full sm:max-w-2xl sm:rounded-2xl sm:border sm:border-border sm:shadow-2xl sm:bg-background overflow-hidden">
 
         {/* Header */}
         <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-border bg-white shrink-0">
