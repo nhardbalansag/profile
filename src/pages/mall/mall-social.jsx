@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import {
   Sparkles, MessageSquare, Users, Eye, ChevronRight, Pin, Flame,
@@ -6,28 +6,25 @@ import {
   Lock, Star, Hash, Grid, X, Bookmark, Share2, Flag, MoreHorizontal,
   ChevronUp, ChevronDown, Bold, Italic, Code, Quote, Link, Send,
   Edit3, Trash2, AlertCircle, ChevronLeft, FileText, CornerDownRight,
-  Home, Loader2, RefreshCw, WifiOff, ArrowLeft, Pen, MessageCircle, Check,
+  Home, Loader2, RefreshCw, WifiOff, ArrowLeft, Pen, MessageCircle,
+  Check, Image, Video, Upload,
 } from 'lucide-react';
 
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 import { LuCircleDollarSign } from "react-icons/lu";
 import { IoFitnessOutline } from "react-icons/io5";
 import { PiPottedPlantBold } from "react-icons/pi";
 import { BiStore } from "react-icons/bi";
 import { BiLike } from "react-icons/bi";
-
 import { MdOutlineAirplanemodeActive } from "react-icons/md";
 import { RiGraduationCapLine } from "react-icons/ri";
-
 
 import { Link as LinkDom } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 
-import {
-  Header,
-  Footer,
-  LanguageBottomSheet
-} from "../../component/index"
+import { Header, Footer, LanguageBottomSheet } from "../../component/index";
 
 import * as forumApi from '../../services/forum/forum.index';
 
@@ -72,6 +69,12 @@ const normalisePost = p => ({
   updatedAt:  p.updated_at  ?? p.updatedAt   ?? null,
   replies:    Array.isArray(p.replies) ? p.replies.map(r => normalisePost(r)) : [],
 });
+
+// ─── Detect whether a string is Quill HTML or legacy markdown ─────────────
+const isHTMLContent = text => /<[a-z][\s\S]*>/i.test(text ?? '');
+
+// ─── Strip empty Quill <p><br></p> check ─────────────────────────────────
+const isQuillEmpty = html => !html || html === '<p><br></p>' || html.trim() === '';
 
 // ═══════════════════════════════════════════════════════════════
 // SHARED UI ATOMS
@@ -162,8 +165,11 @@ const BottomSheet = ({ open, onClose, title, children }) => {
 };
 
 // ═══════════════════════════════════════════════════════════════
-// RICH TEXT RENDERER
+// RICH CONTENT RENDERER
+// Handles both legacy markdown AND new Quill HTML output.
 // ═══════════════════════════════════════════════════════════════
+
+// ── Legacy markdown renderer (kept for old posts) ─────────────
 const parseLine = text => {
   const parts = []; let buf = ''; let i = 0;
   const flush = k => { if (buf) { parts.push(<span key={`t${k}`}>{buf}</span>); buf = ''; } };
@@ -177,7 +183,7 @@ const parseLine = text => {
   flush('end'); return parts;
 };
 
-const RichBody = ({ text }) => {
+const MarkdownBody = ({ text }) => {
   if (!text) return null;
   const lines = text.split('\n'); const nodes = []; let i = 0;
   while (i < lines.length) {
@@ -196,49 +202,220 @@ const RichBody = ({ text }) => {
   return <div className="space-y-1">{nodes}</div>;
 };
 
+// ── RichBody: auto-detects HTML vs markdown ───────────────────
+const RichBody = ({ text }) => {
+  if (!text) return null;
+  if (isHTMLContent(text)) {
+    // Quill HTML — render with responsive image/video styles
+    return (
+      <div
+        className="quill-content text-sm text-foreground leading-relaxed"
+        dangerouslySetInnerHTML={{ __html: text }}
+      />
+    );
+  }
+  return <MarkdownBody text={text} />;
+};
+
 // ═══════════════════════════════════════════════════════════════
-// COMPOSER
+// QUILL EDITOR — shared between Composer and NewThreadModal
 // ═══════════════════════════════════════════════════════════════
-const Composer = ({ placeholder='Write your reply...', initialValue='', onSubmit, onCancel, submitLabel='Post Reply', compact=false, quoteText=null, loading=false, autoFocus=false }) => {
-  const [body, setBody]       = useState(quoteText ? `> ${quoteText.split('\n').join('\n> ')}\n\n` : (initialValue||''));
-  const [preview, setPreview] = useState(false);
-  const ta = useRef();
+const QuillEditor = ({
+  value,
+  onChange,
+  placeholder,
+  minHeight = 140,
+  token,
+  onUploadStart,
+  onUploadEnd,
+  disabled = false,
+}) => {
+  const quillRef = useRef(null);
+  const fileInputRef = useRef(null);
 
-  useEffect(() => { if (autoFocus && ta.current) { ta.current.focus(); ta.current.selectionStart = ta.current.value.length; } }, [autoFocus]);
+  // ── Image upload handler ─────────────────────────────────
+  const handleImageUpload = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
 
-  const wrap = (b, a='', fb='text') => {
-    const el=ta.current; if(!el) return;
-    const s=el.selectionStart, e=el.selectionEnd, sel=body.slice(s,e);
-    setBody(v=>v.slice(0,s)+b+(sel||fb)+a+v.slice(e));
-    setTimeout(()=>el.focus(),0);
-  };
-  const submit = () => { if(!body.trim()||loading) return; onSubmit(body.trim()); if(!onCancel) setBody(''); setPreview(false); };
+  const handleFileChange = useCallback(async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-  const toolbar = [
-    { icon:<Bold className="w-3.5 h-3.5"/>,   title:'Bold',   action:()=>wrap('**','**') },
-    { icon:<Italic className="w-3.5 h-3.5"/>, title:'Italic', action:()=>wrap('*','*') },
-    { icon:<Code className="w-3.5 h-3.5"/>,   title:'Code',   action:()=>wrap('`','`','code') },
-    { icon:<Quote className="w-3.5 h-3.5"/>,  title:'Quote',  action:()=>setBody(v=>'> '+v) },
-    { icon:<Link className="w-3.5 h-3.5"/>,   title:'Link',   action:()=>wrap('[','](url)') },
+    // Validate type and size (max 10 MB)
+    const isImage = file.type.startsWith('image/');
+    const isVideo = file.type.startsWith('video/');
+    if (!isImage && !isVideo) return;
+    if (file.size > 10 * 1024 * 1024) { alert('File must be under 10 MB.'); return; }
+
+    onUploadStart?.();
+    try {
+      const res = await forumApi.uploadForumMedia(token, file);
+      const url  = res.data.url;
+      const type = isImage ? 'image' : 'video';
+
+      const quill = quillRef.current?.getEditor();
+      if (!quill) return;
+      const range = quill.getSelection(true);
+      quill.insertEmbed(range.index, type, url);
+      quill.setSelection(range.index + 1, 0);
+    } catch (err) {
+      alert('Upload failed. Please try again.');
+    } finally {
+      onUploadEnd?.();
+      // Reset so the same file can be re-selected
+      e.target.value = '';
+    }
+  }, [token, onUploadStart, onUploadEnd]);
+
+  // ── Quill toolbar modules (stable reference via useMemo) ──
+  const modules = useMemo(() => ({
+    toolbar: {
+      container: [
+        [{ header: [2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        ['blockquote', 'code-block'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['link', 'image', 'video'],
+        ['clean'],
+      ],
+      handlers: {
+        // Override the built-in image handler to use our upload function
+        image: () => handleImageUpload(),
+        // Built-in video handler prompts for a URL (YouTube, direct .mp4, etc.)
+        // — we keep the default behaviour so no override needed for video
+      },
+    },
+    clipboard: { matchVisual: false },
+  }), [handleImageUpload]);
+
+  const formats = [
+    'header', 'bold', 'italic', 'underline', 'strike',
+    'blockquote', 'code-block', 'list', 'bullet',
+    'link', 'image', 'video',
   ];
 
   return (
-    <div className={`border border-border rounded-2xl overflow-hidden bg-background ${compact?'':'shadow-sm'}`}>
-      <div className="flex items-center gap-0.5 px-3 py-2 border-b border-border bg-muted/20">
-        {toolbar.map((t,i) => <button key={i} onClick={t.action} disabled={loading} title={t.title} className="p-2 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground transition-colors disabled:opacity-40 min-w-[36px] min-h-[36px] flex items-center justify-center">{t.icon}</button>)}
-        <div className="flex-1"/>
-        <button onClick={()=>setPreview(v=>!v)} className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors ${preview?'bg-primary text-white':'text-muted-foreground hover:bg-muted'}`}>{preview?'Edit':'Preview'}</button>
+    <div className="quill-wrapper" style={{ '--quill-min-height': `${minHeight}px` }}>
+      {/* Hidden file input for image/video pick */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*,video/*"
+        className="hidden"
+        onChange={handleFileChange}
+      />
+      <ReactQuill
+        ref={quillRef}
+        theme="snow"
+        value={value}
+        onChange={onChange}
+        modules={modules}
+        formats={formats}
+        placeholder={placeholder}
+        readOnly={disabled}
+      />
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════
+// COMPOSER  — wraps QuillEditor with preview + submit
+// ═══════════════════════════════════════════════════════════════
+const Composer = ({
+  placeholder     = 'Write your reply...',
+  initialValue    = '',
+  onSubmit,
+  onCancel,
+  submitLabel     = 'Post Reply',
+  compact         = false,
+  quoteText       = null,
+  loading         = false,
+  autoFocus       = false,
+  token,
+}) => {
+  // When quoting, wrap the quoted text in a Quill blockquote
+  const initialHTML = useMemo(() => {
+    if (quoteText) {
+      const escaped = quoteText
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+      return `<blockquote>${escaped.split('\n').join('<br>')}</blockquote><p></p>`;
+    }
+    if (initialValue) {
+      // If it's already HTML, use as-is; if markdown, wrap in a paragraph
+      return isHTMLContent(initialValue) ? initialValue : `<p>${initialValue}</p>`;
+    }
+    return '';
+  }, [quoteText, initialValue]);
+
+  const [body, setBody]           = useState(initialHTML);
+  const [preview, setPreview]     = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const submit = () => {
+    if (isQuillEmpty(body) || loading || uploading) return;
+    onSubmit(body);
+    if (!onCancel) setBody('');
+    setPreview(false);
+  };
+
+  const isSubmitDisabled = isQuillEmpty(body) || loading || uploading;
+
+  return (
+    <div className={`border border-border rounded-2xl overflow-hidden bg-background ${compact ? '' : 'shadow-sm'}`}>
+      {/* Preview toggle */}
+      <div className="flex items-center px-3 py-2 border-b border-border bg-muted/20">
+        <div className="flex-1" />
+        {uploading && (
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground mr-3">
+            <Spinner size="sm" /> Uploading…
+          </span>
+        )}
+        <button
+          onClick={() => setPreview(v => !v)}
+          className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors ${preview ? 'bg-primary text-white' : 'text-muted-foreground hover:bg-muted'}`}>
+          {preview ? 'Edit' : 'Preview'}
+        </button>
       </div>
-      {preview
-        ? <div className="min-h-[90px] p-3">{body.trim()?<RichBody text={body}/>:<p className="text-sm italic text-muted-foreground">Nothing to preview.</p>}</div>
-        : <textarea ref={ta} value={body} onChange={e=>setBody(e.target.value)} placeholder={placeholder} disabled={loading} onKeyDown={e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))submit();}} className="w-full p-3 text-sm bg-transparent resize-none text-foreground placeholder:text-muted-foreground focus:outline-none disabled:opacity-60" style={{minHeight:compact?80:140,fontSize:16}}/>
-      }
+
+      {/* Editor / Preview */}
+      {preview ? (
+        <div className="min-h-[90px] p-3">
+          {isQuillEmpty(body)
+            ? <p className="text-sm italic text-muted-foreground">Nothing to preview.</p>
+            : <RichBody text={body} />}
+        </div>
+      ) : (
+        <QuillEditor
+          value={body}
+          onChange={setBody}
+          placeholder={placeholder}
+          minHeight={compact ? 90 : 140}
+          token={token}
+          onUploadStart={() => setUploading(true)}
+          onUploadEnd={() => setUploading(false)}
+          disabled={loading}
+        />
+      )}
+
+      {/* Footer */}
       <div className="flex items-center justify-between px-3 py-2.5 border-t border-border bg-muted/10">
-        <span className="text-[10px] text-muted-foreground hidden sm:block">**bold** *italic* `code` &gt;quote • Ctrl+Enter</span>
+        <span className="text-[10px] text-muted-foreground hidden sm:block">
+          Use toolbar to add <strong>images</strong> or <strong>videos</strong>
+        </span>
         <div className="flex items-center gap-2 ml-auto">
-          {onCancel && <button onClick={onCancel} disabled={loading} className="px-4 py-2 rounded-xl text-xs font-semibold text-muted-foreground hover:bg-muted transition-colors disabled:opacity-40 min-h-[36px]">Cancel</button>}
-          <button onClick={submit} disabled={!body.trim()||loading} className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-primary text-white hover:opacity-90 disabled:opacity-40 active:scale-95 transition-all min-h-[36px]">
-            {loading?<Spinner size="sm"/>:<Send className="w-3.5 h-3.5"/>}{submitLabel}
+          {onCancel && (
+            <button onClick={onCancel} disabled={loading || uploading}
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-muted-foreground hover:bg-muted transition-colors disabled:opacity-40 min-h-[36px]">
+              Cancel
+            </button>
+          )}
+          <button onClick={submit} disabled={isSubmitDisabled}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-primary text-white hover:opacity-90 disabled:opacity-40 active:scale-95 transition-all min-h-[36px]">
+            {loading || uploading ? <Spinner size="sm" /> : <Send className="w-3.5 h-3.5" />}
+            {uploading ? 'Uploading…' : submitLabel}
           </button>
         </div>
       </div>
@@ -249,83 +426,114 @@ const Composer = ({ placeholder='Write your reply...', initialValue='', onSubmit
 // ═══════════════════════════════════════════════════════════════
 // NEW THREAD MODAL — full-screen on mobile
 // ═══════════════════════════════════════════════════════════════
-const NewThreadModal = ({ board, onClose, onSubmit, loading }) => {
-  const [title, setTitle]     = useState('');
-  const [body, setBody]       = useState('');
-  const [tag, setTag]         = useState('');
-  const [preview, setPreview] = useState(false);
-  const [error, setError]     = useState('');
-  const ta = useRef();
-
-  const wrap = (b,a='',fb='text') => { const el=ta.current; if(!el) return; const s=el.selectionStart,e=el.selectionEnd,sel=body.slice(s,e); setBody(v=>v.slice(0,s)+b+(sel||fb)+a+v.slice(e)); };
+const NewThreadModal = ({ board, onClose, onSubmit, loading, token }) => {
+  const [title, setTitle]         = useState('');
+  const [body, setBody]           = useState('');
+  const [tag, setTag]             = useState('');
+  const [preview, setPreview]     = useState(false);
+  const [error, setError]         = useState('');
+  const [uploading, setUploading] = useState(false);
 
   const submit = () => {
-    if (!title.trim())                           { setError('Please enter a title.'); return; }
-    if (title.trim().length < 5)                 { setError('Title must be at least 5 characters.'); return; }
-    if (!body.trim()||body.trim().length<10)     { setError('Content must be at least 10 characters.'); return; }
-    onSubmit({ title: title.trim(), body: body.trim(), tag });
+    if (!title.trim())                  { setError('Please enter a title.'); return; }
+    if (title.trim().length < 5)        { setError('Title must be at least 5 characters.'); return; }
+    if (isQuillEmpty(body))             { setError('Content must not be empty.'); return; }
+    onSubmit({ title: title.trim(), body, tag });
   };
 
-  const toolbar = [
-    { icon:<Bold className="w-3.5 h-3.5"/>, action:()=>wrap('**','**') },
-    { icon:<Italic className="w-3.5 h-3.5"/>, action:()=>wrap('*','*') },
-    { icon:<Code className="w-3.5 h-3.5"/>, action:()=>wrap('`','`','code') },
-    { icon:<Quote className="w-3.5 h-3.5"/>, action:()=>setBody(v=>'> '+v) },
-    { icon:<Link className="w-3.5 h-3.5"/>, action:()=>wrap('[','](url)') },
-  ];
+  const isSubmitDisabled = loading || uploading;
 
   return (
-    <div className=" inset-0 z-50 flex flex-col bg-background sm:items-center sm:justify-center sm:bg-black/60 sm:backdrop-blur-sm">
-      <div className="flex flex-col h-full sm:h-auto sm:max-h-[90vh] sm:w-full sm:max-w-2xl sm:rounded-2xl sm:border sm:border-border sm:shadow-2xl sm:bg-background overflow-hidden">
+    <div className="inset-0 z-50 flex flex-col bg-background sm:items-center sm:justify-center sm:bg-black/60 sm:backdrop-blur-sm">
+      <div className="flex my-5 flex-col h-full sm:h-auto sm:max-h-[90vh] sm:w-full sm:max-w-2xl sm:rounded-2xl sm:border sm:border-border sm:shadow-2xl sm:bg-background overflow-hidden">
+
         {/* Header */}
         <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-border bg-white shrink-0">
-          <button onClick={onClose} disabled={loading} className="p-2 -ml-2 sm:hidden rounded-xl hover:bg-muted disabled:opacity-40"><ArrowLeft className="w-5 h-5"/></button>
+          <button onClick={onClose} disabled={isSubmitDisabled} className="p-2 -ml-2 sm:hidden rounded-xl hover:bg-muted disabled:opacity-40"><ArrowLeft className="w-5 h-5" /></button>
           <div className="flex-1 mx-2 sm:flex-none sm:mx-0">
-            <h2 className="text-base font-black sm:text-lg text-foreground" style={{fontFamily:"'Sora',sans-serif"}}>New Thread</h2>
+            <h2 className="text-base font-black sm:text-lg text-foreground" style={{ fontFamily: "'Sora',sans-serif" }}>New Thread</h2>
             <p className="text-xs text-muted-foreground">in <span className="font-medium text-primary">{board.name}</span></p>
           </div>
           <div className="flex items-center gap-2">
-            <button onClick={onClose} disabled={loading} className="hidden px-4 py-2 text-sm font-medium sm:block rounded-xl text-muted-foreground hover:bg-muted disabled:opacity-40">Cancel</button>
-            <button onClick={submit} disabled={loading} className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold bg-primary text-white hover:opacity-90 disabled:opacity-60 active:scale-95 transition-all">
-              {loading?<Spinner size="sm"/>:null}{loading?'Posting...':'Post'}
+            <button onClick={onClose} disabled={isSubmitDisabled} className="hidden px-4 py-2 text-sm font-medium sm:block rounded-xl text-muted-foreground hover:bg-muted disabled:opacity-40">Cancel</button>
+            <button onClick={submit} disabled={isSubmitDisabled}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold bg-primary text-white hover:opacity-90 disabled:opacity-60 active:scale-95 transition-all">
+              {isSubmitDisabled ? <Spinner size="sm" /> : null}
+              {uploading ? 'Uploading…' : loading ? 'Posting…' : 'Post'}
             </button>
           </div>
         </div>
-        {/* Body */}
+
+        {/* Scrollable body */}
         <div className="flex-1 overflow-y-auto bg-white">
           <div className="p-4 space-y-4 sm:p-6">
-            {error && <div className="flex items-center gap-2 p-3 text-sm text-red-400 border rounded-xl bg-red-500/10 border-red-500/20"><AlertCircle className="w-4 h-4 shrink-0"/>{error}</div>}
+            {error && (
+              <div className="flex items-center gap-2 p-3 text-sm text-red-400 border rounded-xl bg-red-500/10 border-red-500/20">
+                <AlertCircle className="w-4 h-4 shrink-0" />{error}
+              </div>
+            )}
+
+            {/* Title */}
             <div>
               <label className="block mb-2 text-xs font-bold tracking-wider uppercase text-muted-foreground">Thread Title *</label>
-              <input type="text" value={title} onChange={e=>{setTitle(e.target.value);setError('');}} disabled={loading} placeholder="Write a clear, descriptive title..."
-                className="w-full px-4 py-3 text-sm transition-all border bg-muted/30 border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-60" style={{fontSize:16}}/>
+              <input type="text" value={title} onChange={e => { setTitle(e.target.value); setError(''); }}
+                disabled={isSubmitDisabled} placeholder="Write a clear, descriptive title..."
+                className="w-full px-4 py-3 text-sm transition-all border bg-muted/30 border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-60"
+                style={{ fontSize: 16 }} />
               <p className="text-[10px] text-muted-foreground mt-1">{title.length} / 255</p>
             </div>
+
+            {/* Tag */}
             <div>
               <label className="block mb-2 text-xs font-bold tracking-wider uppercase text-muted-foreground">Tag</label>
               <div className="flex gap-2 px-4 pb-1 -mx-4 overflow-x-auto sm:mx-0 sm:px-0 sm:flex-wrap scrollbar-hide">
-                {TAGS.map(t=>(
-                  <button key={t} onClick={()=>setTag(tag===t?'':t)} disabled={loading}
-                    className={`px-3 py-1.5 rounded-full text-xs font-semibold border whitespace-nowrap shrink-0 transition-all active:scale-95 disabled:opacity-60 ${tag===t?'bg-primary text-white border-primary shadow-sm':'border-border text-muted-foreground hover:border-primary/50 bg-muted/30'}`}>
+                {TAGS.map(t => (
+                  <button key={t} onClick={() => setTag(tag === t ? '' : t)} disabled={isSubmitDisabled}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold border whitespace-nowrap shrink-0 transition-all active:scale-95 disabled:opacity-60
+                    ${tag === t ? 'bg-primary text-white border-primary shadow-sm' : 'border-border text-muted-foreground hover:border-primary/50 bg-muted/30'}`}>
                     {t}
                   </button>
                 ))}
               </div>
             </div>
+
+            {/* Body — Quill editor */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-bold tracking-wider uppercase text-muted-foreground">Content *</label>
-                <button onClick={()=>setPreview(v=>!v)} disabled={loading} className={`px-3 py-1 rounded-xl text-xs font-semibold transition-colors ${preview?'bg-primary text-white':'text-muted-foreground hover:bg-muted'}`}>{preview?'Edit':'Preview'}</button>
-              </div>
-              <div className="overflow-hidden border border-border rounded-2xl">
-                <div className="flex items-center gap-0.5 px-3 py-2 border-b border-border bg-muted/20 overflow-x-auto scrollbar-hide">
-                  {toolbar.map((t,i)=><button key={i} onClick={t.action} disabled={loading} className="p-2 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground transition-colors disabled:opacity-40 min-w-[36px] min-h-[36px] flex items-center justify-center shrink-0">{t.icon}</button>)}
+                <div className="flex items-center gap-2">
+                  {uploading && <span className="flex items-center gap-1 text-xs text-muted-foreground"><Spinner size="sm" />Uploading…</span>}
+                  <button onClick={() => setPreview(v => !v)} disabled={isSubmitDisabled}
+                    className={`px-3 py-1 rounded-xl text-xs font-semibold transition-colors ${preview ? 'bg-primary text-white' : 'text-muted-foreground hover:bg-muted'}`}>
+                    {preview ? 'Edit' : 'Preview'}
+                  </button>
                 </div>
-                {preview
-                  ? <div className="min-h-[160px] p-4">{body.trim()?<RichBody text={body}/>:<p className="text-sm italic text-muted-foreground">Nothing to preview.</p>}</div>
-                  : <textarea ref={ta} value={body} onChange={e=>{setBody(e.target.value);setError('');}} disabled={loading} placeholder="Share your thoughts..." className="w-full p-4 text-sm bg-transparent resize-none text-foreground placeholder:text-muted-foreground focus:outline-none disabled:opacity-60" style={{minHeight:160,fontSize:16}}/>
-                }
               </div>
+
+              {preview ? (
+                <div className="min-h-[200px] p-4 border border-border rounded-2xl">
+                  {isQuillEmpty(body)
+                    ? <p className="text-sm italic text-muted-foreground">Nothing to preview.</p>
+                    : <RichBody text={body} />}
+                </div>
+              ) : (
+                <div className="border border-border rounded-2xl overflow-hidden">
+                  <QuillEditor
+                    value={body}
+                    onChange={setBody}
+                    placeholder="Share your thoughts, questions, or findings... Add images/videos with the toolbar."
+                    minHeight={200}
+                    token={token}
+                    onUploadStart={() => setUploading(true)}
+                    onUploadEnd={() => setUploading(false)}
+                    disabled={isSubmitDisabled}
+                  />
+                </div>
+              )}
+
+              <p className="text-[10px] text-muted-foreground mt-1.5 flex items-center gap-1">
+                <Image className="w-3 h-3" /> Images and videos supported via the toolbar
+              </p>
             </div>
           </div>
         </div>
@@ -335,9 +543,9 @@ const NewThreadModal = ({ board, onClose, onSubmit, loading }) => {
 };
 
 // ═══════════════════════════════════════════════════════════════
-// POST CARD — mobile-first
+// POST CARD — mobile-first (unchanged except uses RichBody)
 // ═══════════════════════════════════════════════════════════════
-const PostCard = ({ post, isOP=false, depth=0, onVote, onReply, onQuote, onEdit, onDelete, currentUser }) => {
+const PostCard = ({ post, isOP=false, depth=0, onVote, onReply, onQuote, onEdit, onDelete, currentUser, token }) => {
   const [menuOpen, setMenuOpen]       = useState(false);
   const [editing, setEditing]         = useState(false);
   const [editLoading, setEditLoading] = useState(false);
@@ -357,7 +565,7 @@ const PostCard = ({ post, isOP=false, depth=0, onVote, onReply, onQuote, onEdit,
       className={`rounded-2xl border overflow-hidden transition-colors
       ${isOP ? 'bg-primary/5 border-primary/20' : depth>0 ? 'bg-background border-border/50' : 'bg-muted/10 border-border/60'}`}>
 
-      {/* Post header */}
+      {/* Header */}
       <div className="flex items-center gap-2.5 px-3.5 pt-3 pb-0">
         <Avatar name={post.authorName} size={depth>0?'xs':'md'}/>
         <div className="flex-1 min-w-0">
@@ -372,19 +580,19 @@ const PostCard = ({ post, isOP=false, depth=0, onVote, onReply, onQuote, onEdit,
           </div>
         </div>
         {!isOP && (
-          <div className='flex flex-col-reverse items-end'> 
-            <button onClick={()=>setMenuOpen(v=>!v)} className="p-2 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center">
-            <MoreHorizontal className="w-4 h-4"/>
+          <div className="flex flex-col-reverse items-end">
+            <button onClick={() => setMenuOpen(v => !v)} className="p-2 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center">
+              <MoreHorizontal className="w-4 h-4" />
             </button>
             <div ref={menuRef} className="absolute overflow-visible shrink-0">
               {menuOpen && (
                 <div className="top-10 z-[2000] bg-white border border-border rounded-2xl shadow-2xl min-w-[160px] py-1.5 overflow-visible">
-                  <button onClick={()=>{onReply(post);setMenuOpen(false);}} className="flex items-center w-full gap-3 px-4 py-2.5 text-sm hover:bg-muted text-foreground transition-colors"><CornerDownRight className="w-4 h-4"/>Reply</button>
-                  <button onClick={()=>{onQuote(post);setMenuOpen(false);}} className="flex items-center w-full gap-3 px-4 py-2.5 text-sm hover:bg-muted text-foreground transition-colors"><Quote className="w-4 h-4"/>Quote</button>
+                  <button onClick={() => { onReply(post); setMenuOpen(false); }} className="flex items-center w-full gap-3 px-4 py-2.5 text-sm hover:bg-muted text-foreground transition-colors"><CornerDownRight className="w-4 h-4" />Reply</button>
+                  <button onClick={() => { onQuote(post); setMenuOpen(false); }} className="flex items-center w-full gap-3 px-4 py-2.5 text-sm hover:bg-muted text-foreground transition-colors"><Quote className="w-4 h-4" />Quote</button>
                   {isOwn && <>
-                    <div className="mx-3 my-1 border-t border-border"/>
-                    <button onClick={()=>{setEditing(true);setMenuOpen(false);}} className="flex items-center w-full gap-3 px-4 py-2.5 text-sm hover:bg-muted text-foreground transition-colors"><Edit3 className="w-4 h-4"/>Edit Post</button>
-                    <button onClick={()=>{onDelete(post.id);setMenuOpen(false);}} className="flex items-center w-full gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors"><Trash2 className="w-4 h-4"/>Delete</button>
+                    <div className="mx-3 my-1 border-t border-border" />
+                    <button onClick={() => { setEditing(true); setMenuOpen(false); }} className="flex items-center w-full gap-3 px-4 py-2.5 text-sm hover:bg-muted text-foreground transition-colors"><Edit3 className="w-4 h-4" />Edit Post</button>
+                    <button onClick={() => { onDelete(post.id); setMenuOpen(false); }} className="flex items-center w-full gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors"><Trash2 className="w-4 h-4" />Delete</button>
                   </>}
                 </div>
               )}
@@ -396,8 +604,16 @@ const PostCard = ({ post, isOP=false, depth=0, onVote, onReply, onQuote, onEdit,
       {/* Body */}
       <div className="px-3.5 pt-2.5 pb-1">
         {editing
-          ? <Composer initialValue={post.body} onSubmit={handleEdit} onCancel={()=>setEditing(false)} submitLabel="Save Edit" compact loading={editLoading}/>
-          : <RichBody text={post.body}/>
+          ? <Composer
+              initialValue={post.body}
+              onSubmit={handleEdit}
+              onCancel={() => setEditing(false)}
+              submitLabel="Save Edit"
+              compact
+              loading={editLoading}
+              token={token}
+            />
+          : <RichBody text={post.body} />
         }
       </div>
 
@@ -405,23 +621,23 @@ const PostCard = ({ post, isOP=false, depth=0, onVote, onReply, onQuote, onEdit,
       {!isOP && !editing && (
         <div className="flex items-center px-2 py-1.5 border-t border-border/40 mt-1.5 bg-muted/10">
           <div className="flex items-center gap-0.5">
-            <button onClick={()=>onVote(post.id,1)}
+            <button onClick={() => onVote(post.id, 1)}
               className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all active:scale-95 ${post.userVote===1?'bg-primary/10 text-primary':'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
-              <ChevronUp className="w-3.5 h-3.5"/>
+              <ChevronUp className="w-3.5 h-3.5" />
               <span>{post.votes>0?formatCount(post.votes):post.votes<0?post.votes:''}</span>
             </button>
-            <button onClick={()=>onVote(post.id,-1)}
+            <button onClick={() => onVote(post.id, -1)}
               className={`p-1.5 rounded-xl transition-all active:scale-95 ${post.userVote===-1?'bg-red-500/10 text-red-400':'text-muted-foreground hover:bg-muted hover:text-red-400'}`}>
-              <ChevronDown className="w-3.5 h-3.5"/>
+              <ChevronDown className="w-3.5 h-3.5" />
             </button>
             {post.votes===0 && <span className="px-1 text-xs text-muted-foreground">0</span>}
           </div>
-          <div className="flex-1"/>
-          <button onClick={()=>onQuote(post)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-all active:scale-95">
-            <Quote className="w-3.5 h-3.5"/><span className="hidden sm:inline">Quote</span>
+          <div className="flex-1" />
+          <button onClick={() => onQuote(post)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-all active:scale-95">
+            <Quote className="w-3.5 h-3.5" /><span className="hidden sm:inline">Quote</span>
           </button>
-          <button onClick={()=>onReply(post)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all active:scale-95">
-            <CornerDownRight className="w-3.5 h-3.5"/><span>Reply</span>
+          <button onClick={() => onReply(post)} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all active:scale-95">
+            <CornerDownRight className="w-3.5 h-3.5" /><span>Reply</span>
           </button>
         </div>
       )}
@@ -432,7 +648,7 @@ const PostCard = ({ post, isOP=false, depth=0, onVote, onReply, onQuote, onEdit,
 // ═══════════════════════════════════════════════════════════════
 // POST TREE
 // ═══════════════════════════════════════════════════════════════
-const PostTree = ({ post, depth=0, onVote, onReply, onQuote, onEdit, onDelete, currentUser }) => {
+const PostTree = ({ post, depth=0, onVote, onReply, onQuote, onEdit, onDelete, currentUser, token }) => {
   const np = normalisePost(post);
   const hasReplies = np.replies.length > 0;
   const [expanded, setExpanded] = useState(false);
@@ -441,7 +657,7 @@ const PostTree = ({ post, depth=0, onVote, onReply, onQuote, onEdit, onDelete, c
   return (
     <div style={depth>0?{marginLeft:indent,marginTop:8}:{}}>
       {depth>0 && <div className="flex items-center gap-1 mb-1.5"><div className="w-4 h-0.5 rounded-full bg-border/60"/><div className="flex-1 h-px bg-border/30"/></div>}
-      <PostCard post={np} depth={depth} onVote={onVote} onReply={onReply} onQuote={onQuote} onEdit={onEdit} onDelete={onDelete} currentUser={currentUser}/>
+      <PostCard post={np} depth={depth} onVote={onVote} onReply={onReply} onQuote={onQuote} onEdit={onEdit} onDelete={onDelete} currentUser={currentUser} token={token}/>
       {hasReplies && (
         <>
           {!expanded && (
@@ -455,7 +671,7 @@ const PostTree = ({ post, depth=0, onVote, onReply, onQuote, onEdit, onDelete, c
                 <ChevronUp className="w-3.5 h-3.5"/>Collapse replies
               </button>
               <div className="pl-3 mt-2 ml-2 space-y-2 border-l-2" style={{borderColor:'color-mix(in srgb,var(--color-primary,#6366f1) 20%,transparent)'}}>
-                {np.replies.map(r=><PostTree key={r.id} post={r} depth={depth+1} onVote={onVote} onReply={onReply} onQuote={onQuote} onEdit={onEdit} onDelete={onDelete} currentUser={currentUser}/>)}
+                {np.replies.map(r=><PostTree key={r.id} post={r} depth={depth+1} onVote={onVote} onReply={onReply} onQuote={onQuote} onEdit={onEdit} onDelete={onDelete} currentUser={currentUser} token={token}/>)}
               </div>
             </>
           )}
@@ -544,7 +760,6 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
 
   return (
     <div className="space-y-3 pb-28 sm:pb-6">
-      {/* Breadcrumb */}
       <nav className="flex items-center gap-1.5 text-xs text-muted-foreground">
         <button onClick={()=>onBack('home')} className="flex items-center gap-1 py-1 transition-colors hover:text-primary"><Home className="w-3 h-3"/><span className="hidden sm:inline">Forums</span></button>
         <ChevronRight className="w-3 h-3 shrink-0"/>
@@ -553,7 +768,6 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
         <span className="font-medium truncate text-foreground">{localThread.title}</span>
       </nav>
 
-      {/* Thread header */}
       <div className="p-4 border sm:p-5 bg-background border-border rounded-2xl">
         <div className="flex flex-wrap items-center gap-1.5 mb-2">
           {localThread.is_pinned && <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20"><Pin className="w-2.5 h-2.5"/>Pinned</span>}
@@ -584,10 +798,8 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
         </div>
       </div>
 
-      {/* OP */}
-      <PostCard post={opPost} isOP depth={0} onVote={()=>{}} onReply={doReply} onQuote={doQuote} onEdit={()=>{}} onDelete={()=>{}} currentUser={currentUser}/>
+      <PostCard post={opPost} isOP depth={0} onVote={()=>{}} onReply={doReply} onQuote={doQuote} onEdit={()=>{}} onDelete={()=>{}} currentUser={currentUser} token={token}/>
 
-      {/* Sort */}
       <div className="flex items-center gap-2 overflow-x-auto pb-0.5 scrollbar-hide">
         <span className="text-xs text-muted-foreground shrink-0">Sort:</span>
         {[['oldest','Oldest'],['newest','Newest'],['top','Top Voted']].map(([v,l])=>(
@@ -595,13 +807,12 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
         ))}
       </div>
 
-      {/* Posts */}
       {loadingPosts
         ? <div className="flex justify-center py-12"><Spinner size="lg"/></div>
         : postsError
           ? <ErrorState message={postsError} onRetry={()=>fetchPosts(page)}/>
           : posts.length>0
-            ? <div className="space-y-3">{posts.map(p=><PostTree key={p.id} post={p} depth={0} onVote={handleVotePost} onReply={doReply} onQuote={doQuote} onEdit={handleEditPost} onDelete={handleDeletePost} currentUser={currentUser}/>)}</div>
+            ? <div className="space-y-3">{posts.map(p=><PostTree key={p.id} post={p} depth={0} onVote={handleVotePost} onReply={doReply} onQuote={doQuote} onEdit={handleEditPost} onDelete={handleDeletePost} currentUser={currentUser} token={token}/>)}</div>
             : <div className="py-12 text-center border border-border rounded-2xl bg-background">
                 <MessageCircle className="w-10 h-10 mx-auto mb-3 opacity-20 text-muted-foreground"/>
                 <p className="font-semibold text-foreground">No replies yet</p>
@@ -610,7 +821,6 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
               </div>
       }
 
-      {/* Pagination */}
       {meta.last_page>1 && (
         <div className="flex items-center justify-center gap-2">
           <button onClick={()=>setPage(p=>Math.max(1,p-1))} disabled={page===1} className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border border-border hover:bg-muted disabled:opacity-30 active:scale-95 transition-colors"><ChevronLeft className="w-4 h-4"/><span className="hidden sm:inline">Prev</span></button>
@@ -631,12 +841,16 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
             </div>
           </div>
           <div className="p-3">
-            <Composer key={`d-${replyingTo?.id}-${quotingPost?.id}`}
+            <Composer
+              key={`d-${replyingTo?.id}-${quotingPost?.id}`}
               placeholder={replyingTo?`Replying to ${replyingTo.authorName}...`:'Share your thoughts...'}
-              quoteText={quotingPost?`${quotingPost.authorName} wrote:\n${(quotingPost.body??'').slice(0,200)}${(quotingPost.body??'').length>200?'...':''}`:''}
+              quoteText={quotingPost?`${quotingPost.authorName} wrote:\n${(quotingPost.body??'').replace(/<[^>]+>/g,'').slice(0,200)}`:''}
               onSubmit={submitReply}
               onCancel={replyingTo?()=>{setReplyingTo(null);setQuotingPost(null);}:null}
-              loading={replyLoading} compact/>
+              loading={replyLoading}
+              compact
+              token={token}
+            />
           </div>
         </div>
       )}
@@ -656,12 +870,16 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
       {/* Mobile composer sheet */}
       <BottomSheet open={composerOpen&&!localThread.is_locked} onClose={()=>{setComposerOpen(false);setReplyingTo(null);setQuotingPost(null);}} title={replyingTo?`Reply to ${replyingTo.authorName}`:'Post a Reply'}>
         <div className="p-4 mb-[100px]">
-          <Composer key={`m-${replyingTo?.id}-${quotingPost?.id}`}
+          <Composer
+            key={`m-${replyingTo?.id}-${quotingPost?.id}`}
             placeholder={replyingTo?`Replying to ${replyingTo.authorName}...`:'Share your thoughts...'}
-            quoteText={quotingPost?`${quotingPost.authorName} wrote:\n${(quotingPost.body??'').slice(0,200)}${(quotingPost.body??'').length>200?'...':''}`:''}
+            quoteText={quotingPost?`${quotingPost.authorName} wrote:\n${(quotingPost.body??'').replace(/<[^>]+>/g,'').slice(0,200)}`:''}
             onSubmit={body=>{submitReply(body);}}
             onCancel={()=>{setComposerOpen(false);setReplyingTo(null);setQuotingPost(null);}}
-            loading={replyLoading} autoFocus/>
+            loading={replyLoading}
+            autoFocus
+            token={token}
+          />
         </div>
       </BottomSheet>
     </div>
@@ -700,7 +918,6 @@ const BoardView = ({ board, onBack, onSelectThread, onNewThread, token }) => {
         <button onClick={onBack} className="flex items-center gap-1.5 hover:text-primary transition-colors py-1 font-medium"><ArrowLeft className="w-3.5 h-3.5"/><span className="hidden sm:inline">Forums</span><span className="sm:hidden">Back</span></button>
         <ChevronRight className="w-3 h-3"/><span className="font-semibold truncate text-foreground">{board.name}</span>
       </nav>
-
       <div className="p-4 border bg-white border-border rounded-2xl">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
@@ -718,8 +935,6 @@ const BoardView = ({ board, onBack, onSelectThread, onNewThread, token }) => {
           )}
         </div>
       </div>
-
-      {/* Filter toolbar */}
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide flex-1">
           {[['latest','Latest'],['hot','🔥 Hot'],['top','⬆️ Top']].map(([v,l])=>(
@@ -729,7 +944,6 @@ const BoardView = ({ board, onBack, onSelectThread, onNewThread, token }) => {
         <button onClick={()=>setSearchOpen(v=>!v)} className={`p-2.5 rounded-xl border transition-colors active:scale-95 shrink-0 ${searchOpen?'bg-primary/10 border-primary/30 text-primary':'border-border hover:bg-muted text-muted-foreground'}`}><Search className="w-4 h-4"/></button>
         <button onClick={()=>fetchThreads(page,sort,search)} className="p-2.5 rounded-xl border border-border hover:bg-muted text-muted-foreground transition-colors active:scale-95 shrink-0"><RefreshCw className="w-4 h-4"/></button>
       </div>
-
       {searchOpen && (
         <div className="relative">
           <Search className="absolute w-4 h-4 -translate-y-1/2 left-3 top-1/2 text-muted-foreground"/>
@@ -737,7 +951,6 @@ const BoardView = ({ board, onBack, onSelectThread, onNewThread, token }) => {
           {search && <button onClick={()=>setSearch('')} className="absolute p-1 -translate-y-1/2 rounded-full right-3 top-1/2 hover:bg-muted"><X className="w-3.5 h-3.5 text-muted-foreground"/></button>}
         </div>
       )}
-
       <div className="overflow-hidden border rounded-2xl border-border bg-background">
         <div className="hidden md:grid grid-cols-[1fr_56px_56px_56px] gap-2 px-4 py-2.5 border-b border-border bg-muted/30 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
           <span>Thread</span><span className="text-center">Votes</span><span className="text-center">Replies</span><span className="text-center">Views</span>
@@ -781,7 +994,6 @@ const BoardView = ({ board, onBack, onSelectThread, onNewThread, token }) => {
                 </div>
         }
       </div>
-
       {meta.last_page>1 && (
         <div className="flex items-center justify-center gap-2">
           <button onClick={()=>setPage(p=>Math.max(1,p-1))} disabled={page===1} className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border border-border hover:bg-muted disabled:opacity-30 active:scale-95 transition-colors"><ChevronLeft className="w-4 h-4"/><span className="hidden sm:inline">Prev</span></button>
@@ -790,7 +1002,6 @@ const BoardView = ({ board, onBack, onSelectThread, onNewThread, token }) => {
           <button onClick={()=>setPage(p=>Math.min(meta.last_page,p+1))} disabled={page===meta.last_page} className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border border-border hover:bg-muted disabled:opacity-30 active:scale-95 transition-colors"><span className="hidden sm:inline">Next</span><ChevronRight className="w-4 h-4"/></button>
         </div>
       )}
-
       {!board.is_locked && (
         <button onClick={onNewThread} className="sm:hidden fixed bottom-6 right-4 z-30 flex items-center gap-2 px-5 py-3.5 rounded-full bg-primary text-white font-bold text-sm shadow-2xl shadow-primary/30 active:scale-95 transition-all">
           <Pen className="w-4 h-4"/>New Thread
@@ -1022,7 +1233,6 @@ const ForumPage = ({ onAdminOpen, token, toast }) => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur-md">
         <div className="px-4 mx-auto max-w-7xl sm:px-6">
           <div className="flex items-center gap-2 h-14">
@@ -1066,7 +1276,15 @@ const ForumPage = ({ onAdminOpen, token, toast }) => {
         </div>
       </header>
 
-      {showNewThread&&selectedBoard && <NewThreadModal board={selectedBoard} onClose={()=>setShowNewThread(false)} onSubmit={createThread} loading={newThreadLoading}/>}
+      {showNewThread&&selectedBoard &&
+        <NewThreadModal
+          board={selectedBoard}
+          onClose={()=>setShowNewThread(false)}
+          onSubmit={createThread}
+          loading={newThreadLoading}
+          token={token}
+        />
+      }
 
       <div className="px-4 py-4 mx-auto max-w-7xl sm:px-6 sm:py-6">
         <div className="flex gap-6">
@@ -1103,10 +1321,9 @@ const MallSocial = () => {
   const token = auth_states.StateToken;
 
   const location = useLocation();
-
-  const [open, setOpen] = useState(false)
-  const [getOpenLanguageSelection, setOpenLanguageSelection] = useState(false)
-  const [getSelectedLanguage, setSelectedLanguage] = useState("")
+  const [open, setOpen] = useState(false);
+  const [getOpenLanguageSelection, setOpenLanguageSelection] = useState(false);
+  const [getSelectedLanguage, setSelectedLanguage] = useState('');
 
   const [forumEnabled, setForumEnabled]   = useState(false);
   const [statusLoading, setStatusLoading] = useState(true);
@@ -1126,97 +1343,42 @@ const MallSocial = () => {
     });
   },[auth_states]);
 
-  const TopCategories = () =>{
-    return(
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-5">
-
-        <div
-          onClick={() => navigate('/academy-index')}
-          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-            location.pathname.includes('academy-index') || location.pathname.includes('academy') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-          }`}
-        >
-          <div className="mb-1 text-xl"><RiGraduationCapLine /></div>
-          <span className="text-[12px] md:text-[15px] academy_label_id">Learn</span>
-        </div>
-
-        <div
-          onClick={() => navigate('/grow')}
-          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-            location.pathname.includes('grow') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-          }`}
-        >
-          <div className="mb-1 text-xl"><PiPottedPlantBold /></div>
-          <span className="text-[12px] md:text-[15px] grow_label_id">Grow</span>
-        </div>
-
-        <div
-          onClick={() => navigate('/travel')}
-          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-            location.pathname.includes('travel') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-          }`}
-        >
-          <div className="mb-1 text-xl"><MdOutlineAirplanemodeActive /></div>
-          <span className="text-[12px] md:text-[15px] travel_label_id">Travel</span>
-        </div>
-
-        <div
-          onClick={() => navigate('/earn')}
-          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-            location.pathname.includes('earn') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-          }`}
-        >
-          <div className="mb-1 text-xl"><LuCircleDollarSign /></div>
-          <span className="text-[12px] md:text-[15px] earn_label_id">Earn</span>
-        </div>
-
-        <div
-          onClick={() => navigate('/social')}
-          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-            location.pathname.includes('social') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-          }`}
-        >
-          <div className="mb-1 text-xl"><BiLike /></div>
-          <span className="text-[12px] md:text-[15px] social_label_id">Social</span>
-        </div>
-
-        <div
-          onClick={() => navigate('/shop')}
-          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-            location.pathname.includes('shop') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-          }`}
-        >
-          <div className="mb-1 text-xl"><BiStore /></div>
-          <span className="text-[12px] md:text-[15px] shop_label_id">Shop</span>
-        </div>
-
-        <div
-          onClick={() => navigate('/lifestyle')}
-          className={`cursor-pointer flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px] ${
-            location.pathname.includes('lifestyle') ? "bg-[#031956] text-white" : "bg-gray-200 text-gray-500"
-          }`}
-        >
-          <div className="mb-1 text-xl"><IoFitnessOutline /></div>
-          <span className="text-[12px] md:text-[15px] lifestyle_label_id">Lifestyle</span>
-        </div>
-      </div>
-    )
-  }
+  const TopCategories = () => (
+    <div className="flex flex-wrap items-center justify-center gap-2 mb-5">
+      {[
+        { path:'/academy-index', match:'academy', icon:<RiGraduationCapLine/>, label:'Learn', cls:'academy_label_id' },
+        { path:'/grow',          match:'grow',    icon:<PiPottedPlantBold/>,   label:'Grow',  cls:'grow_label_id' },
+        { path:'/travel',        match:'travel',  icon:<MdOutlineAirplanemodeActive/>, label:'Travel', cls:'travel_label_id' },
+        { path:'/earn',          match:'earn',    icon:<LuCircleDollarSign/>,  label:'Earn',  cls:'earn_label_id' },
+        { path:'/social',        match:'social',  icon:<BiLike/>,              label:'Social',cls:'social_label_id' },
+        { path:'/shop',          match:'shop',    icon:<BiStore/>,             label:'Shop',  cls:'shop_label_id' },
+        { path:'/lifestyle',     match:'lifestyle',icon:<IoFitnessOutline/>,   label:'Lifestyle',cls:'lifestyle_label_id' },
+      ].map(({ path, match, icon, label, cls }) => (
+        <LinkDom key={path} to={path}
+          className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px]
+          ${location.pathname.includes(match) ? 'bg-[#031956] text-white' : 'bg-gray-200 text-gray-500'}`}>
+          <div className="mb-1 text-xl">{icon}</div>
+          <span className={`text-[12px] md:text-[15px] ${cls}`}>{label}</span>
+        </LinkDom>
+      ))}
+    </div>
+  );
 
   return (
     <>
-      <div className='mb-3'>
-        <Header 
-        handleLanguageVisibility={() => setOpenLanguageSelection(true)}
-        onPressAction={() => setOpen(!open)} 
-        ActionState={open}
+      <div className="mb-3">
+        <Header
+          handleLanguageVisibility={() => setOpenLanguageSelection(true)}
+          onPressAction={() => setOpen(!open)}
+          ActionState={open}
         />
       </div>
-      <div className='flex justify-center my-5'>
-        <div className='md:w-[75%] w-[95%]'>
-          {TopCategories()}
+      <div className="flex justify-center my-5">
+        <div className="md:w-[75%] w-[95%]">
+          <TopCategories />
         </div>
       </div>
+
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@700;900&display=swap');
         .line-clamp-1{overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
@@ -1225,9 +1387,72 @@ const MallSocial = () => {
         .scrollbar-hide::-webkit-scrollbar{display:none}
         @keyframes forum-slide-up{from{transform:translateY(100%)}to{transform:translateY(0)}}
         .forum-slide-up{animation:forum-slide-up 0.22s cubic-bezier(0.32,0.72,0,1)}
+
+        /* ── Quill editor skin overrides ── */
+        .quill-wrapper .ql-toolbar{
+          border:none!important;
+          border-bottom:1px solid var(--color-border,#e4e4e7)!important;
+          background:var(--color-muted,#f4f4f5)/20;
+          padding:6px 8px!important;
+          flex-wrap:wrap;
+        }
+        .quill-wrapper .ql-container{
+          border:none!important;
+          font-size:14px;
+        }
+        .quill-wrapper .ql-editor{
+          min-height:var(--quill-min-height,140px);
+          font-size:14px;
+          line-height:1.6;
+          padding:12px;
+        }
+        .quill-wrapper .ql-editor.ql-blank::before{
+          color:var(--color-muted-foreground,#a1a1aa);
+          font-style:normal;
+        }
+        /* Make Quill-inserted images responsive */
+        .quill-content img,
+        .ql-editor img{
+          max-width:100%;
+          height:auto;
+          border-radius:12px;
+          margin:8px 0;
+          display:block;
+        }
+        /* Responsive video iframes from Quill */
+        .quill-content .ql-video,
+        .ql-editor .ql-video{
+          width:100%;
+          max-width:100%;
+          aspect-ratio:16/9;
+          border-radius:12px;
+          margin:8px 0;
+          display:block;
+        }
+        /* Blockquote styling in rendered content */
+        .quill-content blockquote{
+          border-left:4px solid color-mix(in srgb,var(--color-primary,#6366f1) 40%,transparent);
+          padding:8px 12px;
+          margin:8px 0;
+          background:var(--color-muted,#f4f4f5)/25;
+          border-radius:0 8px 8px 0;
+          font-style:italic;
+          font-size:13px;
+          color:var(--color-muted-foreground,#a1a1aa);
+        }
+        /* Code blocks */
+        .quill-content pre{
+          background:var(--color-muted,#f4f4f5);
+          padding:12px;
+          border-radius:8px;
+          font-size:12px;
+          overflow-x:auto;
+        }
       `}</style>
-      <Toast toasts={toasts} remove={removeToast}/>
+
+      <Toast toasts={toasts} remove={removeToast} />
       {adminOpen && <AdminPanel forumEnabled={forumEnabled} onClose={()=>setAdminOpen(false)} token={token} toast={toast}/>}
+
       {statusLoading
         ? <div className="flex items-center justify-center min-h-screen bg-background"><Spinner size="lg"/></div>
         : forumEnabled
@@ -1235,16 +1460,14 @@ const MallSocial = () => {
           : <div className="flex items-center justify-center min-h-screen bg-background"><Spinner size="lg"/></div>
       }
 
-      {
-        getOpenLanguageSelection
-        && 
-        <LanguageBottomSheet 
-        selected={getSelectedLanguage}
-        handleSelectContent={(event) => setSelectedLanguage(event)}
-        handleClose={() => setOpenLanguageSelection(false)} 
-        DataContent={auth_states.Languages}/>
+      {getOpenLanguageSelection &&
+        <LanguageBottomSheet
+          selected={getSelectedLanguage}
+          handleSelectContent={e => setSelectedLanguage(e)}
+          handleClose={() => setOpenLanguageSelection(false)}
+          DataContent={auth_states.Languages}
+        />
       }
-      
     </>
   );
 };

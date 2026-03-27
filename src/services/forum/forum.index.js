@@ -228,3 +228,30 @@ export const sendHeartbeat = async (token) => {
         data: {},
     });
 };
+
+// ─────────────────────────────────────────────────────────────────
+// MEDIA UPLOAD
+// ─────────────────────────────────────────────────────────────────
+/**
+ * POST /forum/media/upload
+ * Accepts a single image or video file (multipart/form-data).
+ * Returns: { success: true, url: "https://...", type: "image"|"video" }
+ *
+ * Used by the Quill editor image/video handlers.
+ * Follows the same multipart pattern as UploadFile in your existing API files.
+ */
+export const uploadForumMedia = async (token, file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+ 
+    // Spread token headers but remove Content-Type so axios sets the
+    // correct multipart boundary automatically (never hard-code it for FormData).
+    const { 'Content-Type': _drop, ...tokenHeaders } = { ...token };
+ 
+    return await axios({
+        headers: { ...tokenHeaders },
+        method: 'POST',
+        url: `${ForumAPI}media/upload`,
+        data: formData,
+    });
+};
