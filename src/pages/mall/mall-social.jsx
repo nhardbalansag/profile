@@ -445,7 +445,7 @@ const NewThreadModal = ({ board, onClose, onSubmit, loading, token }) => {
 
   return (
     <div className="inset-0 z-50 flex flex-col bg-background sm:items-center sm:justify-center sm:bg-black/60 sm:backdrop-blur-sm">
-      <div className="flex my-5 flex-col h-full sm:h-auto sm:max-h-[90vh] sm:w-full sm:max-w-2xl sm:rounded-2xl sm:border sm:border-border sm:shadow-2xl sm:bg-background overflow-hidden">
+      <div className="flex flex-col h-full sm:h-auto sm:max-h-[90vh] sm:w-full sm:max-w-2xl sm:rounded-2xl sm:border sm:border-border sm:shadow-2xl sm:bg-background overflow-hidden">
 
         {/* Header */}
         <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-border bg-white shrink-0">
@@ -531,6 +531,113 @@ const NewThreadModal = ({ board, onClose, onSubmit, loading, token }) => {
                 </div>
               )}
 
+              <p className="text-[10px] text-muted-foreground mt-1.5 flex items-center gap-1">
+                <Image className="w-3 h-3" /> Images and videos supported via the toolbar
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════
+// EDIT THREAD MODAL — same shell as NewThreadModal, pre-populated
+// ═══════════════════════════════════════════════════════════════
+const EditThreadModal = ({ thread, onClose, onSubmit, loading, token }) => {
+  const [title, setTitle]         = useState(thread.title ?? '');
+  const [body, setBody]           = useState(thread.body  ?? '');
+  const [tag, setTag]             = useState(thread.tag   ?? '');
+  const [preview, setPreview]     = useState(false);
+  const [error, setError]         = useState('');
+  const [uploading, setUploading] = useState(false);
+
+  const submit = () => {
+    if (!title.trim())           { setError('Please enter a title.'); return; }
+    if (title.trim().length < 5) { setError('Title must be at least 5 characters.'); return; }
+    if (isQuillEmpty(body))      { setError('Content must not be empty.'); return; }
+    onSubmit({ title: title.trim(), body, tag });
+  };
+
+  const isSubmitDisabled = loading || uploading;
+
+  return (
+    <div className="inset-0 z-50 flex flex-col bg-background sm:items-center sm:justify-center sm:bg-black/60 sm:backdrop-blur-sm">
+      <div className="my-5 flex flex-col h-full sm:h-auto sm:max-h-[90vh] sm:w-full sm:max-w-2xl sm:rounded-2xl sm:border sm:border-border sm:shadow-2xl sm:bg-background overflow-hidden">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-border bg-white shrink-0">
+          <button onClick={onClose} disabled={isSubmitDisabled} className="p-2 -ml-2 sm:hidden rounded-xl hover:bg-muted disabled:opacity-40"><ArrowLeft className="w-5 h-5" /></button>
+          <div className="flex-1 mx-2 sm:flex-none sm:mx-0">
+            <h2 className="text-base font-black sm:text-lg text-foreground" style={{ fontFamily: "'Sora',sans-serif" }}>Edit Thread</h2>
+            <p className="text-xs text-muted-foreground">Changes are saved immediately</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={onClose} disabled={isSubmitDisabled} className="hidden px-4 py-2 text-sm font-medium sm:block rounded-xl text-muted-foreground hover:bg-muted disabled:opacity-40">Cancel</button>
+            <button onClick={submit} disabled={isSubmitDisabled}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold bg-primary text-white hover:opacity-90 disabled:opacity-60 active:scale-95 transition-all">
+              {isSubmitDisabled ? <Spinner size="sm" /> : <Check className="w-4 h-4" />}
+              {uploading ? 'Uploading\u2026' : loading ? 'Saving\u2026' : 'Save'}
+            </button>
+          </div>
+        </div>
+        <div className="flex-1 overflow-y-auto bg-white">
+          <div className="p-4 space-y-4 sm:p-6">
+            {error && (
+              <div className="flex items-center gap-2 p-3 text-sm text-red-400 border rounded-xl bg-red-500/10 border-red-500/20">
+                <AlertCircle className="w-4 h-4 shrink-0" />{error}
+              </div>
+            )}
+            <div>
+              <label className="block mb-2 text-xs font-bold tracking-wider uppercase text-muted-foreground">Thread Title *</label>
+              <input type="text" value={title} onChange={e => { setTitle(e.target.value); setError(''); }}
+                disabled={isSubmitDisabled} placeholder="Write a clear, descriptive title..."
+                className="w-full px-4 py-3 text-sm transition-all border bg-muted/30 border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-60"
+                style={{ fontSize: 16 }} />
+              <p className="text-[10px] text-muted-foreground mt-1">{title.length} / 255</p>
+            </div>
+            <div>
+              <label className="block mb-2 text-xs font-bold tracking-wider uppercase text-muted-foreground">Tag</label>
+              <div className="flex gap-2 px-4 pb-1 -mx-4 overflow-x-auto sm:mx-0 sm:px-0 sm:flex-wrap scrollbar-hide">
+                {TAGS.map(t => (
+                  <button key={t} onClick={() => setTag(tag === t ? '' : t)} disabled={isSubmitDisabled}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold border whitespace-nowrap shrink-0 transition-all active:scale-95 disabled:opacity-60
+                    ${tag === t ? 'bg-primary text-white border-primary shadow-sm' : 'border-border text-muted-foreground hover:border-primary/50 bg-muted/30'}`}>
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs font-bold tracking-wider uppercase text-muted-foreground">Content *</label>
+                <div className="flex items-center gap-2">
+                  {uploading && <span className="flex items-center gap-1 text-xs text-muted-foreground"><Spinner size="sm" />Uploading…</span>}
+                  <button onClick={() => setPreview(v => !v)} disabled={isSubmitDisabled}
+                    className={`px-3 py-1 rounded-xl text-xs font-semibold transition-colors ${preview ? 'bg-primary text-white' : 'text-muted-foreground hover:bg-muted'}`}>
+                    {preview ? 'Edit' : 'Preview'}
+                  </button>
+                </div>
+              </div>
+              {preview ? (
+                <div className="min-h-[200px] p-4 border border-border rounded-2xl">
+                  {isQuillEmpty(body)
+                    ? <p className="text-sm italic text-muted-foreground">Nothing to preview.</p>
+                    : <RichBody text={body} />}
+                </div>
+              ) : (
+                <div className="border border-border rounded-2xl overflow-hidden">
+                  <QuillEditor
+                    value={body}
+                    onChange={setBody}
+                    placeholder="Edit your thread content..."
+                    minHeight={200}
+                    token={token}
+                    onUploadStart={() => setUploading(true)}
+                    onUploadEnd={() => setUploading(false)}
+                    disabled={isSubmitDisabled}
+                  />
+                </div>
+              )}
               <p className="text-[10px] text-muted-foreground mt-1.5 flex items-center gap-1">
                 <Image className="w-3 h-3" /> Images and videos supported via the toolbar
               </p>
@@ -695,7 +802,9 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
   const [quotingPost, setQuotingPost]   = useState(null);
   const [replyLoading, setReplyLoading] = useState(false);
   const [localThread, setLocalThread]   = useState(thread);
-  const [composerOpen, setComposerOpen] = useState(false);
+  const [composerOpen, setComposerOpen]     = useState(false);
+  const [editThreadOpen, setEditThreadOpen] = useState(false);
+  const [editThreadLoading, setEditThreadLoading] = useState(false);
   const composerRef = useRef();
 
   const fetchPosts = useCallback(async (p=1) => {
@@ -753,6 +862,27 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
     catch(e) { setPosts(snap); setLocalThread(t=>({...t,reply_count:(t.reply_count??0)+1})); toast(e.response?.data?.message??e.message,'error'); }
   };
 
+  const handleEditThread = async ({ title, body, tag }) => {
+    setEditThreadLoading(true);
+    try {
+      const res = await forumApi.updateThread(token, localThread.id, { title, body, tag: tag || null });
+      const updated = res.data.thread ?? {};
+      setLocalThread(prev => ({
+        ...prev,
+        title:      updated.title      ?? title,
+        body:       updated.body       ?? body,
+        tag:        updated.tag        ?? tag,
+        updated_at: updated.updated_at ?? new Date().toISOString(),
+      }));
+      setEditThreadOpen(false);
+      toast('Thread updated!', 'success');
+    } catch (e) {
+      toast(e.response?.data?.message ?? e.message, 'error');
+    } finally {
+      setEditThreadLoading(false);
+    }
+  };
+
   const doReply = post => { const np=normalisePost(post); setReplyingTo(np); setQuotingPost(null); setComposerOpen(true); setTimeout(()=>composerRef.current?.scrollIntoView({behavior:'smooth',block:'center'}),150); };
   const doQuote = post => { const np=normalisePost(post); setQuotingPost(np); setReplyingTo(np); setComposerOpen(true); setTimeout(()=>composerRef.current?.scrollIntoView({behavior:'smooth',block:'center'}),150); };
 
@@ -794,9 +924,29 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
           </div>
           <div className="flex-1"/>
           <span className="text-xs text-muted-foreground">{meta.total} {meta.total===1?'reply':'replies'}</span>
+          {/* Edit button — only visible to the thread author */}
+          {!localThread.is_locked && localThread.author_id === currentUser?.id && (
+            <button
+              onClick={() => setEditThreadOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-border hover:bg-muted text-muted-foreground hover:text-foreground transition-all active:scale-95">
+              <Edit3 className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Edit Thread</span>
+            </button>
+          )}
           <button onClick={()=>fetchPosts(page)} className="p-2 transition-colors rounded-xl hover:bg-muted text-muted-foreground active:scale-95"><RefreshCw className="w-3.5 h-3.5"/></button>
         </div>
       </div>
+
+      {/* Edit Thread Modal */}
+      {editThreadOpen && (
+        <EditThreadModal
+          thread={localThread}
+          onClose={() => setEditThreadOpen(false)}
+          onSubmit={handleEditThread}
+          loading={editThreadLoading}
+          token={token}
+        />
+      )}
 
       <PostCard post={opPost} isOP depth={0} onVote={()=>{}} onReply={doReply} onQuote={doQuote} onEdit={()=>{}} onDelete={()=>{}} currentUser={currentUser} token={token}/>
 
