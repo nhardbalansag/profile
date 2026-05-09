@@ -1025,7 +1025,8 @@ const AccountContent = () => {
               <div className="ac-logo-mark">CLUB TEN</div>
               <div className="ac-logo-sub">Member Dashboard</div>
             </div>
-            <div className="ac-badge-status">Active VIP</div>
+            {/* <div className="ac-badge-status">Active VIP</div> */}
+            <div className="ac-badge-status active_label_id">Active</div>
           </div>
 
           {/* ── Main grid ── */}

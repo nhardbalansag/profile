@@ -255,3 +255,24 @@ export const uploadForumMedia = async (token, file) => {
         data: formData,
     });
 };
+
+// ─────────────────────────────────────────────────────────────────
+// USER SEARCH & PROFILES
+// ─────────────────────────────────────────────────────────────────
+
+export const searchUsers = async (token, query) => {
+    return await axios({
+        headers: { 'Content-Type': 'application/json', ...token },
+        method: 'GET',
+        url: `${BaseAPIUrl}forum/users/search`,
+        params: { q: query },
+    });
+};
+
+export const getUserProfile = async (token, userId) => {
+    return await axios({
+        headers: { 'Content-Type': 'application/json', ...token },
+        method: 'GET',
+        url: `${BaseAPIUrl}forum/users/${userId}/profile`,
+    });
+};

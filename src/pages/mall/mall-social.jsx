@@ -70,10 +70,7 @@ const normalisePost = p => ({
   replies:    Array.isArray(p.replies) ? p.replies.map(r => normalisePost(r)) : [],
 });
 
-// ─── Detect whether a string is Quill HTML or legacy markdown ─────────────
 const isHTMLContent = text => /<[a-z][\s\S]*>/i.test(text ?? '');
-
-// ─── Strip empty Quill <p><br></p> check ─────────────────────────────────
 const isQuillEmpty = html => !html || html === '<p><br></p>' || html.trim() === '';
 
 // ═══════════════════════════════════════════════════════════════
@@ -98,7 +95,6 @@ const ErrorState = ({ message, onRetry }) => (
   <div className="flex flex-col items-center justify-center px-4 py-16 text-center">
     <WifiOff className="w-10 h-10 mb-3 text-muted-foreground/40" />
     <p className="mb-1 font-semibold text-foreground">Failed to load</p>
-    {/* <p className="mb-4 text-sm text-muted-foreground">{message}</p> */}
     {onRetry && (
       <button onClick={onRetry}
         className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white rounded-full bg-primary hover:opacity-90 active:scale-95 transition-all">
@@ -166,10 +162,7 @@ const BottomSheet = ({ open, onClose, title, children }) => {
 
 // ═══════════════════════════════════════════════════════════════
 // RICH CONTENT RENDERER
-// Handles both legacy markdown AND new Quill HTML output.
 // ═══════════════════════════════════════════════════════════════
-
-// ── Legacy markdown renderer (kept for old posts) ─────────────
 const parseLine = text => {
   const parts = []; let buf = ''; let i = 0;
   const flush = k => { if (buf) { parts.push(<span key={`t${k}`}>{buf}</span>); buf = ''; } };
@@ -202,14 +195,12 @@ const MarkdownBody = ({ text }) => {
   return <div className="space-y-1">{nodes}</div>;
 };
 
-// ── RichBody: auto-detects HTML vs markdown ───────────────────
 const RichBody = ({ text }) => {
   if (!text) return null;
   if (isHTMLContent(text)) {
-    // Quill HTML — render with responsive image/video styles
     return (
       <div
-        className="quill-content text-sm text-foreground leading-relaxed"
+        className="text-sm leading-relaxed quill-content text-foreground"
         dangerouslySetInnerHTML={{ __html: text }}
       />
     );
@@ -218,42 +209,29 @@ const RichBody = ({ text }) => {
 };
 
 // ═══════════════════════════════════════════════════════════════
-// QUILL EDITOR — shared between Composer and NewThreadModal
+// QUILL EDITOR
 // ═══════════════════════════════════════════════════════════════
 const QuillEditor = ({
-  value,
-  onChange,
-  placeholder,
-  minHeight = 140,
-  token,
-  onUploadStart,
-  onUploadEnd,
-  disabled = false,
+  value, onChange, placeholder, minHeight = 140,
+  token, onUploadStart, onUploadEnd, disabled = false,
 }) => {
   const quillRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  // ── Image upload handler ─────────────────────────────────
-  const handleImageUpload = useCallback(() => {
-    fileInputRef.current?.click();
-  }, []);
+  const handleImageUpload = useCallback(() => { fileInputRef.current?.click(); }, []);
 
   const handleFileChange = useCallback(async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    // Validate type and size (max 10 MB)
     const isImage = file.type.startsWith('image/');
     const isVideo = file.type.startsWith('video/');
     if (!isImage && !isVideo) return;
     if (file.size > 10 * 1024 * 1024) { alert('File must be under 10 MB.'); return; }
-
     onUploadStart?.();
     try {
       const res = await forumApi.uploadForumMedia(token, file);
       const url  = res.data.url;
       const type = isImage ? 'image' : 'video';
-
       const quill = quillRef.current?.getEditor();
       if (!quill) return;
       const range = quill.getSelection(true);
@@ -263,103 +241,45 @@ const QuillEditor = ({
       alert('Upload failed. Please try again.');
     } finally {
       onUploadEnd?.();
-      // Reset so the same file can be re-selected
       e.target.value = '';
     }
   }, [token, onUploadStart, onUploadEnd]);
 
-  // ── Quill toolbar modules (stable reference via useMemo) ──
   const modules = useMemo(() => ({
     toolbar: {
-      container: [
-        // [{ header: [2, 3, false] }],
-        // ['bold', 'italic', 'underline', 'strike'],
-        // ['blockquote', 'code-block'],
-        // [{ list: 'ordered' }, { list: 'bullet' }],
-        [
-          // 'link', 
-          'image', 
-          'video'
-        ],
-        // ['clean'],
-      ],
-      handlers: {
-        // Override the built-in image handler to use our upload function
-        image: () => handleImageUpload(),
-        // Built-in video handler prompts for a URL (YouTube, direct .mp4, etc.)
-        // — we keep the default behaviour so no override needed for video
-      },
+      container: [['image', 'video']],
+      handlers: { image: () => handleImageUpload() },
     },
     clipboard: { matchVisual: false },
   }), [handleImageUpload]);
 
-  const formats = [
-    // 'header', 
-    // 'bold', 
-    // 'italic', 
-    // 'underline', 
-    // 'strike',
-    // 'blockquote', 
-    // 'code-block', 
-    // 'list', 
-    // 'bullet',
-    // 'link', 
-    'image', 
-    'video',
-  ];
+  const formats = ['image', 'video'];
 
   return (
     <div className="quill-wrapper" style={{ '--quill-min-height': `${minHeight}px` }}>
-      {/* Hidden file input for image/video pick */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*,video/*"
-        className="hidden"
-        onChange={handleFileChange}
-      />
+      <input ref={fileInputRef} type="file" accept="image/*,video/*" className="hidden" onChange={handleFileChange} />
       <ReactQuill
-        ref={quillRef}
-        theme="snow"
-        value={value}
-        onChange={onChange}
-        modules={modules}
-        formats={formats}
-        placeholder={placeholder}
-        readOnly={disabled}
+        ref={quillRef} theme="snow" value={value} onChange={onChange}
+        modules={modules} formats={formats} placeholder={placeholder} readOnly={disabled}
       />
     </div>
   );
 };
 
 // ═══════════════════════════════════════════════════════════════
-// COMPOSER  — wraps QuillEditor with preview + submit
+// COMPOSER
 // ═══════════════════════════════════════════════════════════════
 const Composer = ({
-  placeholder     = 'Write your reply...',
-  initialValue    = '',
-  onSubmit,
-  onCancel,
-  submitLabel     = 'Post Reply',
-  compact         = false,
-  quoteText       = null,
-  loading         = false,
-  autoFocus       = false,
-  token,
+  placeholder = 'Write your reply...', initialValue = '', onSubmit, onCancel,
+  submitLabel = 'Post Reply', compact = false, quoteText = null, loading = false,
+  autoFocus = false, token,
 }) => {
-  // When quoting, wrap the quoted text in a Quill blockquote
   const initialHTML = useMemo(() => {
     if (quoteText) {
-      const escaped = quoteText
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+      const escaped = quoteText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       return `<blockquote>${escaped.split('\n').join('<br>')}</blockquote><p></p>`;
     }
-    if (initialValue) {
-      // If it's already HTML, use as-is; if markdown, wrap in a paragraph
-      return isHTMLContent(initialValue) ? initialValue : `<p>${initialValue}</p>`;
-    }
+    if (initialValue) return isHTMLContent(initialValue) ? initialValue : `<p>${initialValue}</p>`;
     return '';
   }, [quoteText, initialValue]);
 
@@ -378,46 +298,24 @@ const Composer = ({
 
   return (
     <div className={`border border-border rounded-2xl overflow-hidden bg-background ${compact ? '' : 'shadow-sm'}`}>
-      {/* Preview toggle */}
       <div className="flex items-center px-3 py-2 border-b border-border bg-muted/20">
         <div className="flex-1" />
-        {uploading && (
-          <span className="flex items-center gap-1.5 text-xs text-muted-foreground mr-3">
-            <Spinner size="sm" /> Uploading…
-          </span>
-        )}
-        <button
-          onClick={() => setPreview(v => !v)}
+        {uploading && <span className="flex items-center gap-1.5 text-xs text-muted-foreground mr-3"><Spinner size="sm" /> Uploading…</span>}
+        <button onClick={() => setPreview(v => !v)}
           className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors ${preview ? 'bg-primary text-white' : 'text-muted-foreground hover:bg-muted'}`}>
           {preview ? 'Edit' : 'Preview'}
         </button>
       </div>
-
-      {/* Editor / Preview */}
       {preview ? (
         <div className="min-h-[90px] p-3">
-          {isQuillEmpty(body)
-            ? <p className="text-sm italic text-muted-foreground">Nothing to preview.</p>
-            : <RichBody text={body} />}
+          {isQuillEmpty(body) ? <p className="text-sm italic text-muted-foreground">Nothing to preview.</p> : <RichBody text={body} />}
         </div>
       ) : (
-        <QuillEditor
-          value={body}
-          onChange={setBody}
-          placeholder={placeholder}
-          minHeight={compact ? 90 : 140}
-          token={token}
-          onUploadStart={() => setUploading(true)}
-          onUploadEnd={() => setUploading(false)}
-          disabled={loading}
-        />
+        <QuillEditor value={body} onChange={setBody} placeholder={placeholder} minHeight={compact ? 90 : 140}
+          token={token} onUploadStart={() => setUploading(true)} onUploadEnd={() => setUploading(false)} disabled={loading} />
       )}
-
-      {/* Footer */}
       <div className="flex items-center justify-between px-3 py-2.5 border-t border-border bg-muted/10">
-        <span className="text-[10px] text-muted-foreground hidden sm:block">
-          Use toolbar to add <strong>images</strong> or <strong>videos</strong>
-        </span>
+        <span className="text-[10px] text-muted-foreground hidden sm:block">Use toolbar to add <strong>images</strong> or <strong>videos</strong></span>
         <div className="flex items-center gap-2 ml-auto">
           {onCancel && (
             <button onClick={onCancel} disabled={loading || uploading}
@@ -437,7 +335,7 @@ const Composer = ({
 };
 
 // ═══════════════════════════════════════════════════════════════
-// NEW THREAD MODAL — full-screen on mobile
+// NEW THREAD MODAL
 // ═══════════════════════════════════════════════════════════════
 const NewThreadModal = ({ board, onClose, onSubmit, loading, token }) => {
   const [title, setTitle]         = useState('');
@@ -448,9 +346,9 @@ const NewThreadModal = ({ board, onClose, onSubmit, loading, token }) => {
   const [uploading, setUploading] = useState(false);
 
   const submit = () => {
-    if (!title.trim())                  { setError('Please enter a title.'); return; }
-    if (title.trim().length < 5)        { setError('Title must be at least 5 characters.'); return; }
-    if (isQuillEmpty(body))             { setError('Content must not be empty.'); return; }
+    if (!title.trim())           { setError('Please enter a title.'); return; }
+    if (title.trim().length < 5) { setError('Title must be at least 5 characters.'); return; }
+    if (isQuillEmpty(body))      { setError('Content must not be empty.'); return; }
     onSubmit({ title: title.trim(), body, tag });
   };
 
@@ -459,8 +357,6 @@ const NewThreadModal = ({ board, onClose, onSubmit, loading, token }) => {
   return (
     <div className="inset-0 z-50 flex flex-col bg-background sm:items-center sm:justify-center sm:bg-black/60 sm:backdrop-blur-sm">
       <div className="flex my-5 flex-col h-full sm:h-auto sm:max-h-[90vh] sm:w-full sm:max-w-2xl sm:rounded-2xl sm:border sm:border-border sm:shadow-2xl sm:bg-background overflow-hidden">
-
-        {/* Header */}
         <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-border bg-white shrink-0">
           <button onClick={onClose} disabled={isSubmitDisabled} className="p-2 -ml-2 sm:hidden rounded-xl hover:bg-muted disabled:opacity-40"><ArrowLeft className="w-5 h-5" /></button>
           <div className="flex-1 mx-2 sm:flex-none sm:mx-0">
@@ -476,8 +372,6 @@ const NewThreadModal = ({ board, onClose, onSubmit, loading, token }) => {
             </button>
           </div>
         </div>
-
-        {/* Scrollable body */}
         <div className="flex-1 overflow-y-auto bg-white">
           <div className="p-4 space-y-4 sm:p-6">
             {error && (
@@ -485,8 +379,6 @@ const NewThreadModal = ({ board, onClose, onSubmit, loading, token }) => {
                 <AlertCircle className="w-4 h-4 shrink-0" />{error}
               </div>
             )}
-
-            {/* Title */}
             <div>
               <label className="block mb-2 text-xs font-bold tracking-wider uppercase text-muted-foreground">Thread Title *</label>
               <input type="text" value={title} onChange={e => { setTitle(e.target.value); setError(''); }}
@@ -495,8 +387,6 @@ const NewThreadModal = ({ board, onClose, onSubmit, loading, token }) => {
                 style={{ fontSize: 16 }} />
               <p className="text-[10px] text-muted-foreground mt-1">{title.length} / 255</p>
             </div>
-
-            {/* Tag */}
             <div>
               <label className="block mb-2 text-xs font-bold tracking-wider uppercase text-muted-foreground">Tag</label>
               <div className="flex gap-2 px-4 pb-1 -mx-4 overflow-x-auto sm:mx-0 sm:px-0 sm:flex-wrap scrollbar-hide">
@@ -509,8 +399,6 @@ const NewThreadModal = ({ board, onClose, onSubmit, loading, token }) => {
                 ))}
               </div>
             </div>
-
-            {/* Body — Quill editor */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-bold tracking-wider uppercase text-muted-foreground">Content *</label>
@@ -522,28 +410,17 @@ const NewThreadModal = ({ board, onClose, onSubmit, loading, token }) => {
                   </button>
                 </div>
               </div>
-
               {preview ? (
                 <div className="min-h-[200px] p-4 border border-border rounded-2xl">
-                  {isQuillEmpty(body)
-                    ? <p className="text-sm italic text-muted-foreground">Nothing to preview.</p>
-                    : <RichBody text={body} />}
+                  {isQuillEmpty(body) ? <p className="text-sm italic text-muted-foreground">Nothing to preview.</p> : <RichBody text={body} />}
                 </div>
               ) : (
-                <div className="border border-border rounded-2xl overflow-hidden">
-                  <QuillEditor
-                    value={body}
-                    onChange={setBody}
+                <div className="overflow-hidden border border-border rounded-2xl">
+                  <QuillEditor value={body} onChange={setBody}
                     placeholder="Share your thoughts, questions, or findings... Add images/videos with the toolbar."
-                    minHeight={200}
-                    token={token}
-                    onUploadStart={() => setUploading(true)}
-                    onUploadEnd={() => setUploading(false)}
-                    disabled={isSubmitDisabled}
-                  />
+                    minHeight={200} token={token} onUploadStart={() => setUploading(true)} onUploadEnd={() => setUploading(false)} disabled={isSubmitDisabled} />
                 </div>
               )}
-
               <p className="text-[10px] text-muted-foreground mt-1.5 flex items-center gap-1">
                 <Image className="w-3 h-3" /> Images and videos supported via the toolbar
               </p>
@@ -556,7 +433,7 @@ const NewThreadModal = ({ board, onClose, onSubmit, loading, token }) => {
 };
 
 // ═══════════════════════════════════════════════════════════════
-// EDIT THREAD MODAL — same shell as NewThreadModal, pre-populated
+// EDIT THREAD MODAL
 // ═══════════════════════════════════════════════════════════════
 const EditThreadModal = ({ thread, onClose, onSubmit, loading, token }) => {
   const [title, setTitle]         = useState(thread.title ?? '');
@@ -633,22 +510,12 @@ const EditThreadModal = ({ thread, onClose, onSubmit, loading, token }) => {
               </div>
               {preview ? (
                 <div className="min-h-[200px] p-4 border border-border rounded-2xl">
-                  {isQuillEmpty(body)
-                    ? <p className="text-sm italic text-muted-foreground">Nothing to preview.</p>
-                    : <RichBody text={body} />}
+                  {isQuillEmpty(body) ? <p className="text-sm italic text-muted-foreground">Nothing to preview.</p> : <RichBody text={body} />}
                 </div>
               ) : (
-                <div className="border border-border rounded-2xl overflow-hidden">
-                  <QuillEditor
-                    value={body}
-                    onChange={setBody}
-                    placeholder="Edit your thread content..."
-                    minHeight={200}
-                    token={token}
-                    onUploadStart={() => setUploading(true)}
-                    onUploadEnd={() => setUploading(false)}
-                    disabled={isSubmitDisabled}
-                  />
+                <div className="overflow-hidden border border-border rounded-2xl">
+                  <QuillEditor value={body} onChange={setBody} placeholder="Edit your thread content..."
+                    minHeight={200} token={token} onUploadStart={() => setUploading(true)} onUploadEnd={() => setUploading(false)} disabled={isSubmitDisabled} />
                 </div>
               )}
               <p className="text-[10px] text-muted-foreground mt-1.5 flex items-center gap-1">
@@ -663,9 +530,9 @@ const EditThreadModal = ({ thread, onClose, onSubmit, loading, token }) => {
 };
 
 // ═══════════════════════════════════════════════════════════════
-// POST CARD — mobile-first (unchanged except uses RichBody)
+// POST CARD — clickable author names route to user profile
 // ═══════════════════════════════════════════════════════════════
-const PostCard = ({ post, isOP=false, depth=0, onVote, onReply, onQuote, onEdit, onDelete, currentUser, token }) => {
+const PostCard = ({ post, isOP=false, depth=0, onVote, onReply, onQuote, onEdit, onDelete, onViewProfile, currentUser, token }) => {
   const [menuOpen, setMenuOpen]       = useState(false);
   const [editing, setEditing]         = useState(false);
   const [editLoading, setEditLoading] = useState(false);
@@ -687,10 +554,19 @@ const PostCard = ({ post, isOP=false, depth=0, onVote, onReply, onQuote, onEdit,
 
       {/* Header */}
       <div className="flex items-center gap-2.5 px-3.5 pt-3 pb-0">
-        <Avatar name={post.authorName} size={depth>0?'xs':'md'}/>
+        <button
+          onClick={() => post.authorId && onViewProfile?.(post.authorId, { first_name: post.authorName })}
+          className="shrink-0 focus:outline-none"
+          title={`View ${post.authorName}'s profile`}>
+          <Avatar name={post.authorName} size={depth>0?'xs':'md'} className="transition-all hover:ring-2 hover:ring-primary/40" />
+        </button>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className={`font-bold text-sm leading-none ${isOwn?'text-primary':'text-foreground'}`}>{post.authorName}</span>
+            <button
+              onClick={() => post.authorId && onViewProfile?.(post.authorId, { first_name: post.authorName })}
+              className={`font-bold text-sm leading-none hover:underline transition-colors ${isOwn ? 'text-primary' : 'text-foreground hover:text-primary'}`}>
+              {post.authorName}
+            </button>
             {isOP  && <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-primary/10 text-primary leading-none">OP</span>}
             {isOwn && <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-emerald-500/10 text-emerald-400 leading-none">You</span>}
           </div>
@@ -709,6 +585,9 @@ const PostCard = ({ post, isOP=false, depth=0, onVote, onReply, onQuote, onEdit,
                 <div className="top-10 z-[2000] bg-white border border-border rounded-2xl shadow-2xl min-w-[160px] py-1.5 overflow-visible">
                   <button onClick={() => { onReply(post); setMenuOpen(false); }} className="flex items-center w-full gap-3 px-4 py-2.5 text-sm hover:bg-muted text-foreground transition-colors"><CornerDownRight className="w-4 h-4" />Reply</button>
                   <button onClick={() => { onQuote(post); setMenuOpen(false); }} className="flex items-center w-full gap-3 px-4 py-2.5 text-sm hover:bg-muted text-foreground transition-colors"><Quote className="w-4 h-4" />Quote</button>
+                  {post.authorId && (
+                    <button onClick={() => { onViewProfile?.(post.authorId, { first_name: post.authorName }); setMenuOpen(false); }} className="flex items-center w-full gap-3 px-4 py-2.5 text-sm hover:bg-muted text-foreground transition-colors"><Users className="w-4 h-4" />View Profile</button>
+                  )}
                   {isOwn && <>
                     <div className="mx-3 my-1 border-t border-border" />
                     <button onClick={() => { setEditing(true); setMenuOpen(false); }} className="flex items-center w-full gap-3 px-4 py-2.5 text-sm hover:bg-muted text-foreground transition-colors"><Edit3 className="w-4 h-4" />Edit Post</button>
@@ -724,15 +603,7 @@ const PostCard = ({ post, isOP=false, depth=0, onVote, onReply, onQuote, onEdit,
       {/* Body */}
       <div className="px-3.5 pt-2.5 pb-1">
         {editing
-          ? <Composer
-              initialValue={post.body}
-              onSubmit={handleEdit}
-              onCancel={() => setEditing(false)}
-              submitLabel="Save Edit"
-              compact
-              loading={editLoading}
-              token={token}
-            />
+          ? <Composer initialValue={post.body} onSubmit={handleEdit} onCancel={() => setEditing(false)} submitLabel="Save Edit" compact loading={editLoading} token={token} />
           : <RichBody text={post.body} />
         }
       </div>
@@ -768,7 +639,7 @@ const PostCard = ({ post, isOP=false, depth=0, onVote, onReply, onQuote, onEdit,
 // ═══════════════════════════════════════════════════════════════
 // POST TREE
 // ═══════════════════════════════════════════════════════════════
-const PostTree = ({ post, depth=0, onVote, onReply, onQuote, onEdit, onDelete, currentUser, token }) => {
+const PostTree = ({ post, depth=0, onVote, onReply, onQuote, onEdit, onDelete, onViewProfile, currentUser, token }) => {
   const np = normalisePost(post);
   const hasReplies = np.replies.length > 0;
   const [expanded, setExpanded] = useState(false);
@@ -777,7 +648,7 @@ const PostTree = ({ post, depth=0, onVote, onReply, onQuote, onEdit, onDelete, c
   return (
     <div style={depth>0?{marginLeft:indent,marginTop:8}:{}}>
       {depth>0 && <div className="flex items-center gap-1 mb-1.5"><div className="w-4 h-0.5 rounded-full bg-border/60"/><div className="flex-1 h-px bg-border/30"/></div>}
-      <PostCard post={np} depth={depth} onVote={onVote} onReply={onReply} onQuote={onQuote} onEdit={onEdit} onDelete={onDelete} currentUser={currentUser} token={token}/>
+      <PostCard post={np} depth={depth} onVote={onVote} onReply={onReply} onQuote={onQuote} onEdit={onEdit} onDelete={onDelete} onViewProfile={onViewProfile} currentUser={currentUser} token={token}/>
       {hasReplies && (
         <>
           {!expanded && (
@@ -791,7 +662,7 @@ const PostTree = ({ post, depth=0, onVote, onReply, onQuote, onEdit, onDelete, c
                 <ChevronUp className="w-3.5 h-3.5"/>Collapse replies
               </button>
               <div className="pl-3 mt-2 ml-2 space-y-2 border-l-2" style={{borderColor:'color-mix(in srgb,var(--color-primary,#6366f1) 20%,transparent)'}}>
-                {np.replies.map(r=><PostTree key={r.id} post={r} depth={depth+1} onVote={onVote} onReply={onReply} onQuote={onQuote} onEdit={onEdit} onDelete={onDelete} currentUser={currentUser} token={token}/>)}
+                {np.replies.map(r=><PostTree key={r.id} post={r} depth={depth+1} onVote={onVote} onReply={onReply} onQuote={onQuote} onEdit={onEdit} onDelete={onDelete} onViewProfile={onViewProfile} currentUser={currentUser} token={token}/>)}
               </div>
             </>
           )}
@@ -804,7 +675,7 @@ const PostTree = ({ post, depth=0, onVote, onReply, onQuote, onEdit, onDelete, c
 // ═══════════════════════════════════════════════════════════════
 // THREAD VIEW
 // ═══════════════════════════════════════════════════════════════
-const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
+const ThreadView = ({ thread, board, onBack, currentUser, token, toast, onViewProfile }) => {
   const [posts, setPosts]               = useState([]);
   const [meta, setMeta]                 = useState({ current_page:1, last_page:1, total:0 });
   const [loadingPosts, setLoadingPosts] = useState(true);
@@ -920,7 +791,13 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
         </div>
         <h1 className="mb-2 text-lg font-black leading-tight sm:text-xl text-foreground" style={{fontFamily:"'Sora',sans-serif"}}>{localThread.title}</h1>
         <div className="flex flex-wrap items-center gap-3 mb-3 text-xs text-muted-foreground">
-          <span>by <span className="font-semibold text-primary">{localThread.author??localThread.authorName}</span></span>
+          <span>by{' '}
+            <button
+              onClick={() => localThread.author_id && onViewProfile?.(localThread.author_id, { first_name: localThread.author ?? localThread.authorName })}
+              className="font-semibold transition-colors text-primary hover:underline">
+              {localThread.author ?? localThread.authorName}
+            </button>
+          </span>
           <span title={formatDate(localThread.created_at??localThread.createdAt)}>{timeAgo(localThread.created_at??localThread.createdAt)}</span>
           <span className="flex items-center gap-1"><Eye className="w-3 h-3"/>{formatCount(localThread.view_count??0)}</span>
           <span className="flex items-center gap-1"><MessageSquare className="w-3 h-3"/>{meta.total}</span>
@@ -937,10 +814,8 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
           </div>
           <div className="flex-1"/>
           <span className="text-xs text-muted-foreground">{meta.total} {meta.total===1?'reply':'replies'}</span>
-          {/* Edit button — only visible to the thread author */}
           {!localThread.is_locked && localThread.author_id === currentUser?.id && (
-            <button
-              onClick={() => setEditThreadOpen(true)}
+            <button onClick={() => setEditThreadOpen(true)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-border hover:bg-muted text-muted-foreground hover:text-foreground transition-all active:scale-95">
               <Edit3 className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Edit Thread</span>
@@ -950,18 +825,11 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
         </div>
       </div>
 
-      {/* Edit Thread Modal */}
       {editThreadOpen && (
-        <EditThreadModal
-          thread={localThread}
-          onClose={() => setEditThreadOpen(false)}
-          onSubmit={handleEditThread}
-          loading={editThreadLoading}
-          token={token}
-        />
+        <EditThreadModal thread={localThread} onClose={() => setEditThreadOpen(false)} onSubmit={handleEditThread} loading={editThreadLoading} token={token} />
       )}
 
-      <PostCard post={opPost} isOP depth={0} onVote={()=>{}} onReply={doReply} onQuote={doQuote} onEdit={()=>{}} onDelete={()=>{}} currentUser={currentUser} token={token}/>
+      <PostCard post={opPost} isOP depth={0} onVote={()=>{}} onReply={doReply} onQuote={doQuote} onEdit={()=>{}} onDelete={()=>{}} onViewProfile={onViewProfile} currentUser={currentUser} token={token}/>
 
       <div className="flex items-center gap-2 overflow-x-auto pb-0.5 scrollbar-hide">
         <span className="text-xs text-muted-foreground shrink-0">Sort:</span>
@@ -975,7 +843,7 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
         : postsError
           ? <ErrorState message={postsError} onRetry={()=>fetchPosts(page)}/>
           : posts.length>0
-            ? <div className="space-y-3">{posts.map(p=><PostTree key={p.id} post={p} depth={0} onVote={handleVotePost} onReply={doReply} onQuote={doQuote} onEdit={handleEditPost} onDelete={handleDeletePost} currentUser={currentUser} token={token}/>)}</div>
+            ? <div className="space-y-3">{posts.map(p=><PostTree key={p.id} post={p} depth={0} onVote={handleVotePost} onReply={doReply} onQuote={doQuote} onEdit={handleEditPost} onDelete={handleDeletePost} onViewProfile={onViewProfile} currentUser={currentUser} token={token}/>)}</div>
             : <div className="py-12 text-center border border-border rounded-2xl bg-background">
                 <MessageCircle className="w-10 h-10 mx-auto mb-3 opacity-20 text-muted-foreground"/>
                 <p className="font-semibold text-foreground">No replies yet</p>
@@ -993,7 +861,6 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
         </div>
       )}
 
-      {/* Desktop inline composer */}
       {!localThread.is_locked && (
         <div ref={composerRef} className="hidden overflow-hidden border sm:block rounded-2xl border-border bg-background">
           <div className="flex items-center gap-3 px-4 py-3 border-b border-border bg-muted/20">
@@ -1010,16 +877,13 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
               quoteText={quotingPost?`${quotingPost.authorName} wrote:\n${(quotingPost.body??'').replace(/<[^>]+>/g,'').slice(0,200)}`:''}
               onSubmit={submitReply}
               onCancel={replyingTo?()=>{setReplyingTo(null);setQuotingPost(null);}:null}
-              loading={replyLoading}
-              compact
-              token={token}
+              loading={replyLoading} compact token={token}
             />
           </div>
         </div>
       )}
       {localThread.is_locked && <div className="flex items-center gap-3 p-4 text-sm border text-muted-foreground border-border rounded-2xl bg-muted/10"><Lock className="w-4 h-4 shrink-0"/>Thread is locked.</div>}
 
-      {/* Mobile sticky reply bar */}
       {!localThread.is_locked && (
         <div className="fixed bottom-0 left-0 right-0 z-40 px-4 py-3 border-t sm:hidden bg-background/97 backdrop-blur-md border-border">
           <button onClick={()=>{setComposerOpen(true);}} className="w-full flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-border bg-muted/30 active:scale-[0.98] transition-all">
@@ -1030,7 +894,6 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
         </div>
       )}
 
-      {/* Mobile composer sheet */}
       <BottomSheet open={composerOpen&&!localThread.is_locked} onClose={()=>{setComposerOpen(false);setReplyingTo(null);setQuotingPost(null);}} title={replyingTo?`Reply to ${replyingTo.authorName}`:'Post a Reply'}>
         <div className="p-4 mb-[100px]">
           <Composer
@@ -1039,9 +902,7 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
             quoteText={quotingPost?`${quotingPost.authorName} wrote:\n${(quotingPost.body??'').replace(/<[^>]+>/g,'').slice(0,200)}`:''}
             onSubmit={body=>{submitReply(body);}}
             onCancel={()=>{setComposerOpen(false);setReplyingTo(null);setQuotingPost(null);}}
-            loading={replyLoading}
-            autoFocus
-            token={token}
+            loading={replyLoading} autoFocus token={token}
           />
         </div>
       </BottomSheet>
@@ -1052,7 +913,7 @@ const ThreadView = ({ thread, board, onBack, currentUser, token, toast }) => {
 // ═══════════════════════════════════════════════════════════════
 // BOARD VIEW
 // ═══════════════════════════════════════════════════════════════
-const BoardView = ({ board, onBack, onSelectThread, onNewThread, token }) => {
+const BoardView = ({ board, onBack, onSelectThread, onNewThread, onViewProfile, token }) => {
   const [threads, setThreads] = useState([]);
   const [meta, setMeta]       = useState({current_page:1,last_page:1,total:0});
   const [loading, setLoading] = useState(true);
@@ -1081,7 +942,7 @@ const BoardView = ({ board, onBack, onSelectThread, onNewThread, token }) => {
         <button onClick={onBack} className="flex items-center gap-1.5 hover:text-primary transition-colors py-1 font-medium"><ArrowLeft className="w-3.5 h-3.5"/><span className="hidden sm:inline">Forums</span><span className="sm:hidden">Back</span></button>
         <ChevronRight className="w-3 h-3"/><span className="font-semibold truncate text-foreground">{board.name}</span>
       </nav>
-      <div className="p-4 border bg-white border-border rounded-2xl">
+      <div className="p-4 bg-white border border-border rounded-2xl">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h1 className="text-lg font-black sm:text-xl text-foreground" style={{fontFamily:"'Sora',sans-serif"}}>{board.name}</h1>
@@ -1135,7 +996,13 @@ const BoardView = ({ board, onBack, onSelectThread, onNewThread, token }) => {
                           <span className="text-sm font-semibold transition-colors text-foreground group-hover:text-primary line-clamp-1">{t.title}</span>
                         </div>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <span>by <span className="font-medium text-primary/80">{t.author}</span></span>
+                          <span>by{' '}
+                            <button
+                              onClick={e => { e.stopPropagation(); t.author_id && onViewProfile?.(t.author_id, { first_name: t.author }); }}
+                              className="font-medium transition-colors text-primary/80 hover:text-primary hover:underline">
+                              {t.author}
+                            </button>
+                          </span>
                           <span>·</span><span title={formatDate(t.created_at)}>{timeAgo(t.created_at)}</span>
                         </div>
                         <div className="flex items-center gap-3 mt-1.5 text-xs text-muted-foreground md:hidden">
@@ -1296,6 +1163,589 @@ const TrendingSidebar = ({ onSelectThread, token }) => {
 };
 
 // ═══════════════════════════════════════════════════════════════
+// USER SEARCH VIEW
+// ═══════════════════════════════════════════════════════════════
+const UserSearchView = ({ onSelectUser, token }) => {
+  const [query, setQuery]       = useState('');
+  const [users, setUsers]       = useState([]);
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState(null);
+  const [searched, setSearched] = useState(false);
+  const debounceRef             = useRef();
+
+  const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_URL ?? '';
+
+  useEffect(() => {
+    clearTimeout(debounceRef.current);
+    if (!query.trim()) { setUsers([]); setSearched(false); setLoading(false); return; }
+    debounceRef.current = setTimeout(async () => {
+      setLoading(true); setError(null); setSearched(false);
+      try {
+        const res = await forumApi.searchUsers(token, query.trim());
+        // Support both { data: { users: [] } } and { data: { data: [] } } (paginated)
+        const list = res.data?.data?.data ?? res.data?.data?.users ?? res.data?.users ?? [];
+        setUsers(list);
+        setSearched(true);
+      } catch (e) {
+        setError(e.response?.data?.message ?? e.message ?? 'Search failed');
+      } finally {
+        setLoading(false);
+      }
+    }, 400);
+    return () => clearTimeout(debounceRef.current);
+  }, [query, token]);
+
+  const getMembershipBadge = (user) => {
+    const type = user.accounts_table?.subscription__sales__transactions_one?.subscription_category?.membership_type?.type_title;
+    return type ?? user.accounts_table?.user_type_table?.user_type_title ?? null;
+  };
+
+  const getMembershipColor = (title) => {
+    if (!title) return { bg: 'bg-gray-100', text: 'text-gray-500', border: 'border-gray-200' };
+    if (title.toUpperCase() === 'VIP') return { bg: 'bg-amber-50', text: 'text-amber-600', border: 'border-amber-200' };
+    if (title.toUpperCase() === 'PCA') return { bg: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-200' };
+    if (title.toLowerCase() === 'admin') return { bg: 'bg-purple-50', text: 'text-purple-600', border: 'border-purple-200' };
+    return { bg: 'bg-gray-100', text: 'text-gray-500', border: 'border-gray-200' };
+  };
+
+  return (
+    <div className="pb-24 space-y-3 sm:pb-4">
+      {/* Search bar */}
+      <div className="relative">
+        <Search className="absolute w-4 h-4 -translate-y-1/2 pointer-events-none left-4 top-1/2 text-muted-foreground" />
+        <input
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder="Search by name or account number..."
+          autoFocus
+          className="w-full pl-11 pr-10 py-3.5 bg-white border border-border rounded-2xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 shadow-sm"
+          style={{ fontSize: 16 }}
+        />
+        {query && (
+          <button onClick={() => setQuery('')}
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full hover:bg-muted transition-colors">
+            <X className="w-3.5 h-3.5 text-muted-foreground" />
+          </button>
+        )}
+      </div>
+
+      {loading && <div className="flex justify-center py-12"><Spinner size="lg" /></div>}
+      {!loading && error && <ErrorState message={error} onRetry={() => setQuery(q => q + ' ')} />}
+
+      {!loading && !error && !searched && (
+        <div className="flex flex-col items-center justify-center px-6 py-20 text-center">
+          <div className="flex items-center justify-center w-16 h-16 mb-4 border rounded-2xl bg-primary/10 border-primary/20">
+            <Users className="w-8 h-8 text-primary/60" />
+          </div>
+          <p className="font-black text-foreground text-lg mb-1.5" style={{ fontFamily: "'Sora',sans-serif" }}>Find Members</p>
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-[240px]">
+            Search for members by name or account number to view their profiles
+          </p>
+        </div>
+      )}
+
+      {!loading && !error && searched && users.length === 0 && (
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <Users className="w-10 h-10 mb-3 text-muted-foreground/30" />
+          <p className="font-semibold text-foreground">No members found</p>
+          <p className="mt-1 text-sm text-muted-foreground">Try a different name or account number</p>
+        </div>
+      )}
+
+      {!loading && !error && users.length > 0 && (
+        <>
+          <p className="text-xs text-muted-foreground px-0.5">
+            {users.length} {users.length === 1 ? 'member' : 'members'} found
+          </p>
+          <div className="overflow-hidden bg-white border divide-y shadow-sm border-border rounded-2xl divide-border">
+            {users.map(user => {
+              const displayName = [user.first_name, user.last_name].filter(Boolean).join(' ') || `Member #${user.id}`;
+              const accountNumber = user.accounts_table?.account_number;
+              const membershipTitle = getMembershipBadge(user);
+              const badgeColors = getMembershipColor(membershipTitle);
+              const profilePhoto = user.user_profile?.upload_url;
+              const country = user.country_table?.name;
+              const isActive = user.users_is_active;
+
+              return (
+                <button
+                  key={user.id}
+                  onClick={() => onSelectUser(user)}
+                  className="w-full flex items-center gap-3.5 px-4 py-3.5 hover:bg-muted/20 active:bg-muted/30 transition-colors group text-left">
+                  {/* Avatar */}
+                  <div className="relative shrink-0">
+                    {profilePhoto ? (
+                      <img
+                        src={`${STORAGE_URL}${profilePhoto}`}
+                        alt={displayName}
+                        className="object-cover transition-all shadow-sm w-11 h-11 rounded-xl ring-2 ring-white group-hover:ring-primary/30"
+                        onError={e => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                      />
+                    ) : null}
+                    <div
+                      className={`w-11 h-11 rounded-xl flex items-center justify-center text-sm font-bold text-white shadow-sm ring-2 ring-white group-hover:ring-primary/30 transition-all shrink-0 ${profilePhoto ? 'hidden' : 'flex'}`}
+                      style={{ background: avatarColor(user.first_name || '?') }}>
+                      {((user.first_name || '?').slice(0, 1) + (user.last_name || '').slice(0, 1)).toUpperCase()}
+                    </div>
+                    {isActive && (
+                      <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-white" />
+                    )}
+                  </div>
+
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <p className="text-sm font-semibold truncate transition-colors text-foreground group-hover:text-primary">
+                        {displayName}
+                      </p>
+                      {user.nick_names && (
+                        <span className="text-xs font-normal text-muted-foreground shrink-0">"{user.nick_names}"</span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                      {accountNumber && (
+                        <span className="font-mono text-xs text-muted-foreground">@{accountNumber}</span>
+                      )}
+                      {membershipTitle && (
+                        <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold border ${badgeColors.bg} ${badgeColors.text} ${badgeColors.border}`}>
+                          {membershipTitle}
+                        </span>
+                      )}
+                      {country && (
+                        <span className="text-[10px] text-muted-foreground">{country}</span>
+                      )}
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 transition-colors text-muted-foreground/40 shrink-0 group-hover:text-primary/50" />
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════
+// USER PROFILE VIEW
+// ═══════════════════════════════════════════════════════════════
+const UserProfileView = ({ userId, userSeed, onSelectThread, token, currentUser }) => {
+  const [profile, setProfile]     = useState(null);
+  const [loading, setLoading]     = useState(true);
+  const [error, setError]         = useState(null);
+  const [activeTab, setActiveTab] = useState('about');
+
+  const STORAGE_URL = import.meta.env.VITE_APP_STORAGE_URL ?? '';
+
+  const fetchProfile = useCallback(async () => {
+    setLoading(true); setError(null);
+    try {
+      const res = await forumApi.getUserProfile(token, userId);
+      // Shape: { data: { user: { info: {}, thread_count, post_count, total_votes, threads, recent_posts } } }
+      const userBlock = res.data?.data?.user ?? res.data?.user ?? {};
+      const info      = userBlock.info ?? userBlock;
+      setProfile({
+        ...info,
+        thread_count:  userBlock.thread_count  ?? 0,
+        post_count:    userBlock.post_count    ?? 0,
+        total_votes:   userBlock.total_votes   ?? 0,
+        threads:       userBlock.threads       ?? [],
+        recent_posts:  userBlock.recent_posts  ?? [],
+      });
+    } catch (e) {
+      setError(e.response?.data?.message ?? e.message ?? 'Failed to load profile');
+    } finally {
+      setLoading(false);
+    }
+  }, [token, userId]);
+
+  useEffect(() => { fetchProfile(); }, [fetchProfile]);
+
+  if (loading) return <div className="flex justify-center py-24"><Spinner size="lg" /></div>;
+  if (error)   return <ErrorState message={error} onRetry={fetchProfile} />;
+  if (!profile) return null;
+
+  const isOwn         = profile.id === currentUser?.id;
+  const fullName      = [profile.first_name, profile.last_name].filter(Boolean).join(' ') || `Member #${profile.id}`;
+  const initials      = ((profile.first_name || '?').slice(0, 1) + (profile.last_name || '').slice(0, 1)).toUpperCase();
+  const accent        = avatarColor(profile.first_name || '?');
+  const account       = profile.accounts_table ?? {};
+  const accountNum    = account.account_number;
+  const profilePhoto  = profile.user_profile?.upload_url;
+  const contentPhotos = (profile.user_uploads_table ?? []).filter(u => u.upload_type === 'contents' && !u.upload_is_deleted);
+  const country       = profile.country_table?.name;
+  const memberType    = account.subscription__sales__transactions_one?.subscription_category?.membership_type?.type_title
+                     ?? account.user_type_table?.user_type_title;
+  const isVIP         = memberType?.toUpperCase() === 'VIP';
+  const isPCA         = memberType?.toUpperCase() === 'PCA';
+  const isAdmin       = account.user_type_table?.user_type_is_admin;
+
+  const params        = profile.params ?? {};
+  const socialMedia   = params.social_media && !Array.isArray(params.social_media) ? params.social_media : null;
+  const bucketList    = Array.isArray(params.bucket_list) ? params.bucket_list : [];
+  const hobbies       = Array.isArray(params.hobbies) ? params.hobbies.filter(Boolean) : [];
+  const youtubeVids   = Array.isArray(params.youtube_videos) ? params.youtube_videos.filter(Boolean) : [];
+
+  const directs       = account.distribution?.length ?? 0;
+  const subsStart     = account.subscription__sales__transactions_one?.subscription_start;
+
+  const threads      = profile.threads      ?? [];
+  const recentPosts  = profile.recent_posts ?? [];
+
+  const threadCount  = profile.thread_count;
+  const postCount    = profile.post_count;
+  const totalVotes   = profile.total_votes;
+
+  const getYouTubeId = url => {
+    const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^?&\s]+)/);
+    return m ? m[1] : null;
+  };
+
+  const tabList = [
+    ['about',   'About'],
+    ['threads', `Threads${threadCount > 0 ? ` (${threadCount})` : ''}`],
+    ['replies', `Replies${postCount   > 0 ? ` (${postCount})`   : ''}`],
+    ...(contentPhotos.length > 0 ? [['photos',  `Photos (${contentPhotos.length})`]] : []),
+    ...(bucketList.length    > 0 ? [['bucket',  'Bucket List']] : []),
+    ...(youtubeVids.length   > 0 ? [['videos',  'Videos']]       : []),
+  ];
+
+  return (
+    <div className="pb-24 space-y-4 sm:pb-4">
+
+      {/* ── Profile card ── */}
+      <div className="overflow-hidden bg-white border shadow-sm border-border rounded-2xl">
+        {/* Banner */}
+        <div className="relative overflow-hidden h-28 sm:h-36"
+          style={{ background: `linear-gradient(135deg, ${accent}40 0%, ${accent}18 60%, #f0f4ff 100%)` }}>
+          <div className="absolute rounded-full -right-8 -top-8 w-36 h-36 opacity-20" style={{ background: accent }} />
+          <div className="absolute w-16 h-16 rounded-full right-20 top-6 opacity-10" style={{ background: accent }} />
+        </div>
+
+        <div className="px-5 pb-5">
+          <div className="flex items-end justify-between mb-4 -mt-12">
+            {/* Avatar */}
+            <div className="relative">
+              {profilePhoto ? (
+                <img
+                  src={`${STORAGE_URL}${profilePhoto}`}
+                  alt={fullName}
+                  className="object-cover w-20 h-20 border-4 border-white shadow-lg sm:w-24 sm:h-24 rounded-2xl"
+                  onError={e => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling.style.display = 'flex'; }}
+                />
+              ) : null}
+              <div
+                className={`w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border-4 border-white shadow-lg items-center justify-center font-black text-white text-2xl select-none ${profilePhoto ? 'hidden' : 'flex'}`}
+                style={{ background: accent }}>
+                {initials}
+              </div>
+              {profile.users_is_active && (
+                <span className="absolute w-4 h-4 border-2 border-white rounded-full shadow bottom-1 right-1 bg-emerald-400" />
+              )}
+            </div>
+
+            {/* Badges */}
+            <div className="flex items-center gap-1.5 mb-1 flex-wrap justify-end">
+              {isOwn && (
+                <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+                  <Check className="w-3 h-3" /> You
+                </span>
+              )}
+              {isAdmin && (
+                <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-purple-50 text-purple-600 border border-purple-200">
+                  <Shield className="w-3 h-3" /> Admin
+                </span>
+              )}
+              {isVIP && (
+                <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-600 border border-amber-200">★ VIP</span>
+              )}
+              {isPCA && !isVIP && (
+                <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-blue-600 border border-blue-200">PCA</span>
+              )}
+            </div>
+          </div>
+
+          {/* Name */}
+          <h1 className="text-xl font-black leading-tight text-foreground" style={{ fontFamily: "'Sora',sans-serif" }}>
+            {fullName}
+          </h1>
+          {profile.nick_names && (
+            <p className="text-sm font-medium mt-0.5" style={{ color: accent }}>"{profile.nick_names}"</p>
+          )}
+          {params.personal_introduction && (
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-3">{params.personal_introduction}</p>
+          )}
+
+          {/* Meta pills */}
+          <div className="flex flex-wrap items-center gap-2 mt-3">
+            {accountNum && (
+              <span className="text-xs text-muted-foreground font-mono bg-muted px-2 py-0.5 rounded-md border border-border/60">
+                @{accountNum}
+              </span>
+            )}
+            {country && (
+              <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-md border border-border/60">{country}</span>
+            )}
+            {params.occupation && (
+              <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-md border border-border/60">{params.occupation}</span>
+            )}
+            {params.company && (
+              <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-md border border-border/60">{params.company}</span>
+            )}
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-4 gap-0 pt-4 mt-4 border-t border-border">
+            {[
+              { label: 'Threads', value: threadCount },
+              { label: 'Replies', value: postCount },
+              { label: 'Votes',   value: totalVotes },
+              { label: 'Directs', value: directs },
+            ].map(({ label, value }, idx, arr) => (
+              <div key={label} className={`text-center py-1 ${idx < arr.length - 1 ? 'border-r border-border' : ''}`}>
+                <p className="text-base font-black leading-none text-foreground">{value}</p>
+                <p className="text-[11px] text-muted-foreground mt-1">{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Tabs ── */}
+      <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide pb-0.5">
+        {tabList.map(([v, l]) => (
+          <button key={v} onClick={() => setActiveTab(v)}
+            className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 transition-all active:scale-95
+            ${activeTab === v ? 'bg-primary text-white shadow-sm' : 'border border-border text-muted-foreground hover:bg-muted bg-white'}`}>
+            {l}
+          </button>
+        ))}
+      </div>
+
+      {/* ── About tab ── */}
+      {activeTab === 'about' && (
+        <div className="space-y-3">
+          {(params.company || params.business_description) && (
+            <div className="p-4 bg-white border border-border rounded-2xl">
+              <p className="mb-2 text-xs font-bold tracking-wider uppercase text-muted-foreground">Company</p>
+              {params.company && <p className="text-sm font-semibold text-foreground">{params.company}</p>}
+              {params.business_description && <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{params.business_description}</p>}
+            </div>
+          )}
+
+          {hobbies.length > 0 && (
+            <div className="p-4 bg-white border border-border rounded-2xl">
+              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2.5">Hobbies</p>
+              <div className="flex flex-wrap gap-2">
+                {hobbies.map((h, i) => (
+                  <span key={i} className="px-3 py-1.5 rounded-full text-xs font-semibold bg-primary/8 text-primary border border-primary/20">{h}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {subsStart && memberType && (
+            <div className="p-4 bg-white border border-border rounded-2xl">
+              <p className="mb-2 text-xs font-bold tracking-wider uppercase text-muted-foreground">Membership</p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-semibold text-foreground">{memberType}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Since {new Date(subsStart).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                  </p>
+                </div>
+                <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${isVIP ? 'bg-amber-50 text-amber-600 border-amber-200' : 'bg-blue-50 text-blue-600 border-blue-200'}`}>
+                  {memberType}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {socialMedia && Object.values(socialMedia).some(Boolean) && (
+            <div className="p-4 bg-white border border-border rounded-2xl">
+              <p className="mb-3 text-xs font-bold tracking-wider uppercase text-muted-foreground">Social Media</p>
+              <div className="space-y-2">
+                {socialMedia.facebook && (
+                  <a href={socialMedia.facebook} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-2.5 rounded-xl bg-blue-50 border border-blue-100 hover:bg-blue-100 transition-colors">
+                    <div className="flex items-center justify-center bg-blue-600 rounded-lg w-7 h-7 shrink-0">
+                      <span className="text-xs font-bold text-white">f</span>
+                    </div>
+                    <span className="flex-1 text-sm font-medium text-blue-700">Facebook</span>
+                    <ChevronRight className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                  </a>
+                )}
+                {socialMedia.instagram && (
+                  <a href={socialMedia.instagram} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-2.5 rounded-xl bg-pink-50 border border-pink-100 hover:bg-pink-100 transition-colors">
+                    <div className="flex items-center justify-center rounded-lg w-7 h-7 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 shrink-0">
+                      <span className="text-xs font-bold text-white">ig</span>
+                    </div>
+                    <span className="flex-1 text-sm font-medium text-pink-700">Instagram</span>
+                    <ChevronRight className="w-3.5 h-3.5 text-pink-400 shrink-0" />
+                  </a>
+                )}
+                {socialMedia.twitter && (
+                  <a href={socialMedia.twitter} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-2.5 rounded-xl bg-sky-50 border border-sky-100 hover:bg-sky-100 transition-colors">
+                    <div className="flex items-center justify-center bg-black rounded-lg w-7 h-7 shrink-0">
+                      <span className="text-xs font-bold text-white">𝕏</span>
+                    </div>
+                    <span className="flex-1 text-sm font-medium text-sky-700">X / Twitter</span>
+                    <ChevronRight className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  </a>
+                )}
+                {socialMedia.youtube && (
+                  <a href={socialMedia.youtube} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-2.5 rounded-xl bg-red-50 border border-red-100 hover:bg-red-100 transition-colors">
+                    <div className="flex items-center justify-center bg-red-600 rounded-lg w-7 h-7 shrink-0">
+                      <span className="text-xs font-bold text-white">▶</span>
+                    </div>
+                    <span className="flex-1 text-sm font-medium text-red-700">YouTube</span>
+                    <ChevronRight className="w-3.5 h-3.5 text-red-400 shrink-0" />
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+
+          {!params.company && !params.business_description && hobbies.length === 0 && !socialMedia && !subsStart && (
+            <div className="py-12 text-center bg-white border border-border rounded-2xl text-muted-foreground">
+              <Users className="mx-auto mb-3 w-9 h-9 opacity-20" />
+              <p className="text-sm font-semibold">No additional info</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── Threads tab ── */}
+      {activeTab === 'threads' && (
+        <div className="overflow-hidden bg-white border shadow-sm border-border rounded-2xl">
+          {threads.length === 0 ? (
+            <div className="py-16 text-center text-muted-foreground">
+              <FileText className="mx-auto mb-3 w-9 h-9 opacity-20" />
+              <p className="text-sm font-semibold">No threads yet</p>
+            </div>
+          ) : (
+            <div className="divide-y divide-border">
+              {threads.map(t => (
+                <button key={t.id} onClick={() => onSelectThread(t)}
+                  className="flex items-start w-full gap-3 px-4 py-4 text-left transition-colors hover:bg-muted/20 active:bg-muted/30 group">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                      {!!t.is_hot && <Flame className="w-3 h-3 text-orange-400 shrink-0" />}
+                      {t.tag && <span className="px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-primary/10 text-primary">{t.tag}</span>}
+                    </div>
+                    <p className="text-sm font-semibold leading-snug transition-colors text-foreground group-hover:text-primary line-clamp-2">{t.title}</p>
+                    <div className="flex items-center gap-2.5 mt-1.5 text-[11px] text-muted-foreground flex-wrap">
+                      {t.board_name && <span className="font-medium text-primary/70">{t.board_name}</span>}
+                      {t.board_name && <span>·</span>}
+                      <span className="flex items-center gap-1"><ChevronUp className="w-3 h-3" />{formatCount(t.vote_count ?? 0)}</span>
+                      <span className="flex items-center gap-1"><MessageSquare className="w-3 h-3" />{formatCount(t.reply_count ?? 0)}</span>
+                      <span title={formatDate(t.created_at)}>{timeAgo(t.created_at)}</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground/40 shrink-0 mt-0.5 group-hover:text-primary/50 transition-colors" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── Replies tab ── */}
+      {activeTab === 'replies' && (
+        <div className="space-y-2">
+          {recentPosts.length === 0 ? (
+            <div className="py-16 text-center bg-white border border-border rounded-2xl text-muted-foreground">
+              <MessageCircle className="mx-auto mb-3 w-9 h-9 opacity-20" />
+              <p className="text-sm font-semibold">No replies yet</p>
+            </div>
+          ) : (
+            recentPosts.map(p => (
+              <div key={p.id} className="overflow-hidden bg-white border shadow-sm border-border rounded-2xl">
+                <div className="flex items-center gap-2 px-4 py-2.5 bg-muted/30 border-b border-border/60">
+                  <MessageSquare className="w-3 h-3 text-muted-foreground shrink-0" />
+                  <span className="flex-1 text-xs truncate text-muted-foreground">
+                    in{' '}
+                    <button
+                      onClick={() => p.thread_slug && onSelectThread({ slug: p.thread_slug, title: p.thread_title })}
+                      className="font-semibold transition-colors text-primary hover:underline">
+                      {p.thread_title ?? 'Thread'}
+                    </button>
+                  </span>
+                  <span className="text-[11px] text-muted-foreground shrink-0">{timeAgo(p.created_at)}</span>
+                </div>
+                <div className="px-4 py-3">
+                  <RichBody text={p.body} />
+                </div>
+                <div className="flex items-center gap-3 px-4 py-2 border-t border-border/40 bg-muted/10">
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <ChevronUp className="w-3 h-3" />{formatCount(p.vote_count ?? 0)} votes
+                  </span>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {/* ── Photos tab ── */}
+      {activeTab === 'photos' && (
+        <div className="overflow-hidden bg-white border border-border rounded-2xl">
+          <div className="grid grid-cols-3 gap-0.5">
+            {contentPhotos.map(photo => (
+              <div key={photo.id} className="overflow-hidden aspect-square bg-muted">
+                <img
+                  src={`${STORAGE_URL}${photo.upload_url}`}
+                  alt=""
+                  className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Bucket list tab ── */}
+      {activeTab === 'bucket' && (
+        <div className="space-y-2">
+          {bucketList.map((item, i) => (
+            <div key={i} className="flex gap-3 p-4 bg-white border border-border rounded-2xl">
+              <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                <span className="text-sm font-bold text-primary">{i + 1}</span>
+              </div>
+              <div>
+                <p className="text-sm font-bold text-foreground">{item.destination}</p>
+                {item.description && <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{item.description}</p>}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ── Videos tab ── */}
+      {activeTab === 'videos' && (
+        <div className="space-y-3">
+          {youtubeVids.map((url, i) => {
+            const vid = getYouTubeId(url);
+            if (!vid) return null;
+            return (
+              <div key={i} className="overflow-hidden bg-white border border-border rounded-2xl">
+                <div className="aspect-video">
+                  <iframe src={`https://www.youtube.com/embed/${vid}`} className="w-full h-full" allowFullScreen title={`Video ${i + 1}`} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════
 // ADMIN PANEL
 // ═══════════════════════════════════════════════════════════════
 const AdminPanel = ({ forumEnabled, onClose, token, toast }) => {
@@ -1349,127 +1799,289 @@ const ComingSoonPage = ({ onAdminOpen }) => (
 );
 
 // ═══════════════════════════════════════════════════════════════
-// FORUM PAGE
+// FORUM PAGE  — root view router + header
 // ═══════════════════════════════════════════════════════════════
 const ForumPage = ({ onAdminOpen, token, toast }) => {
   const auth_states = useSelector(state => state.AuthReducer);
-  const currentUser = auth_states?.StateUserInformation ?? { id:null, first_name:'Guest', role:'guest' };
+  const currentUser = auth_states?.StateUserInformation ?? { id: null, first_name: 'Guest', role: 'guest' };
 
+  // ── View state ───────────────────────────────────────────────
   const [view, setView]                         = useState('home');
   const [selectedBoard, setSelectedBoard]       = useState(null);
   const [selectedThread, setSelectedThread]     = useState(null);
+  const [selectedUser, setSelectedUser]         = useState(null);
+  // Where to return to when leaving the people search flow
+  const [preUserSnap, setPreUserSnap]           = useState({ view: 'home', board: null, thread: null });
+
   const [searchQuery, setSearchQuery]           = useState('');
   const [showNewThread, setShowNewThread]       = useState(false);
   const [newThreadLoading, setNewThreadLoading] = useState(false);
   const [getLoadingSelect, setGetLoadingSelect] = useState(false);
   const [searchOpen, setSearchOpen]             = useState(false);
 
-  useEffect(()=>{ const ping=()=>forumApi.sendHeartbeat(token).catch(()=>{}); ping(); const id=setInterval(ping,60_000); return()=>clearInterval(id); },[token]);
+  useEffect(() => {
+    const ping = () => forumApi.sendHeartbeat(token).catch(() => {});
+    ping();
+    const id = setInterval(ping, 60_000);
+    return () => clearInterval(id);
+  }, [token]);
 
-  const selectBoard  = b => { setSelectedBoard(b); setView('board'); setSearchQuery(''); setSearchOpen(false); };
+  // ── Navigation helpers ───────────────────────────────────────
+  const selectBoard = b => { setSelectedBoard(b); setView('board'); setSearchQuery(''); setSearchOpen(false); };
   const selectThread = t => { setSelectedThread(t); setView('thread'); };
+
   const goBack = target => {
-    if(target==='home')  { setView('home');  setSelectedBoard(null); setSelectedThread(null); }
-    if(target==='board') { setView('board'); setSelectedThread(null); }
+    if (target === 'home')  { setView('home');  setSelectedBoard(null); setSelectedThread(null); }
+    if (target === 'board') { setView('board'); setSelectedThread(null); }
+    // User search / profile navigation
+    if (target === 'users') { setView('users'); setSelectedUser(null); }
+    if (target === 'prev')  {
+      // Return to wherever the user was before entering the people search flow
+      setView(preUserSnap.view);
+      setSelectedBoard(preUserSnap.board);
+      setSelectedThread(preUserSnap.thread);
+      setSelectedUser(null);
+    }
+  };
+
+  /** Open the people search, saving the current location so we can return */
+  const openUserSearch = () => {
+    setPreUserSnap({ view, board: selectedBoard, thread: selectedThread });
+    setView('users');
+    setSearchOpen(false);
+    setSearchQuery('');
+  };
+
+  /** Navigate from user-search results to a user's profile */
+  const selectUser = user => {
+    setSelectedUser(user);
+    setView('user-profile');
+  };
+
+  /** Navigate to a user profile from clicking an author name inside any view */
+  const viewUserProfile = (userId, seed = {}) => {
+    setPreUserSnap({ view, board: selectedBoard, thread: selectedThread });
+    setSelectedUser({ id: userId, ...seed });
+    setView('user-profile');
   };
 
   const createThread = async ({ title, body, tag }) => {
     setNewThreadLoading(true);
     try {
-      const res=await forumApi.createThread(token,{forum_board_id:selectedBoard.id,title,body,tag:tag||undefined});
-      toast('Thread posted!','success'); setShowNewThread(false); setSelectedThread(res.data.thread); setView('thread');
-    } catch(e) { toast(e.response?.data?.message??e.message,'error'); }
+      const res = await forumApi.createThread(token, { forum_board_id: selectedBoard.id, title, body, tag: tag || undefined });
+      toast('Thread posted!', 'success');
+      setShowNewThread(false);
+      setSelectedThread(res.data.thread);
+      setView('thread');
+    } catch (e) { toast(e.response?.data?.message ?? e.message, 'error'); }
     finally { setNewThreadLoading(false); }
   };
 
   const selectTrendingThread = async t => {
     setGetLoadingSelect(true);
     try {
-      const res=await forumApi.getThread(token,t.slug);
-      setSelectedBoard({id:res.data.thread?.forum_board_id,name:res.data.thread?.board,slug:res.data.thread?.board_slug});
-      setSelectedThread(res.data.thread); setView('thread');
-    } catch(e) { toast(e.response?.data?.message??e.message,'error'); }
+      const res = await forumApi.getThread(token, t.slug);
+      setSelectedBoard({ id: res.data.thread?.forum_board_id, name: res.data.thread?.board, slug: res.data.thread?.board_slug });
+      setSelectedThread(res.data.thread);
+      setView('thread');
+    } catch (e) { toast(e.response?.data?.message ?? e.message, 'error'); }
     finally { setGetLoadingSelect(false); }
   };
 
   const isAdmin = auth_states?.StateUserInformation?.accounts_table?.user_type_table?.user_type_is_admin;
 
+  // Derived helpers for header display
+  const isUserFlow    = view === 'users' || view === 'user-profile';
+  const headerTitle   = view === 'board'        ? selectedBoard?.name
+                      : view === 'thread'       ? selectedThread?.title
+                      : view === 'users'        ? 'Find People'
+                      : view === 'user-profile' ? ([selectedUser?.first_name, selectedUser?.last_name].filter(Boolean).join(' ') || 'Profile')
+                      : '';
+  const headerSubtitle = view === 'thread'       ? selectedBoard?.name
+                       : view === 'user-profile' ? (selectedUser?.account_number ? `@${selectedUser.account_number}` : null)
+                       : null;
+
+  const handleHeaderBack = () => {
+    if (view === 'thread')       goBack('board');
+    else if (view === 'board')   goBack('home');
+    else if (view === 'user-profile') goBack('users');
+    else if (view === 'users')   goBack('prev');
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      {/* ── Sticky header ─────────────────────────────── */}
       <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur-md">
         <div className="px-4 mx-auto max-w-7xl sm:px-6">
           <div className="flex items-center gap-2 h-14">
-            {view!=='home'
-              ? <button onClick={()=>goBack(view==='thread'?'board':'home')} className="p-2 -ml-2 transition-colors rounded-xl hover:bg-muted active:scale-95"><ArrowLeft className="w-5 h-5"/></button>
+            {/* Back / Logo */}
+            {view !== 'home'
+              ? <button onClick={handleHeaderBack}
+                  className="p-2 -ml-2 transition-colors rounded-xl hover:bg-muted active:scale-95">
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
               : <div className="flex items-center gap-2 shrink-0">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-xl" style={{background:'var(--color-primary,#6366f1)'}}><Hash className="w-4 h-4 text-white"/></div>
-                  <span className="text-base font-black text-foreground sm:text-lg" style={{fontFamily:"'Sora',sans-serif",letterSpacing:'-0.03em'}}>ClubTEN Forum</span>
+                  <div className="flex items-center justify-center w-8 h-8 rounded-xl" style={{ background: 'var(--color-primary,#6366f1)' }}>
+                    <Hash className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-base font-black text-foreground sm:text-lg" style={{ fontFamily: "'Sora',sans-serif", letterSpacing: '-0.03em' }}>
+                    ClubTEN Forum
+                  </span>
                 </div>
             }
-            {view!=='home' && (
+
+            {/* Contextual title */}
+            {view !== 'home' && (
               <div className="flex-1 min-w-0 mx-1">
-                <p className="text-sm font-bold truncate text-foreground">{view==='board'?selectedBoard?.name:selectedThread?.title}</p>
-                {view==='thread' && <p className="text-[11px] text-muted-foreground truncate">{selectedBoard?.name}</p>}
+                <p className="text-sm font-bold truncate text-foreground">{headerTitle}</p>
+                {headerSubtitle && <p className="text-[11px] text-muted-foreground truncate">{headerSubtitle}</p>}
               </div>
             )}
-            {view==='home' && <div className="flex-1"/>}
+            {view === 'home' && <div className="flex-1" />}
+
+            {/* Action buttons */}
             <div className="flex items-center gap-1 shrink-0">
-              {view==='home' && (
-                <button onClick={()=>setSearchOpen(v=>!v)} className={`p-2 rounded-xl transition-colors active:scale-95 ${searchOpen?'bg-primary/10 text-primary':'hover:bg-muted text-muted-foreground'}`}><Search className="w-4 h-4"/></button>
+              {/* Board search (home only) */}
+              {view === 'home' && (
+                <button onClick={() => setSearchOpen(v => !v)}
+                  className={`p-2 rounded-xl transition-colors active:scale-95 ${searchOpen ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground'}`}>
+                  <Search className="w-4 h-4" />
+                </button>
               )}
-              {view==='board'&&selectedBoard&&!selectedBoard.is_locked && (
-                <button onClick={()=>setShowNewThread(true)} className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-primary text-white hover:opacity-90 active:scale-95 transition-all"><Plus className="w-3.5 h-3.5"/>New Thread</button>
+
+              {/* New thread (board view, desktop) */}
+              {view === 'board' && selectedBoard && !selectedBoard.is_locked && (
+                <button onClick={() => setShowNewThread(true)}
+                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-primary text-white hover:opacity-90 active:scale-95 transition-all">
+                  <Plus className="w-3.5 h-3.5" />New Thread
+                </button>
               )}
+
+              {/* ── People search button ──────────────────── */}
+              <button
+                onClick={isUserFlow ? handleHeaderBack : openUserSearch}
+                title="Find people"
+                className={`p-2 rounded-xl transition-colors active:scale-95
+                ${isUserFlow
+                  ? 'bg-primary/10 text-primary'
+                  : 'hover:bg-muted text-muted-foreground'}`}>
+                <Users className="w-4 h-4" />
+              </button>
+
+              {/* Current user chip */}
               <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-xl border border-border bg-muted/20">
-                <Avatar name={currentUser?.first_name||'?'} size="xs"/>
-                <span className="hidden sm:block text-xs font-semibold text-foreground max-w-[80px] truncate">{currentUser?.first_name||'Guest'}</span>
+                <button
+                  onClick={() => viewUserProfile(currentUser?.id, { first_name: currentUser?.first_name, last_name: currentUser?.last_name })}
+                  title="Your profile"
+                  className="focus:outline-none">
+                  <Avatar name={currentUser?.first_name || '?'} size="xs" className="transition-all hover:ring-2 hover:ring-primary/40" />
+                </button>
+                <span className="hidden sm:block text-xs font-semibold text-foreground max-w-[80px] truncate">
+                  {currentUser?.first_name || 'Guest'}
+                </span>
               </div>
-              {isAdmin && <button onClick={onAdminOpen} className="p-2 transition-colors rounded-xl hover:bg-muted active:scale-95 text-muted-foreground"><Shield className="w-4 h-4"/></button>}
+
+              {isAdmin && (
+                <button onClick={onAdminOpen} className="p-2 transition-colors rounded-xl hover:bg-muted active:scale-95 text-muted-foreground">
+                  <Shield className="w-4 h-4" />
+                </button>
+              )}
             </div>
           </div>
-          {searchOpen&&view==='home' && (
+
+          {/* Board search bar */}
+          {searchOpen && view === 'home' && (
             <div className="pb-3">
               <div className="relative">
-                <Search className="absolute w-4 h-4 -translate-y-1/2 left-3 top-1/2 text-muted-foreground"/>
-                <input value={searchQuery} onChange={e=>setSearchQuery(e.target.value)} placeholder="Search boards..." autoFocus className="w-full pl-10 pr-4 py-2.5 bg-muted/40 border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40" style={{fontSize:16}}/>
-                {searchQuery && <button onClick={()=>setSearchQuery('')} className="absolute p-1 -translate-y-1/2 rounded-lg right-3 top-1/2 hover:bg-muted"><X className="w-3.5 h-3.5 text-muted-foreground"/></button>}
+                <Search className="absolute w-4 h-4 -translate-y-1/2 left-3 top-1/2 text-muted-foreground" />
+                <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search boards..." autoFocus
+                  className="w-full pl-10 pr-4 py-2.5 bg-muted/40 border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+                  style={{ fontSize: 16 }} />
+                {searchQuery && <button onClick={() => setSearchQuery('')} className="absolute p-1 -translate-y-1/2 rounded-lg right-3 top-1/2 hover:bg-muted"><X className="w-3.5 h-3.5 text-muted-foreground" /></button>}
               </div>
             </div>
           )}
         </div>
       </header>
 
-      {showNewThread&&selectedBoard &&
-        <NewThreadModal
-          board={selectedBoard}
-          onClose={()=>setShowNewThread(false)}
-          onSubmit={createThread}
-          loading={newThreadLoading}
-          token={token}
-        />
-      }
+      {/* Modals */}
+      {showNewThread && selectedBoard && (
+        <NewThreadModal board={selectedBoard} onClose={() => setShowNewThread(false)} onSubmit={createThread} loading={newThreadLoading} token={token} />
+      )}
 
+      {/* ── Main content ─────────────────────────────── */}
       <div className="px-4 py-4 mx-auto max-w-7xl sm:px-6 sm:py-6">
         <div className="flex gap-6">
           <main className="flex-1 min-w-0">
-            {view==='home' && (
+            {/* Home */}
+            {view === 'home' && (
               <>
                 <div className="flex items-center justify-between mb-4">
-                  <h1 className="text-xl font-black sm:text-2xl text-foreground" style={{fontFamily:"'Sora',sans-serif",letterSpacing:'-0.03em'}}>Community Forums</h1>
+                  <h1 className="text-xl font-black sm:text-2xl text-foreground" style={{ fontFamily: "'Sora',sans-serif", letterSpacing: '-0.03em' }}>
+                    Community Forums
+                  </h1>
                 </div>
-                <HomeView searchQuery={searchQuery} onSelectBoard={selectBoard} token={token}/>
+                <HomeView searchQuery={searchQuery} onSelectBoard={selectBoard} token={token} />
               </>
             )}
-            {view==='board'&&selectedBoard && <BoardView board={selectedBoard} onBack={()=>goBack('home')} onSelectThread={selectThread} onNewThread={()=>setShowNewThread(true)} token={token}/>}
-            {view==='thread'&&selectedThread&&selectedBoard && (
+
+            {/* Board */}
+            {view === 'board' && selectedBoard && (
+              <BoardView
+                board={selectedBoard}
+                onBack={() => goBack('home')}
+                onSelectThread={selectThread}
+                onNewThread={() => setShowNewThread(true)}
+                onViewProfile={viewUserProfile}
+                token={token}
+              />
+            )}
+
+            {/* Thread */}
+            {view === 'thread' && selectedThread && selectedBoard && (
               getLoadingSelect
-                ? <div className="flex items-center justify-center py-24"><Spinner size="lg"/></div>
-                : <ThreadView thread={selectedThread} board={selectedBoard} onBack={goBack} currentUser={currentUser} token={token} toast={toast}/>
+                ? <div className="flex items-center justify-center py-24"><Spinner size="lg" /></div>
+                : <ThreadView
+                    thread={selectedThread}
+                    board={selectedBoard}
+                    onBack={goBack}
+                    currentUser={currentUser}
+                    token={token}
+                    toast={toast}
+                    onViewProfile={viewUserProfile}
+                  />
+            )}
+
+            {/* ── People search ── */}
+            {view === 'users' && (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <h1 className="text-xl font-black sm:text-2xl text-foreground" style={{ fontFamily: "'Sora',sans-serif", letterSpacing: '-0.03em' }}>
+                    Find People
+                  </h1>
+                </div>
+                <UserSearchView onSelectUser={selectUser} token={token} />
+              </>
+            )}
+
+            {/* ── User profile ── */}
+            {view === 'user-profile' && selectedUser && (
+              <UserProfileView
+                userId={selectedUser.id}
+                userSeed={selectedUser}
+                onSelectThread={selectTrendingThread}
+                token={token}
+                currentUser={currentUser}
+              />
             )}
           </main>
-          <div className="hidden w-64 xl:block shrink-0">
-            <TrendingSidebar onSelectThread={selectTrendingThread} token={token}/>
-          </div>
+
+          {/* Trending sidebar (desktop, hidden on people views) */}
+          {!isUserFlow && (
+            <div className="hidden w-64 xl:block shrink-0">
+              <TrendingSidebar onSelectThread={selectTrendingThread} token={token} />
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -1493,29 +2105,31 @@ const MallSocial = () => {
   const [adminOpen, setAdminOpen]         = useState(false);
   const { toasts, toast, removeToast }    = useToast();
 
-  useEffect(()=>{ forumApi.getForumStatus().then(res=>setForumEnabled(res.data.forum_enabled??false)).catch(()=>{}).finally(()=>setStatusLoading(false)); },[]);
+  useEffect(() => {
+    forumApi.getForumStatus().then(res => setForumEnabled(res.data.forum_enabled ?? false)).catch(() => {}).finally(() => setStatusLoading(false));
+  }, []);
 
-  useEffect(()=>{
-    auth_states.PageLanguages?.map(item=>{
-      const tr=item.translation;
-      if(tr.length>0&&auth_states.SelectedLanguage){
-        const f=tr.find(t=>t.language_id==auth_states.SelectedLanguage.id);
-        const els=document.getElementsByClassName(item.page_config_id);
-        if(els?.length>0) Array.from(els).forEach(el=>{el.textContent=f?f.page_config_title:item.page_config_title;});
+  useEffect(() => {
+    auth_states.PageLanguages?.map(item => {
+      const tr = item.translation;
+      if (tr.length > 0 && auth_states.SelectedLanguage) {
+        const f = tr.find(t => t.language_id == auth_states.SelectedLanguage.id);
+        const els = document.getElementsByClassName(item.page_config_id);
+        if (els?.length > 0) Array.from(els).forEach(el => { el.textContent = f ? f.page_config_title : item.page_config_title; });
       }
     });
-  },[auth_states]);
+  }, [auth_states]);
 
   const TopCategories = () => (
     <div className="flex flex-wrap items-center justify-center gap-2 mb-5">
       {[
-        { path:'/academy-index', match:'academy', icon:<RiGraduationCapLine/>, label:'Learn', cls:'academy_label_id' },
-        { path:'/grow',          match:'grow',    icon:<PiPottedPlantBold/>,   label:'Grow',  cls:'grow_label_id' },
-        { path:'/travel',        match:'travel',  icon:<MdOutlineAirplanemodeActive/>, label:'Travel', cls:'travel_label_id' },
-        { path:'/earn',          match:'earn',    icon:<LuCircleDollarSign/>,  label:'Earn',  cls:'earn_label_id' },
-        { path:'/social',        match:'social',  icon:<BiLike/>,              label:'Social',cls:'social_label_id' },
-        { path:'/shop',          match:'shop',    icon:<BiStore/>,             label:'Shop',  cls:'shop_label_id' },
-        { path:'/lifestyle',     match:'lifestyle',icon:<IoFitnessOutline/>,   label:'Lifestyle',cls:'lifestyle_label_id' },
+        { path: '/academy-index', match: 'academy',   icon: <RiGraduationCapLine />,       label: 'Learn',     cls: 'academy_label_id' },
+        { path: '/grow',          match: 'grow',       icon: <PiPottedPlantBold />,          label: 'Grow',      cls: 'grow_label_id' },
+        { path: '/travel',        match: 'travel',     icon: <MdOutlineAirplanemodeActive />, label: 'Travel',    cls: 'travel_label_id' },
+        { path: '/earn',          match: 'earn',       icon: <LuCircleDollarSign />,         label: 'Earn',      cls: 'earn_label_id' },
+        { path: '/social',        match: 'social',     icon: <BiLike />,                     label: 'Social',    cls: 'social_label_id' },
+        { path: '/shop',          match: 'shop',       icon: <BiStore />,                    label: 'Shop',      cls: 'shop_label_id' },
+        { path: '/lifestyle',     match: 'lifestyle',  icon: <IoFitnessOutline />,           label: 'Lifestyle', cls: 'lifestyle_label_id' },
       ].map(({ path, match, icon, label, cls }) => (
         <LinkDom key={path} to={path}
           className={`flex flex-col items-center p-3 md:shadow-md shadow-sm border rounded-xl w-[80px] md:w-[90px]
@@ -1573,64 +2187,43 @@ const MallSocial = () => {
           color:var(--color-muted-foreground,#a1a1aa);
           font-style:normal;
         }
-        /* Make Quill-inserted images responsive */
-        .quill-content img,
-        .ql-editor img{
-          max-width:100%;
-          height:auto;
-          border-radius:12px;
-          margin:8px 0;
-          display:block;
+        .quill-content img,.ql-editor img{
+          max-width:100%;height:auto;border-radius:12px;margin:8px 0;display:block;
         }
-        /* Responsive video iframes from Quill */
-        .quill-content .ql-video,
-        .ql-editor .ql-video{
-          width:100%;
-          max-width:100%;
-          aspect-ratio:16/9;
-          border-radius:12px;
-          margin:8px 0;
-          display:block;
+        .quill-content .ql-video,.ql-editor .ql-video{
+          width:100%;max-width:100%;aspect-ratio:16/9;border-radius:12px;margin:8px 0;display:block;
         }
-        /* Blockquote styling in rendered content */
         .quill-content blockquote{
           border-left:4px solid color-mix(in srgb,var(--color-primary,#6366f1) 40%,transparent);
-          padding:8px 12px;
-          margin:8px 0;
+          padding:8px 12px;margin:8px 0;
           background:var(--color-muted,#f4f4f5)/25;
-          border-radius:0 8px 8px 0;
-          font-style:italic;
-          font-size:13px;
+          border-radius:0 8px 8px 0;font-style:italic;font-size:13px;
           color:var(--color-muted-foreground,#a1a1aa);
         }
-        /* Code blocks */
         .quill-content pre{
-          background:var(--color-muted,#f4f4f5);
-          padding:12px;
-          border-radius:8px;
-          font-size:12px;
-          overflow-x:auto;
+          background:var(--color-muted,#f4f4f5);padding:12px;
+          border-radius:8px;font-size:12px;overflow-x:auto;
         }
       `}</style>
 
       <Toast toasts={toasts} remove={removeToast} />
-      {adminOpen && <AdminPanel forumEnabled={forumEnabled} onClose={()=>setAdminOpen(false)} token={token} toast={toast}/>}
+      {adminOpen && <AdminPanel forumEnabled={forumEnabled} onClose={() => setAdminOpen(false)} token={token} toast={toast} />}
 
       {statusLoading
-        ? <div className="flex items-center justify-center min-h-screen bg-background"><Spinner size="lg"/></div>
+        ? <div className="flex items-center justify-center min-h-screen bg-background"><Spinner size="lg" /></div>
         : forumEnabled
-          ? <ForumPage onAdminOpen={()=>setAdminOpen(true)} token={token} toast={toast}/>
-          : <div className="flex items-center justify-center min-h-screen bg-background"><Spinner size="lg"/></div>
+          ? <ForumPage onAdminOpen={() => setAdminOpen(true)} token={token} toast={toast} />
+          : <div className="flex items-center justify-center min-h-screen bg-background"><Spinner size="lg" /></div>
       }
 
-      {getOpenLanguageSelection &&
+      {getOpenLanguageSelection && (
         <LanguageBottomSheet
           selected={getSelectedLanguage}
           handleSelectContent={e => setSelectedLanguage(e)}
           handleClose={() => setOpenLanguageSelection(false)}
           DataContent={auth_states.Languages}
         />
-      }
+      )}
     </>
   );
 };
